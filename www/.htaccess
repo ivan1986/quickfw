@@ -1,0 +1,12 @@
+Options +FollowSymLinks 
+
+RewriteEngine on
+
+RewriteBase /
+
+#RewriteRule ^\/fckeditor\/?(.*)$ /fckeditor/$1 [L]
+#RewriteRule !\.(js|ico|gif|jpg|png|css)$ index.php
+
+RewriteCond %{SCRIPT_FILENAME} !-f
+RewriteCond %{SCRIPT_FILENAME} !-d
+RewriteRule ^(.*)$ index.php/$1
