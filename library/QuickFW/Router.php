@@ -31,6 +31,7 @@ class QuickFW_Router
 		$this->filterUri($requestUri);
 		
 		$data = split(self::URI_DELIMITER, $requestUri);
+		$data = array_map('urldecode', $data);
 		while (isset($data[0]) AND $data[0] === '') array_shift($data);
 
 		$MCA = $this->getMCA($data,false);
@@ -40,13 +41,13 @@ class QuickFW_Router
 		$this->cModule = $this->module;
 		$this->cControllerName = $MCA['Controller'];
 		
-		$path = $this->getCurModulePath() . '/controllers/';
+		$path = $this->getCurModulePath();
 
 		$cname = $MCA['Controller'];
 		
 		$class=ucfirst($cname).'Controller';
 		$file=$class.'.php';
-		$fullname = $path . $file;
+		$fullname = $path . '/controllers/' . $file;
 		
 		if  (is_file($fullname))
 		{
@@ -59,7 +60,6 @@ class QuickFW_Router
 		}
 		
 		$this->controller = new $class();
-		//echo $class;
 		
 		if ($this->controller === NULL)
 		{
@@ -69,7 +69,6 @@ class QuickFW_Router
 		
 		
 		$aname = ucfirst($MCA['Action']) . 'Action';
-		//echo $aname;
 		if (method_exists($this->controller, $aname))
 		{
 			$this->action = $aname;
@@ -80,17 +79,16 @@ class QuickFW_Router
 			die("Действие не найдено шоб его");
 		}
 		
-		//If array if not empty then its parameters
-		while(!empty($data))
-		{
-			$_GET[$data[0]] = isset($data[1])?$data[1]:'';
-			$_REQUEST[$data[0]] = isset($data[1])?$data[1]:'';
-			array_shift($data);
-			if (isset($data[0])) array_shift($data);
-		}
+		$view->setScriptPath($path.'/templates');
+		
+		$params = $this->parceParams($data);
 
-		$view->setScriptPath($this->getCurModulePath().'/templates');
-		$view->assign('content',call_user_func(array($this->controller, $this->action)));
+		if (!empty($params))
+			$result = call_user_func_array(array($this->controller, $this->action), $params);
+		else
+			$result = call_user_func(array($this->controller, $this->action));
+
+		$view->assign('content',$result);
 		$view->displayMain();
 
 	}
@@ -124,24 +122,17 @@ class QuickFW_Router
 				$MCA['Controller']=$patt[2];
 				$MCA['Action']=$patt[3];
 			}
-			$MCA['Params']=$this->parceParams($patt[4]);
+			$MCA['Params']=$this->parceScobParams($patt[4]);
 		}
 		else 
 		{
 			// module/controller/action/p1/p2/p3/...
 			$data = split(self::URI_DELIMITER, $Uri);
+			$data = array_map('urldecode', $data);
 			while (isset($data[0]) AND $data[0] === '') array_shift($data);
 	
 			$MCA = $this->getMCA($data);
-
-			//If array if not empty then its parameters
-			while(!empty($data))
-			{
-				$params[$data[0]] = isset($data[1])?$data[1]:'';
-				array_shift($data);
-				if (isset($data[0])) array_shift($data);
-			}
-			$MCA['Params']=$params;
+			$MCA['Params']=$this->parceParams($data);
 		}
 		$MCA['File']=$this->baseDir.'/'.$MCA['Module'].'/controllers/'.ucfirst($MCA['Controller']).'Controller.php';
 		return $MCA;
@@ -152,7 +143,30 @@ class QuickFW_Router
 		return $this->baseDir.'/'.$this->module;
 	}
 	
-	protected function parceParams($par)
+	function redirect($url)
+	{
+		header('Location: '.$url);
+		exit();
+	}
+
+	protected function parceParams(&$data)
+	{
+		if (empty($data))
+			return array();
+		if ($data[0]!='')
+			return $data;
+		array_shift($data);
+		//If array if not empty then its parameters
+		while(!empty($data))
+		{
+			$params[$data[0]] = isset($data[1])?$data[1]:'';
+			array_shift($data);
+			if (isset($data[0])) array_shift($data);
+		}
+		return array('params' => $params);
+	}
+	
+	protected function parceScobParams($par)
 	{
 		$instr  = false;
 		$strbeg = '';

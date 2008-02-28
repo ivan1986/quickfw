@@ -3,7 +3,6 @@
 $config=array();
 
 $config['host']=array(
-	//'host'     => 'photogal.my',
 	'encoding' => 'utf-8',
 );
 
