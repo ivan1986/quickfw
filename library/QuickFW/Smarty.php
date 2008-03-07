@@ -83,6 +83,7 @@ class QuickFW_Smarty
 	{
 		if (is_readable($path)) {
 			$this->_tmplPath = $path;
+			//TO DO: убрать
 			$this->getEngine()->template_dir = $path;
 			return;
 		}
@@ -133,7 +134,7 @@ class QuickFW_Smarty
 	*/
 	public function __set($key, $val)
 	{
-		$this->_smarty->assign($key, $val);
+		$this->getEngine()->assign($key, $val);
 	}
 
 	/**
