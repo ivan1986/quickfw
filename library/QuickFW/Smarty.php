@@ -83,12 +83,11 @@ class QuickFW_Smarty
 	{
 		if (is_readable($path)) {
 			$this->_tmplPath = $path;
-			//TO DO: убрать
-			$this->getEngine()->template_dir = $path;
-			return;
+			if ($this->_smarty)
+				$this->_smarty->template_dir = $path;
+			return true;
 		}
-
-		throw new Exception('Invalid path provided');
+		return false;
 	}
 
 	/**
