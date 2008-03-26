@@ -97,28 +97,12 @@ class QuickFW_Module
 
 	function isSecure($tpl_name, &$smarty)
 	{
-		$MCAP = self::IncludeFile($tpl_name);
-		if (isset($MCAP['error'])) return true;
-		
-		$classname=ucfirst($MCAP['Controller']).'Controller';
-		if (!class_exists($classname))
-			return true;
-		
-		return call_user_func(array($classname, 'isSecure'));
-		
+		return true;
 	}
 	
 	function isTrusted($tpl_name, &$smarty)
 	{
-		$MCAP = self::IncludeFile($tpl_name);
-		if (isset($MCAP['error'])) return true;
-		
-		$classname=ucfirst($MCAP['Controller']).'Controller';
-		if (!class_exists($classname))
-			return true;
-		
-		return call_user_func(array($classname, 'isTrusted'));
-		
+		return false;
 	}
 }
 

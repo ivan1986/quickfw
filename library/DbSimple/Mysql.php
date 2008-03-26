@@ -16,7 +16,7 @@
  * 
  * @version 2.x $Id: Mysql.php 163 2007-01-10 09:47:49Z dk $
  */
-require_once dirname(__FILE__) . '/Generic.php';
+require_once LIBPATH.'/DbSimple/Generic.php';
 
 
 /**
@@ -114,18 +114,14 @@ class DbSimple_Mysql extends DbSimple_Generic_Database
             case 'CALC_TOTAL':
                 $m = null;
                 if (preg_match('/^(\s* SELECT)(.*)/six', $queryMain[0], $m)) {
-                    if ($this->_calcFoundRowsAvailable()) {
-                        $queryMain[0] = $m[1] . ' SQL_CALC_FOUND_ROWS' . $m[2];
-                    }
+                    $queryMain[0] = $m[1] . ' SQL_CALC_FOUND_ROWS' . $m[2];
                 }
                 return true;
         
             // Perform total calculation.
             case 'GET_TOTAL':
                 // Built-in calculation available?
-                if ($this->_calcFoundRowsAvailable()) {
-                    $queryMain = array('SELECT FOUND_ROWS()');
-                }
+                $queryMain = array('SELECT FOUND_ROWS()');
                 // Else use manual calculation.
                 // TODO: GROUP BY ... -> COUNT(DISTINCT ...)
                 $re = '/^
@@ -180,13 +176,7 @@ class DbSimple_Mysql extends DbSimple_Generic_Database
     {
         return $this->_setLastError(mysql_errno(), mysql_error(), $query);
     }
-    
-    
-    function _calcFoundRowsAvailable()
-    {
-        $ok = version_compare(mysql_get_server_info($this->link), '4.0') >= 0;
-        return $ok;
-    }
+
 }
 
 

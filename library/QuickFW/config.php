@@ -17,9 +17,10 @@ $config['database']=array(
 );
 
 $config['redirection']=array(
-	'baseUrl'  => '/',
-	'useIndex' => false,
-	'defExt'   => '',
+	'baseUrl'    => '/',
+	'useIndex'   => false,
+	'defExt'     => '',	//или пусто или .html например
+	'useRewrite' => true,
 );
 
 $config['state']=array(

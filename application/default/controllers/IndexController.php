@@ -4,13 +4,14 @@ class IndexController
 {
 	public function indexAction()
 	{
-		/*global $view,$db;
+		//die('test');
+		global $view,$db;
 		$_SESSION['1']++;
 		var_dump($_SESSION);
 		echo session_id();
+		//die();
 		$view->assign('ttt','111');
-		$db->select("SELECT * FROM album");*/
-		die('test');
+		$db->select("SELECT * FROM album");
 		return 'Корневое действие сайта, показывается на /, на /default, на /index и т.п.<br/>';
 	}
 

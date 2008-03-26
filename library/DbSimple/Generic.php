@@ -31,7 +31,7 @@
  * Parsing code is partially grabbed from PEAR DB class,
  * initial author: Tomas V.V.Cox <cox@idecnet.com>.
  * 
- * Ñontains 3 classes:
+ * ï¿½ontains 3 classes:
  * - DbSimple_Generic: database factory class
  * - DbSimple_Generic_Database: common database methods
  * - DbSimple_Generic_Blob: common BLOB support
@@ -92,51 +92,11 @@ class DbSimple_Generic
             return $dummy;
         }
         $class = 'DbSimple_'.ucfirst($parsed['scheme']);
-        if (!class_exists($class)) {
-            $file = str_replace('_', '/', $class) . ".php";
-            // Try to load library file from standard include_path.
-            if ($f = @fopen($file, "r", true)) {
-                fclose($f);
-                require_once($file);
-            } else {
-                // Wrong include_path; try to load from current directory.
-                $base = basename($file);
-                $dir = dirname(__FILE__);
-                if (@is_file($path = "$dir/$base")) {
-                    require_once($path);
-                } else {
-                    trigger_error("Error loading database driver: no file $file in include_path; no file $base in $dir", E_USER_ERROR);
-                    return null;
-                }
-            }
-        }
         $object =& new $class($parsed);
         if (isset($parsed['ident_prefix'])) {
             $object->setIdentPrefix($parsed['ident_prefix']);
         }
         $object->setCachePrefix(md5(serialize($parsed['dsn'])));
-        if (@fopen('Cache/Lite.php', 'r', true)) {
-            $tmp_dirs = array(
-                ini_get('session.save_path'),
-                getenv("TEMP"),
-                getenv("TMP"),
-                getenv("TMPDIR"),
-                '/tmp'
-            );
-            foreach ($tmp_dirs as $dir) {
-                if (!$dir) continue;
-                $fp = @fopen($testFile = $dir . '/DbSimple_' . md5(getmypid() . microtime()), 'w');
-                if ($fp) {
-                    fclose($fp);
-                    unlink($testFile);                
-                    require_once 'Cache/Lite.php';
-                    $t =& new Cache_Lite(array('cacheDir' => $dir.'/', 'lifeTime' => null, 'automaticSerialization' => true));
-                    $object->setCacher(&$t);
-                    break;
-                }
-
-            }
-        }
         return $object;
     }
     
@@ -963,7 +923,7 @@ class DbSimple_Generic_Database extends DbSimple_Generic_LastError
                     $tmp = array();
                     $current[] =& $tmp;
                     $current =& $tmp;
-                    unset($tmp); // we use ætmp, because don't know the value of auto-index
+                    unset($tmp); // we use ï¿½tmp, because don't know the value of auto-index
                 }
             }
             $current = $row; // save the row in last dimension

@@ -16,7 +16,7 @@
  * 
  * @version 2.x $Id: Postgresql.php 167 2007-01-22 10:12:09Z tit $
  */
-require_once dirname(__FILE__) . '/Generic.php';
+require_once LIBPATH.'/DbSimple/Generic.php';
 
 
 /**

@@ -1,4 +1,5 @@
 <?php
+
 class QuickFW_Router
 {
 	const URI_DELIMITER = '/';
@@ -7,6 +8,7 @@ class QuickFW_Router
 	const DEFAULT_ACTION = 'index';
 	
 	protected $baseDir;
+	protected $rewriter;
 
 	//модуль и контроллер в контексте которого выполняется,
 	//небходимо для роутинга компонентов
@@ -28,7 +30,8 @@ class QuickFW_Router
 		{
 			$requestUri = $_SERVER['REQUEST_URI'];
 		}
-		$this->filterUri($requestUri);
+		$requestUri = $this->filterUri($requestUri);
+		$requestUri = $this->rewrite($requestUri);
 		
 		$data = split(self::URI_DELIMITER, $requestUri);
 		$data = array_map('urldecode', $data);
@@ -99,6 +102,7 @@ class QuickFW_Router
 		// module.controller.action(p1,p2,p3,...)
 		$patt=array();
 		$MCA=array();
+		$Uri = $this->rewrite($Uri);
 		if (preg_match('|(?:(.*?)\.)?(.*?)(?:\.(.*))?\((.*)\)|',$Uri,$patt))
 		{
 			// юзаем дефолтовый module и action
@@ -149,6 +153,32 @@ class QuickFW_Router
 		exit();
 	}
 
+	function backroute($url)
+	{
+		global $config;
+		if (!$config['redirection']['useRewrite'])
+			return $url;
+		if (!$this->rewriter)
+		{
+			require LIBPATH.'/QuickFW/Rewrite.php';
+			$this->rewriter = new QuickFW_Rewrite();
+		}
+		return $this->rewriter->back($url);
+	}
+	
+	protected function rewrite($uri)
+	{
+		global $config;
+		if (!$config['redirection']['useRewrite'])
+			return $url;
+		if (!$this->rewriter)
+		{
+			require LIBPATH.'/QuickFW/Rewrite.php';
+			$this->rewriter = new QuickFW_Rewrite();
+		}
+		return $this->rewriter->forword($uri);
+	}
+	
 	protected function parceParams(&$data)
 	{
 		if (empty($data))
@@ -251,15 +281,33 @@ class QuickFW_Router
 
 	}
 	
-	protected function filterUri(&$uri)
+	protected function filterUri($uri)
 	{
+		global $config;
 		$pos = strpos($uri,'?');
 		if ($pos !== false)
 		{
 			$uri = substr($uri,0,$pos);
 		}
+		if (!substr_compare($uri,$config['redirection']['baseUrl'],0,strlen($config['redirection']['baseUrl'])))
+		{
+			$uri = substr($uri,strlen($config['redirection']['baseUrl']));
+		}
+		if ($config['redirection']['useIndex'] && strlen($uri)>=10 && !substr_compare($uri,'index.php/',0,10))
+		{
+			$uri = substr($uri,10);
+		}
+		if ($config['redirection']['defExt'] != '')
+		{
+			$len_de=strlen($config['redirection']['defExt']);
+			$l=strlen($uri)-$len_de;
+			if (!substr_compare($uri,$config['redirection']['defExt'],
+				$l,$len_de))
+				$uri = substr($uri,0,$l);
+		}
 		$uri = trim($uri, self::URI_DELIMITER);
 		return $uri;
 	}
+	
 }
 ?>

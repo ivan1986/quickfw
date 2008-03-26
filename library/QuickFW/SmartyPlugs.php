@@ -11,11 +11,11 @@ class QuickFW_SmartyPlugs
 		$this->base=$config['redirection']['baseUrl'];
 
 		$this->defext=$config['redirection']['defExt'];
-		if (strlen($this->defext)>0 && $this->defext[0]!='.') 
-			$this->defext='.'.$this->defext;
 
 		$this->index=$config['redirection']['useIndex'];
 		$this->index=$this->index?'index.php/':'';
+		
+		$this->rewriter = $config['redirection']['useRewrite'];
 	}
 	
 	public static function getInstance()
@@ -47,9 +47,10 @@ class QuickFW_SmartyPlugs
 
 	public function siteUrl($params, &$smarty)
 	{
+		global $router;
 		if (!isset($params['url'])) return baseUrl();
 		$url=$params['url'];
-		//тут редиректы будут
+		$url = $router->backroute($url);
 		return $this->base.$this->index.$url.$this->defext;
 	}
 	
