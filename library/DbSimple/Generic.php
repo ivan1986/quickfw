@@ -491,9 +491,9 @@ class DbSimple_Generic_Database extends DbSimple_Generic_LastError
             $hash = $this->_cachePrefix . md5(serialize($query));
             // Getting data from cache if possible
             $fetchTime = $firstFetchTime = 0;
-            $qStart    = $this->_microtime();
+            $qStart    = microtime(true);
             $cacheData = $this->_cache($hash);
-            $queryTime = $this->_microtime() - $qStart;
+            $queryTime = microtime(true) - $qStart;
 
             $storeTime  = isset($cacheData['storeTime'])  ? $cacheData['storeTime']  : null;
             $invalCache = isset($cacheData['invalCache']) ? $cacheData['invalCache'] : null;
@@ -547,27 +547,27 @@ class DbSimple_Generic_Database extends DbSimple_Generic_LastError
             $this->_logQuery($query);
 
             // Run the query (counting time).
-            $qStart = $this->_microtime();        
+            $qStart = microtime(true);
             $result = $this->_performQuery($query);
             $fetchTime = $firstFetchTime = 0;
 
             if (is_resource($result)) {
                 $rows = array();
                 // Fetch result row by row.
-                $fStart = $this->_microtime();
+                $fStart = microtime(true);
                 $row = $this->_performFetch($result);
-                $firstFetchTime = $this->_microtime() - $fStart;
+                $firstFetchTime = microtime(true) - $fStart;
                 if ($row !== null) {
                     $rows[] = $row;
                     while ($row=$this->_performFetch($result)) {
                         $rows[] = $row;
                     }
                 }
-                $fetchTime = $this->_microtime() - $fStart;
+                $fetchTime = microtime(true) - $fStart;
             } else {
                 $rows = $result;
             }
-            $queryTime = $this->_microtime() - $qStart;
+            $queryTime = microtime(true) - $qStart;
 
             // Log query statistics.
             $this->_logQueryStat($queryTime, $fetchTime, $firstFetchTime, $rows);
@@ -836,16 +836,6 @@ class DbSimple_Generic_Database extends DbSimple_Generic_LastError
             $query = $query[0];
         }
         return DbSimple_Generic_LastError::_setLastError($code, $msg, $query);
-    }
-    
-    
-    /**
-     * Return microtime as float value.
-     */
-    function _microtime()
-    {
-        $t = explode(" ", microtime());
-        return $t[0] + $t[1];
     }
     
     
