@@ -2042,27 +2042,27 @@ class Smarty_Compiler extends Smarty {
                 break;
 
             case 'get':
-                $compiled_ref = ($this->request_use_auto_globals) ? '$_GET' : "\$GLOBALS['HTTP_GET_VARS']";
+                $compiled_ref = '$_GET';
                 break;
 
             case 'post':
-                $compiled_ref = ($this->request_use_auto_globals) ? '$_POST' : "\$GLOBALS['HTTP_POST_VARS']";
+                $compiled_ref = '$_POST';
                 break;
 
             case 'cookies':
-                $compiled_ref = ($this->request_use_auto_globals) ? '$_COOKIE' : "\$GLOBALS['HTTP_COOKIE_VARS']";
+                $compiled_ref = '$_COOKIE';
                 break;
 
             case 'env':
-                $compiled_ref = ($this->request_use_auto_globals) ? '$_ENV' : "\$GLOBALS['HTTP_ENV_VARS']";
+                $compiled_ref = '$_ENV';
                 break;
 
             case 'server':
-                $compiled_ref = ($this->request_use_auto_globals) ? '$_SERVER' : "\$GLOBALS['HTTP_SERVER_VARS']";
+                $compiled_ref = '$_SERVER';
                 break;
 
             case 'session':
-                $compiled_ref = ($this->request_use_auto_globals) ? '$_SESSION' : "\$GLOBALS['HTTP_SESSION_VARS']";
+                $compiled_ref = '$_SESSION';
                 break;
 
             /*
@@ -2070,13 +2070,8 @@ class Smarty_Compiler extends Smarty {
              * compiler.
              */
             case 'request':
-                if ($this->request_use_auto_globals) {
-                    $compiled_ref = '$_REQUEST';
-                    break;
-                } else {
-                    $this->_init_smarty_vars = true;
-                }
-                return null;
+                $compiled_ref = '$_REQUEST';
+                break;
 
             case 'capture':
                 return null;

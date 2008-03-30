@@ -39,7 +39,6 @@ class QuickFW_AutoDbSimple
 		if ($this->DbSimple === null)
 		{
 			require LIBPATH.'/DbSimple/'.ucfirst($this->_driver).'.php';
-			//require LIBPATH.'/DbSimple/Generic.php';
 			$this->connect();
 		}
 		$result = call_user_func_array(array(&$this->DbSimple, $method), $params);
