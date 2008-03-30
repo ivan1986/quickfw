@@ -1,7 +1,5 @@
 <?php
 
-require LIBPATH.'/QuickFW/Module/Abstract.php';
-
 class QuickFW_Module
 {
 	protected static $_thisInst = null;

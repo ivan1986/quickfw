@@ -1,6 +1,6 @@
 <?php
 
-class TestController //extends QuickFW_Module_Abstract
+class TestController
 {
 	public function IndexModule()
 	{
