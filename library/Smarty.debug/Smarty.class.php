@@ -96,11 +96,39 @@ class Smarty
     var $plugins_dir     =  array('plugins');
 
     /**
+     * If debugging is enabled, a debug console window will display
+     * when the page loads (make sure your browser allows unrequested
+     * popup windows)
+     *
+     * @var boolean
+     */
+    var $debugging       =  false;
+
+    /**
      * When set, smarty does uses this value as error_reporting-level.
      *
      * @var boolean
      */
     var $error_reporting  =  null;
+
+    /**
+     * This is the path to the debug console template. If not set,
+     * the default one will be used.
+     *
+     * @var string
+     */
+    var $debug_tpl       =  '';
+
+    /**
+     * This determines if debugging is enable-able from the browser.
+     * <ul>
+     *  <li>NONE => no debugging control allowed</li>
+     *  <li>URL => enable debugging when SMARTY_DEBUG is found in the URL.</li>
+     * </ul>
+     * @link http://www.foo.dom/index.php?SMARTY_DEBUG
+     * @var string
+     */
+    var $debugging_ctrl  =  'NONE';
 
     /**
      * This tells Smarty whether to check for recompiling or not. Recompiling
@@ -441,6 +469,20 @@ class Smarty
      * @var string
      */
     var $_compile_id           = null;
+
+    /**
+     * text in URL to enable debug mode
+     *
+     * @var string
+     */
+    var $_smarty_debug_id      = 'SMARTY_DEBUG';
+
+    /**
+     * debugging information for debug console
+     *
+     * @var array
+     */
+    var $_smarty_debug_info    = array();
 
     /**
      * info that makes up a cache file
@@ -1063,7 +1105,37 @@ class Smarty
     {
         static $_cache_info = array();
         
-        $_smarty_old_error_level = error_reporting() & ~E_NOTICE;
+        $_smarty_old_error_level = $this->debugging ? error_reporting() : error_reporting(isset($this->error_reporting)
+               ? $this->error_reporting : error_reporting() & ~E_NOTICE);
+
+        if (!$this->debugging && $this->debugging_ctrl == 'URL') {
+            $_query_string = $_SERVER['QUERY_STRING'];
+            if (@strstr($_query_string, $this->_smarty_debug_id)) {
+                if (@strstr($_query_string, $this->_smarty_debug_id . '=on')) {
+                    // enable debugging for this browser session
+                    @setcookie('SMARTY_DEBUG', true);
+                    $this->debugging = true;
+                } elseif (@strstr($_query_string, $this->_smarty_debug_id . '=off')) {
+                    // disable debugging for this browser session
+                    @setcookie('SMARTY_DEBUG', false);
+                    $this->debugging = false;
+                } else {
+                    // enable debugging for this page
+                    $this->debugging = true;
+                }
+            } else {
+                $this->debugging = (bool)(isset($_COOKIE['SMARTY_DEBUG']) ? $_COOKIE['SMARTY_DEBUG'] : false);
+            }
+        }
+
+        if ($this->debugging) {
+            // capture time for debugging info
+            $_debug_start_time = microtime(true);
+            $this->_smarty_debug_info[] = array('type'      => 'template',
+                                                'filename'  => $resource_name,
+                                                'depth'     => 0);
+            $_included_tpls_idx = count($this->_smarty_debug_info) - 1;
+        }
 
         if (!isset($compile_id)) {
             $compile_id = $this->compile_id;
@@ -1101,6 +1173,13 @@ class Smarty
 
 
                 if ($display) {
+                    if ($this->debugging)
+                    {
+                        // capture time for debugging info
+                        $this->_smarty_debug_info[$_included_tpls_idx]['exec_time'] = microtime(true) - $_debug_start_time;
+                        require_once(SMARTY_CORE_DIR . 'core.display_debug_console.php');
+                        $_smarty_results .= smarty_core_display_debug_console($_params, $this);
+                    }
                     if ($this->cache_modified_check) {
                         $_server_vars = $_SERVER;
                         $_last_modified_date = @substr($_server_vars['HTTP_IF_MODIFIED_SINCE'], 0, strpos($_server_vars['HTTP_IF_MODIFIED_SINCE'], 'GMT') + 3);
@@ -1197,6 +1276,12 @@ class Smarty
 
         if ($display) {
             if (isset($_smarty_results)) { echo $_smarty_results; }
+            if ($this->debugging) {
+                // capture time for debugging info
+                $this->_smarty_debug_info[$_included_tpls_idx]['exec_time'] = microtime(true) - $_debug_start_time;
+                require_once(SMARTY_CORE_DIR . 'core.display_debug_console.php');
+                echo smarty_core_display_debug_console($_params, $this);
+            }
             error_reporting($_smarty_old_error_level);
             return;
         } else {
@@ -1729,6 +1814,14 @@ class Smarty
 
     function _smarty_include($params)
     {
+        if ($this->debugging) {
+            $debug_start_time = microtime(true);
+            $this->_smarty_debug_info[] = array('type'      => 'template',
+                                                  'filename'  => $params['smarty_include_tpl_file'],
+                                                  'depth'     => ++$this->_inclusion_depth);
+            $included_tpls_idx = count($this->_smarty_debug_info) - 1;
+        }
+
         $this->_tpl_vars = array_merge($this->_tpl_vars, $params['smarty_include_vars']);
 
         // config vars are treated as local, so push a copy of the
@@ -1748,6 +1841,11 @@ class Smarty
         array_shift($this->_config);
 
         $this->_inclusion_depth--;
+
+        if ($this->debugging) {
+            // capture time for debugging info
+            $this->_smarty_debug_info[$included_tpls_idx]['exec_time'] = microtime(true) - $debug_start_time;
+        }
 
         if ($this->caching) {
             $this->_cache_info['template'][$params['smarty_include_tpl_file']] = true;
