@@ -11,7 +11,7 @@ class IndexController
 		echo session_id();
 		//die();
 		$view->assign('ttt','111');
-		$db->select("SELECT * FROM album");
+		//$db->select("SELECT * FROM album");
 		return 'Корневое действие сайта, показывается на /, на /default, на /index и т.п.<br/>';
 	}
 

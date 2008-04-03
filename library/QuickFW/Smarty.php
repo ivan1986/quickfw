@@ -8,31 +8,32 @@ class QuickFW_Smarty
 	*/
 	protected $_smarty;
 	
-	protected $_tmplPath, $_extraParams;
+	protected $_tmplPath;
 	/**
 	* Template file in which is all content
 	*
 	* @var string
 	*/
 	public $mainTemplate;
-
+	
 	/**
 	 * Init - подключение и инициальзация смарти - вынесено так как только по требованию
 	 *
 	 */
 	protected function Init()
 	{
-		require LIBPATH.'/Smarty/Smarty.class.php';
+		global $config;
+		require LIBPATH.'/Smarty'.($config['templater']['debug']?'.debug':'').'/Smarty.class.php';
 		$this->_smarty = new Smarty;
-
+	
+		$this->_smarty->compile_dir = TMPPATH . '/templates_c';
+		$this->_smarty->config_dir  = TMPPATH . '/configs';
+		$this->_smarty->cache_dir   = TMPPATH . '/cache';
+		
 		if (null !== $this->_tmplPath) {
 			$this->setScriptPath($this->_tmplPath);
 		}
-
-		foreach ($this->_extraParams as $key => $value) {
-			$this->_smarty->$key = $value;
-		}
-
+	
 		require LIBPATH.'/QuickFW/Module.php';
 		$module = QuickFW_Module::getInstance();
 		$this->_smarty->register_resource('module', array($module,
@@ -40,9 +41,9 @@ class QuickFW_Smarty
 													"getTimestamp",
 													"isSecure",
 													"isTrusted"));
-		require LIBPATH.'/QuickFW/SmartyPlugs.php';
-		$plugins = QuickFW_SmartyPlugs::getInstance();
-		$plugins->RegisterAll($this->_smarty);
+		require LIBPATH.'/QuickFW/Plugs.php';
+		$plugins = QuickFW_Plugs::getInstance();
+		$plugins->Register4Smarty($this->_smarty);
 	}
 	
 	/**
@@ -52,13 +53,12 @@ class QuickFW_Smarty
 	* @param array $extraParams
 	* @return void
 	*/
-	public function __construct($tmplPath = null, $extraParams = array(), $mainTpl = 'main.tpl')
+	public function __construct($tmplPath = null, $mainTpl = 'main.tpl')
 	{
 		$this->_tmplPath = $tmplPath;
-		$this->_extraParams = $extraParams;
 		$this->mainTemplate = $mainTpl;
 	}
-
+	
 	/**
 	* Return the template engine object
 	*
@@ -72,7 +72,7 @@ class QuickFW_Smarty
 		}
 		return $this->_smarty;
 	}
-
+	
 	/**
 	* Set the path to the templates
 	*
@@ -89,7 +89,7 @@ class QuickFW_Smarty
 		}
 		return false;
 	}
-
+	
 	/**
 	* Retrieve the current template directory
 	*
@@ -99,7 +99,7 @@ class QuickFW_Smarty
 	{
 		return $this->_tmplPath;
 	}
-
+	
 	/**
 	* Alias for setScriptPath
 	*
@@ -111,7 +111,7 @@ class QuickFW_Smarty
 	{
 		return $this->setScriptPath($path);
 	}
-
+	
 	/**
 	* Alias for setScriptPath
 	*
@@ -123,7 +123,7 @@ class QuickFW_Smarty
 	{
 		return $this->setScriptPath($path);
 	}
-
+	
 	/**
 	* Assign a variable to the template
 	*
@@ -135,7 +135,7 @@ class QuickFW_Smarty
 	{
 		$this->getEngine()->assign($key, $val);
 	}
-
+	
 	/**
 	* Retrieve an assigned variable
 	*
@@ -146,7 +146,7 @@ class QuickFW_Smarty
 	{
 		return $this->getEngine()->get_template_vars($key);
 	}
-
+	
 	/**
 	* Allows testing with empty() and isset() to work
 	*
@@ -157,7 +157,7 @@ class QuickFW_Smarty
 	{
 		return (null !== $this->getEngine()->get_template_vars($key));
 	}
-
+	
 	/**
 	* Allows unset() on object properties to work
 	*
@@ -168,7 +168,7 @@ class QuickFW_Smarty
 	{
 		$this->getEngine()->clear_assign($key);
 	}
-
+	
 	/**
 	* Assign variables to the template
 	*
@@ -189,10 +189,10 @@ class QuickFW_Smarty
 			$this->getEngine()->assign($spec);
 			return;
 		}
-
+		
 		$this->getEngine()->assign($spec, $value);
 	}
-
+	
 	/**
 	* Clear all assigned variables
 	*
@@ -202,7 +202,7 @@ class QuickFW_Smarty
 	{
 		$this->getEngine()->clear_all_assign();
 	}
-
+	
 	/**
 	* Processes a template and returns the output.
 	*

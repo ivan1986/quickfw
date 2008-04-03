@@ -1,6 +1,6 @@
 <?php
 
-class QuickFW_SmartyPlugs
+class QuickFW_Plugs
 {
 	protected static $_thisInst = null;
 	protected $base, $defext, $index;
@@ -22,12 +22,12 @@ class QuickFW_SmartyPlugs
 	{
 		if (self::$_thisInst === null)
 		{
-			self:: $_thisInst = new QuickFW_SmartyPlugs();
+			self:: $_thisInst = new QuickFW_Plugs();
 		}
 		return self::$_thisInst;
 	}
 	
-	public function RegisterAll(&$smarty)
+	public function Register4Smarty(&$smarty)
 	{
 		$smarty->register_function('outHead',array($this,'outHeader'));
 		$smarty->register_block('getHead',array($this,'getHeader'));

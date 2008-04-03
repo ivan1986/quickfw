@@ -56,17 +56,12 @@
 		require (LIBPATH.'/QuickFW/Session.php');
 		$Session = new QuickFW_Session();
 	}
-		
-	$smartyconf['compile_dir']	= TMPPATH . '/templates_c';
-	$smartyconf['config_dir']	= TMPPATH . '/configs';
-	$smartyconf['cache_dir']	= TMPPATH . '/cache';
-
-	$maintpl="";
-	if (isset($config['state']['def_tpl']) && $config['state']['def_tpl']!="")
-		$maintpl=$config['state']['def_tpl'].'.tpl';
-
-	require (LIBPATH.'/QuickFW/Smarty.php');
-	$view = new QuickFW_Smarty(ROOTPATH .'/application', $smartyconf, $maintpl);
+	
+	$templ = ucfirst($config['templater']['name']);
+	$class = 'QuickFW_'.$templ;
+	require (LIBPATH.'/QuickFW/'.$templ.'.php');
+	$view = new $class(ROOTPATH .'/application', 
+		isset($config['state']['def_tpl'])?$config['state']['def_tpl']:"");
 	
 	require (LIBPATH.'/QuickFW/AutoDbSimple.php');
 	$db = new QuickFW_AutoDbSimple( $config['database']['username'],

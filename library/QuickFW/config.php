@@ -26,11 +26,16 @@ $config['redirection']=array(
 $config['state']=array(
 	'release'     => true,
 	'autosession' => true,
-	'def_tpl'     => 'main',
+	'def_tpl'     => 'main.tpl',
 );
 
 $config['cacher']=array(
 	'module' => 'File',
+);
+
+$config['templater']= array(
+	'name'=>'Smarty',
+	'debug'=>false,
 );
 
 ?>
