@@ -17,4 +17,28 @@ $config['cacher']=array(
 	'module' => 'File',
 );
 
+$config['state']=array(
+	'release'     => true,
+	'autosession' => true,
+	'def_tpl'     => 'main.html',
+);
+
+$config['templater']= array(
+	'name'=>'PlainView',
+	'debug'=>false,
+);
+
+/*
+$config['state']=array(
+	'release'     => true,
+	'autosession' => true,
+	'def_tpl'     => 'main.tpl',
+);
+
+$config['templater']= array(
+	'name'=>'Smarty',
+	'debug'=>false,
+);
+/**/
+
 ?>

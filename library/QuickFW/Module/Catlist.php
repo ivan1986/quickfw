@@ -1,6 +1,6 @@
 <?php
 
-class QuickFW_Module_Catlist extends QuickFW_Module_Abstract
+class QuickFW_Module_Catlist
 {
 	public function getTemplate(&$smarty)
 	{

@@ -40,12 +40,12 @@ class QuickFW_Plugs
 		$smarty->register_function('siteUrl',array($this,'siteUrl'));
 	}
 	
-	public function baseUrl($params, &$smarty)
+	public function baseUrl($params, &$smarty=null)
 	{
 		return $this->base;
 	}
 
-	public function siteUrl($params, &$smarty)
+	public function siteUrl($params, &$smarty=null)
 	{
 		global $router;
 		if (!isset($params['url'])) return baseUrl();
@@ -57,28 +57,28 @@ class QuickFW_Plugs
 	protected $HeaderArr = array();
 	protected $IncFiles = array();
 	
-	public function addJS($params, &$smarty)
+	public function addJS($params, &$smarty=null)
 	{
 		if (isset($params['file']))
 			$this->IncFiles['js'][]=$params['file'];
 		return "";
 	}
 
-	public function addCSS($params, &$smarty)
+	public function addCSS($params, &$smarty=null)
 	{
 		if (isset($params['file']))
 			$this->IncFiles['css'][]=$params['file'];
 		return "";
 	}
 	
-	public function outHeader($params, &$smarty)
+	public function outHeader($params, &$smarty=null)
 	{
 		if (!isset($params['name']))
 			$params['name']='default';
 		return '<!--HEAD'.$params['name'].'-->';
 	}
 	
-	public function getHeader($params, $content, &$smarty)
+	public function getHeader($params, $content, &$smarty=null)
 	{
 		if ($content==null) return;
 		if (!isset($params['name']))

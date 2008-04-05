@@ -1,9 +1,12 @@
 <?php
 
+require LIBPATH.'/QuickFW/Module.php';
+
 class QuickFW_PlainView 
 {
     protected $_vars;
     protected $_tmplPath;
+    protected $plugins;
     
     public $_mainTmpl;
     
@@ -13,7 +16,10 @@ class QuickFW_PlainView
         if (null !== $tmplPath) {
             $this->_tmplPath = $tmplPath;
         }
-        
+
+        require LIBPATH.'/QuickFW/Plugs.php';
+        $this->plugins = QuickFW_Plugs::getInstance();
+
         $this->_mainTmpl = $mainTmpl;
     }
     
@@ -59,31 +65,28 @@ class QuickFW_PlainView
     public function module($module)
     {
         $result = '';
-        $argnum = func_num_args();
+        /*$argnum = func_num_args();
         $args = func_get_args();
         $module = array_shift($args);
         array_unshift($args, &$this);
         array_unshift($args, &$result);
-        array_unshift($args, $module);
+        array_unshift($args, $module);*/
         
-        call_user_func_array(array('QuickFW_Module', 'getTemplate'), $args);
-        /*QuickFW_Module::getTemplate($module, $result, $this);*/
+        //call_user_func_array(array('QuickFW_Module', 'getTemplate'), $args);
+        QuickFW_Module::getTemplate($module, $result, $this);
         return $result;
-    }
-    
-    protected function insert($tmpl)
-    {
-        
     }
     
     public function render($tmpl)
     {
         extract($this->_vars, EXTR_OVERWRITE);
         error_reporting(E_ALL ^ E_NOTICE);
+        $P=&$this->plugins;
         ob_start();
         include($this->_tmplPath . '/' . $tmpl);
         $content = ob_get_contents();
         ob_end_clean();
+        $content = $this->plugins->HeaderFilter($content);
         return $content;
     }
     
@@ -91,15 +94,16 @@ class QuickFW_PlainView
     {
         global $config;
         $content = $this->render($tpl);
-        QuickFW_Cacher::set(generateLabel(), $content);
+        //QuickFW_Cacher::set(generateLabel(), $content);
         echo $content;
     }
     
 	public function displayMain()
 	{
-        global $config;
+        //global $config;
         $content = $this->render($this->_mainTmpl);
-        QuickFW_Cacher::set(generateLabel(), $content);
+        //getCache()->set(generateLabel(), $content);
+        //QuickFW_Cacher::set(generateLabel(), $content);
         echo $content;
 	}
     
