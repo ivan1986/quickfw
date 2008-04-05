@@ -39,12 +39,11 @@ class DbSimple_Mysql extends DbSimple_Generic_Database
         $ok = $this->link = @mysql_connect(
             $p['host'] . (empty($p['port'])? "" : ":".$p['port']),
             $p['user'],
-            $p['pass'],
-            true
+            $p['pass']
         );
         $this->_resetLastError();
         if (!$ok) return $this->_setDbError('mysql_connect()');
-        $ok = @mysql_select_db(preg_replace('{^/}s', '', $p['path']), $this->link);
+        $ok = mysql_select_db(preg_replace('{^/}s', '', $p['path']), $this->link);
         if (!$ok) return $this->_setDbError('mysql_select_db()');
     }
 
