@@ -11,12 +11,12 @@
 <?=$P->addCSS(array('file'=>'file.css')); ?>
 <?=$P->addCSS(array('file'=>'file.css')); ?>
 
-<? ob_start(); ?>HEAD<?=$P->getHeader(array('name'=>'h'),ob_get_contents()); ob_end_clean(); ?>
+<?=$P->getHeader(array('name'=>'h'),false);?>HEAD<?=$P->getHeader(array('name'=>'h'),true);?>
 А сюда у нас подключен модуль test</br>
 <?=$this->module('test');?><br />
 <?=$this->module('test/index//a/1/b/2');?><br />
 <?=$this->module("test(123,55,'1\'1','1,1',123)");?><br />
 А вот тут он закончился
-<? ob_start(); ?>HEAD<? $P->getHeader(array('name'=>'h'),ob_get_contents()); ob_end_clean(); ?>
+<?=$P->getHeader(array('name'=>'h'),false);?>HEAD<?=$P->getHeader(array('name'=>'h'),true);?>
 </body>
 </html>

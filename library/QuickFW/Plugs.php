@@ -80,7 +80,19 @@ class QuickFW_Plugs
 	
 	public function getHeader($params, $content, &$smarty=null)
 	{
-		if ($content==null) return;
+		//для двух шаблонизаторов
+		if ($content===null) return;
+		if ($content===false)
+		{
+			ob_start();
+			return;
+		}
+		if ($content===true)
+		{
+			$content=ob_get_contents();
+			ob_end_clean();
+		}
+
 		if (!isset($params['name']))
 			$params['name']='default';
 			
