@@ -15,6 +15,8 @@ class QuickFW_Router
 	protected $cModule, $cControllerName;
 	public $module, $controller, $action;
 	
+	public $UriPath, $CurPath, $ParentPath;
+	
 	function __construct($baseDir='../application')
 	{
 		$this->baseDir = rtrim($baseDir, '/\\');		
@@ -35,61 +37,34 @@ class QuickFW_Router
 		
 		$data = split(self::URI_DELIMITER, $requestUri);
 		$data = array_map('urldecode', $data);
-		while (isset($data[0]) AND $data[0] === '') array_shift($data);
 
-		$MCA = $this->getMCA($data,false);
+		$MCA = $this->loadMCA($data,false);
+		if (isset($MCA['Error']))
+		{
+			die("Был выполнен запрос \t\t".$requestUri."\nадрес был разобран в\t\t ".
+				$MCA['Path']."\n".
+				$MCA['Error']);
+		}
+		
+		$this->cModule = $this->module = $MCA['Module'];
+		$this->cControllerName = $this->controller = $MCA['Controller'];
+		$this->action = $MCA['Action'];
+		$class = $MCA['Class'];
+		
+		$controller = new $class();
+		$action = $MCA['Action'];
+		
+		$this->CurPath = $this->UriPath = $MCA['Path'];
+		$this->ParentPath = null;
 
-		$this->module = $MCA['Module'];
-		
-		$this->cModule = $this->module;
-		$this->cControllerName = $MCA['Controller'];
-		
-		$path = $this->getCurModulePath();
-
-		$cname = $MCA['Controller'];
-		
-		$class=ucfirst($cname).'Controller';
-		$file=$class.'.php';
-		$fullname = $path . '/controllers/' . $file;
-		
-		if  (is_file($fullname))
-		{
-			require($fullname);
-		}
-		else
-		{
-			echo "Был выполнен запрос \t\t".$requestUri."\nне найден файл \t\t\t".$fullname."\n";
-			die("Контроллер не найден, мать его за ногу");
-		}
-		
-		$this->controller = new $class();
-		
-		if ($this->controller === NULL)
-		{
-			echo "Был выполнен запрос \t\t".$requestUri."\nв файле \t\t\t".$fullname."\nне найден класс \t\t\t".$class."\n";
-			die("Контроллер не найден, мать его за ногу");
-		}
-		
-		
-		$aname = ucfirst($MCA['Action']) . 'Action';
-		if (method_exists($this->controller, $aname))
-		{
-			$this->action = $aname;
-		}
-		else
-		{
-			echo "Был выполнен запрос \t\t".$requestUri."\n в файле \t\t\t".$fullname."\nнаходящемся в классе \t\t".$class." \nне найдена функция \t\t".$aname."\n";
-			die("Действие не найдено шоб его");
-		}
-		
-		$view->setScriptPath($path.'/templates');
+		$view->setScriptPath($this->baseDir.'/'.$this->module.'/templates');
 		
 		$params = $this->parceParams($data);
 
 		if (!empty($params))
-			$result = call_user_func_array(array($this->controller, $this->action), $params);
+			$result = call_user_func_array(array($controller, $action), $params);
 		else
-			$result = call_user_func(array($this->controller, $this->action));
+			$result = call_user_func(array($controller, $action));
 
 		$view->assign('content',$result);
 		$view->displayMain();
@@ -105,46 +80,17 @@ class QuickFW_Router
 		$Uri = $this->rewrite($Uri);
 		if (preg_match('|(?:(.*?)\.)?(.*?)(?:\.(.*))?\((.*)\)|',$Uri,$patt))
 		{
-			// юзаем дефолтовый module и action
-			if (empty($patt[3]))
-			{
-				$MCA['Module']=$this->cModule;
-				if (empty($patt[1]))
-				{
-					$MCA['Controller']=$patt[2];
-					$MCA['Action']=self::DEFAULT_ACTION;
-				}
-				else
-				{
-					$MCA['Controller']=$patt[1];
-					$MCA['Action']=$patt[2];
-				}
-			}
-			else
-			{
-				$MCA['Module']=$patt[1];
-				$MCA['Controller']=$patt[2];
-				$MCA['Action']=$patt[3];
-			}
+			$MCA=$this->loadMCA(array_slice($patt,1,3));
 			$MCA['Params']=$this->parceScobParams($patt[4]);
 		}
 		else 
 		{
 			// module/controller/action/p1/p2/p3/...
 			$data = split(self::URI_DELIMITER, $Uri);
-			$data = array_map('urldecode', $data);
-			while (isset($data[0]) AND $data[0] === '') array_shift($data);
-	
-			$MCA = $this->getMCA($data);
+			$MCA = $this->loadMCA($data);
 			$MCA['Params']=$this->parceParams($data);
 		}
-		$MCA['File']=$this->baseDir.'/'.$MCA['Module'].'/controllers/'.ucfirst($MCA['Controller']).'Controller.php';
 		return $MCA;
-	}
-	
-	function getCurModulePath()
-	{
-		return $this->baseDir.'/'.$this->module;
 	}
 	
 	function redirect($url)
@@ -237,50 +183,85 @@ class QuickFW_Router
 		}
 		return $params;
 	}
-
-	protected function getMCA(&$data,$isModule=true)
+	
+	protected function loadMCA(&$data,$isModule=true)
 	{
+		$MCA = array();
+		while (isset($data[0]) AND $data[0] === '') array_shift($data);
 		//Determine Module
 		if (isset($data[0]) && (is_dir($this->baseDir . '/' . $data[0])))
 		{
-			$module = $data[0];
+			$MCA['Module'] = $data[0];
 			array_shift($data);
 		}
 		else 
 		{
-			$module = $isModule ? $this->cModule : self::DEFAULT_MODULE;
+			$MCA['Module'] = $isModule ? $this->cModule : self::DEFAULT_MODULE;
 		}
+		$path = $this->baseDir.'/'.$MCA['Module'];
 		
+		$c=count($data);	// Количество элементов URI исключая модуль
 		//Determine Controller
-		if (isset($data[0]))
-		{
-			$cname = $data[0];
-			array_shift($data);
-		}
-		else 
-		{
-			$cname = $isModule ? $this->cController : self::DEFAULT_CONTROLLER;
-		}
+		$cname = isset($data[0])?$data[0]: ($isModule ? $this->cController : self::DEFAULT_CONTROLLER);
+
+		$class=ucfirst($cname).'Controller';
+		$fullname = $path . '/controllers/' . $class . '.php';
 		
-		//Determine Action
-		if (isset($data[0]))
+		if  (is_file($fullname))
 		{
-			$aname = $data[0];
 			array_shift($data);
 		}
-		else 
+		else
 		{
-			$aname = self::DEFAULT_ACTION;
+			$cname=self::DEFAULT_CONTROLLER;
+			$class=ucfirst($cname).'Controller';
+			$fullname = $path . '/controllers/' . $class . '.php';
 		}
 
-		return array(
-			'Module'=> $module,
-			'Controller'=> $cname,
-			'Action'=> $aname,
-		);
+		require_once($fullname);
+		$MCA['Controller'] = $cname;
+		$MCA['Class'] = $class;
 
+		if (!class_exists($class))
+		{
+			$MCA['Error']="не найден класс \t\t\t".$class."\nКласс не найден, мать его за ногу";
+			$MCA['Path']=$MCA['Module'].'/'.$MCA['Controller'].'/...';
+			return $MCA;
+		}
+
+		$aname = isset($data[0])?$data[0]:self::DEFAULT_ACTION;
+		$action = $aname.($isModule?'Module':'Action');
+		
+		$actions=get_class_methods($class);
+		if (in_array($action,$actions))
+		{
+			array_shift($data);
+		}
+		else
+		{
+			$aname=self::DEFAULT_ACTION;
+			$action = $aname.($isModule?'Module':'Action');
+			if (!in_array($action,$actions) && !$isModule)
+			{
+				$MCA['Error']="в классе \t\t\t".$class." \nне найдена функция \t\t".
+				$aname.($isModule?'Module':'Action')
+				."\nМетод не найден шоб его";
+				$MCA['Path']=$MCA['Module'].'/'.$MCA['Controller'].'/'.$aname;
+				return $MCA;
+			}
+		}
+		$MCA['Action'] = $aname.($isModule?'Module':'Action');
+		if (count($data)==$c && $c>0)	// если из URI после модуля ничего не забрали и что-то осталось
+		{
+			$MCA['Error']="Указаны параметры у дефолтового CA \n".
+				"или несуществующий Контроллер или Экшен дефолтового контроллера\n".
+				"Не работает, мать его за ногу";
+		}
+		$MCA['Path']=$MCA['Module'].'/'.$MCA['Controller'].'/'.$aname;
+		
+		return $MCA;
 	}
-	
+
 	protected function filterUri($uri)
 	{
 		global $config;

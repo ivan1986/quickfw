@@ -28,7 +28,7 @@ $config['templater']= array(
 	'debug'=>false,
 );
 
-/*
+/**/
 $config['state']=array(
 	'release'     => true,
 	'autosession' => true,

@@ -4,7 +4,9 @@
 {outHead name='h'}
 Это файл Main.tpl</br>
 Это урл {siteUrl url='test'}
+<br />
 {$content}
+<br />
 {getHead name='h'}HEAD{/getHead}
 А сюда у нас подключен модуль test</br>
 
@@ -16,6 +18,7 @@
 {include file="module:test"}<br />
 {include file="module:test/index//a/1/b/2"}<br />
 {include file="module:test(123,55,'1\'1','1,1','$ttt')"}<br />
+{include file="module:test.index()"}<br />
 А вот тут он закончился
 {getHead name='h'}HEAD{/getHead}
 </body>
