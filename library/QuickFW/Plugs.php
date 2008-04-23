@@ -60,14 +60,14 @@ class QuickFW_Plugs
 	public function addJS($params, &$smarty=null)
 	{
 		if (isset($params['file']))
-			$this->IncFiles['js'][]=$params['file'];
+			$this->IncFiles['js'][]=(isset($params['noBase'])?'':$this->base).$params['file'];
 		return "";
 	}
 
 	public function addCSS($params, &$smarty=null)
 	{
 		if (isset($params['file']))
-			$this->IncFiles['css'][]=$params['file'];
+			$this->IncFiles['css'][]=(isset($params['noBase'])?'':$this->base).$params['file'];
 		return "";
 	}
 	

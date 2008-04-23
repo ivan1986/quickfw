@@ -73,11 +73,13 @@ class QuickFW_Router
 	
 	function moduleRoute($Uri)
 	{
+		global $config;
 		//два варианта записи вызова
 		// module.controller.action(p1,p2,p3,...)
 		$patt=array();
 		$MCA=array();
-		$Uri = $this->rewrite($Uri);
+		if ($config['redirection']['useModuleRewrite'])
+			$Uri = $this->rewrite($Uri);
 		if (preg_match('|(?:(.*?)\.)?(.*?)(?:\.(.*))?\((.*)\)|',$Uri,$patt))
 		{
 			$MCA=$this->loadMCA(array_slice($patt,1,3));

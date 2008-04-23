@@ -45,9 +45,6 @@
 		}
 	}
 
-	//$manager = new QuickFW_Manager();
-	//$cacher = new QuickFW_Cacher_Memcached();
-		
 	if (isset($config['host']['encoding']))
 		header("Content-Type: text/html; charset=".$config['host']['encoding']);
 
