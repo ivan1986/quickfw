@@ -55,6 +55,8 @@ class QuickFW_Plugs
 	}
 	
 	protected $HeaderArr = array();
+	protected $HeaderOut = array();
+	
 	protected $IncFiles = array();
 	
 	public function addJS($params, &$smarty=null)
@@ -75,7 +77,14 @@ class QuickFW_Plugs
 	{
 		if (!isset($params['name']))
 			$params['name']='default';
-		return '<!--HEAD'.$params['name'].'-->';
+		$key = $params['name'];
+		//$HeaderOut[$key]=1;
+		var_dump($this->HeaderOut);
+		if (!isset($this->HeaderOut[$key]))
+			$this->HeaderOut[$key]=-1;
+		$this->HeaderOut[$key]++;
+		var_dump($this->HeaderOut);
+		return $this->HeaderOut[$key]==0?'<!--HEAD'.$key.'-->':'';
 	}
 	
 	public function getHeader($params, $content, &$smarty=null)
@@ -96,29 +105,33 @@ class QuickFW_Plugs
 		if (!isset($params['name']))
 			$params['name']='default';
 			
-		//TO DO:
-		//загнать в массив и потом уникальные
-		if (!isset($this->HeaderArr['<!--HEAD'.$params['name'].'-->']))
-			$this->HeaderArr['<!--HEAD'.$params['name'].'-->']='';
-		$this->HeaderArr['<!--HEAD'.$params['name'].'-->'].=$content;
+		$key = '<!--HEAD'.$params['name'].'-->';
+		if (!isset($this->HeaderArr[$key]))
+			$this->HeaderArr[$key]='';
+		if (isset($params['join']))
+			$this->HeaderArr[$key].=$content;
+		else 
+			$this->HeaderArr[$key]=$content;
 	}
 	
 	public function HeaderFilter($text)
 	{
 		$head='';
-		if (is_array($this->IncFiles['css']))
+		if (count($this->IncFiles['css'])>0)
 		{
 			sort($this->IncFiles['css']);
 			$this->IncFiles['css'] = array_unique($this->IncFiles['css']);
-			foreach ($this->IncFiles['css'] as $v)
-				$head.='<link rel="stylesheet" href="'.$v.'" type="text/css">'."\n";
+			$head.='<link rel="stylesheet" href="'.
+				join('" type="text/css">'."\n".'<link rel="stylesheet" href="', $this->IncFiles['css']).
+				'" type="text/css">'."\n";
 		}
-		if (is_array($this->IncFiles['js']))
+		if (count($this->IncFiles['js'])>0)
 		{
 			sort($this->IncFiles['js']);
 			$this->IncFiles['js'] = array_unique($this->IncFiles['js']);
-			foreach ($this->IncFiles['js'] as $v)
-				$head.='<script language="JavaScript" src="'.$v.'" type="text/javascript"></script>'."\n";
+			$head.='<script language="JavaScript" src="'.
+				join('" type="text/javascript"></script>'."\n".'<script language="JavaScript" src="', $this->IncFiles['js']).
+				'" type="text/javascript"></script>'."\n";
 		}
 		
 		$text = str_replace('</head>',$head.'</head>',$text);

@@ -9,9 +9,12 @@
 <br />
 {getHead name='h'}HEAD{/getHead}
 А сюда у нас подключен модуль test</br>
+{outHead name='h'}
 
 {addJS file='file.js'}
 {addJS file='file.js'}
+{addJS file='file2.js'}
+{addJS file='file1.js'}
 {addCSS file='file.css'}
 {addCSS file='file.css'}
 
