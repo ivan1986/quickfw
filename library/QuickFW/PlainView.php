@@ -86,17 +86,16 @@ class QuickFW_PlainView
         include($this->_tmplPath . '/' . $tmpl);
         $content = ob_get_contents();
         ob_end_clean();
-        $content = $this->plugins->HeaderFilter($content);
         return $content;
     }
     
-    public function display($tpl)
+    /*public function display($tpl)
     {
         global $config;
         $content = $this->render($tpl);
         //QuickFW_Cacher::set(generateLabel(), $content);
         echo $content;
-    }
+    }*/
     
 	public function displayMain()
 	{
@@ -104,6 +103,7 @@ class QuickFW_PlainView
         $content = $this->render($this->_mainTmpl);
         //getCache()->set(generateLabel(), $content);
         //QuickFW_Cacher::set(generateLabel(), $content);
+        $content = $this->plugins->HeaderFilter($content);
         echo $content;
 	}
     

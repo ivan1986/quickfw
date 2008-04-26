@@ -23,6 +23,6 @@
 {include file="module:test(123,55,'1\'1','1,1','$ttt')"}<br />
 {include file="module:test.index()"}<br />
 А вот тут он закончился
-{getHead name='h'}HEAD{/getHead}
+{getHead name='123'}<script></script>{/getHead}
 </body>
 </html>

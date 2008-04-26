@@ -31,7 +31,7 @@ class QuickFW_Plugs
 	{
 		$smarty->register_function('outHead',array($this,'outHeader'));
 		$smarty->register_block('getHead',array($this,'getHeader'));
-		$smarty->register_outputfilter(array($this,'HeaderFilter'));
+		//$smarty->register_outputfilter(array($this,'HeaderFilter'));
 		
 		$smarty->register_function('addJS',array($this,'addJS'));
 		$smarty->register_function('addCSS',array($this,'addCSS'));
@@ -77,14 +77,11 @@ class QuickFW_Plugs
 	{
 		if (!isset($params['name']))
 			$params['name']='default';
-		$key = $params['name'];
-		//$HeaderOut[$key]=1;
-		var_dump($this->HeaderOut);
+		$key = '<!--HEAD'.$params['name'].'-->';
 		if (!isset($this->HeaderOut[$key]))
 			$this->HeaderOut[$key]=-1;
 		$this->HeaderOut[$key]++;
-		var_dump($this->HeaderOut);
-		return $this->HeaderOut[$key]==0?'<!--HEAD'.$key.'-->':'';
+		return $this->HeaderOut[$key]==0?$key:'';
 	}
 	
 	public function getHeader($params, $content, &$smarty=null)
@@ -105,13 +102,14 @@ class QuickFW_Plugs
 		if (!isset($params['name']))
 			$params['name']='default';
 			
-		$key = '<!--HEAD'.$params['name'].'-->';
-		if (!isset($this->HeaderArr[$key]))
-			$this->HeaderArr[$key]='';
+		$k = '<!--HEAD'.$params['name'].'-->';
+		
+		if (!isset($this->HeaderArr[$k]))
+			$this->HeaderArr[$k]='';
 		if (isset($params['join']))
-			$this->HeaderArr[$key].=$content;
+			$this->HeaderArr[$k].=$content;
 		else 
-			$this->HeaderArr[$key]=$content;
+			$this->HeaderArr[$k]=$content;
 	}
 	
 	public function HeaderFilter($text)
@@ -134,7 +132,17 @@ class QuickFW_Plugs
 				'" type="text/javascript"></script>'."\n";
 		}
 		
-		$text = str_replace('</head>',$head.'</head>',$text);
+		$head.="</head>\n";
+		foreach ($this->HeaderArr as $k=>$v)
+		{
+			if (!isset($this->HeaderOut[$k]))
+			{
+				$head.=$v;
+				unset($this->HeaderArr[$k]);
+			}
+		}
+		
+		$text = str_replace('</head>',$head,$text);
 		$text = str_replace(array_keys($this->HeaderArr),array_values($this->HeaderArr),$text);
 		return $text;
 	}
