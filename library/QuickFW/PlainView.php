@@ -8,7 +8,7 @@ class QuickFW_PlainView
     protected $_tmplPath;
     protected $plugins;
     
-    public $_mainTmpl;
+    public $mainTemplate;
     
     public function __construct($tmplPath = null, $mainTmpl = 'main.tpl')
     {
@@ -20,7 +20,7 @@ class QuickFW_PlainView
         require LIBPATH.'/QuickFW/Plugs.php';
         $this->plugins = QuickFW_Plugs::getInstance();
 
-        $this->_mainTmpl = $mainTmpl;
+        $this->mainTemplate = $mainTmpl;
     }
     
     public function assign($spec, $value = null)
@@ -65,13 +65,6 @@ class QuickFW_PlainView
     public function module($module)
     {
         $result = '';
-        /*$argnum = func_num_args();
-        $args = func_get_args();
-        $module = array_shift($args);
-        array_unshift($args, &$this);
-        array_unshift($args, &$result);
-        array_unshift($args, $module);*/
-        
         //call_user_func_array(array('QuickFW_Module', 'getTemplate'), $args);
         QuickFW_Module::getTemplate($module, $result, $this);
         return $result;
@@ -99,10 +92,10 @@ class QuickFW_PlainView
     
 	public function displayMain()
 	{
-        //global $config;
-        $content = $this->render($this->_mainTmpl);
-        //getCache()->set(generateLabel(), $content);
-        //QuickFW_Cacher::set(generateLabel(), $content);
+		if (isset($this->mainTemplate) && $this->mainTemplate!="")
+			$content = $this->render($this->mainTemplate);
+		else
+			$content = $this->get_template_vars('content');
         $content = $this->plugins->HeaderFilter($content);
         echo $content;
 	}

@@ -222,9 +222,10 @@ class QuickFW_Smarty
 	
 	public function displayMain()
 	{
-		/*if (isset($this->mainTemplate) && $this->mainTemplate!="")
-			echo $this->getEngine()->display($this->mainTemplate);*/
-		$content = $this->getEngine()->fetch($this->mainTemplate);
+		if (isset($this->mainTemplate) && $this->mainTemplate!="")
+			$content = $this->getEngine()->fetch($this->mainTemplate);
+		else
+			$content = $this->getEngine()->get_template_vars('content');
         $content = $this->_plugins->HeaderFilter($content);
         echo $content;
 	}

@@ -207,7 +207,7 @@ class QuickFW_Router
 		$cname = isset($data[0])?$data[0]: ($isModule ? $this->cController : self::DEFAULT_CONTROLLER);
 
 		$class=ucfirst($cname).'Controller';
-		$fullname = $path . '/controllers/' . $class . '.php';
+		$fullname = $path . '/controllers/' . strtr($class,'_','/') . '.php';
 		
 		if  (is_file($fullname))
 		{
@@ -217,9 +217,9 @@ class QuickFW_Router
 		{
 			$cname=self::DEFAULT_CONTROLLER;
 			$class=ucfirst($cname).'Controller';
-			$fullname = $path . '/controllers/' . $class . '.php';
+			$fullname = $path . '/controllers/' . strtr($class,'_','/') . '.php';
 		}
-
+		
 		require_once($fullname);
 		$MCA['Controller'] = $cname;
 		$MCA['Class'] = $class;

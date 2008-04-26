@@ -18,6 +18,7 @@ class IndexController
 	
 	public function преведAction()
 	{
+		QFW::$view->mainTemplate='';
 		return "медвед";
 	}
 
