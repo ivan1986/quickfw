@@ -59,7 +59,7 @@ class QuickFW_Router
 
 		$view->setScriptPath($this->baseDir.'/'.$this->module.'/templates');
 		
-		$params = $this->parceParams($data);
+		$params = $this->parseParams($data);
 
 		if (!empty($params))
 			$result = call_user_func_array(array($controller, $action), $params);
@@ -83,14 +83,14 @@ class QuickFW_Router
 		if (preg_match('|(?:(.*?)\.)?(.*?)(?:\.(.*))?\((.*)\)|',$Uri,$patt))
 		{
 			$MCA=$this->loadMCA(array_slice($patt,1,3));
-			$MCA['Params']=$this->parceScobParams($patt[4]);
+			$MCA['Params']=$this->parseScobParams($patt[4]);
 		}
 		else 
 		{
 			// module/controller/action/p1/p2/p3/...
 			$data = split(self::URI_DELIMITER, $Uri);
 			$MCA = $this->loadMCA($data);
-			$MCA['Params']=$this->parceParams($data);
+			$MCA['Params']=$this->parseParams($data);
 		}
 		return $MCA;
 	}
@@ -139,7 +139,7 @@ class QuickFW_Router
 		return $this->rewriter->forward($uri);
 	}
 	
-	protected function parceParams(&$data)
+	protected function parseParams(&$data)
 	{
 		if (empty($data))
 			return array();
@@ -156,7 +156,7 @@ class QuickFW_Router
 		return array('params' => $params);
 	}
 	
-	protected function parceScobParams($par)
+	protected function parseScobParams($par)
 	{
 		$instr  = false;
 		$strbeg = '';
