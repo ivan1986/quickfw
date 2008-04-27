@@ -95,13 +95,25 @@ class QuickFW_Router
 		return $MCA;
 	}
 	
+	function redirectMCA($MCA,$tail='')
+	{
+		global $config;
+		$base   = $config['redirection']['baseUrl'];
+		$index  = $config['redirection']['useIndex']?'index.php/':'';
+		$url    = $config['redirection']['useRewrite']?$this->backrewrite($MCA):$MCA;
+		$defext = $config['redirection']['defExt'];
+
+		header('Location: '.$base.$index.$url.$defext.$tail);
+		exit();
+	}
+
 	function redirect($url)
 	{
 		header('Location: '.$url);
 		exit();
 	}
 
-	function backroute($url)
+	function backrewrite($url)
 	{
 		global $config;
 		if (!$config['redirection']['useRewrite'])
@@ -124,7 +136,7 @@ class QuickFW_Router
 			require LIBPATH.'/QuickFW/Rewrite.php';
 			$this->rewriter = new QuickFW_Rewrite();
 		}
-		return $this->rewriter->forword($uri);
+		return $this->rewriter->forward($uri);
 	}
 	
 	protected function parceParams(&$data)

@@ -50,7 +50,7 @@ class QuickFW_Plugs
 		global $router;
 		if (!isset($params['url'])) return baseUrl();
 		$url=$params['url'];
-		$url = $router->backroute($url);
+		$url = $router->backrewrite($url);
 		return $this->base.$this->index.$url.$this->defext;
 	}
 	

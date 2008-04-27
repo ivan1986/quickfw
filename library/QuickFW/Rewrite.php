@@ -14,7 +14,7 @@ class QuickFW_Rewrite
 			$this->backrewrite = $backrewrite;
 	}
 	
-	function forword($url)
+	function forward($url)
 	{
 		return preg_replace(array_keys($this->rewrite), array_values($this->rewrite), $url);
 	}
