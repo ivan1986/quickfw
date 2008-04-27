@@ -191,6 +191,7 @@ class QuickFW_Router
 		$MCA = array();
 		while (isset($data[0]) AND $data[0] === '') array_shift($data);
 		//Determine Module
+		$qfw = '';
 		if (isset($data[0]) && (is_dir($this->baseDir . '/' . $data[0])))
 		{
 			$MCA['Module'] = $data[0];
@@ -198,15 +199,25 @@ class QuickFW_Router
 		}
 		else 
 		{
-			$MCA['Module'] = $isModule ? $this->cModule : self::DEFAULT_MODULE;
+			if ($data[0]=='QFW' && $isModule)
+			{
+				$MCA['Module']='QFW';
+				array_shift($data);
+				$path = LIBPATH.'/QuickFW/Module';
+				$qfw = 'QFW';
+			}
+			else
+			{
+				$MCA['Module'] = $isModule ? $this->cModule : self::DEFAULT_MODULE;
+				$path = $this->baseDir.'/'.$MCA['Module'];
+			}
 		}
-		$path = $this->baseDir.'/'.$MCA['Module'];
 		
 		$c=count($data);	// Количество элементов URI исключая модуль
 		//Determine Controller
 		$cname = isset($data[0])?$data[0]: ($isModule ? $this->cController : self::DEFAULT_CONTROLLER);
 
-		$class=ucfirst($cname).'Controller';
+		$class=$qfw.ucfirst($cname).'Controller';
 		$fullname = $path . '/controllers/' . strtr($class,'_','/') . '.php';
 		
 		if  (is_file($fullname))
@@ -232,27 +243,25 @@ class QuickFW_Router
 		}
 
 		$aname = isset($data[0])?$data[0]:self::DEFAULT_ACTION;
-		$action = $aname.($isModule?'Module':'Action');
+		$MCA['Action'] = $aname.($isModule?'Module':'Action');
 		
 		$actions=get_class_methods($class);
-		if (in_array($action,$actions))
+		if (in_array($MCA['Action'],$actions))
 		{
 			array_shift($data);
 		}
 		else
 		{
 			$aname=self::DEFAULT_ACTION;
-			$action = $aname.($isModule?'Module':'Action');
-			if (!in_array($action,$actions) && !$isModule)
+			$MCA['Action'] = $aname.($isModule?'Module':'Action');
+			if (!in_array($MCA['Action'],$actions))
 			{
 				$MCA['Error']="в классе \t\t\t".$class." \nне найдена функция \t\t".
-				$aname.($isModule?'Module':'Action')
-				."\nМетод не найден шоб его";
+				$MCA['Action']."\nМетод не найден шоб его";
 				$MCA['Path']=$MCA['Module'].'/'.$MCA['Controller'].'/'.$aname;
 				return $MCA;
 			}
 		}
-		$MCA['Action'] = $aname.($isModule?'Module':'Action');
 		if (count($data)==$c && $c>0)	// если из URI после модуля ничего не забрали и что-то осталось
 		{
 			$MCA['Error']="Указаны параметры у дефолтового CA \n".

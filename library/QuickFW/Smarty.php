@@ -26,6 +26,8 @@ class QuickFW_Smarty
 		global $config;
 		require LIBPATH.'/Smarty'.($config['templater']['debug']?'.debug':'').'/Smarty.class.php';
 		$this->_smarty = new Smarty;
+		
+		$this->_smarty->force_compile = $config['templater']['debug'];
 	
 		$this->_smarty->compile_dir = TMPPATH . '/templates_c';
 		$this->_smarty->config_dir  = TMPPATH . '/configs';

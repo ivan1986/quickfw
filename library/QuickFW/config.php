@@ -4,6 +4,7 @@ $config=array();
 
 $config['host']=array(
 	'encoding' => 'utf-8',
+	'lang' => 'ru_RU',
 );
 
 $config['database']=array(
@@ -36,7 +37,7 @@ $config['cacher']=array(
 
 $config['templater']= array(
 	'name'=>'Smarty',
-	'debug'=>false,
+	'debug'=>true,
 );
 
 ?>
