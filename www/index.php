@@ -10,17 +10,21 @@
 	class QFW
 	{
 		static public $router;
-		static public $db;
+		static public $params;
 		static public $view;
+		static public $db;
+		static public $P;
 
 		private function __construct() {}
 
 		static public function Init()
 		{
-			global $router,$db,$view;
+			global $router,$db,$view,$params;
+			self::$params=$params;
 			self::$router=$router;
 			self::$view=$view;
 			self::$db=$db;
+			self::$P=$view->plugins;
 		}
 	}
 	

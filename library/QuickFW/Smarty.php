@@ -7,7 +7,7 @@ class QuickFW_Smarty
 	* @var Smarty
 	*/
 	protected $_smarty;
-	protected $_plugins;
+	public $plugins;
 	
 	protected $_tmplPath;
 	/**
@@ -44,9 +44,7 @@ class QuickFW_Smarty
 													"getTimestamp",
 													"isSecure",
 													"isTrusted"));
-		require LIBPATH.'/QuickFW/Plugs.php';
-		$this->_plugins = QuickFW_Plugs::getInstance();
-		$this->_plugins->Register4Smarty($this->_smarty);
+		$this->plugins->Register4Smarty($this->_smarty);
 	}
 	
 	/**
@@ -60,6 +58,9 @@ class QuickFW_Smarty
 	{
 		$this->_tmplPath = $tmplPath;
 		$this->mainTemplate = $mainTpl;
+
+		require LIBPATH.'/QuickFW/Plugs.php';
+		$this->plugins = QuickFW_Plugs::getInstance();
 	}
 	
 	/**
@@ -228,7 +229,7 @@ class QuickFW_Smarty
 			$content = $this->getEngine()->fetch($this->mainTemplate);
 		else
 			$content = $this->getEngine()->get_template_vars('content');
-        $content = $this->_plugins->HeaderFilter($content);
+        $content = $this->plugins->HeaderFilter($content);
         echo $content;
 	}
 }

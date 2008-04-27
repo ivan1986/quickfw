@@ -12,6 +12,8 @@ class IndexController
 		//die();
 		//$view->assign('ttt','111');
 		//$db->select("SELECT * FROM album");
+		QFW::$params->sModuleParams('aaa',"123");
+		echo '<pre>'.QFW::$P->siteUrl(array('url'=>'test')).'</pre>';
 		
 		return 'Корневое действие сайта, показывается на /, на /default, на /index и т.п.<br/>';
 	}

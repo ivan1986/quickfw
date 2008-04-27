@@ -23,7 +23,7 @@ class QuickFW_Module
 	
 	public static function getTemplate($tpl_name, &$tpl_source, &$smarty)
 	{
-		global $router;
+		global $router,$params;
 		$MCA=$router->moduleRoute($tpl_name);
 		if (isset($MCA['Error']))
 		{
@@ -34,13 +34,15 @@ class QuickFW_Module
 		
 		$module = new $MCA['Class']();
 		
-		list($lpPath, $router->ParentPath, $router->CurPath) = 
-			array($router->ParentPath, $router->CurPath, $MCA['Path']);
-		
+		list($c, $lpPath, $router->ParentPath, $router->CurPath) = 
+			array($params->curName, $router->ParentPath, $router->CurPath, $MCA['Path']);
+
+		$params->curName = $MCA['ModuleParamsName'];
+			
 		$result = call_user_func_array(array($module, $MCA['Action']), $MCA['Params']);
 		
-		list($router->CurPath, $router->ParentPath) = 
-			array($router->ParentPath, $lpPath);
+		list($params->curName, $router->CurPath, $router->ParentPath) = 
+			array($c, $router->ParentPath, $lpPath);
 		
 		if ($result === false)
 			return true;

@@ -74,12 +74,23 @@ class QuickFW_Router
 	function moduleRoute($Uri)
 	{
 		global $config;
-		//два варианта записи вызова
-		// module.controller.action(p1,p2,p3,...)
 		$patt=array();
 		$MCA=array();
+
+		//Имя массива параметров модуля
+		$pos = strrpos($Uri,'#');
+		if ($pos !== false)
+		{
+			$ModuleParamsName = substr($Uri,$pos+1);
+			$Uri = substr($Uri,0,$pos);
+		}
+		
+		
 		if ($config['redirection']['useModuleRewrite'])
 			$Uri = $this->rewrite($Uri);
+		
+		//два варианта записи вызова
+		// module.controller.action(p1,p2,p3,...)
 		if (preg_match('|(?:(.*?)\.)?(.*?)(?:\.(.*))?\((.*)\)|',$Uri,$patt))
 		{
 			$MCA=$this->loadMCA(array_slice($patt,1,3));
@@ -92,6 +103,8 @@ class QuickFW_Router
 			$MCA = $this->loadMCA($data);
 			$MCA['Params']=$this->parseParams($data);
 		}
+		if (isset($ModuleParamsName))
+			$MCA['ModuleParamsName'] = $ModuleParamsName;
 		return $MCA;
 	}
 	

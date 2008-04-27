@@ -1,12 +1,10 @@
 <?php
 
-require LIBPATH.'/QuickFW/Module.php';
-
 class QuickFW_PlainView 
 {
     protected $_vars;
     protected $_tmplPath;
-    protected $plugins;
+    public $plugins;
     
     public $mainTemplate;
     
@@ -17,7 +15,8 @@ class QuickFW_PlainView
             $this->_tmplPath = $tmplPath;
         }
 
-        require LIBPATH.'/QuickFW/Plugs.php';
+		require LIBPATH.'/QuickFW/Module.php';
+		require LIBPATH.'/QuickFW/Plugs.php';
         $this->plugins = QuickFW_Plugs::getInstance();
 
         $this->mainTemplate = $mainTmpl;
