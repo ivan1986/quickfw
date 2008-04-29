@@ -4,7 +4,7 @@ class QuickFW_PlainView
 {
     protected $_vars;
     protected $_tmplPath;
-    public $plugins;
+    public $P;
     
     public $mainTemplate;
     
@@ -17,7 +17,7 @@ class QuickFW_PlainView
 
 		require LIBPATH.'/QuickFW/Module.php';
 		require LIBPATH.'/QuickFW/Plugs.php';
-        $this->plugins = QuickFW_Plugs::getInstance();
+        $this->P = QuickFW_Plugs::getInstance();
 
         $this->mainTemplate = $mainTmpl;
     }
@@ -73,7 +73,7 @@ class QuickFW_PlainView
     {
         extract($this->_vars, EXTR_OVERWRITE);
         error_reporting(E_ALL ^ E_NOTICE);
-        $P=&$this->plugins;
+        $P=&$this->P;
         ob_start();
         include($this->_tmplPath . '/' . $tmpl);
         $content = ob_get_contents();
@@ -95,7 +95,7 @@ class QuickFW_PlainView
 			$content = $this->render($this->mainTemplate);
 		else
 			$content = $this->get_template_vars('content');
-        $content = $this->plugins->HeaderFilter($content);
+        $content = $this->P->HeaderFilter($content);
         echo $content;
 	}
     

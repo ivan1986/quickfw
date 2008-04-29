@@ -13,7 +13,6 @@
 		static public $params;
 		static public $view;
 		static public $db;
-		static public $P;
 
 		private function __construct() {}
 
@@ -24,7 +23,6 @@
 			self::$router=$router;
 			self::$view=$view;
 			self::$db=$db;
-			self::$P=$view->plugins;
 		}
 	}
 	

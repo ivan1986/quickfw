@@ -220,6 +220,7 @@ class QuickFW_Router
 		if (isset($data[0]) && (is_dir($this->baseDir . '/' . $data[0])))
 		{
 			$MCA['Module'] = $data[0];
+			$path = $this->baseDir.'/'.$MCA['Module'];
 			array_shift($data);
 		}
 		else 

@@ -7,7 +7,7 @@ class QuickFW_Smarty
 	* @var Smarty
 	*/
 	protected $_smarty;
-	public $plugins;
+	public $P;
 	
 	protected $_tmplPath;
 	/**
@@ -44,7 +44,7 @@ class QuickFW_Smarty
 													"getTimestamp",
 													"isSecure",
 													"isTrusted"));
-		$this->plugins->Register4Smarty($this->_smarty);
+		$this->regPlugs();
 	}
 	
 	/**
@@ -60,7 +60,7 @@ class QuickFW_Smarty
 		$this->mainTemplate = $mainTpl;
 
 		require LIBPATH.'/QuickFW/Plugs.php';
-		$this->plugins = QuickFW_Plugs::getInstance();
+		$this->P = QuickFW_Plugs::getInstance();
 	}
 	
 	/**
@@ -229,8 +229,49 @@ class QuickFW_Smarty
 			$content = $this->getEngine()->fetch($this->mainTemplate);
 		else
 			$content = $this->getEngine()->get_template_vars('content');
-        $content = $this->plugins->HeaderFilter($content);
+        $content = $this->P->HeaderFilter($content);
         echo $content;
 	}
+	
+	//Plugins Wrapper
+	protected function regPlugs()
+	{
+		$this->_smarty->register_function('baseUrl',array($this,'s_baseUrl'));
+		$this->_smarty->register_function('siteUrl',array($this,'s_siteUrl'));
+		
+		$this->_smarty->register_function('addJS',array($this,'s_addJS'));
+		$this->_smarty->register_function('addCSS',array($this,'s_addCSS'));
+		
+		$this->_smarty->register_function('outHead',array($this,'s_outHead'));
+		$this->_smarty->register_block('getHead',array($this,'s_getHead'));
+	}
+	
+	public function s_baseUrl($params, &$smarty)
+		{return $this->P->baseUrl();}
+	public function s_siteUrl($params, &$smarty) 
+		{return !isset($params['url'])?$this->P->baseUrl():$this->P->siteUrl($params['url']);}
+	public function s_addJS($params, &$smarty)
+	{
+		if (isset($params['file']))
+			$this->P->addJS($params['file'],isset($params['noBase']));
+		return "";
+	}
+	public function s_addCSS($params, &$smarty)
+	{
+		if (isset($params['file']))
+			$this->P->addCSS($params['file'],isset($params['noBase']));
+		return "";
+	}
+	public function s_outHead($params, &$smarty) 
+	{
+		return $this->P->outHead(isset($params['name'])?$params['name']:'default');
+	}
+	public function s_getHead($params, $content, &$smarty) 
+	{
+		if ($content===null)
+			return;
+		return $this->P->getHead($content, isset($params['name'])?$params['name']:'default', isset($params['join']));
+	}
+	
 }
 ?>

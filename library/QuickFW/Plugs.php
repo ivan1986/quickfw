@@ -40,16 +40,14 @@ class QuickFW_Plugs
 		$smarty->register_function('siteUrl',array($this,'siteUrl'));
 	}
 	
-	public function baseUrl($params, &$smarty=null)
+	public function baseUrl()
 	{
 		return $this->base;
 	}
 
-	public function siteUrl($params, &$smarty=null)
+	public function siteUrl($url)
 	{
 		global $router;
-		if (!isset($params['url'])) return baseUrl();
-		$url=$params['url'];
 		$url = $router->backrewrite($url);
 		return $this->base.$this->index.$url.$this->defext;
 	}
@@ -59,35 +57,30 @@ class QuickFW_Plugs
 	
 	protected $IncFiles = array();
 	
-	public function addJS($params, &$smarty=null)
+	public function addJS($file, $noBase=false)
 	{
-		if (isset($params['file']))
-			$this->IncFiles['js'][]=(isset($params['noBase'])?'':$this->base).$params['file'];
+		$this->IncFiles['js'][]=($noBase?'':$this->base).$file;
 		return "";
 	}
 
-	public function addCSS($params, &$smarty=null)
+	public function addCSS($file, $noBase=false)
 	{
-		if (isset($params['file']))
-			$this->IncFiles['css'][]=(isset($params['noBase'])?'':$this->base).$params['file'];
+		$this->IncFiles['css'][]=($noBase?'':$this->base).$file;
 		return "";
 	}
 	
-	public function outHeader($params, &$smarty=null)
+	public function outHead($name='default')
 	{
-		if (!isset($params['name']))
-			$params['name']='default';
-		$key = '<!--HEAD'.$params['name'].'-->';
+		$key = '<!--HEAD'.$name.'-->';
 		if (!isset($this->HeaderOut[$key]))
 			$this->HeaderOut[$key]=-1;
 		$this->HeaderOut[$key]++;
 		return $this->HeaderOut[$key]==0?$key:'';
 	}
 	
-	public function getHeader($params, $content, &$smarty=null)
+	public function getHead($content, $name='default', $join=false)
 	{
-		//для двух шаблонизаторов
-		if ($content===null) return;
+		//для перехвата из PlainPHP
 		if ($content===false)
 		{
 			ob_start();
@@ -99,14 +92,11 @@ class QuickFW_Plugs
 			ob_end_clean();
 		}
 
-		if (!isset($params['name']))
-			$params['name']='default';
-			
-		$k = '<!--HEAD'.$params['name'].'-->';
+		$k = '<!--HEAD'.$name.'-->';
 		
 		if (!isset($this->HeaderArr[$k]))
 			$this->HeaderArr[$k]='';
-		if (isset($params['join']))
+		if ($join)
 			$this->HeaderArr[$k].=$content;
 		else 
 			$this->HeaderArr[$k]=$content;

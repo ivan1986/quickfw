@@ -1,26 +1,26 @@
 <html>
 <head><title>Main.tpl</title></head>
 <body>
-<?=$P->outHeader(array('name'=>'h')); ?>
+<?=$P->outHead('h'); ?>
 Это файл Main.tpl</br>
-Это урл <?=$P->siteUrl(array('url'=>'test')); ?>
+Это урл <?=$P->siteUrl('test'); ?>
 
 <br />
 <?=$content; ?>
 <br />
 
-<?=$P->addJS(array('file'=>'file.js')); ?>
-<?=$P->addJS(array('file'=>'file.js')); ?>
-<?=$P->addCSS(array('file'=>'file.css')); ?>
-<?=$P->addCSS(array('file'=>'file.css')); ?>
+<?=$P->addJS('file.js'); ?>
+<?=$P->addJS('file.js'); ?>
+<?=$P->addCSS('file.css'); ?>
+<?=$P->addCSS('file.css'); ?>
 
-<?=$P->getHeader(array('name'=>'h'),false);?>HEAD<?=$P->getHeader(array('name'=>'h'),true);?>
+<?=$P->getHead(false,'h');?>HEAD<?=$P->getHead(true,'h');?>
 А сюда у нас подключен модуль test</br>
 <?=$this->module('test');?><br />
 <?=$this->module('test/index//a/1/b/2');?><br />
 <?=$this->module("test(123,55,'1\'1','1,1',123)");?><br />
 <?=$this->module("default.test.index()");?><br />
 А вот тут он закончился
-<?=$P->getHeader(array('name'=>'h'),false);?>HEAD<?=$P->getHeader(array('name'=>'h'),true);?>
+<?=$P->getHead(false,'h');?>HEAD<?=$P->getHead(true,'h');?>
 </body>
 </html>

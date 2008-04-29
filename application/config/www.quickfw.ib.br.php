@@ -1,0 +1,1 @@
+/home/ivan1986/workspace/quickfw/application/config/quickfw.my.php

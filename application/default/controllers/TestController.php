@@ -5,8 +5,7 @@ class TestController
 	public function indexModule()
 	{
 		global $router,$view;
-		$aaa = QFW::$params->gCurModuleParams();
-		return "<pre>".$view->render('index.tpl').print_r($aaa)
+		return "<pre>".$view->render('index.tpl')
 		."\nМодуль index - ".$router->UriPath.' '.$router->CurPath.' '.$router->ParentPath
 		."\nЭто результат работы модуля Test с параметрами ". var_export(func_get_args(),true)."</pre>";
 	}
