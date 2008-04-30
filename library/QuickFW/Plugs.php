@@ -27,19 +27,6 @@ class QuickFW_Plugs
 		return self::$_thisInst;
 	}
 	
-	public function Register4Smarty(&$smarty)
-	{
-		$smarty->register_function('outHead',array($this,'outHeader'));
-		$smarty->register_block('getHead',array($this,'getHeader'));
-		//$smarty->register_outputfilter(array($this,'HeaderFilter'));
-		
-		$smarty->register_function('addJS',array($this,'addJS'));
-		$smarty->register_function('addCSS',array($this,'addCSS'));
-		
-		$smarty->register_function('baseUrl',array($this,'baseUrl'));
-		$smarty->register_function('siteUrl',array($this,'siteUrl'));
-	}
-	
 	public function baseUrl()
 	{
 		return $this->base;

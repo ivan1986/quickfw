@@ -215,35 +215,19 @@ class QuickFW_Router
 	{
 		$MCA = array();
 		while (isset($data[0]) AND $data[0] === '') array_shift($data);
+		
 		//Determine Module
-		$qfw = '';
 		if (isset($data[0]) && (is_dir($this->baseDir . '/' . $data[0])))
-		{
-			$MCA['Module'] = $data[0];
-			$path = $this->baseDir.'/'.$MCA['Module'];
-			array_shift($data);
-		}
+			$MCA['Module'] = array_shift($data);
 		else 
-		{
-			if ($data[0]=='QFW' && $isModule)
-			{
-				$MCA['Module']='QFW';
-				array_shift($data);
-				$path = LIBPATH.'/QuickFW/Module';
-				$qfw = 'QFW';
-			}
-			else
-			{
-				$MCA['Module'] = $isModule ? $this->cModule : self::DEFAULT_MODULE;
-				$path = $this->baseDir.'/'.$MCA['Module'];
-			}
-		}
+			$MCA['Module'] = $isModule ? $this->cModule : self::DEFAULT_MODULE;
+		$path = $this->baseDir.'/'.$MCA['Module'];
 		
 		$c=count($data);	// Количество элементов URI исключая модуль
 		//Determine Controller
 		$cname = isset($data[0])?$data[0]: ($isModule ? $this->cController : self::DEFAULT_CONTROLLER);
 
-		$class=$qfw.ucfirst($cname).'Controller';
+		$class=ucfirst($cname).'Controller';
 		$fullname = $path . '/controllers/' . strtr($class,'_','/') . '.php';
 		
 		if  (is_file($fullname))
@@ -254,7 +238,7 @@ class QuickFW_Router
 		{
 			$cname=self::DEFAULT_CONTROLLER;
 			$class=ucfirst($cname).'Controller';
-			$fullname = $path . '/controllers/' . strtr($class,'_','/') . '.php';
+			$fullname = $path . '/controllers/' . $class . '.php';
 		}
 		
 		require_once($fullname);
@@ -288,6 +272,7 @@ class QuickFW_Router
 				return $MCA;
 			}
 		}
+		
 		if (count($data)==$c && $c>0)	// если из URI после модуля ничего не забрали и что-то осталось
 		{
 			$MCA['Error']="Указаны параметры у дефолтового CA \n".
