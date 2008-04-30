@@ -37,7 +37,6 @@ $config['cacher']=array(
 
 $config['templater']= array(
 	'name'=>'Smarty',
-	'debug'=>true,
 );
 
 ?>

@@ -41,9 +41,16 @@ class QuickFW_Router
 		$MCA = $this->loadMCA($data,false);
 		if (isset($MCA['Error']))
 		{
-			die("Был выполнен запрос \t\t".$requestUri."\nадрес был разобран в\t\t ".
-				$MCA['Path']."\n".
-				$MCA['Error']);
+			if ($GLOBALS['config']['state']['release'])
+			{
+				header("HTTP/1.1 404 Not Found");
+				die($view->render('default/templates/404.html'));
+				
+			}
+			else
+				die("Был выполнен запрос \t\t".$requestUri."\nадрес был разобран в\t\t ".
+					$MCA['Path']."\n".
+					$MCA['Error']);
 		}
 		
 		$this->cModule = $this->module = $MCA['Module'];

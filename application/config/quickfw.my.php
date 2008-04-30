@@ -25,7 +25,6 @@ $config['state']=array(
 
 $config['templater']= array(
 	'name'=>'PlainView',
-	'debug'=>false,
 );
 
 /*
@@ -37,7 +36,6 @@ $config['state']=array(
 
 $config['templater']= array(
 	'name'=>'Smarty',
-	'debug'=>false,
 );
 /**/
 

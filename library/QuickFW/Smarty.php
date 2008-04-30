@@ -24,10 +24,10 @@ class QuickFW_Smarty
 	protected function Init()
 	{
 		global $config;
-		require LIBPATH.'/Smarty'.($config['templater']['debug']?'.debug':'').'/Smarty.class.php';
+		require LIBPATH.'/Smarty'.($config['state']['release']?'':'.debug').'/Smarty.class.php';
 		$this->_smarty = new Smarty;
 		
-		$this->_smarty->force_compile = $config['templater']['debug'];
+		$this->_smarty->force_compile = !$config['state']['release'];
 	
 		$this->_smarty->compile_dir = TMPPATH . '/templates_c';
 		$this->_smarty->config_dir  = TMPPATH . '/configs';
@@ -214,6 +214,11 @@ class QuickFW_Smarty
 	* @return string The output.
 	*/
 	public function render($name)
+	{
+		return $this->getEngine()->fetch($name);
+	}
+
+	public function fetch($name)
 	{
 		return $this->getEngine()->fetch($name);
 	}

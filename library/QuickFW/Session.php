@@ -46,13 +46,13 @@ class QuickFW_Session
 	public function __construct()
 	{
 		global $config;
-		if (!$config['state']['release'])
+		/*if (!$config['state']['release'])
 		{
 			//session_save_path(TMPPATH);
 			//session_start();
 		//echo session_name().':'.session_id().serialize($_SESSION)."\n<br>";
 			return;
-		}
+		}*/
 		session_set_save_handler(
 				array('QuickFW_Session',"open"),
 				array('QuickFW_Session',"close"),
