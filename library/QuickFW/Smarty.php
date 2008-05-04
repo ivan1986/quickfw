@@ -243,6 +243,7 @@ class QuickFW_Smarty
 	{
 		$this->_smarty->register_function('baseUrl',array($this,'s_baseUrl'));
 		$this->_smarty->register_function('siteUrl',array($this,'s_siteUrl'));
+		$this->_smarty->register_modifier('siteUrl',array($this,'m_siteUrl'));
 		
 		$this->_smarty->register_function('addJS',array($this,'s_addJS'));
 		$this->_smarty->register_function('addCSS',array($this,'s_addCSS'));
@@ -255,6 +256,8 @@ class QuickFW_Smarty
 		{return $this->P->baseUrl();}
 	public function s_siteUrl($params, &$smarty) 
 		{return !isset($params['url'])?$this->P->baseUrl():$this->P->siteUrl($params['url']);}
+	public function m_siteUrl($url)
+		{return $this->P->siteUrl($url);}
 	public function s_addJS($params, &$smarty)
 	{
 		if (isset($params['file']))

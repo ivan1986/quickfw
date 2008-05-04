@@ -3,6 +3,7 @@
 class QuickFW_Module
 {
 	protected static $_thisInst = null;
+	protected static $classes;
 	
 	protected function __construct()
 	{
@@ -32,7 +33,11 @@ class QuickFW_Module
 			return true;
 		}
 		
-		$module = new $MCA['Class']();
+		if (!isset(QuickFW_Module::$classes[$MCA['Class']]))
+		{
+			QuickFW_Module::$classes[$MCA['Class']] = new $MCA['Class']();
+		}
+		$module = &QuickFW_Module::$classes[$MCA['Class']];
 		
 		list($c, $lpPath, $router->ParentPath, $router->CurPath) = 
 			array($params->curName, $router->ParentPath, $router->CurPath, $MCA['Path']);
@@ -57,14 +62,18 @@ class QuickFW_Module
 		$MCA=$router->moduleRoute($tpl_name);
 		if (isset($MCA['Error'])) return true;
 		
-		$module = new $MCA['Class']();
-			
-		if (!is_callable(array($module,'getTimestamp')))
+		if (!$MCA['ts'])
 		{
 			$tpl_timestamp = mktime();
 			return true;
 		}
 			
+		if (!isset(QuickFW_Module::$classes[$MCA['Class']]))
+		{
+			QuickFW_Module::$classes[$MCA['Class']] = new $MCA['Class']();
+		}
+		$module = &QuickFW_Module::$classes[$MCA['Class']];
+
 		$result = call_user_func_array(array($module, 'getTimestamp'), array($MCAP['Action'],$MCAP['Params']));
 		
 		if ($result === false)

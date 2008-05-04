@@ -97,19 +97,18 @@ class QuickFW_Plugs
 			sort($this->IncFiles['css']);
 			$this->IncFiles['css'] = array_unique($this->IncFiles['css']);
 			$head.='<link rel="stylesheet" href="'.
-				join('" type="text/css">'."\n".'<link rel="stylesheet" href="', $this->IncFiles['css']).
-				'" type="text/css">'."\n";
+				join('" type="text/css" />'."\n".'<link rel="stylesheet" href="', $this->IncFiles['css']).
+				'" type="text/css" />'."\n";
 		}
 		if (count($this->IncFiles['js'])>0)
 		{
 			sort($this->IncFiles['js']);
 			$this->IncFiles['js'] = array_unique($this->IncFiles['js']);
-			$head.='<script language="JavaScript" src="'.
-				join('" type="text/javascript"></script>'."\n".'<script language="JavaScript" src="', $this->IncFiles['js']).
+			$head.='<script src="'.
+				join('" type="text/javascript"></script>'."\n".'<script src="', $this->IncFiles['js']).
 				'" type="text/javascript"></script>'."\n";
 		}
 		
-		$head.="</head>\n";
 		foreach ($this->HeaderArr as $k=>$v)
 		{
 			if (!isset($this->HeaderOut[$k]))
@@ -118,6 +117,7 @@ class QuickFW_Plugs
 				unset($this->HeaderArr[$k]);
 			}
 		}
+		$head.="</head>\n";
 		
 		$text = str_replace('</head>',$head,$text);
 		$text = str_replace(array_keys($this->HeaderArr),array_values($this->HeaderArr),$text);

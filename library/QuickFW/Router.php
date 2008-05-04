@@ -42,11 +42,7 @@ class QuickFW_Router
 		if (isset($MCA['Error']))
 		{
 			if ($GLOBALS['config']['state']['release'])
-			{
-				header("HTTP/1.1 404 Not Found");
-				die($view->render('default/templates/404.html'));
-				
-			}
+				$this->show404();
 			else
 				die("Был выполнен запрос \t\t".$requestUri."\nадрес был разобран в\t\t ".
 					$MCA['Path']."\n".
@@ -92,7 +88,6 @@ class QuickFW_Router
 			$Uri = substr($Uri,0,$pos);
 		}
 		
-		
 		if ($config['redirection']['useModuleRewrite'])
 			$Uri = $this->rewrite($Uri);
 		
@@ -114,6 +109,28 @@ class QuickFW_Router
 			$MCA['ModuleParamsName'] = $ModuleParamsName;
 		return $MCA;
 	}
+
+	function show404()
+	{
+		global $view;
+		header("HTTP/1.1 404 Not Found");
+		die($view->render(APPPATH.'/default/templates/404.html'));
+	}
+	
+	function delDef($url)
+	{
+		$url = explode('/',$url);
+		if (isset($url[0]) && $url[0]==self::DEFAULT_MODULE)
+			array_shift($url);
+		if (count($url)==2 && $url[1]==self::DEFAULT_ACTION)
+		{
+			$url[0]=array_shift($url);
+			if (isset($url[0]) && $url[0]==self::DEFAULT_CONTROLLER)
+				array_shift($url);
+		}
+		return join('/',$url);
+	}
+	
 	
 	function redirectMCA($MCA,$tail='')
 	{
@@ -133,24 +150,24 @@ class QuickFW_Router
 		exit();
 	}
 
-	function backrewrite($url)
+	function backrewrite($uri)
 	{
 		global $config;
 		if (!$config['redirection']['useRewrite'])
-			return $url;
+			return $uri;
 		if (!$this->rewriter)
 		{
 			require LIBPATH.'/QuickFW/Rewrite.php';
 			$this->rewriter = new QuickFW_Rewrite();
 		}
-		return $this->rewriter->back($url);
+		return $this->rewriter->back($uri);
 	}
 	
 	protected function rewrite($uri)
 	{
 		global $config;
 		if (!$config['redirection']['useRewrite'])
-			return $url;
+			return $uri;
 		if (!$this->rewriter)
 		{
 			require LIBPATH.'/QuickFW/Rewrite.php';
@@ -263,6 +280,7 @@ class QuickFW_Router
 		$MCA['Action'] = $aname.($isModule?'Module':'Action');
 		
 		$actions=get_class_methods($class);
+		$MCA['ts']= in_array('getTimestamp',$actions);
 		if (in_array($MCA['Action'],$actions))
 		{
 			array_shift($data);
