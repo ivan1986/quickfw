@@ -54,16 +54,16 @@ class QuickFW_Router
 		$this->action = $MCA['Action'];
 		$class = $MCA['Class'];
 		
+		$view->setScriptPath($this->baseDir.'/'.$this->module.'/templates');
+		
 		$controller = new $class();
 		$action = $MCA['Action'];
 		
 		$this->CurPath = $this->UriPath = $MCA['Path'];
 		$this->ParentPath = null;
-
-		$view->setScriptPath($this->baseDir.'/'.$this->module.'/templates');
 		
 		$params = $this->parseParams($data);
-
+		
 		if (!empty($params))
 			$result = call_user_func_array(array($controller, $action), $params);
 		else
@@ -114,7 +114,8 @@ class QuickFW_Router
 	{
 		global $view;
 		header("HTTP/1.1 404 Not Found");
-		die($view->render(APPPATH.'/default/templates/404.html'));
+		$view->setScriptPath(APPPATH.'/default/templates/');
+		die($view->render('404.html'));
 	}
 	
 	function delDef($url)
@@ -140,7 +141,7 @@ class QuickFW_Router
 		$url    = $config['redirection']['useRewrite']?$this->backrewrite($MCA):$MCA;
 		$defext = $config['redirection']['defExt'];
 
-		header('Location: '.$base.$index.$url.$defext.$tail);
+		header('Location: '.$base.$index.$url.($url!==''?$defext:'').$tail);
 		exit();
 	}
 
@@ -329,6 +330,7 @@ class QuickFW_Router
 		{
 			$len_de=strlen($config['redirection']['defExt']);
 			$l=strlen($uri)-$len_de;
+			if ($l>0)
 			if (!substr_compare($uri,$config['redirection']['defExt'],
 				$l,$len_de))
 				$uri = substr($uri,0,$l);

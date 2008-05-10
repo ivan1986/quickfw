@@ -36,7 +36,7 @@ class QuickFW_Plugs
 	{
 		global $router;
 		$url = $router->backrewrite($url);
-		return $this->base.$this->index.$url.$this->defext;
+		return $this->base.$this->index.$url.($url!==''?$this->defext:'');
 	}
 	
 	protected $HeaderArr = array();

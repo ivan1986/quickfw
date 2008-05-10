@@ -9,6 +9,7 @@
 
 	class QFW
 	{
+		static public $globalData;
 		static public $router;
 		static public $params;
 		static public $view;
@@ -18,11 +19,12 @@
 
 		static public function Init()
 		{
-			global $router,$db,$view,$params;
+			global $router,$db,$view,$params,$globalData;
 			self::$params=$params;
 			self::$router=$router;
 			self::$view=$view;
 			self::$db=$db;
+			self::$globalData=$globalData;
 		}
 	}
 	

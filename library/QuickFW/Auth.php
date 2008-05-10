@@ -2,31 +2,42 @@
 
 class QuickFW_Auth
 {
-	const USERNAME_FIELD = 'username';
+	const USERNAME_FIELD = 'login';
 	const PASSWORD_FIELD = 'password';
 	
+	static private $session=null;
 	protected $authorized;
-	protected $username;
+	protected $userdata;
+	protected $name;
 	
-	
-	function __construct()
+	function __construct($name='user',$redir=false)
 	{
-		//session_start();
-		$this->authorized = false;
-		if (isset($_SESSION['authorized']) AND ($_SESSION['authorized'] === true))
+		if (QuickFW_Auth::$session==null)
 		{
-			if (!isset($_SESSION['username']))
-			{
-				unset($_SESSION['authorized']);
-			}
-			else
-			{
-				$this->authorized = true;
-				$this->username = $_SESSION['username'];
-				return;
-			}
+			require (LIBPATH.'/QuickFW/Session.php');
+			QuickFW_Auth::$session = new QuickFW_Session();
+		}
+
+		$this->name=$name;
+		$this->authorized = false;
+		if (isset($_SESSION[$name]))
+		{
+			$this->authorized = true;
+			$this->userdata = & $_SESSION[$name];
+			return true;
 		}
 		$this->checkPostData();
+		if (!$this->authorized)
+		{
+			if ($redir!==false)
+			{
+				QFW::$router->route($redir);
+				die();
+			}
+			else
+				return false;
+		}
+		return true;
 	}
 	
 	function isAuthorized()
@@ -37,7 +48,7 @@ class QuickFW_Auth
 	function getUser()
 	{
 		if ($this->authorized)
-			return $this->username;
+			return $this->userdata;
 		return false;
 	}
 	
@@ -48,29 +59,27 @@ class QuickFW_Auth
 	 */
 	function checkPostData()
 	{
+		//В случае авторизации через жопу - жопу вписать сюда
 		if (empty($_POST))
 			return false;
 		
-		if(isset($_POST[self::USERNAME_FIELD]) AND isset($_POST[self::PASSWORD_FIELD]))
+		//We get something from form!
+		$data = $this->checkUser();
+		if ($data !== false)
 		{
-			//We get something from form!
-			if ($this->checkUser($_POST[self::USERNAME_FIELD], $_POST[self::PASSWORD_FIELD]))
-			{
-				$this->authorized = true;
-				$_SESSION['authorized'] = true;
-				$this->username = $_POST[self::USERNAME_FIELD];
-				$_SESSION['username'] = $_POST[self::USERNAME_FIELD];
-				return true;
-			}
-			return false;
+			$_SESSION[$this->name] = $this->userdata = $data;
+			$this->authorized = true;
+			return true;
 		}
 		return false;
 	}
 	
 	//You can overload this!
-	protected function checkUser($username, $password)
+	protected function checkUser()
 	{
 		global $config;
+		$username = isset($_POST[self::USERNAME_FIELD]) ? $_POST[self::USERNAME_FIELD] : null;
+		$password = isset($_POST[self::PASSWORD_FIELD]) ? $_POST[self::PASSWORD_FIELD] : null;
 		//Check if this admin
 		if
 		(
@@ -78,7 +87,7 @@ class QuickFW_Auth
 		and
 			(strcasecmp($config['admin']['password'], trim($password)) == 0)
 		)
-			return true;
+			return $username;
 		else
 			return false;
 	}

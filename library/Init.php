@@ -48,12 +48,6 @@
 	if (isset($config['host']['encoding']))
 		header("Content-Type: text/html; charset=".$config['host']['encoding']);
 
-	if (isset($config['state']['autosession']) && $config['state']['autosession'])
-	{
-		require (LIBPATH.'/QuickFW/Session.php');
-		$Session = new QuickFW_Session();
-	}
-	
 	$templ = ucfirst($config['templater']['name']);
 	$class = 'QuickFW_'.$templ;
 	require (LIBPATH.'/QuickFW/'.$templ.'.php');
@@ -73,7 +67,6 @@
 	                                $config['database']['encoding']
 	                              );
 
-	require (LIBPATH.'/QuickFW/Auth.php');
-	$auth = new QuickFW_Auth();
+	$globalData = array();
 
 ?>

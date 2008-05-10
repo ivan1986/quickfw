@@ -19,7 +19,6 @@ $config['cacher']=array(
 
 $config['state']=array(
 	'release'     => true,
-	'autosession' => true,
 	'def_tpl'     => 'main.html',
 );
 
