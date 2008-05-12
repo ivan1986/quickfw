@@ -68,5 +68,6 @@
 	                              );
 
 	$globalData = array();
+	$libs = array();
 
 ?>
