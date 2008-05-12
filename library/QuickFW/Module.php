@@ -22,6 +22,12 @@ class QuickFW_Module
 		return self::$_thisInst;
 	}
 	
+	public static function addStartControllerClass($name,&$class)
+	{
+		if (!isset(QuickFW_Module::$classes[$name]))
+			QuickFW_Module::$classes[$name] = $class;
+	}
+	
 	public static function getTemplate($tpl_name, &$tpl_source, &$smarty)
 	{
 		global $router,$params;
@@ -34,9 +40,7 @@ class QuickFW_Module
 		}
 		
 		if (!isset(QuickFW_Module::$classes[$MCA['Class']]))
-		{
 			QuickFW_Module::$classes[$MCA['Class']] = new $MCA['Class']();
-		}
 		$module = &QuickFW_Module::$classes[$MCA['Class']];
 		
 		list($c, $lpPath, $router->ParentPath, $router->CurPath) = 

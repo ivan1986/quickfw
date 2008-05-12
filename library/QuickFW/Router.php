@@ -12,7 +12,7 @@ class QuickFW_Router
 
 	//модуль и контроллер в контексте которого выполняется,
 	//небходимо для роутинга компонентов
-	protected $cModule, $cControllerName;
+	protected $cModule, $cControllerName, $cController, $cClass;
 	public $module, $controller, $action;
 	
 	public $UriPath, $CurPath, $ParentPath;
@@ -52,11 +52,11 @@ class QuickFW_Router
 		$this->cModule = $this->module = $MCA['Module'];
 		$this->cControllerName = $this->controller = $MCA['Controller'];
 		$this->action = $MCA['Action'];
-		$class = $MCA['Class'];
+		$this->cClass = $MCA['Class'];
 		
 		$view->setScriptPath($this->baseDir.'/'.$this->module.'/templates');
 		
-		$controller = new $class();
+		$this->cController = new $this->cClass();
 		$action = $MCA['Action'];
 		
 		$this->CurPath = $this->UriPath = $MCA['Path'];
@@ -65,9 +65,9 @@ class QuickFW_Router
 		$params = $this->parseParams($data);
 		
 		if (!empty($params))
-			$result = call_user_func_array(array($controller, $action), $params);
+			$result = call_user_func_array(array($this->cController, $action), $params);
 		else
-			$result = call_user_func(array($controller, $action));
+			$result = call_user_func(array($this->cController, $action));
 
 		$view->assign('content',$result);
 		$view->displayMain();
@@ -107,6 +107,7 @@ class QuickFW_Router
 		}
 		if (isset($ModuleParamsName))
 			$MCA['ModuleParamsName'] = $ModuleParamsName;
+		QuickFW_Module::addStartControllerClass($this->cClass,$this->cController);
 		return $MCA;
 	}
 
