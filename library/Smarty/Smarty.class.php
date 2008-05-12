@@ -1063,7 +1063,7 @@ class Smarty
     {
         static $_cache_info = array();
         
-        $_smarty_old_error_level = error_reporting() & ~E_NOTICE;
+        $_smarty_old_error_level = error_reporting(isset($this->error_reporting) ? $this->error_reporting : error_reporting() & ~E_NOTICE);
 
         if (!isset($compile_id)) {
             $compile_id = $this->compile_id;
