@@ -59,19 +59,14 @@ class QuickFW_Auth
 	 */
 	function checkPostData()
 	{
-		//В случае авторизации через жопу - жопу вписать сюда
-		if (empty($_POST))
-			return false;
-		
-		//We get something from form!
 		$data = $this->checkUser();
-		if ($data !== false)
+		if ($data === false)
+			return;	//неудачный логин
+		$_SESSION[$this->name] = $data;
+		if ($data!==null)	//не автосессия - редирект с POST
 		{
-			$_SESSION[$this->name] = $this->userdata = $data;
-			$this->authorized = true;
-			return true;
+			QFW::$router->redirect($_SERVER['REQUEST_URI']);
 		}
-		return false;
 	}
 	
 	//You can overload this!

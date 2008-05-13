@@ -92,7 +92,7 @@ class QuickFW_Plugs
 	public function HeaderFilter($text)
 	{
 		$head='';
-		if (count($this->IncFiles['css'])>0)
+		if (isset($this->IncFiles['css']))
 		{
 			sort($this->IncFiles['css']);
 			$this->IncFiles['css'] = array_unique($this->IncFiles['css']);
@@ -100,7 +100,7 @@ class QuickFW_Plugs
 				join('" type="text/css" />'."\n".'<link rel="stylesheet" href="', $this->IncFiles['css']).
 				'" type="text/css" />'."\n";
 		}
-		if (count($this->IncFiles['js'])>0)
+		if (isset($this->IncFiles['js']))
 		{
 			sort($this->IncFiles['js']);
 			$this->IncFiles['js'] = array_unique($this->IncFiles['js']);
