@@ -63,8 +63,9 @@ class QuickFW_Auth
 		if ($data === false)
 			return;	//неудачный логин
 		$_SESSION[$this->name] = $data;
-		if ($data!==null)	//не автосессия - редирект с POST
+		if (isset($data['redirect']))
 		{
+			unset($_SESSION[$this->name]['redirect']);
 			QFW::$router->redirect($_SERVER['REQUEST_URI']);
 		}
 	}
