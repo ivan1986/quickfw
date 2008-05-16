@@ -250,6 +250,15 @@ class QuickFW_Smarty
 		
 		$this->_smarty->register_function('outHead',array($this,'s_outHead'));
 		$this->_smarty->register_block('getHead',array($this,'s_getHead'));
+
+		$this->_smarty->register_function('pluralForm',array($this,'s_pluralForm'));
+	}
+	
+	public function s_pluralForm($params, &$smarty)
+	{
+		$sep=isset($params['sep'])?$params['sep']:',';
+		$forms=explode($sep,$params['forms'],3);
+		return $this->P->pluralForm($params['num'],$forms[0],$forms[1],$forms[2]);
 	}
 	
 	public function s_baseUrl($params, &$smarty)
