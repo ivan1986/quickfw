@@ -37,8 +37,6 @@ class QuickFW_Auth
 			else
 				return false;
 		}
-		$this->authorized = true;
-		$this->userdata = & $_SESSION[$name];
 		return true;
 	}
 	
@@ -70,6 +68,8 @@ class QuickFW_Auth
 			unset($_SESSION[$this->name]['redirect']);
 			QFW::$router->redirect($_SERVER['REQUEST_URI']);
 		}
+		$this->authorized = true;
+		$this->userdata = & $_SESSION[$this->name];
 	}
 	
 	//You can overload this!
