@@ -37,6 +37,7 @@ class QuickFW_Auth
 			else
 				return false;
 		}
+		$this->authorized = true;
 		$this->userdata = & $_SESSION[$name];
 		return true;
 	}
