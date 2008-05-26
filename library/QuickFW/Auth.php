@@ -12,7 +12,7 @@ class QuickFW_Auth
 	
 	function __construct($name='user',$redir=false)
 	{
-		if (QuickFW_Auth::$session==null)
+		if (isset($_REQUEST[session_name()]) && QuickFW_Auth::$session==null)
 		{
 			require (LIBPATH.'/QuickFW/Session.php');
 			QuickFW_Auth::$session = new QuickFW_Session();
@@ -62,6 +62,12 @@ class QuickFW_Auth
 		$data = $this->checkUser();
 		if ($data === false)
 			return;	//неудачный логин
+		
+		if (QuickFW_Auth::$session==null)
+		{
+			require (LIBPATH.'/QuickFW/Session.php');
+			QuickFW_Auth::$session = new QuickFW_Session();
+		}
 		$_SESSION[$this->name] = $data;
 		if (isset($data['redirect']))
 		{
