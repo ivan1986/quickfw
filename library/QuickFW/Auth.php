@@ -12,11 +12,8 @@ class QuickFW_Auth
 	
 	function __construct($name='user',$redir=false)
 	{
-		if (isset($_REQUEST[session_name()]) && QuickFW_Auth::$session==null)
-		{
-			require (LIBPATH.'/QuickFW/Session.php');
-			QuickFW_Auth::$session = new QuickFW_Session();
-		}
+		if (isset($_REQUEST[session_name()]))
+			$this->session();
 
 		$this->name=$name;
 		$this->authorized = false;
@@ -52,6 +49,15 @@ class QuickFW_Auth
 		return false;
 	}
 	
+	function session()
+	{
+		if (QuickFW_Auth::$session==null)
+		{
+			require (LIBPATH.'/QuickFW/Session.php');
+			QuickFW_Auth::$session = new QuickFW_Session();
+		}
+	}
+	
 	/**
 	 * Check if we get data from form with username and password
 	 *
@@ -63,11 +69,8 @@ class QuickFW_Auth
 		if ($data === false)
 			return;	//неудачный логин
 		
-		if (QuickFW_Auth::$session==null)
-		{
-			require (LIBPATH.'/QuickFW/Session.php');
-			QuickFW_Auth::$session = new QuickFW_Session();
-		}
+		$this->session();
+		
 		$_SESSION[$this->name] = $data;
 		if (isset($data['redirect']))
 		{
