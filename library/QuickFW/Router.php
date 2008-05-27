@@ -133,7 +133,6 @@ class QuickFW_Router
 		return join('/',$url);
 	}
 	
-	
 	function redirectMCA($MCA,$tail='')
 	{
 		global $config;
@@ -279,7 +278,7 @@ class QuickFW_Router
 		}
 
 		$aname = isset($data[0])?$data[0]:self::DEFAULT_ACTION;
-		$MCA['Action'] = $aname.($isModule?'Module':'Action');
+		$MCA['Action'] = strtr($aname,'.','_').($isModule?'Module':'Action');
 		
 		$actions=get_class_methods($class);
 		$MCA['ts']= in_array('getTimestamp',$actions);
