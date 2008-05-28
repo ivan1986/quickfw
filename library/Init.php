@@ -54,9 +54,6 @@
 	$view = new $class(ROOTPATH .'/application', 
 		isset($config['state']['def_tpl'])?$config['state']['def_tpl']:"");
 	
-	require LIBPATH.'/QuickFW/Params.php';
-	$params = new QuickFW_Params();
-
 	require (LIBPATH.'/QuickFW/AutoDbSimple.php');
 	$db = new QuickFW_AutoDbSimple( $config['database']['username'],
 	                                $config['database']['password'],
