@@ -80,14 +80,6 @@ class QuickFW_Router
 		$patt=array();
 		$MCA=array();
 
-		//Имя массива параметров модуля
-		$pos = strrpos($Uri,'#');
-		if ($pos !== false)
-		{
-			$ModuleParamsName = substr($Uri,$pos+1);
-			$Uri = substr($Uri,0,$pos);
-		}
-		
 		if ($config['redirection']['useModuleRewrite'])
 			$Uri = $this->rewrite($Uri);
 		
@@ -105,8 +97,7 @@ class QuickFW_Router
 			$MCA = $this->loadMCA($data);
 			$MCA['Params']=$this->parseParams($data);
 		}
-		if (isset($ModuleParamsName))
-			$MCA['ModuleParamsName'] = $ModuleParamsName;
+
 		QuickFW_Module::addStartControllerClass($this->cClass,$this->cController);
 		return $MCA;
 	}

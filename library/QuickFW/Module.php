@@ -43,15 +43,13 @@ class QuickFW_Module
 			QuickFW_Module::$classes[$MCA['Class']] = new $MCA['Class']();
 		$module = &QuickFW_Module::$classes[$MCA['Class']];
 		
-		list($c, $lpPath, $router->ParentPath, $router->CurPath) = 
-			array($params->curName, $router->ParentPath, $router->CurPath, $MCA['Path']);
+		list($lpPath, $router->ParentPath, $router->CurPath) = 
+			array($router->ParentPath, $router->CurPath, $MCA['Path']);
 
-		$params->curName = $MCA['ModuleParamsName'];
-			
 		$result = call_user_func_array(array($module, $MCA['Action']), $MCA['Params']);
 		
-		list($params->curName, $router->CurPath, $router->ParentPath) = 
-			array($c, $router->ParentPath, $lpPath);
+		list($router->CurPath, $router->ParentPath) = 
+			array($router->ParentPath, $lpPath);
 		
 		if ($result === false)
 			return true;
