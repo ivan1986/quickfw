@@ -5,6 +5,8 @@ class QuickFW_Plugs
 	protected static $_thisInst = null;
 	protected $base, $defext, $index;
 	
+	protected $displayErrorsParams;
+	
 	protected function __construct()
 	{
 		global $config;
@@ -16,6 +18,8 @@ class QuickFW_Plugs
 		$this->index=$this->index?'index.php/':'';
 		
 		$this->rewriter = $config['redirection']['useRewrite'];
+		
+		$this->setDisplayErrorsParams();
 	}
 	
 	public static function getInstance()
@@ -134,6 +138,22 @@ class QuickFW_Plugs
 		return $text;
 	}
 	
+	public function displayErrors($errors)
+	{
+		$res = '';
+		if (isset($errors)) {
+			foreach($errors as $error){
+				$res .= $this->displayErrorsParams['pre'].$error.$this->displayErrorsParams['post'];
+			 }
+		}
+		return $res;
+	}
+	
+	public function setDisplayErrorsParams($pre='', $post='')
+	{
+		$this->displayErrorsParams = array('pre'=>$pre, 'post'=>$post);
+		return TRUE;
+	}
 }
 
 

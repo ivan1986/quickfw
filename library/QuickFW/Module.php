@@ -40,7 +40,9 @@ class QuickFW_Module
 		}
 		
 		if (!isset(QuickFW_Module::$classes[$MCA['Class']]))
+		{
 			QuickFW_Module::$classes[$MCA['Class']] = new $MCA['Class']();
+		}
 		$module = &QuickFW_Module::$classes[$MCA['Class']];
 		
 		list($lpPath, $router->ParentPath, $router->CurPath) = 

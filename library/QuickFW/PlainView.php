@@ -15,8 +15,8 @@ class QuickFW_PlainView
             $this->_tmplPath = $tmplPath;
         }
 
-		require LIBPATH.'/QuickFW/Module.php';
-		require LIBPATH.'/QuickFW/Plugs.php';
+        require LIBPATH.'/QuickFW/Module.php';
+        require LIBPATH.'/QuickFW/Plugs.php';
         $this->P = QuickFW_Plugs::getInstance();
 
         $this->mainTemplate = $mainTmpl;
@@ -26,7 +26,7 @@ class QuickFW_PlainView
     {
         if (is_array($spec))
         {
-            $this->_var = array_merge($this->_vars, $spec);
+            $this->_vars = array_merge($this->_vars, $spec);
         }
         else 
             $this->_vars[$spec] = $value;
@@ -47,10 +47,15 @@ class QuickFW_PlainView
     public function getTemplateVars($var = null)
     {
         if ($var === null)
-            return $_vars;
-        else if (isset($_vars[$var]))
-            return $_vars[$var];
+            return $this->_vars;
+        else if (isset($this->_vars[$var]))
+            return $this->_vars[$var];
         else return null;
+    }
+    
+    public function getScriptPaths()
+    {
+        return $this->_tmplPath;
     }
     
     public function setScriptPath($path)
@@ -101,15 +106,15 @@ class QuickFW_PlainView
         echo $content;
     }*/
     
-	public function displayMain()
-	{
-		if (isset($this->mainTemplate) && $this->mainTemplate!="")
-			$content = $this->render($this->mainTemplate);
-		else
-			$content = $this->get_template_vars('content');
+    public function displayMain()
+    {
+        if (isset($this->mainTemplate) && $this->mainTemplate!="")
+            $content = $this->render($this->mainTemplate);
+        else
+            $content = $this->get_template_vars('content');
         $content = $this->P->HeaderFilter($content);
         echo $content;
-	}
+    }
     
 }
 
