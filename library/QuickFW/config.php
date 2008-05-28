@@ -38,4 +38,6 @@ $config['templater']= array(
 	'name'=>'Smarty',
 );
 
+mb_internal_encoding("UTF-8");
+
 ?>
