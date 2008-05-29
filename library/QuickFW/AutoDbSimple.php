@@ -1,5 +1,7 @@
 <?php
 
+define('DBSIMPLE_SKIP', log(0));
+
 class QuickFW_AutoDbSimple
 {
 	protected $DbSimple;
