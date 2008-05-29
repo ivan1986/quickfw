@@ -1,5 +1,4 @@
 <?php
-require('Abstract.php');
 
 /**
  * Memcached server interface
@@ -9,8 +8,10 @@ require('Abstract.php');
  * @version 0.1
  * @copyright RosBusinessConsulting
  */
-class Cacher_Memcache extends Cacher_Abstract 
+class Cacher_Memcache
 {
+	protected static $connection = NULL;
+	
     public function __construct($host='localhost', $port=11211)
     {
         $this->addServer($host, $port);

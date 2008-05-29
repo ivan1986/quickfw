@@ -1,15 +1,14 @@
 <?php
-require('Abstract.php');
 
 /**
- * Xcache variable cache interface
+* Xcache variable cache interface
  * 
  * @package RELAX
  * @author Petrenko Andrey
  * @version 0.1
  * @copyright RosBusinessConsulting
  */
-class Cacher_Xcache extends Cacher_Abstract 
+class Cacher_Xcache
 {
     /**
      * Set (add) value on server

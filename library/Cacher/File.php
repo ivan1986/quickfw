@@ -1,7 +1,6 @@
 <?php
-require('Abstract.php');
 
-class Cacher_File extends Cacher_Abstract
+class Cacher_File
 {
 	public function __construct()
 	{

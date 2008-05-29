@@ -8,7 +8,7 @@ class QuickFW_PlainView
     
     public $mainTemplate;
     
-    public function __construct($tmplPath = null, $mainTmpl = 'main.tpl')
+    public function __construct($tmplPath, $mainTmpl)
     {
         $this->_vars = array();
         if (null !== $tmplPath) {

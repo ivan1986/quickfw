@@ -56,7 +56,7 @@ class QuickFW_Smarty
 	* @param string $mainTpl
 	* @return void
 	*/
-	public function __construct($tmplPath = null, $mainTpl = 'main.tpl')
+	public function __construct($tmplPath, $mainTpl)
 	{
 		$this->_tmplPath = $tmplPath;
 		$this->mainTemplate = $mainTpl;
