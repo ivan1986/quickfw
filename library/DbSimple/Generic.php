@@ -60,7 +60,7 @@
 /**
  * Use this constant as placeholder value to skip optional SQL block [...].
  */
-define('DBSIMPLE_SKIP', log(0));
+//define('DBSIMPLE_SKIP', log(0));
 
 /**
  * Names of special columns in result-set which is used

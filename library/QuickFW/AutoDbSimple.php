@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * Use this constant as placeholder value to skip optional SQL block [...].
+ */
 define('DBSIMPLE_SKIP', log(0));
 
 class QuickFW_AutoDbSimple
