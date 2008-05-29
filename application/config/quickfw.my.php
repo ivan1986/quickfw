@@ -26,10 +26,9 @@ $config['templater']= array(
 	'name'=>'PlainView',
 );
 
-/*
+/**/
 $config['state']=array(
 	'release'     => true,
-	'autosession' => true,
 	'def_tpl'     => 'main.tpl',
 );
 

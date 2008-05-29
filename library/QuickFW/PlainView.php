@@ -22,7 +22,20 @@ class QuickFW_PlainView
         $this->mainTemplate = $mainTmpl;
     }
     
-    public function assign($spec, $value = null)
+	/**
+	* Assign variables to the template
+	*
+	* Allows setting a specific key to the specified value, OR passing an array
+	* of key => value pairs to set en masse.
+	*
+	* @see __set()
+	* @param string|array $spec The assignment strategy to use (key or array of key
+	* => value pairs)
+	* @param mixed $value (Optional) If assigning a named variable, use this
+	* as the value.
+	* @return void
+	*/
+	public function assign($spec, $value = null)
     {
         if (is_array($spec))
         {
@@ -32,6 +45,12 @@ class QuickFW_PlainView
             $this->_vars[$spec] = $value;
     }
     
+	/**
+	* Clear assigned variable
+	*
+	* @param string|array
+	* @return void
+	*/
     public function delete($spec)
     {
         if (is_array($spec))
@@ -43,6 +62,16 @@ class QuickFW_PlainView
             if (isset($this->_vars[$spec]))
                 unset($this->_vars[$spec]);
     }
+
+	/**
+	* Clear all assigned variables
+	*
+	* @return void
+	*/
+	public function clearVars()
+	{
+		$this->_vars=array();
+	}
     
     public function getTemplateVars($var = null)
     {
@@ -53,23 +82,22 @@ class QuickFW_PlainView
         else return null;
     }
     
-    public function getScriptPaths()
+    public function getScriptPath()
     {
         return $this->_tmplPath;
     }
     
     public function setScriptPath($path)
     {
-        if (is_readable($path)) {
-            $this->_tmplPath = $path;
-            return;
-        }
+        if (!is_readable($path)) 
+        return false;
+		$this->_tmplPath = $path;
+        return true;
     }
     
     public function module($module)
     {
         $result = '';
-        //call_user_func_array(array('QuickFW_Module', 'getTemplate'), $args);
         QuickFW_Module::getTemplate($module, $result, $this);
         return $result;
     }
@@ -97,14 +125,6 @@ class QuickFW_PlainView
         ob_end_clean();
         return $content;
     }
-    
-    /*public function display($tpl)
-    {
-        global $config;
-        $content = $this->render($tpl);
-        //QuickFW_Cacher::set(generateLabel(), $content);
-        echo $content;
-    }*/
     
     public function displayMain()
     {

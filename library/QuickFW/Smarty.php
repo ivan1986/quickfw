@@ -2,11 +2,13 @@
 
 class QuickFW_Smarty
 {
-	/**
-	* Smarty object
-	* @var Smarty
-	*/
 	protected $_smarty;
+	
+	/**
+	* Плагины фреймворка
+	* 
+	* @var QuickFW_Plugs
+	*/
 	public $P;
 	
 	protected $_tmplPath;
@@ -51,7 +53,7 @@ class QuickFW_Smarty
 	* Constructor
 	*
 	* @param string $tmplPath
-	* @param array $extraParams
+	* @param string $mainTpl
 	* @return void
 	*/
 	public function __construct($tmplPath = null, $mainTpl = 'main.tpl')
@@ -64,20 +66,6 @@ class QuickFW_Smarty
 	}
 	
 	/**
-	* Return the template engine object
-	*
-	* @return Smarty
-	*/
-	public function getEngine()
-	{
-		if (!$this->_smarty)
-		{
-			$this->Init();
-		}
-		return $this->_smarty;
-	}
-	
-	/**
 	* Set the path to the templates
 	*
 	* @param string $path The directory to set as the path.
@@ -85,13 +73,12 @@ class QuickFW_Smarty
 	*/
 	public function setScriptPath($path)
 	{
-		if (is_readable($path)) {
-			$this->_tmplPath = $path;
-			if ($this->_smarty)
-				$this->_smarty->template_dir = $path;
-			return true;
-		}
+		if (!is_readable($path)) 
 		return false;
+		$this->_tmplPath = $path;
+		if ($this->_smarty)
+			$this->_smarty->template_dir = $path;
+		return true;
 	}
 	
 	/**
@@ -99,78 +86,9 @@ class QuickFW_Smarty
 	*
 	* @return string
 	*/
-	public function getScriptPaths()
+	public function getScriptPath()
 	{
 		return $this->_tmplPath;
-	}
-	
-	/**
-	* Alias for setScriptPath
-	*
-	* @param string $path
-	* @param string $prefix Unused
-	* @return void
-	*/
-	public function setBasePath($path, $prefix = 'Zend_View')
-	{
-		return $this->setScriptPath($path);
-	}
-	
-	/**
-	* Alias for setScriptPath
-	*
-	* @param string $path
-	* @param string $prefix Unused
-	* @return void
-	*/
-	public function addBasePath($path, $prefix = 'Zend_View')
-	{
-		return $this->setScriptPath($path);
-	}
-	
-	/**
-	* Assign a variable to the template
-	*
-	* @param string $key The variable name.
-	* @param mixed $val The variable value.
-	* @return void
-	*/
-	public function __set($key, $val)
-	{
-		$this->getEngine()->assign($key, $val);
-	}
-	
-	/**
-	* Retrieve an assigned variable
-	*
-	* @param string $key The variable name.
-	* @return mixed The variable value.
-	*/
-	public function __get($key)
-	{
-		return $this->getEngine()->get_template_vars($key);
-	}
-	
-	/**
-	* Allows testing with empty() and isset() to work
-	*
-	* @param string $key
-	* @return boolean
-	*/
-	public function __isset($key)
-	{
-		return (null !== $this->getEngine()->get_template_vars($key));
-	}
-	
-	/**
-	* Allows unset() on object properties to work
-	*
-	* @param string $key
-	* @return void
-	*/
-	public function __unset($key)
-	{
-		$this->getEngine()->clear_assign($key);
 	}
 	
 	/**
@@ -195,6 +113,17 @@ class QuickFW_Smarty
 		}
 		
 		$this->getEngine()->assign($spec, $value);
+	}
+	
+	/**
+	* Clear assigned variable
+	*
+	* @param string|array
+	* @return void
+	*/
+	public function delete($key)
+	{
+		$this->getEngine()->clear_assign($key);
 	}
 	
 	/**
@@ -223,11 +152,6 @@ class QuickFW_Smarty
 		return $this->getEngine()->fetch($name);
 	}
 	
-	/*public function display($tpl)
-	{
-		echo $this->getEngine()->display($tpl);
-	}*/
-	
 	public function displayMain()
 	{
 		if (isset($this->mainTemplate) && $this->mainTemplate!="")
@@ -236,6 +160,20 @@ class QuickFW_Smarty
 			$content = $this->getEngine()->get_template_vars('content');
         $content = $this->P->HeaderFilter($content);
         echo $content;
+	}
+	
+	/**
+	* Return the template engine object
+	*
+	* @return Smarty
+	*/
+	private function getEngine()
+	{
+		if (!$this->_smarty)
+		{
+			$this->Init();
+		}
+		return $this->_smarty;
 	}
 	
 	//Plugins Wrapper
