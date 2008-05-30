@@ -149,7 +149,7 @@ class QuickFW_Router
 			return $uri;
 		if (!$this->rewriter)
 		{
-			require LIBPATH.'/QuickFW/Rewrite.php';
+			require QFWPATH.'/QuickFW/Rewrite.php';
 			$this->rewriter = new QuickFW_Rewrite();
 		}
 		return $this->rewriter->back($uri);
@@ -162,7 +162,7 @@ class QuickFW_Router
 			return $uri;
 		if (!$this->rewriter)
 		{
-			require LIBPATH.'/QuickFW/Rewrite.php';
+			require QFWPATH.'/QuickFW/Rewrite.php';
 			$this->rewriter = new QuickFW_Rewrite();
 		}
 		return $this->rewriter->forward($uri);

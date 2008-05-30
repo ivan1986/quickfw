@@ -3,9 +3,10 @@
 	if (!isset($_SERVER['DOCUMENT_ROOT'])) $_SERVER['DOCUMENT_ROOT'] = getcwd();
 	define ('DOC_ROOT', realpath($_SERVER['DOCUMENT_ROOT']));
 	define ('ROOTPATH', realpath($_SERVER['DOCUMENT_ROOT'] . '/../'));
-	define ('LIBPATH', ROOTPATH . '/QFW');
+	define ('QFWPATH', ROOTPATH . '/QFW');
+	define ('LIBPATH', ROOTPATH . '/lib');
 	
-	require (LIBPATH.'/Init.php');
+	require (QFWPATH.'/Init.php');
 
 	class QFW
 	{
@@ -30,7 +31,7 @@
 		}
 	}
 	
-	require (LIBPATH.'/QuickFW/Router.php');
+	require (QFWPATH.'/QuickFW/Router.php');
 	$router = new QuickFW_Router(ROOTPATH . '/application');
 
 	QFW::Init();

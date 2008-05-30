@@ -15,8 +15,8 @@ class QuickFW_PlainView
             $this->_tmplPath = $tmplPath;
         }
 
-        require LIBPATH.'/QuickFW/Module.php';
-        require LIBPATH.'/QuickFW/Plugs.php';
+        require QFWPATH.'/QuickFW/Module.php';
+        require QFWPATH.'/QuickFW/Plugs.php';
         $this->P = QuickFW_Plugs::getInstance();
 
         $this->mainTemplate = $mainTmpl;

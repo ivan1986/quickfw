@@ -53,7 +53,7 @@ class QuickFW_Auth
 	{
 		if (QuickFW_Auth::$session==null)
 		{
-			require (LIBPATH.'/QuickFW/Session.php');
+			require (QFWPATH.'/QuickFW/Session.php');
 			QuickFW_Auth::$session = new QuickFW_Session();
 		}
 	}

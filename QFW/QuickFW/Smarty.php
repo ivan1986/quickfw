@@ -26,7 +26,7 @@ class QuickFW_Smarty
 	protected function Init()
 	{
 		global $config;
-		require LIBPATH.'/Smarty'.($config['state']['release']?'':'.debug').'/Smarty.class.php';
+		require QFWPATH.'/Smarty'.($config['state']['release']?'':'.debug').'/Smarty.class.php';
 		$this->_smarty = new Smarty;
 		
 		$this->_smarty->force_compile = !$config['state']['release'];
@@ -39,7 +39,7 @@ class QuickFW_Smarty
 			$this->setScriptPath($this->_tmplPath);
 		}
 	
-		require LIBPATH.'/QuickFW/Module.php';
+		require QFWPATH.'/QuickFW/Module.php';
 		$module = QuickFW_Module::getInstance();
 		$this->_smarty->register_resource('module', array($module,
 													"getTemplate",
@@ -61,7 +61,7 @@ class QuickFW_Smarty
 		$this->_tmplPath = $tmplPath;
 		$this->mainTemplate = $mainTpl;
 
-		require LIBPATH.'/QuickFW/Plugs.php';
+		require QFWPATH.'/QuickFW/Plugs.php';
 		$this->P = QuickFW_Plugs::getInstance();
 	}
 	

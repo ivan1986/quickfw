@@ -1,6 +1,6 @@
 <?php
 
-require (LIBPATH.'/QuickFW/Auth.php');
+require (QFWPATH.'/QuickFW/Auth.php');
 
 class IndexController extends QuickFW_Auth 
 {

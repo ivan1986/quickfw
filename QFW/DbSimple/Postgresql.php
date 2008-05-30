@@ -16,7 +16,7 @@
  * 
  * @version 2.x $Id: Postgresql.php 167 2007-01-22 10:12:09Z tit $
  */
-require_once LIBPATH.'/DbSimple/Generic.php';
+require_once QFWPATH.'/DbSimple/Generic.php';
 
 
 /**

@@ -23,13 +23,13 @@
 		if (!$c)
 		{
 			$cl='Cacher_'.$name;
-			require (LIBPATH.'/Cacher/'.$name.'.php');
+			require (QFWPATH.'/Cacher/'.$name.'.php');
 			$c=new $cl;
 		}
 		return $c;
 	}
 
-	require (LIBPATH.'/QuickFW/config.php');
+	require (QFWPATH.'/QuickFW/config.php');
 	
 	if (isset($_SERVER['HTTP_HOST']))
 	{
@@ -50,11 +50,11 @@
 
 	$templ = ucfirst($config['templater']['name']);
 	$class = 'QuickFW_'.$templ;
-	require (LIBPATH.'/QuickFW/'.$templ.'.php');
+	require (QFWPATH.'/QuickFW/'.$templ.'.php');
 	$view = new $class(ROOTPATH .'/application', 
 		isset($config['state']['def_tpl'])?$config['state']['def_tpl']:"");
 	
-	require (LIBPATH.'/QuickFW/AutoDbSimple.php');
+	require (QFWPATH.'/QuickFW/AutoDbSimple.php');
 	$db = new QuickFW_AutoDbSimple( $config['database']['username'],
 	                                $config['database']['password'],
 	                                $config['database']['dbname'],

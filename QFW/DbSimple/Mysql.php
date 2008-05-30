@@ -16,7 +16,7 @@
  * 
  * @version 2.x $Id: Mysql.php 163 2007-01-10 09:47:49Z dk $
  */
-require_once LIBPATH.'/DbSimple/Generic.php';
+require_once QFWPATH.'/DbSimple/Generic.php';
 
 
 /**
