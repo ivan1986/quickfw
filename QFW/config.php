@@ -25,17 +25,15 @@ $config['redirection']=array(
 	'useModuleRewrite' => false,
 );
 
-$config['state']=array(
-	'release'     => true,
-	'def_tpl'     => 'main.tpl',
-);
+$config['release']=true;
 
 $config['cacher']=array(
 	'module' => 'File',
 );
 
 $config['templater']= array(
-	'name'=>'Smarty',
+	'name'       =>'Smarty',
+	'def_tpl'    => 'main.tpl',
 );
 
 mb_internal_encoding("UTF-8");

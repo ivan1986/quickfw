@@ -46,7 +46,7 @@ class QuickFW_Session
 	public function __construct()
 	{
 		global $config;
-		/*if (!$config['state']['release'])
+		/*if (!$config['release'])
 		{
 			//session_save_path(TMPPATH);
 			//session_start();

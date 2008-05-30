@@ -41,7 +41,7 @@ class QuickFW_Router
 		$MCA = $this->loadMCA($data,false);
 		if (isset($MCA['Error']))
 		{
-			if ($GLOBALS['config']['state']['release'])
+			if ($GLOBALS['config']['release'])
 				$this->show404();
 			else
 				die("Был выполнен запрос \t\t".$requestUri."\nадрес был разобран в\t\t ".

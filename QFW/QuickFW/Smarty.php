@@ -26,10 +26,10 @@ class QuickFW_Smarty
 	protected function Init()
 	{
 		global $config;
-		require QFWPATH.'/Smarty'.($config['state']['release']?'':'.debug').'/Smarty.class.php';
+		require QFWPATH.'/Smarty'.($config['release']?'':'.debug').'/Smarty.class.php';
 		$this->_smarty = new Smarty;
 		
-		$this->_smarty->force_compile = !$config['state']['release'];
+		$this->_smarty->force_compile = !$config['release'];
 	
 		$this->_smarty->compile_dir = TMPPATH . '/templates_c';
 		$this->_smarty->config_dir  = TMPPATH . '/configs';

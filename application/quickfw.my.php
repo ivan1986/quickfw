@@ -1,5 +1,6 @@
 <?php
 
+/* Настройки коннекта к базе данных */
 $config['database']=array(
 	'type'     => 'mysql',
 	'host'     => 'localhost',
@@ -10,6 +11,7 @@ $config['database']=array(
 	'encoding' => 'utf8',
 );
 
+/* Настройки кешера (класс бекенда и дополнительные параметры, если есть) */
 /*$config['cacher']=array(
 	'module' => 'Memcache',
 );*/
@@ -17,23 +19,19 @@ $config['cacher']=array(
 	'module' => 'File',
 );
 
-$config['state']=array(
-	'release'     => true,
-	'def_tpl'     => 'main.html',
-);
+/* статус проекта на данном хосте - отладка и всякие быстрые компиляции */
+$config['release']= true;
 
+/* Шаблонизатор - имя класса + дефолтовый шаблон */
 $config['templater']= array(
-	'name'=>'PlainView',
+	'name'      => 'PlainView',
+	'def_tpl'   => 'main.html',
 );
 
 /**/
-$config['state']=array(
-	'release'     => true,
-	'def_tpl'     => 'main.tpl',
-);
-
 $config['templater']= array(
-	'name'=>'Smarty',
+	'def_tpl'   => 'main.tpl',
+	'name'      => 'Smarty',
 );
 /**/
 

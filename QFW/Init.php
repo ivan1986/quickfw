@@ -52,7 +52,7 @@
 	$class = 'QuickFW_'.$templ;
 	require (QFWPATH.'/QuickFW/'.$templ.'.php');
 	$view = new $class(ROOTPATH .'/application', 
-		isset($config['state']['def_tpl'])?$config['state']['def_tpl']:"");
+		isset($config['templater']['def_tpl'])?$config['templater']['def_tpl']:"");
 	
 	require (QFWPATH.'/QuickFW/AutoDbSimple.php');
 	$db = new QuickFW_AutoDbSimple( $config['database']['username'],
