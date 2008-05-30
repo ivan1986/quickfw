@@ -1,0 +1,1 @@
+{include file="module:test.b()"}

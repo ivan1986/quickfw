@@ -12,7 +12,7 @@ $config['database']=array(
 	'host'     => 'localhost',
 	'username' => 'root',
 	'password' => '',
-	'dbname'   => 'amarok',
+	'dbname'   => '',
 	'prefix'   => '',
 	'encoding' => 'utf8',
 );
