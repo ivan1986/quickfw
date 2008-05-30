@@ -3,7 +3,7 @@
 	if (!isset($_SERVER['DOCUMENT_ROOT'])) $_SERVER['DOCUMENT_ROOT'] = getcwd();
 	define ('DOC_ROOT', realpath($_SERVER['DOCUMENT_ROOT']));
 	define ('ROOTPATH', realpath($_SERVER['DOCUMENT_ROOT'] . '/../'));
-	define ('LIBPATH', ROOTPATH . '/library');
+	define ('LIBPATH', ROOTPATH . '/QFW');
 	
 	require (LIBPATH.'/Init.php');
 
