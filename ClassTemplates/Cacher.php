@@ -1,9 +1,7 @@
 <?php
 
-abstract class Cacher_Abstract
+abstract class Cacher_Class
 {
-	protected static $connection = NULL;
-	
 	/*abstract public function save($data, $id, $lifetime);
 	abstract public function load($id);
 	abstract public function remove($id);*/

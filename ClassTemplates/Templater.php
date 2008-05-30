@@ -1,6 +1,6 @@
 <?php
 
-class Templater
+class QuickFW_Templater
 {
 	/**
 	* Плагины фреймворка - необходимо инициализировать

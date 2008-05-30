@@ -7,6 +7,7 @@ $config['host']=array(
 	'lang' => 'ru_RU',
 );
 
+
 $config['database']=array(
 	'type'     => 'mysql',
 	'host'     => 'localhost',
