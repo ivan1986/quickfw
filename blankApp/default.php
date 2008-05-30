@@ -12,19 +12,20 @@ $config['database']=array(
 	'host'     => 'localhost',
 	'username' => 'root',
 	'password' => '',
-	'dbname'   => 'amarok',
+	'dbname'   => '',
 	'prefix'   => '',
 	'encoding' => 'utf8',
 );
 
 /* Настройки перенаправления */
-$config['redirection']=array(
-	'baseUrl'          => '/',
-	'useIndex'         => false,
-	'defExt'           => '',	//или пусто или .html например
-	'useRewrite'       => true,
-	'useModuleRewrite' => false,
-);
+/*
+$config['redirection']=array();
+$config['redirection']['baseUrl']='/';
+$config['redirection']['useIndex']=false;
+$config['redirection']['defExt']='';
+$config['redirection']['useRewrite']=true;
+$config['redirection']['useModuleRewrite']=false;
+*/
 
 /* Настройки кешера (класс бекенда и дополнительные параметры, если есть) */
 /*$config['cacher']=array(
@@ -45,8 +46,8 @@ $config['templater']= array(
 
 /**/
 $config['templater']= array(
-	'def_tpl'   => 'main.tpl',
 	'name'      => 'Smarty',
+	'def_tpl'   => 'main.tpl',
 );
 /**/
 
