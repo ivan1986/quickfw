@@ -152,7 +152,6 @@ class QuickFW_Plugs
 	public function setDisplayErrorsParams($pre='', $post='')
 	{
 		$this->displayErrorsParams = array('pre'=>$pre, 'post'=>$post);
-		return TRUE;
 	}
 }
 

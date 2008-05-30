@@ -63,7 +63,7 @@ class QuickFW_Auth
 	 *
 	 * @return boolean
 	 */
-	function checkPostData()
+	private function checkPostData()
 	{
 		$data = $this->checkUser();
 		if ($data === false)
@@ -74,8 +74,9 @@ class QuickFW_Auth
 		$_SESSION[$this->name] = $data;
 		if (isset($data['redirect']))
 		{
+			$r=$_SESSION[$this->name]['redirect'];
 			unset($_SESSION[$this->name]['redirect']);
-			QFW::$router->redirect($_SERVER['REQUEST_URI']);
+			QFW::$router->redirect($r===true?$_SERVER['REQUEST_URI']:$r);
 		}
 		$this->authorized = true;
 		$this->userdata = & $_SESSION[$this->name];
@@ -84,6 +85,8 @@ class QuickFW_Auth
 	//You can overload this!
 	protected function checkUser()
 	{
+		if (!isset($_POST[self::USERNAME_FIELD]))
+			return false;
 		global $config;
 		$username = isset($_POST[self::USERNAME_FIELD]) ? $_POST[self::USERNAME_FIELD] : null;
 		$password = isset($_POST[self::PASSWORD_FIELD]) ? $_POST[self::PASSWORD_FIELD] : null;

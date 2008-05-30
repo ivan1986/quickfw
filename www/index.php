@@ -12,7 +12,6 @@
 	{
 		static public $globalData;
 		static public $router;
-		static public $params;
 		static public $view;
 		static public $libs;
 		static public $db;
@@ -21,9 +20,8 @@
 
 		static public function Init()
 		{
-			global $router,$db,$view,$params,$globalData,$libs;
+			global $router,$db,$view,$globalData,$libs;
 			self::$globalData=$globalData;
-			self::$params=$params;
 			self::$router=$router;
 			self::$view=$view;
 			self::$libs=$libs;

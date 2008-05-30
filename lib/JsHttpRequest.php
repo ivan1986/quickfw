@@ -10,7 +10,6 @@
  * See http://www.gnu.org/copyleft/lesser.html
  *
  * Do not remove this comment if you want to use the script!
- * Не удаляйте данный комментарий, если вы хотите использовать скрипт!
  *
  * This backend library also supports POST requests additionally to GET.
  *
@@ -20,7 +19,7 @@
 
 class JsHttpRequest
 {
-    var $SCRIPT_ENCODING = "windows-1251";
+    var $SCRIPT_ENCODING = "utf-8";
     var $SCRIPT_DECODE_MODE = '';
     var $LOADER = null;
     var $ID = null;    
@@ -356,4 +355,6 @@ class JsHttpRequest
         ),
     );
 }
+
+QFW::$libs['JsHttpRequest'] = new JsHttpRequest();
 ?>
