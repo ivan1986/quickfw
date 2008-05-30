@@ -2,10 +2,10 @@
 
 class True_Validation {
 
-	var $_rules					= array(); //Правила для проверки
-	var $_data					= array(); //Данные для проверки.
-	var $_fields				= array(); //Заголовки полей
-	var $_errors				= array(); //Массив ошибок
+	var $_rules				= array(); //Правила для проверки
+	var $_data				= array(); //Данные для проверки.
+	var $_fields			= array(); //Заголовки полей
+	var $_errors			= array(); //Массив ошибок
 	var $_error_messages	= array();//Собственные сообщения об ошибках
 
 	function True_Validation() {
