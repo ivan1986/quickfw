@@ -29,19 +29,19 @@
 		return $c;
 	}
 
-	require (QFWPATH.'/QuickFW/config.php');
+	require (QFWPATH.'/config.php');
 	
 	if (isset($_SERVER['HTTP_HOST']))
 	{
-		$file=APPPATH.'/config/'.$_SERVER['HTTP_HOST'].'.php';
+		$file=APPPATH.'/'.$_SERVER['HTTP_HOST'].'.php';
 		if (is_file($file))
 		{
 			require ($file);
 		}
 		else
 		{
-			if (is_file(APPPATH.'/config/default.php'))
-				require APPPATH.'/config/default.php';
+			if (is_file(APPPATH.'/default.php'))
+				require APPPATH.'/default.php';
 		}
 	}
 

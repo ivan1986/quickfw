@@ -7,7 +7,7 @@ class QuickFW_Rewrite
 	
 	function __construct()
 	{
-		require APPPATH . '/config/rewrite.php';
+		require APPPATH . '/rewrite.php';
 		if (isset($rewrite))
 			$this->rewrite = $rewrite;
 		if (isset($backrewrite))
