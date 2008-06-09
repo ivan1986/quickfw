@@ -1,0 +1,116 @@
+<?php ?>
+================ Language Class usage example =================
+
+--- Lang file (application/language/russian/user_lang.php): ---
+<?php
+$lang['user_login_error']       = 'Указан неправильный логин или пароль.';
+
+$lang['items_news_title']       = 'Новости';
+$lang['items_articles_title']   = 'Статьи';
+$lang['items_games_title']      = 'Игры';
+$lang['items_screenshots_title']        = 'Скриншоты';
+$lang['items_rss_title']        = 'GamerOnline';
+$lang['items_send_link_title']  = 'Отправка ссылки';
+
+$lang['ourgames_title']         = 'Наши игры';
+
+$lang['comments_too_long']      = 'Ваш комментарий был ограничен в размере до %s знаков.';
+$lang['user_register_regagree_error'] = 'Необходимо принять пользовательское соглашение.';
+
+$lang['pm_no_receiver_error']	= 'Получатель с эти имененем не найден.';
+?>
+
+----------------------- Usage example: ------------------------
+<?php
+//...
+		require_once(LIBPATH.'/Language.php');
+		QFW::$libs['lang']->load('user');
+
+		$s = QFW::$libs['lang']->line('user_login_error');
+//...
+?>
+
+=============== Validation Class usage example ================
+
+--------------------------- Model: ----------------------------
+<?php
+
+class PmModel
+{
+	public $errors;
+
+	public function __construct() {
+	}
+
+	public function is_valid($data) {
+		$this->errors = array();
+		require_once(LIBPATH.'/True_validation.php');
+		$rules = array();
+		$fields = array('receiver_name'=>'получатель', 'subject'=>'тема', 'body'=>'собщение');
+		$rules['receiver_name'] = 'required|min_length[5]|max_length[20]';
+		$rules['subject'] = 'required';
+		$rules['body'] = 'required';
+
+		QFW::$libs['true_validation']->set_rules($rules);
+		QFW::$libs['true_validation']->set_data($data);
+		QFW::$libs['true_validation']->set_fields($fields);
+
+		$res = QFW::$libs['true_validation']->run();
+		$res2 = $data['receiver_id']!==FALSE;
+		if (!$res2) {
+			QFW::$libs['true_validation']->add_error('receiver', QFW::$libs['lang']->line('pm_no_receiver_error'));
+		}
+		$res = $res && $res2;
+		if ($res === FALSE) {
+			$this->errors = QFW::$libs['true_validation']->_errors;
+		}
+		return $res;
+	}
+
+/*.............*/
+
+}
+?>
+
+------------------------- Controller: ------------------------
+<?php
+//...
+	public function __construct(){
+		parent::__construct();
+		require_once(APPPATH.'/'.QFW::$router->module.'/models/PmModel.php');
+		$this->pm_model = new PmModel();
+	}
+
+	public function composeAction() {
+		if (!empty($_POST)) {
+			$data = array('receiver_name' => $_POST['receiver_name'], 'subject'=>$_POST['subject'], 'body'=>$_POST['body']);
+			$data['receiver'] = $this->users_model->get_user_bylogin($data['receiver_name']);
+			$data['receiver'] = $data['receiver']['id'];
+			if ($this->pm_model->is_valid($data) !== FALSE) {// Calling validation method
+				unset($data['receiver_name']);
+				$data['sender'] = QFW::$globalData['userinfo']['id'];
+				$this->pm_model->send($data);
+				QFW::$router->redirectMCA('');
+				exit();
+			} else {
+				$this->data_content['errors'] = $this->pm_model->errors;// Receiving errors array
+				QFW::$view->assign($this->data_content);
+			}
+		}
+		QFW::$view->assign($data);
+		return QFW::$view->fetch('pm/compose.tpl');
+	}
+
+---------------------------- View: ----------------------------
+
+<?php $P->setDisplayErrorsParams('<div class="errorbox">', '</div>')?><!-- Setting error block prefix & postfix-->
+<?=$P->displayErrors($errors['receiver_name'])?><!-- Displaying errors if there are -->
+<div class="fm-req">
+	<label for="fm-receiver_name">Кому</label>
+	<input type="text" name="receiver_name" maxlength="40" value="<?=$receiver_name?>" id="fm-receiver_name" class="inputtext" />
+</div>
+<?=$P->displayErrors($errors['subject'])?>
+<div class="fm-req">
+	<label for="fm-subject">Тема</label>
+	<input type="text" name="subject" value="<?=$subject?>" maxlength="200" size="50" id="fm-subject"  class="inputtext"/>
+</div>
