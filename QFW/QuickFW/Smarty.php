@@ -136,6 +136,13 @@ class QuickFW_Smarty
 		$this->getEngine()->clear_all_assign();
 	}
 	
+	public function getTemplateVars($var = null)
+	{
+		if ($var === null)
+			return $this->getEngine()->get_template_vars();
+		return $this->getEngine()->get_template_vars($var);
+	}
+    
 	/**
 	* Processes a template and returns the output.
 	*

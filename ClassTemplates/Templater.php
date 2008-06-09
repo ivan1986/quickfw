@@ -85,6 +85,10 @@ class QuickFW_Templater
 	{
 	}
 	
+	public function getTemplateVars($var = null)
+	{
+	}
+	
 	/**
 	* Processes a template and returns the output.
 	*
