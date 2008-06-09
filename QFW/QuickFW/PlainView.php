@@ -131,7 +131,7 @@ class QuickFW_PlainView
         if (isset($this->mainTemplate) && $this->mainTemplate!="")
             $content = $this->render($this->mainTemplate);
         else
-            $content = $this->get_template_vars('content');
+            $content = $this->getTemplateVars('content');
         $content = $this->P->HeaderFilter($content);
         echo $content;
     }
