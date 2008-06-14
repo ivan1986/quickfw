@@ -54,7 +54,7 @@
  * @author Dmitry Koterov, http://forum.dklab.ru/users/DmitryKoterov/
  * @author Konstantin Zhinko, http://forum.dklab.ru/users/KonstantinGinkoTit/
  * 
- * @version 2.x $Id: Generic.php 172 2007-03-10 13:37:51Z dk $
+ * @version 2.x $Id: Generic.php 226 2007-09-17 21:00:15Z dk $
  */
 
 /**
@@ -141,6 +141,7 @@ class DbSimple_Generic_Database extends DbSimple_Generic_LastError
      */
     function blob($blob_id = null)
     {
+        $this->_resetLastError();
         return $this->_performNewBlob($blob_id);
     }
     
@@ -150,6 +151,7 @@ class DbSimple_Generic_Database extends DbSimple_Generic_LastError
      */
     function transaction($mode=null)
     {
+        $this->_resetLastError();
         $this->_logQuery('-- START TRANSACTION '.$mode);
         return $this->_performTransaction($mode);
     }
@@ -160,6 +162,7 @@ class DbSimple_Generic_Database extends DbSimple_Generic_LastError
      */
     function commit()
     {
+        $this->_resetLastError();
         $this->_logQuery('-- COMMIT');
         return $this->_performCommit();
     }
@@ -170,6 +173,7 @@ class DbSimple_Generic_Database extends DbSimple_Generic_LastError
      */
     function rollback()
     {
+        $this->_resetLastError();
         $this->_logQuery('-- ROLLBACK');
         return $this->_performRollback();
     }
@@ -228,12 +232,8 @@ class DbSimple_Generic_Database extends DbSimple_Generic_LastError
         $total = false;
         $rows = $this->_query($args, $total);
         if (!is_array($rows)) return $rows;
-        $col = array();
-        foreach ($rows as $k=>$row) { 
-            reset($row); 
-            $col[$k] = current($row); 
-        }
-        return $col;
+        $this->_shrinkLastArrayDimensionCallback($rows);
+        return $rows;
     }
 
     /**
@@ -476,6 +476,8 @@ class DbSimple_Generic_Database extends DbSimple_Generic_LastError
      */
     function _query($query, &$total)
     {
+        $this->_resetLastError();
+        
         // Fetch query attributes.
         $this->attributes = $this->_transformQuery($query, 'GET_ATTRIBUTES');
 
@@ -643,7 +645,6 @@ class DbSimple_Generic_Database extends DbSimple_Generic_LastError
                     $i++;
                 }
                 return true;
-                ;
         }
         // No such transform.
         $this->_setLastError(-1, "No such transform type: $how", $query);
@@ -660,7 +661,7 @@ class DbSimple_Generic_Database extends DbSimple_Generic_LastError
         $cacheCode = null;
         if ($this->_logger) {
             // Serialize is much faster than placeholder expansion. So use caching.
-            $cacheCode = crc32(serialize($queryAndArgs) . $useNative);
+            $cacheCode = md5(serialize($queryAndArgs) . '|' . $useNative . '|' . $this->_identPrefix);
             if (isset($this->_placeholderCache[$cacheCode])) {
                 $queryAndArgs = $this->_placeholderCache[$cacheCode];
                 return;
@@ -677,6 +678,7 @@ class DbSimple_Generic_Database extends DbSimple_Generic_LastError
         $query = array_pop($this->_placeholderArgs); // array_pop is faster than array_shift
 
         // Do all the work.
+        $this->_placeholderNoValueFound = false;
         $query = $this->_expandPlaceholdersFlow($query);
 
         if ($useNative) {
@@ -716,7 +718,8 @@ class DbSimple_Generic_Database extends DbSimple_Generic_LastError
             (?> 
                 # Optional blocks
                 \{
-                    ( (?> (?>[^{}]*)  |  (?R) )* )             #1
+                    # Use "+" here, not "*"! Else nested blocks are not processed well.
+                    ( (?> (?>[^{}]+)  |  (?R) )* )             #1
                 \}
             )
               |
@@ -779,9 +782,9 @@ class DbSimple_Generic_Database extends DbSimple_Generic_LastError
                     // Identifier.
                     if (!is_array($value)) return $this->escape($value, true);
                     $parts = array();
-                    foreach ($value as $identifier) {
+                    foreach ($value as $table => $identifier) {
                         if (!is_string($identifier)) return 'DBSIMPLE_ERROR_ARRAY_VALUE_NOT_STRING';
-                        $parts[] = $this->escape($identifier, true);
+                        $parts[] = (!is_int($table)? $this->escape($table, true) . '.' : '') . $this->escape($identifier, true);
                     }
                     return join(', ', $parts);
                 case 'n':
@@ -969,6 +972,23 @@ class DbSimple_Generic_Database extends DbSimple_Generic_LastError
 
 
     /**
+     * Replaces the last array in a multi-dimensional array $V by its first value.
+     * Used for selectCol(), when we need to transform (N+1)d resulting array
+     * to Nd array (column).
+     */
+    function _shrinkLastArrayDimensionCallback(&$v)
+    {
+        if (!$v) return;
+        reset($v);
+        if (!is_array($firstCell = current($v))) {
+            $v = $firstCell;
+        } else {
+            array_walk($v, array(&$this, '_shrinkLastArrayDimensionCallback'));
+        }
+    }
+    
+
+    /**
      * void _logQuery($query, $noTrace=false)
      * Must be called on each query.
      * If $noTrace is true, library caller is not solved (speed improvement).
@@ -1043,9 +1063,9 @@ class DbSimple_Generic_Database extends DbSimple_Generic_LastError
      */
     function _cache($hash, $result=null)
     {
-        if (is_callable($this->_cacher))
+        if (is_callable($this->_cacher)) {
             return call_user_func($this->_cacher, $hash, $result);
-        else if (is_object($this->_cacher) && method_exists($this->_cacher, 'get') && method_exists($this->_cacher, 'save')) {
+        } else if (is_object($this->_cacher) && method_exists($this->_cacher, 'get') && method_exists($this->_cacher, 'save')) {
             if (null === $result)
                 return $this->_cacher->get($hash);
             else
@@ -1079,7 +1099,7 @@ class DbSimple_Generic_Database extends DbSimple_Generic_LastError
     var $_logger = null;
     var $_cacher = null;
     var $_placeholderArgs, $_placeholderNativeArgs, $_placeholderCache=array();
-    var $_placeholderNoValueFound = false;
+    var $_placeholderNoValueFound;
     
     /**
      * When string representation of row (in characters) is greater than this,
