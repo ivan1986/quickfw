@@ -135,6 +135,7 @@ class QuickFW_Plugs
 		
 		$text = str_replace('</head>',$head,$text);
 		$text = str_replace(array_keys($this->HeaderArr),array_values($this->HeaderArr),$text);
+		$text = preg_replace('|<!--HEAD.*?-->|','',$text);
 		return $text;
 	}
 	
