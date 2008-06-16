@@ -61,8 +61,8 @@ class Language {
 		
 		if ($idiom == '')
 		{
-			$deft_lang = $config['host']['language'];
-			$idiom = is_null($deft_lang) ? 'english' : $deft_lang;
+			$deft_lang = $config['host']['lang'];
+			$idiom = is_null($deft_lang) ? 'en_EN' : $deft_lang;
 		}
 
 		// Determine where the language file is and load it
