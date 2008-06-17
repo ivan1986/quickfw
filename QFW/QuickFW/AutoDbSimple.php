@@ -52,9 +52,8 @@ class QuickFW_AutoDbSimple
 	
 	protected function connect()
 	{
-		$this->DbSimple = DbSimple_Generic::connect("{$this->_driver}://{$this->_user}:{$this->_pass}@{$this->_host}/{$this->_database}");
+		$this->DbSimple = DbSimple_Generic::connect("{$this->_driver}://{$this->_user}:{$this->_pass}@{$this->_host}/{$this->_database}?ident_prefix={$this->_prefix}");
 		$this->DbSimple->setErrorHandler(array(&$this, 'errorHandler'));
-		$this->DbSimple->setIdentPrefix($this->_prefix);
 		$this->query("SET NAMES ".$this->_encoding);
 	}
 	
