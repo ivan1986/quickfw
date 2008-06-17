@@ -356,5 +356,5 @@ class JsHttpRequest
     );
 }
 
-QFW::$libs['JsHttpRequest'] = new JsHttpRequest();
+QFW::$libs['JsHttpRequest'] = new JsHttpRequest('utf-8');
 ?>
