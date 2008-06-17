@@ -25,7 +25,7 @@ class QuickFW_Router
 		$this->action = '';
 	}
 
-	function route($requestUri = null)
+	function route($requestUri = null, $type='Action')
 	{
 		global $view;
 		if ($requestUri === null)
@@ -38,7 +38,7 @@ class QuickFW_Router
 		$data = split(self::URI_DELIMITER, $requestUri);
 		$data = array_map('urldecode', $data);
 
-		$MCA = $this->loadMCA($data,false);
+		$MCA = $this->loadMCA($data,$type);
 		if (isset($MCA['Error']))
 		{
 			if ($GLOBALS['config']['release'])
@@ -87,14 +87,14 @@ class QuickFW_Router
 		// module.controller.action(p1,p2,p3,...)
 		if (preg_match('|(?:(.*?)\.)?(.*?)(?:\.(.*))?\((.*)\)|',$Uri,$patt))
 		{
-			$MCA=$this->loadMCA(array_slice($patt,1,3));
+			$MCA=$this->loadMCA(array_slice($patt,1,3),'Module');
 			$MCA['Params']=$this->parseScobParams($patt[4]);
 		}
 		else 
 		{
 			// module/controller/action/p1/p2/p3/...
 			$data = split(self::URI_DELIMITER, $Uri);
-			$MCA = $this->loadMCA($data);
+			$MCA = $this->loadMCA($data,'Module');
 			$MCA['Params']=$this->parseParams($data);
 		}
 
@@ -227,7 +227,7 @@ class QuickFW_Router
 		return $params;
 	}
 	
-	protected function loadMCA(&$data,$isModule=true)
+	protected function loadMCA(&$data,$type)
 	{
 		$MCA = array();
 		while (isset($data[0]) AND $data[0] === '') array_shift($data);
@@ -269,7 +269,7 @@ class QuickFW_Router
 		}
 
 		$aname = isset($data[0])?$data[0]:self::DEFAULT_ACTION;
-		$MCA['Action'] = strtr($aname,'.','_').($isModule?'Module':'Action');
+		$MCA['Action'] = strtr($aname,'.','_').$type;
 		
 		$actions=get_class_methods($class);
 		$MCA['ts']= in_array('getTimestamp',$actions);
@@ -280,7 +280,7 @@ class QuickFW_Router
 		else
 		{
 			$aname=self::DEFAULT_ACTION;
-			$MCA['Action'] = $aname.($isModule?'Module':'Action');
+			$MCA['Action'] = $aname.$type;
 			if (!in_array($MCA['Action'],$actions))
 			{
 				$MCA['Error']="в классе \t\t\t".$class." \nне найдена функция \t\t".
