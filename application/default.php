@@ -43,7 +43,7 @@ $config['templater']= array(
 	'def_tpl'   => 'main.html',
 );
 
-/**/
+/*
 $config['templater']= array(
 	'name'      => 'Smarty',
 	'def_tpl'   => 'main.tpl',
