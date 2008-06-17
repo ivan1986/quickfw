@@ -12,11 +12,17 @@ class Cacher_Memcache
 {
 	protected static $connection = NULL;
 	
-    public function __construct($host='localhost', $port=11211)
+    public function __construct()
     {
         $this->addServer($host, $port);
     }
     
+    public function setDirectives($directives)
+    {
+    	$host = isset($directives['host'])?$directives['host']:'localhost';
+    	$port = isset($directives['port'])?$directives['port']:'11211';
+    	$this->addServer($host,$port);
+    }
     /**
      * Connect to memcached server or add server in pool
      *
@@ -38,10 +44,10 @@ class Cacher_Memcache
      * @param mixed $value
      * @param int $ttl Time after which server will delete value 
      */
-    public function set($key, $value)
+    public function save($data, $id, $tags = array(), $specificLifetime = false)
     {
         if (self::$connection === NULL) return ;
-        memcache_set(self::$connection, $key, $value);
+        memcache_set(self::$connection, $id, $data, 0, $specificLifetime);
     }
     
     /**
@@ -50,10 +56,10 @@ class Cacher_Memcache
      * @param string $key
      * @return mixed
      */
-    public function get($key)
+    public function load($id, $doNotTest = false)
     {
         if (self::$connection === NULL) return false;
-        return memcache_get(self::$connection, $key);
+        return memcache_get(self::$connection, $id);
     }
     
     /**
@@ -62,9 +68,9 @@ class Cacher_Memcache
      * @param string $key
      * @return bool
      */
-    public function incache($key)
+    public function test($id)
     {
-        return ($this->get($key)!==false);
+        return ($this->load($id)!==false);
     }
     
     /**
@@ -73,10 +79,16 @@ class Cacher_Memcache
      * @param string $key
      * @param int $timeout Timeout after which it will be deleted
      */
-    public function delete($key, $timeout = 0)
+    public function remove($id)
     {
         if (self::$connection === NULL) return ;
-        memcache_delete(self::$connection, $key, $timeout);
+        memcache_delete(self::$connection, $id, 0);
+    }
+    
+    public function clean($mode = CACHE_CLR_ALL, $tags = array())
+    {
+        if (self::$connection === NULL) return ;
+        memcache_flush(self::$connection);
     }
 
 }
