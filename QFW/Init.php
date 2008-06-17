@@ -13,19 +13,31 @@
 	//нужна для того, что сессии используют кешер и они записывают данные
 	//после уничтожения всех обьектов, кешер пересоздается заново
 	//для записи сессий
-	function getCache($backend='',$tags=false,$namespace='')
+	function &getCache($backend='',$tags=false,$namespace='')
 	{
 		global $config;
-		static $c;
+		static $cachers=array();
 		if ($backend=='')
 			$backend=ucfirst($config['cacher']['module']);
-		if (!$c)
+		$key=$backend.($tags?'1':'0').$namespace;
+		if (isset($cachers[$key]))
+			return $cachers[$key];
+		
+		$cl='Cacher_'.$backend;
+		require_once(QFWPATH.'/Cacher/'.$backend.'.php');
+		$c=new $cl;
+		if ($namespace!='')
 		{
-			$cl='Cacher_'.$backend;
-			require (QFWPATH.'/Cacher/'.$backend.'.php');
-			$c=new $cl;
+			require_once(QFWPATH.'/QuickFW/Cacher/Namespace.php');
+			$c=new Dklab_Cache_Backend_NamespaceWrapper($c);
 		}
-		return $c;
+		if ($tags)
+		{
+			require_once(QFWPATH.'/QuickFW/Cacher/TagEmu.php');
+			$c=new Dklab_Cache_Backend_TagEmuWrapper($c);
+		}
+		$cachers[$key]=&$c;
+		return $cachers[$key];
 	}
 
 	require (QFWPATH.'/config.php');
