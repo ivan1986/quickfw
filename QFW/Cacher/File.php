@@ -1,7 +1,7 @@
 <?php
-
-define('CACHE_LITE_ERROR_RETURN', 1);
-define('CACHE_LITE_ERROR_DIE', 8);
+/**
+ * Cache_Lite с переписанным интерфейсом
+ */
 
 require_once(QFWPATH.'/QuickFW/Cacher/Interface.php');
 
@@ -10,16 +10,16 @@ class Cacher_File implements Zend_Cache_Backend_Interface
 	
 	protected $_cacheDir;
 	protected $_caching = true;
-	protected $_lifeTime = null;
+	protected $_lifeTime = 3600;//null;
 	protected $_fileLocking = true;
 	protected $_refreshTime;
 	protected $_file;
 	protected $_fileName;
-	protected $_writeControl = true;
-	protected $_readControl = true;
+	protected $_writeControl = false;
+	protected $_readControl = false;
 	protected $_fileNameProtection = true;
 	protected $_automaticSerialization = false;
-	protected $_automaticCleaningFactor = 0;
+	protected $_automaticCleaningFactor = 1;
 	protected $_hashedDirectoryLevel = 0;
 	protected $_hashedDirectoryUmask = 0777;
 
@@ -97,7 +97,7 @@ class Cacher_File implements Zend_Cache_Backend_Interface
 		if ($this->_automaticCleaningFactor>0) {
 			$rand = rand(1, $this->_automaticCleaningFactor);
 			if ($rand==1) {
-				$this->clean(false, 'old');
+				$this->_cleanDir($this->_cacheDir, 'old');
 			}
 		}
 		if ($this->_writeControl) {
@@ -143,24 +143,31 @@ class Cacher_File implements Zend_Cache_Backend_Interface
 		return is_file($file) && unlink($file);
 	}
 
-	protected function _cleanDir($dir){
+	protected function _cleanDir($dir,$mode='ingroup'){
 		$motif = 'cache_';
 		if (!($dh = opendir($dir))) {
 			return false;
 		}
 		$result = true;
 		while ($file = readdir($dh)) {
-			if (($file != '.') && ($file != '..') && (substr($file, 0, 6)=='cache_')) 
-			{
+			if (($file != '.') && ($file != '..') && (substr($file, 0, 6)=='cache_')) {
  				$file2 = $dir . $file;
- 				if (is_file($file2)) 
- 				{
-					if (strpos($file2, $motif) !== false) {
-						$result = ($result && $this->_unlink($file2));
-					}
- 				}
- 				elseif (is_dir($file2) && ($this->_hashedDirectoryLevel>0)) {
- 					$result = ($result && ($this->_cleanDir($file2 . '/')));
+ 				if (is_file($file2)) {
+ 					switch (substr($mode, 0, 9)) {
+ 						case 'old':
+ 							if (!is_null($this->_lifeTime) && (mktime() - filemtime($file2) > $this->_lifeTime)) {
+								$result = ($result && $this->_unlink($file2));
+ 							}
+ 							break;
+ 						case 'ingroup':
+ 						default:
+ 							if (strpos($file2, $motif) !== false) {
+ 								$result = ($result && $this->_unlink($file2));
+ 							}
+ 						break;
+ 					}
+ 				} elseif (is_dir($file2) && ($this->_hashedDirectoryLevel>0)) {
+ 					$result = ($result && ($this->_cleanDir($file2 . '/', $group, $mode)));
  				}
 			}
 		}

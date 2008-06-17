@@ -26,6 +26,8 @@
 		$cl='Cacher_'.$backend;
 		require_once(QFWPATH.'/Cacher/'.$backend.'.php');
 		$c=new $cl;
+		if (array_key_exists('options',$config['cacher']))
+			$c->setDirectives($config['cacher']['options']);
 		if ($namespace!='')
 		{
 			require_once(QFWPATH.'/QuickFW/Cacher/Namespace.php');

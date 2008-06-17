@@ -29,9 +29,13 @@ $config['redirection']=array(
 /* Настройки кешера (класс бекенда и дополнительные параметры, если есть) */
 /*$config['cacher']=array(
 	'module' => 'Memcache',
+	'options' => array(
+	),
 );*/
 $config['cacher']=array(
 	'module' => 'File',
+	'options' => array(
+	),
 );
 
 /* статус проекта на данном хосте - отладка и всякие быстрые компиляции */
