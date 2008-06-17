@@ -17,7 +17,7 @@ class Cacher_Memcache implements Zend_Cache_Backend_Interface
 	
     public function __construct()
     {
-        $this->addServer($host, $port);
+        //$this->addServer($host, $port);
     }
     
     public function setDirectives($directives)
@@ -47,7 +47,7 @@ class Cacher_Memcache implements Zend_Cache_Backend_Interface
      * @param mixed $value
      * @param int $ttl Time after which server will delete value 
      */
-    public function save($data, $id, $tags = array(), $specificLifetime = false)
+    public function save($data, $id, $tags = array(), $specificLifetime = 3600)
     {
         if (self::$connection === NULL) return ;
         memcache_set(self::$connection, $id, $data, 0, $specificLifetime);
@@ -62,7 +62,7 @@ class Cacher_Memcache implements Zend_Cache_Backend_Interface
     public function load($id, $doNotTest = false)
     {
         if (self::$connection === NULL) return false;
-        return memcache_get(self::$connection, $id);
+        return @memcache_get(self::$connection, $id);
     }
     
     /**

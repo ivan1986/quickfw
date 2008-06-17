@@ -18,8 +18,8 @@ class Cacher_File implements Zend_Cache_Backend_Interface
 	protected $_writeControl = false;
 	protected $_readControl = false;
 	protected $_fileNameProtection = true;
-	protected $_automaticSerialization = false;
-	protected $_automaticCleaningFactor = 1;
+	protected $_automaticSerialization = true;
+	protected $_automaticCleaningFactor = 0;
 	protected $_hashedDirectoryLevel = 0;
 	protected $_hashedDirectoryUmask = 0777;
 
