@@ -8,7 +8,10 @@
  * @version 0.1
  * @copyright RosBusinessConsulting
  */
-class Cacher_Memcache
+
+require_once(QFWPATH.'/QuickFW/Cacher/Interface.php');
+
+class Cacher_Memcache implements Zend_Cache_Backend_Interface 
 {
 	protected static $connection = NULL;
 	
