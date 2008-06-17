@@ -1,6 +1,6 @@
 <?php
 
-class QuickFW_Templater
+class Templater_Templater
 {
 	/**
 	* Плагины фреймворка - необходимо инициализировать
@@ -27,6 +27,10 @@ class QuickFW_Templater
 	public function __construct($tmplPath, $mainTpl)
 	{
 		$this->mainTemplate = $mainTpl;
+		//подключить до вызова любого шаблона (в конструкторе или в Init)
+		//require QFWPATH.'/QuickFW/Module.php';
+		//require QFWPATH.'/QuickFW/Plugs.php';
+		
 		$this->P = QuickFW_Plugs::getInstance();
 	}
 	

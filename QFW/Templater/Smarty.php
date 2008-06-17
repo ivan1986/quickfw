@@ -1,6 +1,6 @@
 <?php
 
-class QuickFW_Smarty
+class Templater_Smarty
 {
 	protected $_smarty;
 	

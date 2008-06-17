@@ -13,17 +13,16 @@
 	//нужна для того, что сессии используют кешер и они записывают данные
 	//после уничтожения всех обьектов, кешер пересоздается заново
 	//для записи сессий
-	function getCache()
+	function getCache($backend='',$tags=false,$namespace='')
 	{
 		global $config;
-		static $name;
 		static $c;
-		if (!$name)
-			$name=ucfirst($config['cacher']['module']);
+		if ($backend=='')
+			$backend=ucfirst($config['cacher']['module']);
 		if (!$c)
 		{
-			$cl='Cacher_'.$name;
-			require (QFWPATH.'/Cacher/'.$name.'.php');
+			$cl='Cacher_'.$backend;
+			require (QFWPATH.'/Cacher/'.$backend.'.php');
 			$c=new $cl;
 		}
 		return $c;
@@ -49,8 +48,8 @@
 		header("Content-Type: text/html; charset=".$config['host']['encoding']);
 
 	$templ = ucfirst($config['templater']['name']);
-	$class = 'QuickFW_'.$templ;
-	require (QFWPATH.'/QuickFW/'.$templ.'.php');
+	$class = 'Templater_'.$templ;
+	require (QFWPATH.'/Templater/'.$templ.'.php');
 	$view = new $class(ROOTPATH .'/application', 
 		isset($config['templater']['def_tpl'])?$config['templater']['def_tpl']:"");
 	

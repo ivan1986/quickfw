@@ -1,6 +1,6 @@
 <?php
 
-class QuickFW_PlainView 
+class Templater_PlainView 
 {
 	protected $_vars;
 	protected $_tmplPath;
