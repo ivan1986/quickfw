@@ -113,10 +113,10 @@ class Templater_Templater
 	* @param string $name The template to process.
 	* @return string The output.
 	*/
-	public function displayMain()
+	public function displayMain($content)
 	{
-        $content = $this->P->HeaderFilter($content);
-        echo $content;
+		$content = $this->P->HeaderFilter($content);
+		echo $content;
 	}
 	
 }

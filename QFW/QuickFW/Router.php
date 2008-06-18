@@ -69,9 +69,7 @@ class QuickFW_Router
 		else
 			$result = call_user_func(array($this->cController, $action));
 
-		$view->assign('content',$result);
-		$view->displayMain();
-
+		$view->displayMain($result);
 	}
 	
 	function moduleRoute($Uri)

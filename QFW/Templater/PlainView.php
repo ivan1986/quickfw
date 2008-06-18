@@ -123,12 +123,13 @@ class Templater_PlainView
 		return $content;
 	}
 	
-	public function displayMain()
+	public function displayMain($content)
 	{
 		if (isset($this->mainTemplate) && $this->mainTemplate!="")
+		{
+			$this->assign('content',$content);
 			$content = $this->render($this->mainTemplate);
-		else
-			$content = $this->getTemplateVars('content');
+		}
 		$content = $this->P->HeaderFilter($content);
 		echo $content;
 	}

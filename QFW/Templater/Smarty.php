@@ -159,12 +159,13 @@ class Templater_Smarty
 		return $this->getEngine()->fetch($name);
 	}
 	
-	public function displayMain()
+	public function displayMain($content)
 	{
 		if (isset($this->mainTemplate) && $this->mainTemplate!="")
+		{
+			$this->getEngine()->assign('content',$content);
 			$content = $this->getEngine()->fetch($this->mainTemplate);
-		else
-			$content = $this->getEngine()->get_template_vars('content');
+		}
         $content = $this->P->HeaderFilter($content);
         echo $content;
 	}
