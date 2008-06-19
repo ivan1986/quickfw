@@ -48,28 +48,62 @@ class QuickFW_Router
 					$MCA['Path']."\n".
 					$MCA['Error']);
 		}
+		$params = $this->parseParams($data);
 		
 		$this->cModule = $this->module = $MCA['Module'];
 		$this->cControllerName = $this->controller = $MCA['Controller'];
-		$this->action = $MCA['Action'];
-		$this->cClass = $MCA['Class'];
-		
-		$view->setScriptPath($this->baseDir.'/'.$this->module.'/templates');
-		
-		$this->cController = new $this->cClass();
-		$action = $MCA['Action'];
-		
 		$this->CurPath = $this->UriPath = $MCA['Path'];
 		$this->ParentPath = null;
 		
-		$params = $this->parseParams($data);
+		$this->action = $MCA['Action'];
+		$this->cClass = $MCA['Class'];
+		
+		$this->cController = new $this->cClass();
+		
+		$CacheInfo=false;
+		if ($MCA['cache'])
+		{
+			$CacheInfo=$this->cController->CacheInfo($this->action,$params);
+			if (array_key_exists('Cacher',$CacheInfo) && array_key_exists('id',$CacheInfo))
+			$data = $CacheInfo['Cacher']->load($CacheInfo['id']);
+			if ($data)
+			{
+				if (array_key_exists('full',$CacheInfo))
+					echo $data;
+				else
+				{
+					$view->setScriptPath($this->baseDir.'/'.$this->module.'/templates');
+					$view->displayMain($result);
+				}
+				return;
+			}
+		}
+		
+		$view->setScriptPath($this->baseDir.'/'.$this->module.'/templates');
 		
 		if (!empty($params))
-			$result = call_user_func_array(array($this->cController, $action), $params);
+			$result = call_user_func_array(array($this->cController, $this->action), $params);
 		else
-			$result = call_user_func(array($this->cController, $action));
+			$result = call_user_func(array($this->cController, $this->action));
 
-		$view->displayMain($result);
+		if ($CacheInfo && array_key_exists('Cacher',$CacheInfo) && array_key_exists('id',$CacheInfo))
+		{
+			if (array_key_exists('full',$CacheInfo))
+				$result=$view->displayMain($result);
+			
+	 		if (array_key_exists('time',$CacheInfo))
+			 	$CacheInfo['Cacher']->save($result,$CacheInfo['id'],
+			 		array_key_exists('tags',$CacheInfo)?$CacheInfo['tags']:array(),
+			 		$CacheInfo['time']
+		 		);
+		 	else 
+			 	$CacheInfo['Cacher']->save($result,$CacheInfo['id'],
+			 		array_key_exists('tags',$CacheInfo)?$CacheInfo['tags']:array()
+		 		);
+		}
+		else 
+			$view->displayMain($result);
+		
 	}
 	
 	function moduleRoute($Uri)
@@ -270,7 +304,7 @@ class QuickFW_Router
 		$MCA['Action'] = strtr($aname,'.','_').$type;
 		
 		$actions=get_class_methods($class);
-		$MCA['ts']= in_array('getTimestamp',$actions);
+		$MCA['cache']= in_array('CacheInfo',$actions);
 		if (in_array($MCA['Action'],$actions))
 		{
 			array_shift($data);

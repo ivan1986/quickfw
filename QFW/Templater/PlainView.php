@@ -132,6 +132,7 @@ class Templater_PlainView
 		}
 		$content = $this->P->HeaderFilter($content);
 		echo $content;
+        return $content;
 	}
 
 }

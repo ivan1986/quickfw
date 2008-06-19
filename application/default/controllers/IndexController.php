@@ -20,9 +20,13 @@ class IndexController
 		return "медвед";
 	}
 
-	public function getTimestamp($action,$params)
+	public function CacheInfo($action,$params)
 	{
-		return mktime();
+		return array(
+			'Cacher' => getCache(),
+			'id' => 'ALL',
+			'full'=>1,
+		);
 	}
 	
 }

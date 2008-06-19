@@ -168,6 +168,7 @@ class Templater_Smarty
 		}
         $content = $this->P->HeaderFilter($content);
         echo $content;
+        return $content;
 	}
 	
 	/**

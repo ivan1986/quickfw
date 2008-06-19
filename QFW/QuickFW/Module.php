@@ -30,7 +30,7 @@ class QuickFW_Module
 	
 	public static function getTemplate($tpl_name, &$tpl_source, &$smarty)
 	{
-		global $router,$params;
+		global $router;
 		$MCA=$router->moduleRoute($tpl_name);
 		if (isset($MCA['Error']))
 		{
@@ -45,6 +45,19 @@ class QuickFW_Module
 		}
 		$module = &QuickFW_Module::$classes[$MCA['Class']];
 		
+		$CacheInfo=false;
+		if ($MCA['cache'])
+		{
+			$CacheInfo=$module->CacheInfo($MCA['Action'],$MCA['Params']);
+			if (array_key_exists('Cacher',$CacheInfo) && array_key_exists('id',$CacheInfo))
+			$data = $CacheInfo['Cacher']->load($CacheInfo['id']);
+			if ($data)
+			{
+				$tpl_source = $data;
+				return true;
+			}
+		}
+		
 		list($lpPath, $router->ParentPath, $router->CurPath) = 
 			array($router->ParentPath, $router->CurPath, $MCA['Path']);
 
@@ -57,33 +70,29 @@ class QuickFW_Module
 			return true;
 		
 		$tpl_source = $result;
+		
+		if ($CacheInfo)
+		{
+			if (array_key_exists('Cacher',$CacheInfo) && array_key_exists('id',$CacheInfo))
+			{
+		 		if (array_key_exists('time',$CacheInfo))
+				 	$CacheInfo['Cacher']->save($tpl_source,$CacheInfo['id'],
+				 		array_key_exists('tags',$CacheInfo)?$CacheInfo['tags']:array(),
+				 		$CacheInfo['time']
+			 		);
+			 	else 
+				 	$CacheInfo['Cacher']->save($tpl_source,$CacheInfo['id'],
+				 		array_key_exists('tags',$CacheInfo)?$CacheInfo['tags']:array()
+			 		);
+			}
+		}
+		
 		return true;
 	}
 	
 	function getTimestamp($tpl_name, &$tpl_timestamp, &$smarty)
 	{
-		global $router;
-		$MCA=$router->moduleRoute($tpl_name);
-		if (isset($MCA['Error'])) return true;
-		
-		if (!$MCA['ts'])
-		{
-			$tpl_timestamp = mktime();
-			return true;
-		}
-			
-		if (!isset(QuickFW_Module::$classes[$MCA['Class']]))
-		{
-			QuickFW_Module::$classes[$MCA['Class']] = new $MCA['Class']();
-		}
-		$module = &QuickFW_Module::$classes[$MCA['Class']];
-
-		$result = call_user_func_array(array($module, 'getTimestamp'), array($MCAP['Action'],$MCAP['Params']));
-		
-		if ($result === false)
-			return false;
-		
-		$tpl_timestamp = $result;
+		$tpl_timestamp = mktime();
 		return true;
 	}
 

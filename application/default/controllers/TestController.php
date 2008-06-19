@@ -23,9 +23,12 @@ class TestController
 		return "\nМодуль B - ".$router->UriPath.' '.$router->CurPath.' '.$router->ParentPath;
 	}
 
-	public function getTimestamp($action,$params)
+	public function CacheInfo($action,$params)
 	{
-		return mktime();
+		return array(
+			'Cacher' => getCache(),
+			'id' => 'Test_index',
+		);
 	}
 
 }
