@@ -24,7 +24,7 @@ class IndexController
 	{
 		return array(
 			'Cacher' => getCache(),
-			'id' => 'ALL1',
+			'id' => 'ALL'.$action,
 			//'full'=>1,
 		);
 	}

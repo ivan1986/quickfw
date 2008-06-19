@@ -66,12 +66,14 @@ class QuickFW_Router
 			$CacheInfo=$this->cController->CacheInfo($this->action,$params);
 			if (array_key_exists('Cacher',$CacheInfo) && array_key_exists('id',$CacheInfo))
 			$data = $CacheInfo['Cacher']->load($CacheInfo['id']);
+			$full=array_key_exists('full',$CacheInfo);
 			if ($data)
 			{
-				if (array_key_exists('full',$CacheInfo))
+				if ($full)
 					echo $data;
 				else
 				{
+					$view->mainTemplate = $CacheInfo['Cacher']->load($CacheInfo['id'].'_MTPL');
 					$view->setScriptPath($this->baseDir.'/'.$this->module.'/templates');
 					echo $view->displayMain($data);
 				}
@@ -88,10 +90,23 @@ class QuickFW_Router
 
 		if ($CacheInfo && array_key_exists('Cacher',$CacheInfo) && array_key_exists('id',$CacheInfo))
 		{
-			if (array_key_exists('full',$CacheInfo))
+			if ($full)
+			{
 				echo $result=$view->displayMain($result);
+			}
 			else
+			{
+				if (array_key_exists('time',$CacheInfo))
+				 	$CacheInfo['Cacher']->save($view->mainTemplate,$CacheInfo['id'].'_MTPL',
+				 		array_key_exists('tags',$CacheInfo)?$CacheInfo['tags']:array(),
+				 		$CacheInfo['time']
+			 		);
+			 	else 
+				 	$CacheInfo['Cacher']->save($view->mainTemplate,$CacheInfo['id'].'_MTPL',
+				 		array_key_exists('tags',$CacheInfo)?$CacheInfo['tags']:array()
+			 		);
 				echo $view->displayMain($result);
+			}
 
 			if (array_key_exists('time',$CacheInfo))
 			 	$CacheInfo['Cacher']->save($result,$CacheInfo['id'],
