@@ -115,8 +115,12 @@ class Templater_Templater
 	*/
 	public function displayMain($content)
 	{
-		$content = $this->P->HeaderFilter($content);
-		echo $content;
+		if (isset($this->mainTemplate) && $this->mainTemplate!="")
+		{
+			$this->assign('content',$content);
+			$content = $this->fetch($this->mainTemplate);
+		}
+		//echo $content;
         return $content;
 	}
 	

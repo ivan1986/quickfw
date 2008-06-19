@@ -64,7 +64,7 @@
 	        return $result;
 	    }
 	}
-	
+
 	function thru($Cacher, $obj, $id, $tags=array(), $lifeTime=null)
 	{
 		return new Cache_Thru($Cacher, $obj, $id, $tags, $lifeTime);

@@ -73,7 +73,7 @@ class QuickFW_Router
 				else
 				{
 					$view->setScriptPath($this->baseDir.'/'.$this->module.'/templates');
-					$view->displayMain($result);
+					echo $view->displayMain($data);
 				}
 				return;
 			}
@@ -89,9 +89,11 @@ class QuickFW_Router
 		if ($CacheInfo && array_key_exists('Cacher',$CacheInfo) && array_key_exists('id',$CacheInfo))
 		{
 			if (array_key_exists('full',$CacheInfo))
-				$result=$view->displayMain($result);
-			
-	 		if (array_key_exists('time',$CacheInfo))
+				echo $result=$view->displayMain($result);
+			else
+				echo $view->displayMain($result);
+
+			if (array_key_exists('time',$CacheInfo))
 			 	$CacheInfo['Cacher']->save($result,$CacheInfo['id'],
 			 		array_key_exists('tags',$CacheInfo)?$CacheInfo['tags']:array(),
 			 		$CacheInfo['time']
@@ -102,7 +104,7 @@ class QuickFW_Router
 		 		);
 		}
 		else 
-			$view->displayMain($result);
+			echo $view->displayMain($result);
 		
 	}
 	

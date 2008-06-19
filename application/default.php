@@ -27,16 +27,17 @@ $config['redirection']=array(
 );
 
 /* Настройки кешера (класс бекенда и дополнительные параметры, если есть) */
-/*$config['cacher']=array(
+$config['cacher']=array(
 	'module' => 'Memcache',
 	'options' => array(
 	),
-);*/
+);
 $config['cacher']=array(
 	'module' => 'File',
 	'options' => array(
 	),
 );
+/**/
 
 /* статус проекта на данном хосте - отладка и всякие быстрые компиляции */
 $config['release']= true;
@@ -47,7 +48,7 @@ $config['templater']= array(
 	'def_tpl'   => 'main.html',
 );
 
-/*
+/**/
 $config['templater']= array(
 	'name'      => 'Smarty',
 	'def_tpl'   => 'main.tpl',
