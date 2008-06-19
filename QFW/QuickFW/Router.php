@@ -90,33 +90,27 @@ class QuickFW_Router
 
 		if ($CacheInfo && array_key_exists('Cacher',$CacheInfo) && array_key_exists('id',$CacheInfo))
 		{
+			$par=array();
+			$par[0]=$view->mainTemplate;
+			$par[1]=$CacheInfo['id'].'_MTPL';
+			$par[2]=array_key_exists('tags',$CacheInfo)?$CacheInfo['tags']:array();
+			if (array_key_exists('time',$CacheInfo))
+				$par[3]=$CacheInfo['time'];
+			
+			
 			if ($full)
 			{
 				echo $result=$view->displayMain($result);
 			}
 			else
 			{
-				if (array_key_exists('time',$CacheInfo))
-				 	$CacheInfo['Cacher']->save($view->mainTemplate,$CacheInfo['id'].'_MTPL',
-				 		array_key_exists('tags',$CacheInfo)?$CacheInfo['tags']:array(),
-				 		$CacheInfo['time']
-			 		);
-			 	else 
-				 	$CacheInfo['Cacher']->save($view->mainTemplate,$CacheInfo['id'].'_MTPL',
-				 		array_key_exists('tags',$CacheInfo)?$CacheInfo['tags']:array()
-			 		);
+				call_user_func_array(array($CacheInfo['Cacher'],'save'),$par);
 				echo $view->displayMain($result);
 			}
 
-			if (array_key_exists('time',$CacheInfo))
-			 	$CacheInfo['Cacher']->save($result,$CacheInfo['id'],
-			 		array_key_exists('tags',$CacheInfo)?$CacheInfo['tags']:array(),
-			 		$CacheInfo['time']
-		 		);
-		 	else 
-			 	$CacheInfo['Cacher']->save($result,$CacheInfo['id'],
-			 		array_key_exists('tags',$CacheInfo)?$CacheInfo['tags']:array()
-		 		);
+			$par[0]=$result;
+			$par[1]=$CacheInfo['id'];
+			call_user_func_array(array($CacheInfo['Cacher'],'save'),$par);
 		}
 		else 
 			echo $view->displayMain($result);
