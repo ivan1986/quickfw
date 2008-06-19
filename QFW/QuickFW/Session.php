@@ -21,7 +21,7 @@ class QuickFW_Session
 	{
 		//$this->debug_data=getCache()->get('sess_'.$id);
 		//$this->debug_sess=serialize($_SESSION);
-		$_SESSION=unserialize(getCache()->get('sess_'.$id));
+		$_SESSION=unserialize(getCache()->load('sess_'.$id));
 		//$this->debug_id=session_id();
 
 		return getCache()->get('sess_'.$id);
@@ -32,7 +32,7 @@ class QuickFW_Session
 		//echo "<br>\n";
 		//echo session_id().':'.$id.':'.$data.":".serialize($_SESSION)."\n<br>";
 		//echo session_id().':'.$this->debug_id.':'.$this->debug_data.":".$this->debug_sess."\n<br>";
-		getCache()->set('sess_'.$id,serialize($_SESSION));
+		getCache()->save(serialize($_SESSION),'sess_'.$id);
 	}
 
 	static function destroy()
