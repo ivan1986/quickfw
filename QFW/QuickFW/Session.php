@@ -24,7 +24,7 @@ class QuickFW_Session
 		$_SESSION=unserialize(getCache()->load('sess_'.$id));
 		//$this->debug_id=session_id();
 
-		return getCache()->get('sess_'.$id);
+		return getCache()->load('sess_'.$id);
 	}
 
 	static function write($id,$data)
