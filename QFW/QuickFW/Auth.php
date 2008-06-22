@@ -72,7 +72,7 @@ class QuickFW_Auth
 		$this->session();
 		
 		$_SESSION[$this->name] = $data;
-		if (isset($data['redirect']))
+		if (is_array($data) && array_key_exists('redirect',$data))
 		{
 			$r=$_SESSION[$this->name]['redirect'];
 			unset($_SESSION[$this->name]['redirect']);
