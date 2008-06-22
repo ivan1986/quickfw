@@ -58,6 +58,8 @@ class QuickFW_Router
 		$this->action = $MCA['Action'];
 		$this->cClass = $MCA['Class'];
 		
+		$view->setScriptPath($this->baseDir.'/'.$this->module.'/templates');
+		
 		$this->cController = new $this->cClass();
 		
 		$CacheInfo=false;
@@ -80,8 +82,6 @@ class QuickFW_Router
 				return;
 			}
 		}
-		
-		$view->setScriptPath($this->baseDir.'/'.$this->module.'/templates');
 		
 		if (!empty($params))
 			$result = call_user_func_array(array($this->cController, $this->action), $params);
@@ -279,7 +279,7 @@ class QuickFW_Router
 		if (isset($data[0]) && (is_dir($this->baseDir . '/' . $data[0])))
 			$MCA['Module'] = array_shift($data);
 		else 
-			$MCA['Module'] = $isModule ? $this->cModule : self::DEFAULT_MODULE;
+			$MCA['Module'] = $type=='Module' ? $this->cModule : self::DEFAULT_MODULE;
 		$path = $this->baseDir.'/'.$MCA['Module'];
 		
 		$c=count($data);	// Количество элементов URI исключая модуль
