@@ -66,20 +66,23 @@ class QuickFW_Router
 		if ($MCA['cache'])
 		{
 			$CacheInfo=$this->cController->CacheInfo($this->action,$params);
-			if (array_key_exists('Cacher',$CacheInfo) && array_key_exists('id',$CacheInfo))
-			$data = $CacheInfo['Cacher']->load($CacheInfo['id']);
-			$full=array_key_exists('full',$CacheInfo);
-			if ($data)
+			if (is_array($CacheInfo))
 			{
-				if ($full)
-					echo $data;
-				else
+				if (array_key_exists('Cacher',$CacheInfo) && array_key_exists('id',$CacheInfo))
+				$data = $CacheInfo['Cacher']->load($CacheInfo['id']);
+				$full=array_key_exists('full',$CacheInfo);
+				if ($data)
 				{
-					$view->mainTemplate = $CacheInfo['Cacher']->load($CacheInfo['id'].'_MTPL');
-					$view->setScriptPath($this->baseDir.'/'.$this->module.'/templates');
-					echo $view->displayMain($data);
+					if ($full)
+						echo $data;
+					else
+					{
+						$view->mainTemplate = $CacheInfo['Cacher']->load($CacheInfo['id'].'_MTPL');
+						$view->setScriptPath($this->baseDir.'/'.$this->module.'/templates');
+						echo $view->displayMain($data);
+					}
+					return;
 				}
-				return;
 			}
 		}
 		
