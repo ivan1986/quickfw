@@ -142,7 +142,7 @@ class Templater_Smarty
 			return $this->getEngine()->get_template_vars();
 		return $this->getEngine()->get_template_vars($var);
 	}
-    
+	
 	/**
 	* Processes a template and returns the output.
 	*
@@ -166,9 +166,9 @@ class Templater_Smarty
 			$this->getEngine()->assign('content',$content);
 			$content = $this->getEngine()->fetch($this->mainTemplate);
 		}
-        $content = $this->P->HeaderFilter($content);
-        //echo $content;
-        return $content;
+		$content = $this->P->HeaderFilter($content);
+		//echo $content;
+		return $content;
 	}
 	
 	/**
