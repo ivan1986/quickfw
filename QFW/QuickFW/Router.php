@@ -287,7 +287,7 @@ class QuickFW_Router
 		
 		$c=count($data);	// Количество элементов URI исключая модуль
 		//Determine Controller
-		$cname = isset($data[0])?$data[0]: ($isModule ? $this->cController : self::DEFAULT_CONTROLLER);
+		$cname = isset($data[0])?$data[0]: ($type=='Module' ? $this->cController : self::DEFAULT_CONTROLLER);
 
 		$class=ucfirst($cname).'Controller';
 		$fullname = $path . '/controllers/' . strtr($class,'_','/') . '.php';
