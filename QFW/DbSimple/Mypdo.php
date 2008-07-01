@@ -44,16 +44,22 @@ class DbSimple_Mypdo extends DbSimple_Generic_Database
         }
     }
     
-    function _performQuery($queryMain)
-    {
-        $this->_lastQuery = $queryMain;
-        $this->_expandPlaceholders($queryMain, true);
-        $p = $this->PDO->prepare($queryMain[0]);
-        $res = $p->execute(array_slice($queryMain,1));
-        $res = $p->fetchAll();
-        //print_r($res);
-    	return $res;
-    	
+	function _performQuery($queryMain)
+	{
+		$this->_lastQuery = $queryMain;
+		$this->_expandPlaceholders($queryMain, true);
+		$p = $this->PDO->prepare($queryMain[0]);
+		$p->execute(array_slice($queryMain,1));
+		if ($p->errorCode()!=0)
+			return $this->_setDbError($p,$queryMain[0]);
+		if (preg_match('/^\s* INSERT \s+/six', $queryMain[0])) 
+			return $this->PDO->lastInsertId();
+		if (!preg_match('/^\s* SELECT \s+/six', $queryMain[0])) 
+			return $p->rowCount();
+		$p->setFetchMode(PDO::FETCH_ASSOC);
+		$res = $p->fetchAll();
+		return $res;
+/*    	
     	
         $result = @mysql_query($queryMain[0], $this->link);
         if ($result === false) return $this->_setDbError($queryMain[0]);
@@ -65,28 +71,28 @@ class DbSimple_Mypdo extends DbSimple_Generic_Database
             // Non-SELECT queries return number of affected rows, SELECT - resource.
             return @mysql_affected_rows($this->link);
         }
-        return $result;
+        return $result;*/
     }
     
-    function _performTransformQuery(&$queryMain, $how)
-    {
-        // If we also need to calculate total number of found rows...
-        switch ($how) {
-            // Prepare total calculation (if possible)
-            case 'CALC_TOTAL':
-                $m = null;
-                if (preg_match('/^(\s* SELECT)(.*)/six', $queryMain[0], $m)) {
-                    $queryMain[0] = $m[1] . ' SQL_CALC_FOUND_ROWS' . $m[2];
-                }
-                return true;
-        
-            // Perform total calculation.
-            case 'GET_TOTAL':
-                // Built-in calculation available?
-                $queryMain = array('SELECT FOUND_ROWS()');
-                // Else use manual calculation.
-                // TODO: GROUP BY ... -> COUNT(DISTINCT ...)
-                $re = '/^
+	function _performTransformQuery(&$queryMain, $how)
+	{
+		// If we also need to calculate total number of found rows...
+		switch ($how) {
+			// Prepare total calculation (if possible)
+			case 'CALC_TOTAL':
+				$m = null;
+				if (preg_match('/^(\s* SELECT)(.*)/six', $queryMain[0], $m)) {
+					$queryMain[0] = $m[1] . ' SQL_CALC_FOUND_ROWS' . $m[2];
+				}
+				return true;
+
+			// Perform total calculation.
+			case 'GET_TOTAL':
+				// Built-in calculation available?
+				$queryMain = array('SELECT FOUND_ROWS()');
+				// Else use manual calculation.
+				// TODO: GROUP BY ... -> COUNT(DISTINCT ...)
+				$re = '/^
                     (?> -- [^\r\n]* | \s+)*
                     (\s* SELECT \s+)                                      #1     
                     (.*?)                                                 #2
@@ -106,10 +112,11 @@ class DbSimple_Mypdo extends DbSimple_Generic_Database
         return false;
     }
     
-    function _setDbError($query)
-    {
-        return '';//$this->_setLastError($err[1], $err[2], $query);
-    }
+	function _setDbError($obj,$q)
+	{
+		$info=$obj->errorInfo();
+		return $this->_setLastError($info[1], $info[2], $q);
+	}
 
 }
 
