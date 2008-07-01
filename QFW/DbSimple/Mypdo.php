@@ -56,6 +56,7 @@ class DbSimple_Mypdo extends DbSimple_Generic_Database
 			return $this->PDO->lastInsertId();
 		if (!preg_match('/^\s* SELECT \s+/six', $queryMain[0])) 
 			return $p->rowCount();
+		//блин, тут конечно нужно еще подумать по части правильности определения
 		$p->setFetchMode(PDO::FETCH_ASSOC);
 		$res = $p->fetchAll();
 		return $res;
