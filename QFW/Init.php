@@ -1,14 +1,15 @@
 <?php
-	
+
 	if (!isset($_SERVER['REQUEST_URI'])) $_SERVER['REQUEST_URI']='/';
 	define ('APPPATH', ROOTPATH . '/application');
 	define ('TMPPATH', ROOTPATH . '/tmp');
-	
-	function __autoload($classname)
+
+	/*function __autoload($classname)
 	{
 		$file=strtr($classname,'_','/');
 		require (APPPATH.'/'.$file.'.php');
-	}
+	}*/
+	//Так как нафиг нужно
 
 	//нужна для того, что сессии используют кешер и они записывают данные
 	//после уничтожения всех обьектов, кешер пересоздается заново
@@ -22,7 +23,7 @@
 		$key=$backend.($tags?'1':'0').$namespace;
 		if (isset($cachers[$key]))
 			return $cachers[$key];
-		
+
 		$cl='Cacher_'.$backend;
 		require_once(QFWPATH.'/Cacher/'.$backend.'.php');
 		$c=new $cl;
@@ -41,11 +42,11 @@
 		$cachers[$key]=&$c;
 		return $cachers[$key];
 	}
-	
+
 	class Cache_Thru
 	{
 	    private $_cacher, $_obj, $_id, $_tags, $_lt;
-	    
+
 	    public function __construct($Cacher, $obj, $id, $tags, $lifeTime)
 	    {
 	        $this->_cacher = $Cacher;
@@ -54,7 +55,7 @@
 	        $this->_tags = $tags;
 	        $this->_lt = $lifeTime;
 	    }
-	    
+
 	    public function __call($method, $args)
 	    {
 	        if (false === ($result = $this->_cacher->load($this->_id))) {
@@ -69,10 +70,10 @@
 	{
 		return new Cache_Thru($Cacher, $obj, $id, $tags, $lifeTime);
 	}
-	
+
 
 	require (QFWPATH.'/config.php');
-	
+
 	if (isset($_SERVER['HTTP_HOST']))
 	{
 		$file=APPPATH.'/'.$_SERVER['HTTP_HOST'].'.php';
@@ -93,9 +94,9 @@
 	$templ = ucfirst($config['templater']['name']);
 	$class = 'Templater_'.$templ;
 	require (QFWPATH.'/Templater/'.$templ.'.php');
-	$view = new $class(ROOTPATH .'/application', 
+	$view = new $class(ROOTPATH .'/application',
 		isset($config['templater']['def_tpl'])?$config['templater']['def_tpl']:"");
-	
+
 	require (QFWPATH.'/QuickFW/AutoDbSimple.php');
 	$db = new QuickFW_AutoDbSimple( $config['database']['username'],
 	                                $config['database']['password'],
