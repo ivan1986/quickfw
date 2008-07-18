@@ -73,15 +73,16 @@ class Templater_Smarty
 	*/
 	public function setScriptPath($path)
 	{
-		if (!is_readable($path)) 
-		return false;
+		if (!is_readable($path))
+			return false;
 		$this->_tmplPath = $path;
 		if ($this->_smarty)
 		{
 			$p=explode('/',$path);
 			array_pop($p);
+			$p=array_pop($p);
 			$this->_smarty->template_dir = $path;
-			$this->_smarty->compile_dir = TMPPATH . '/templates_c/'.array_pop($p);
+			$this->_smarty->compile_dir = TMPPATH . '/templates_c/'.($p!='templates'?$p:'');
 		}
 		return true;
 	}
