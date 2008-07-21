@@ -4,6 +4,8 @@ RewriteEngine on
 
 RewriteBase /
 
+RewriteRule \.svn - [F]
+
 RewriteCond %{SCRIPT_FILENAME} !-f
 RewriteCond %{SCRIPT_FILENAME} !-d
 RewriteRule ^(.*)$ index.php/$1
