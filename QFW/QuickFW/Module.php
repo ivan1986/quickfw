@@ -92,7 +92,7 @@ class QuickFW_Module
 	
 	function getTimestamp($tpl_name, &$tpl_timestamp, &$smarty)
 	{
-		$tpl_timestamp = mktime();
+		$tpl_timestamp = microtime(true);
 		return true;
 	}
 
