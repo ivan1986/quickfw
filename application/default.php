@@ -8,11 +8,11 @@ $config['host']=array(
 
 /* Настройки коннекта к базе данных */
 $config['database']=array(
-	'type'     => 'mysql',
+	'type'     => 'mypdo',
 	'host'     => 'localhost',
 	'username' => 'root',
 	'password' => '',
-	'dbname'   => '',
+	'dbname'   => 'base',
 	'prefix'   => '',
 	'encoding' => 'utf8',
 );
@@ -55,20 +55,29 @@ $config['templater']= array(
 );
 /**/
 
+$config['templater']= array(
+	'name'      => 'Proxy',
+	'def_tpl'   => 'main.tpl',
+	'exts' => array(
+		'tpl' => 'Smarty',
+		'html' => 'PlainView',
+	),
+);
+
 /* деквотатор, включите если нужно на хостинге */
 /*
 function strips(&$el) {
-  if (is_array($el)) 
-    foreach($el as $k=>$v) 
-      strips($el[$k]); 
-  else $el = stripslashes($el); 
-} 
-if (get_magic_quotes_gpc()) { 
+  if (is_array($el))
+    foreach($el as $k=>$v)
+      strips($el[$k]);
+  else $el = stripslashes($el);
+}
+if (get_magic_quotes_gpc()) {
   strips($_GET);
   strips($_POST);
-  strips($_COOKIE); 
+  strips($_COOKIE);
   strips($_REQUEST);
-  if (isset($_SERVER['PHP_AUTH_USER'])) strips($_SERVER['PHP_AUTH_USER']); 
+  if (isset($_SERVER['PHP_AUTH_USER'])) strips($_SERVER['PHP_AUTH_USER']);
   if (isset($_SERVER['PHP_AUTH_PW']))   strips($_SERVER['PHP_AUTH_PW']);
 }
 /**/

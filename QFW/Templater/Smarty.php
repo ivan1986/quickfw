@@ -146,6 +146,13 @@ class Templater_Smarty
 		return $this->getEngine()->get_template_vars($var);
 	}
 
+	public function module($module)
+	{
+		$result = '';
+		QuickFW_Module::getTemplate($module, $result, $this);
+		return $result;
+	}
+
 	/**
 	* Processes a template and returns the output.
 	*

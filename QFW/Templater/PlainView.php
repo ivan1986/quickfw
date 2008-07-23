@@ -4,8 +4,8 @@ class Templater_PlainView
 {
 	protected $_vars;
 	protected $_tmplPath;
-	public $P;
 
+	public $P;
 	public $mainTemplate;
 
 	public function __construct($tmplPath, $mainTmpl)
@@ -71,10 +71,11 @@ class Templater_PlainView
 	public function getTemplateVars($var = null)
 	{
 		if ($var === null)
-		return $this->_vars;
+			return $this->_vars;
 		else if (isset($this->_vars[$var]))
-		return $this->_vars[$var];
-		else return null;
+			return $this->_vars[$var];
+		else
+			return null;
 	}
 
 	public function getScriptPath()
@@ -85,8 +86,8 @@ class Templater_PlainView
 	public function setScriptPath($path)
 	{
 		if (!is_readable($path))
-		return false;
-			$this->_tmplPath = $path;
+			return false;
+		$this->_tmplPath = $path;
 		return true;
 	}
 
@@ -129,7 +130,6 @@ class Templater_PlainView
 			$content = $this->render($this->mainTemplate);
 		}
 		$content = $this->P->HeaderFilter($content);
-		//echo $content;
 		return $content;
 	}
 

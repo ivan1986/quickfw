@@ -16,20 +16,20 @@ class TestController
 		return $view->render('index2.tpl')
 		."\nМодуль A - ".$router->UriPath.' '.$router->CurPath.' '.$router->ParentPath;
 	}
-	
+
 	public function bModule()
 	{
-		global $router;
-		return "\nМодуль B - ".$router->UriPath.' '.$router->CurPath.' '.$router->ParentPath;
+		global $router,$view;
+		return $view->render('b.html')."\nМодуль B - ".$router->UriPath.' '.$router->CurPath.' '.$router->ParentPath;
 	}
 
-	public function CacheInfo($action,$params)
+	/*public function CacheInfo($action,$params)
 	{
 		return array(
 			'Cacher' => getCache(),
 			'id' => 'Test_index',
 		);
-	}
+	}*/
 
 }
 
