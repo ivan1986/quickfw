@@ -8,7 +8,6 @@ class Templater_Proxy
 	protected $_vars;
 	protected $_tmplPath;
 
-	protected $sync;
 	protected $templates;
 
 	/**
@@ -20,7 +19,7 @@ class Templater_Proxy
 	*/
 	public function __construct($tmplPath, $mainTpl)
 	{
-		$this->sync = false;
+		$this->unsyncronize();
 		$this->mainTemplate = $mainTpl;
 		$this->P = QuickFW_Plugs::getInstance();
 		$this->templates = array();
@@ -36,7 +35,7 @@ class Templater_Proxy
 	{
 		if (!is_readable($path))
 			return false;
-		$this->sync = false;
+		$this->unsyncronize();
 		$this->_tmplPath = $path;
 		return true;
 	}
@@ -66,7 +65,7 @@ class Templater_Proxy
 	*/
 	public function assign($spec, $value = null)
 	{
-		$this->sync = false;
+		$this->unsyncronize();
 		if (is_array($spec))
 			$this->_vars = array_merge($this->_vars, $spec);
 		else
@@ -81,7 +80,7 @@ class Templater_Proxy
 	*/
 	public function delete($key)
 	{
-		$this->sync = false;
+		$this->unsyncronize();
 		if (is_array($spec))
 			foreach ($spec as $item)
 				$this->delete($item);
@@ -97,7 +96,7 @@ class Templater_Proxy
 	*/
 	public function clearVars()
 	{
-		$this->sync = false;
+		$this->unsyncronize();
 		$this->_vars=array();
 	}
 
@@ -149,13 +148,18 @@ class Templater_Proxy
 			);
 			$this->syncronize($this->templates[$T]['c']);
 		}
-		if (!$this->templates[$T]['s'] || !$this->sync)
+		if (!$this->templates[$T]['s'])
 		{
 			$this->syncronize($this->templates[$T]['c']);
 			$this->templates[$T]['s']=true;
-			$this->sync=true;
 		}
 		return $this->templates[$T]['c']->fetch($name);
+	}
+
+	protected function unsyncronize()
+	{
+		foreach ($this->templates as $k=>$v)
+			$this->templates[$k]['s']=false;
 	}
 
 	protected function syncronize($tpl)
