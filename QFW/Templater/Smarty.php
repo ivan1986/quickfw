@@ -3,14 +3,14 @@
 class Templater_Smarty
 {
 	protected $_smarty;
-	
+
 	/**
 	* Плагины фреймворка
-	* 
+	*
 	* @var QuickFW_Plugs
 	*/
 	public $P;
-	
+
 	protected $_tmplPath;
 	/**
 	* Template file in which is all content
@@ -18,7 +18,7 @@ class Templater_Smarty
 	* @var string
 	*/
 	public $mainTemplate;
-	
+
 	/**
 	 * Init - подключение и инициальзация смарти - вынесено так как только по требованию
 	 *
@@ -28,18 +28,17 @@ class Templater_Smarty
 		global $config;
 		require QFWPATH.'/Smarty'.($config['release']?'':'.debug').'/Smarty.class.php';
 		$this->_smarty = new Smarty;
-		
+
 		$this->_smarty->force_compile = !$config['release'];
-	
+
 		$this->_smarty->compile_dir = TMPPATH . '/templates_c';
 		$this->_smarty->config_dir  = TMPPATH . '/configs';
 		$this->_smarty->cache_dir   = TMPPATH . '/cache';
-		
+
 		if (null !== $this->_tmplPath) {
 			$this->setScriptPath($this->_tmplPath);
 		}
-	
-		require QFWPATH.'/QuickFW/Module.php';
+
 		$module = QuickFW_Module::getInstance();
 		$this->_smarty->register_resource('module', array($module,
 													"getTemplate",
@@ -48,7 +47,7 @@ class Templater_Smarty
 													"isTrusted"));
 		$this->regPlugs();
 	}
-	
+
 	/**
 	* Constructor
 	*
@@ -60,11 +59,9 @@ class Templater_Smarty
 	{
 		$this->_tmplPath = $tmplPath;
 		$this->mainTemplate = $mainTpl;
-
-		require QFWPATH.'/QuickFW/Plugs.php';
 		$this->P = QuickFW_Plugs::getInstance();
 	}
-	
+
 	/**
 	* Set the path to the templates
 	*
@@ -86,7 +83,7 @@ class Templater_Smarty
 		}
 		return true;
 	}
-	
+
 	/**
 	* Retrieve the current template directory
 	*
@@ -96,7 +93,7 @@ class Templater_Smarty
 	{
 		return $this->_tmplPath;
 	}
-	
+
 	/**
 	* Assign variables to the template
 	*
@@ -117,10 +114,10 @@ class Templater_Smarty
 			$this->getEngine()->assign($spec);
 			return;
 		}
-		
+
 		$this->getEngine()->assign($spec, $value);
 	}
-	
+
 	/**
 	* Clear assigned variable
 	*
@@ -131,7 +128,7 @@ class Templater_Smarty
 	{
 		$this->getEngine()->clear_assign($key);
 	}
-	
+
 	/**
 	* Clear all assigned variables
 	*
@@ -141,14 +138,14 @@ class Templater_Smarty
 	{
 		$this->getEngine()->clear_all_assign();
 	}
-	
+
 	public function getTemplateVars($var = null)
 	{
 		if ($var === null)
 			return $this->getEngine()->get_template_vars();
 		return $this->getEngine()->get_template_vars($var);
 	}
-	
+
 	/**
 	* Processes a template and returns the output.
 	*
@@ -164,7 +161,7 @@ class Templater_Smarty
 	{
 		return $this->getEngine()->fetch($name);
 	}
-	
+
 	public function displayMain($content)
 	{
 		if (isset($this->mainTemplate) && $this->mainTemplate!="")
@@ -176,7 +173,7 @@ class Templater_Smarty
 		//echo $content;
 		return $content;
 	}
-	
+
 	/**
 	* Return the template engine object
 	*
@@ -190,33 +187,33 @@ class Templater_Smarty
 		}
 		return $this->_smarty;
 	}
-	
+
 	//Plugins Wrapper
 	protected function regPlugs()
 	{
 		$this->_smarty->register_function('baseUrl',array($this,'s_baseUrl'));
 		$this->_smarty->register_function('siteUrl',array($this,'s_siteUrl'));
 		$this->_smarty->register_modifier('siteUrl',array($this,'m_siteUrl'));
-		
+
 		$this->_smarty->register_function('addJS',array($this,'s_addJS'));
 		$this->_smarty->register_function('addCSS',array($this,'s_addCSS'));
-		
+
 		$this->_smarty->register_function('outHead',array($this,'s_outHead'));
 		$this->_smarty->register_block('getHead',array($this,'s_getHead'));
 
 		$this->_smarty->register_function('pluralForm',array($this,'s_pluralForm'));
 	}
-	
+
 	public function s_pluralForm($params, &$smarty)
 	{
 		$sep=isset($params['sep'])?$params['sep']:',';
 		$forms=explode($sep,$params['forms'],3);
 		return $this->P->pluralForm($params['num'],$forms[0],$forms[1],$forms[2]);
 	}
-	
+
 	public function s_baseUrl($params, &$smarty)
 		{return $this->P->baseUrl();}
-	public function s_siteUrl($params, &$smarty) 
+	public function s_siteUrl($params, &$smarty)
 		{return !isset($params['url'])?$this->P->baseUrl():$this->P->siteUrl($params['url']);}
 	public function m_siteUrl($url)
 		{return $this->P->siteUrl($url);}
@@ -232,16 +229,16 @@ class Templater_Smarty
 			$this->P->addCSS($params['file'],isset($params['noBase']));
 		return "";
 	}
-	public function s_outHead($params, &$smarty) 
+	public function s_outHead($params, &$smarty)
 	{
 		return $this->P->outHead(isset($params['name'])?$params['name']:'default');
 	}
-	public function s_getHead($params, $content, &$smarty) 
+	public function s_getHead($params, $content, &$smarty)
 	{
 		if ($content===null)
 			return;
 		return $this->P->getHead($content, isset($params['name'])?$params['name']:'default', isset($params['join']));
 	}
-	
+
 }
 ?>

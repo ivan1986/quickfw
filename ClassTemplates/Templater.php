@@ -4,19 +4,19 @@ class Templater_Templater
 {
 	/**
 	* Плагины фреймворка - необходимо инициализировать
-	* 
+	*
 	* @var QuickFW_Plugs
 	*/
 	public $P;
-	
+
 	/**
 	* Основной шаблон (путь относительно директории шаблонов)
-	* 
+	*
 	* @var String
 	*/
 	public $mainTemplate;
-	
-	
+
+
 	/**
 	* Constructor
 	*
@@ -27,13 +27,9 @@ class Templater_Templater
 	public function __construct($tmplPath, $mainTpl)
 	{
 		$this->mainTemplate = $mainTpl;
-		//подключить до вызова любого шаблона (в конструкторе или в Init)
-		//require QFWPATH.'/QuickFW/Module.php';
-		//require QFWPATH.'/QuickFW/Plugs.php';
-		
 		$this->P = QuickFW_Plugs::getInstance();
 	}
-	
+
 	/**
 	* Set the path to the templates
 	*
@@ -43,7 +39,7 @@ class Templater_Templater
 	public function setScriptPath($path)
 	{
 	}
-	
+
 	/**
 	* Retrieve the current template directory
 	*
@@ -52,7 +48,7 @@ class Templater_Templater
 	public function getScriptPath()
 	{
 	}
-	
+
 	/**
 	* Assign variables to the template
 	*
@@ -69,7 +65,7 @@ class Templater_Templater
 	public function assign($spec, $value = null)
 	{
 	}
-	
+
 	/**
 	* Clear assigned variable
 	*
@@ -79,7 +75,7 @@ class Templater_Templater
 	public function delete($key)
 	{
 	}
-	
+
 	/**
 	* Clear all assigned variables
 	*
@@ -88,11 +84,11 @@ class Templater_Templater
 	public function clearVars()
 	{
 	}
-	
+
 	public function getTemplateVars($var = null)
 	{
 	}
-	
+
 	/**
 	* Processes a template and returns the output.
 	*
@@ -106,7 +102,7 @@ class Templater_Templater
 	public function fetch($name)
 	{
 	}
-	
+
 	/**
 	* Выводит основной шаблон, обрабатывает функцией HeaderFilter
 	*
@@ -123,6 +119,6 @@ class Templater_Templater
 		//echo $content;
         return $content;
 	}
-	
+
 }
 ?>

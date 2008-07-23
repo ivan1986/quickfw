@@ -1,28 +1,26 @@
 <?php
 
-class Templater_PlainView 
+class Templater_PlainView
 {
 	protected $_vars;
 	protected $_tmplPath;
 	public $P;
-	
+
 	public $mainTemplate;
-	
+
 	public function __construct($tmplPath, $mainTmpl)
 	{
 		$this->_vars = array();
-		if (null !== $tmplPath) 
+		if (null !== $tmplPath)
 		{
 			$this->_tmplPath = $tmplPath;
 		}
-	
-		require QFWPATH.'/QuickFW/Module.php';
-		require QFWPATH.'/QuickFW/Plugs.php';
+
 		$this->P = QuickFW_Plugs::getInstance();
-	
+
 		$this->mainTemplate = $mainTmpl;
 	}
-	
+
 	/**
 	* Assign variables to the template
 	*
@@ -43,7 +41,7 @@ class Templater_PlainView
 		else
 			$this->_vars[$spec] = $value;
 	}
-	
+
 	/**
 	* Clear assigned variable
 	*
@@ -55,11 +53,11 @@ class Templater_PlainView
 		if (is_array($spec))
 			foreach ($spec as $item)
 				$this->delete($item);
-		else 
+		else
 			if (isset($this->_vars[$spec]))
 				unset($this->_vars[$spec]);
 	}
-	
+
 	/**
 	* Clear all assigned variables
 	*
@@ -69,7 +67,7 @@ class Templater_PlainView
 	{
 		$this->_vars=array();
 	}
-	
+
 	public function getTemplateVars($var = null)
 	{
 		if ($var === null)
@@ -78,27 +76,27 @@ class Templater_PlainView
 		return $this->_vars[$var];
 		else return null;
 	}
-	
+
 	public function getScriptPath()
 	{
 		return $this->_tmplPath;
 	}
-	
+
 	public function setScriptPath($path)
 	{
-		if (!is_readable($path)) 
+		if (!is_readable($path))
 		return false;
 			$this->_tmplPath = $path;
 		return true;
 	}
-	
+
 	public function module($module)
 	{
 		$result = '';
 		QuickFW_Module::getTemplate($module, $result, $this);
 		return $result;
 	}
-	
+
 	public function render($tmpl)
 	{
 		extract($this->_vars, EXTR_OVERWRITE);
@@ -110,7 +108,7 @@ class Templater_PlainView
 		ob_end_clean();
 		return $content;
 	}
-	
+
 	public function fetch($tmpl)
 	{
 		extract($this->_vars, EXTR_OVERWRITE);
@@ -122,7 +120,7 @@ class Templater_PlainView
 		ob_end_clean();
 		return $content;
 	}
-	
+
 	public function displayMain($content)
 	{
 		if (isset($this->mainTemplate) && $this->mainTemplate!="")
