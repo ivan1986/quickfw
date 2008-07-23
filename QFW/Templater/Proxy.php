@@ -132,35 +132,33 @@ class Templater_Proxy
 	public function fetch($name)
 	{
 		global $config;
-		foreach ($config['templater']['exts'] as $k=>$v)
+		$key=substr($name,strrpos($name,'.'.$k)+1);
+		if (!array_key_exists($key,$config['templater']['exts']))
+			return '';
+		$T = $config['templater']['exts'][$key];
+
+		if (!array_key_exists($T,$this->templates))
 		{
-			if (strrpos($name,'.'.$k)+1+strlen($k)==strlen($name))
-			{
-				if (!array_key_exists($v,$this->templates))
-				{
-					$templ = ucfirst($v);
-					$class = 'Templater_'.$templ;
-					require (QFWPATH.'/Templater/'.$templ.'.php');
-					//Подключить класс шаблонизатора
-					$this->templates[$v] = array(
-						'c' => new $class(ROOTPATH .'/application',''),
-						's' => true,
-					);
-					$this->syncro($this->templates[$v]['c']);
-				}
-				if (!$this->templates[$v]['s'])
-				{
-					$this->syncro($this->templates[$v]['c']);
-					$this->templates[$v]['s']=true;
-				}
-				$content=$this->templates[$v]['c']->fetch($name);
-				return $content;
-			}
+			$templ = ucfirst($T);
+			$class = 'Templater_'.$templ;
+			require (QFWPATH.'/Templater/'.$templ.'.php');
+			//Подключить класс шаблонизатора
+			$this->templates[$T] = array(
+				'c' => new $class(ROOTPATH .'/application',''),
+				's' => true,
+			);
+			$this->syncronize($this->templates[$T]['c']);
 		}
-		return '';
+		if (!$this->templates[$T]['s'])
+		{
+			$this->syncronize($this->templates[$T]['c']);
+			$this->templates[$T]['s']=true;
+		}
+		$content=$this->templates[$T]['c']->fetch($name);
+		return $content;
 	}
 
-	protected function syncro($tpl)
+	protected function syncronize($tpl)
 	{
 		$tpl->mainTemplate=$this->mainTemplate;
 		$tpl->setScriptPath($this->_tmplPath);
