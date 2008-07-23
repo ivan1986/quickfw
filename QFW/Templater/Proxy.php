@@ -147,7 +147,7 @@ class Templater_Proxy
 			);
 			$this->syncronize($this->templates[$T]['c']);
 		}
-		if (!$this->templates[$T]['s'])
+		elseif (!$this->templates[$T]['s'])
 		{
 			$this->syncronize($this->templates[$T]['c']);
 			$this->templates[$T]['s']=true;
