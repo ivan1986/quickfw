@@ -149,13 +149,13 @@ class Templater_Proxy
 			);
 			$this->syncronize($this->templates[$T]['c']);
 		}
-		if (!$this->templates[$T]['s'])
+		if (!$this->templates[$T]['s'] || !$this->sync)
 		{
 			$this->syncronize($this->templates[$T]['c']);
 			$this->templates[$T]['s']=true;
+			$this->sync=true;
 		}
-		$content=$this->templates[$T]['c']->fetch($name);
-		return $content;
+		return $this->templates[$T]['c']->fetch($name);
 	}
 
 	protected function syncronize($tpl)
