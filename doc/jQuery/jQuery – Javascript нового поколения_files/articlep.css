@@ -1,0 +1,218 @@
+BODY                    
+{
+    font-family:verdana,tahoma;
+    font-size:75%;
+    color:#000000;   
+    background-color:#FFFFFF;            
+    text-align:justify;
+    padding:15px;
+}
+
+table
+{
+    font-size:1em;
+}
+
+P, UL, OL, DL
+{
+    font-family:verdana,tahoma;
+    text-align:justify;
+}
+    
+H1 
+{
+    font-family: arial;
+    font-size: 2em;
+    font-weight: bold;
+    text-align: center;
+    color: #000000;
+}
+     
+H1 SPAN.subtitle    
+{
+    font-family: verdana,tahoma;
+    font-size: 1.8em;
+    font-weight: lighter;
+}                
+         
+H2
+{
+    font-family: verdana,tahoma;
+    font-size: 1.8em;
+    font-weight: lighter;
+    font-variant: small-caps;
+    text-align: left;
+    color: #000000;
+}
+        
+H3 
+  { font-family: tahoma,verdana;
+    font-size: 1.35em;
+    font-weight:bold;            
+    text-align:left;
+    color:#000000; }
+       
+H4
+{
+    font-family: tahoma,verdana;
+    font-size: 1em;
+    font-weight:bold;
+    text-align:left;
+    color:#000000;
+}
+                      
+H5 
+{
+    font-family: tahoma,verdana;
+    font-size: 1em;
+    text-align: right;
+    font-weight: bold;
+}
+           
+H5 .title 
+{
+    color:#000000;
+}
+         
+H5 .value
+{
+    font-family: verdana,tahoma;
+    font-style:italic;
+    color:#000000;
+}
+   
+H6
+{
+    font-family: tahoma,verdana;
+    font-size:1em;
+    text-align:right;
+    font-weight:lighter;
+}
+
+H6 .title    
+  { color:#000000; }
+
+H6 .value     
+  { font-family: arial;
+    font-style:italic;           
+    color:#000000; }            
+       
+TABLE
+  { 
+    margin:5px;
+  }
+
+TD 
+  { font-family: verdana,tahoma;
+  }       
+
+TH 
+  {
+    font-family: verdana,tahoma;
+    font-weight:bold;
+  }       
+       
+PRE, CODE 
+  {
+    padding:10px;
+    margin:0;
+    font-family:"courier new";
+ }                   
+       
+.code    
+  { background-color:#F6F6F6; }
+         
+.warning, .warning TD
+{
+    background-color: #F6F6F6;
+    color: #000000;
+    padding:0.5em;
+    font-family:verdana,tahoma;
+    font-size:x-small; 
+    text-align:justify;
+}
+         
+.note, .note TD
+{
+    background-color: #F6F6F6;
+    color: #000000;
+    padding: 0.8em;    
+    font-family: verdana,tahoma;       
+    text-align: justify;
+}
+      
+.tip, .tip TD    
+{
+    background-color: #F6F6F6;
+    color: #000000;
+    padding: 0.8em;    
+    font-family: verdana,tahoma;
+    text-align: justify;
+}
+
+.warning P, 
+.warning PRE,
+.note P, 
+.note PRE,
+.tip P, 
+.tip PRE
+  { margin:0.3em 0em 0.1em 0em; }
+
+.warning .code { background-color:#F6F6F6;}
+.note .code { background-color:#F6F6F6;}
+.tip .code { background-color:#F6F6F6;}
+
+A 
+{
+  text-decoration: none;
+  font-family: tahoma;
+  color: #505050;
+}
+A:hover 
+{ 
+	text-decoration:underline;
+}
+A.link-ext
+{
+	padding-left: 17px;
+	background: transparent url(extAp000.gif) no-repeat 3 left;
+}
+A.link-file
+{
+	padding-left: 28px;
+	background: transparent url(fileAp00.gif) no-repeat 3 left;
+}
+A.link-chm
+{
+	padding-left: 18px;
+	background: transparent url(chmAp000.gif) no-repeat 3 left;
+}
+                                
+SPAN.COMMENT
+{
+    font-style: italic;
+}
+
+SPAN.STRING
+{
+}
+
+SPAN.CHARACTER
+{
+}
+
+SPAN.KEYWORD
+{
+    font-weight: bolder;
+}
+
+SPAN.PREPROCESSOR
+{
+}
+
+SPAN.NUMBER
+{
+}
+
+SPAN.ACCENT
+{ font-weight: bold; }

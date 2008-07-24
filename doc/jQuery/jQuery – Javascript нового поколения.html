@@ -1,0 +1,1095 @@
+<HTML>
+  <HEAD>
+    <META http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <TITLE>jQuery – Javascript нового поколения</TITLE>
+    <meta name="description" content="В статье описана библиотека jQuery. Разобраны ключевые моменты работы с библиотекой - нахождение элементов на странице, манипуляция объектной моделью документа, базовая анимация, работа с технологией AJAX. В статье приведено большое количество примеров работающего кода.">
+    <meta name="keywords" content="Javascript, jQuery, Web">
+    <META name="robots" content="noindex,follow">
+    <LINK rel="stylesheet" href="jQuery – Javascript нового поколения_files/articlep.css" type="text/css">
+  </HEAD>
+  <BODY marginwidth="20" marginheight="20">
+    <H1>jQuery – Javascript нового поколения</H1>
+    <H5>
+      <SPAN class="title">Автор: </SPAN>
+      <SPAN class="value">
+        <a target="_blank" href="http://rsdn.ru/Users/Profile.aspx?uid=9088">Dmitrii 'Mamut' Dimandt</a>
+      </SPAN>
+      <br>
+      <SPAN class="title">Источник: </SPAN>
+      <SPAN class="value">
+        <a target="_blank" href="http://rsdn.ru/mag/main.htm">RSDN Magazine #1-2007</a>
+      </SPAN>
+    </H5>
+    <H6>
+      <SPAN class="title">Опубликовано: </SPAN>
+      <SPAN class="value">11.04.2002</SPAN>
+      <BR>
+      <SPAN class="title">Версия текста: </SPAN>
+      <SPAN class="value">1.0</SPAN>
+    </H6>
+    <TABLE width="98%">
+      <TR>
+        <TD valign="top" class="contents">
+          <A href="">
+            <B>Веб приложения. И побольше, побольше!</B>
+          </A>
+          <BR>
+          <A href="">
+            <B>jQuery</B>
+          </A>
+          <BR>
+          <DIV style="margin-left:2em">
+            <A href="">С места в карьер</A>
+            <BR>
+            <A href="">Элементарно, Ватсон</A>
+            <BR>
+            <A href="">На старт, внимание, марш!</A>
+            <BR>
+            <A href="">Как много нам открытий чудных...</A>
+            <BR>
+            <A href="">Круговая порука</A>
+            <BR>
+            <A href="">Кто сказал Flash?</A>
+            <BR>
+            <A href="">AJAX – как много в этом звуке!</A>
+            <BR>
+            <A href="">Расширяемся...</A>
+            <BR>
+          </DIV>
+          <A href="">
+            <B>В заключение</B>
+          </A>
+          <BR>
+          <A href="">
+            <B>Краткий справочник</B>
+          </A>
+          <BR>
+          <DIV style="margin-left:2em">
+            <A href="">CSS</A>
+            <BR>
+            <A href="">XPath</A>
+            <BR>
+            <A href="">Специальные селекторы</A>
+            <BR>
+            <A href="">Селекторы форм</A>
+            <BR>
+          </DIV>
+          <A href="">
+            <B>Трюки</B>
+          </A>
+          <BR>
+          <A href="">
+            <B>Ссылки и библиография</B>
+          </A>
+          <BR>
+          <DIV style="margin-left:2em">
+            <A href="">jQuery</A>
+            <BR>
+            <A href="">Плагины</A>
+            <BR>
+            <A href="">Разное</A>
+            <BR>
+          </DIV>
+        </TD>
+        <TD valign="top" align="center" class="contents">
+          <IMG src="jQuery – Javascript нового поколения_files/mag01070.jpg">
+        </TD>
+      </TR>
+    </TABLE>
+    <SCRIPT LANGUAGE="javascript">
+			function ToggleCode(id)
+			{
+				el=document.getElementById(id);
+				img=document.getElementById("img"+id);
+				if(el.style.display=="none")
+				{
+					img.src="/images/ls2.gif";
+					el.style.display="";
+				}
+				else
+				{
+					img.src="/images/ls1.gif";
+					el.style.display="none";
+				}
+				return false;
+			}
+		</SCRIPT>
+    <H2>Веб приложения. И побольше, побольше!<A name="E4"></A></H2>
+<P>Тенденция последних лет в создании веб-приложений – использование функциональности, которая до этого была доступна только прикладным программам. Это и всевозможная анимация, и общение с сервером без перезагрузки страницы, и использование «не веб»-элементов (деревья, табы, сплиттеры и многое другое).</P>
+<P>Над самим термином «клиентское веб-приложение» можно смеяться, о нем можно дискутировать, но факт остается фактом – уже появились решения, которые кроме как «веб-приложением» назвать нельзя (взять тот же Gmail, например). И теперь наша задача, как разработчиков, взять на вооружение все, что позволит создавать новые приложения, которые соответствуют новым, пока еще правда сырым, стандартам, объединяемым звучным названием «Веб 2.0».</P>
+<P>Большая часть технологической стороны новых веб-приложений опирается на предсказуемость поведения современных браузеров. Все наиболее распространенные браузеры разве что не препарированы энтузиастами. Такие копания во внутренностях позволяют этим же энтузиастам создавать разнообразный инструментарий для работы над веб-приложениями в целом, так и над каждой веб-страницей в отдельности. Но так как в заголовок статьи вынесено слово «Javascript», то и говорить мы будем о нем.</P>
+<P>Веб-приложения стремятся приблизиться к функциональности настольных приложений. Но так как ключевые веб-технологии (HTML и CSS) являются статическими, то вся необходимая функциональность реализуется с помощью Javascript.</P>
+<P>Существуют десятки, если не сотни, библиотек, позволяющих реализовывать такие вещи, как красочные графические эффекты и анимацию, перетягивание и сортировку предметов, общение с сервером без перезагрузки страницы и многое, многое другое. Большинство таких библиотек отличает некоторая монструозность и, зачастую, сложность в использовании. Особенно в сравнении с библиотекой, о которой пойдет речь в этой статье. </P>
+<H2>jQuery<A name="ELB"></A></H2>
+<H3>С места в карьер<A name="EOB"></A></H3>
+<P>Начну сразу с интересного, хоть и непрактичного примера. Нам необходимо раскрасить таблицу в таком стиле: </P>
+<P style="text-align: center;"><IMG src="jQuery – Javascript нового поколения_files/zebra-ta.png"><BR><I style="font-face: verdana; font-size:x-small;"></I></P>
+<P>Предполагается, что у нас есть CSS-файл, в котором определен класс «odd». Все, что нам нужно сделать, – это наделить нечетные строки в таблице эти классом. Для начала – решение на чистом Javascript:</P>
+<TABLE class="code" width="98%"><TR><TD><PRE>
+<SPAN class="KEYWORD">var</SPAN> tables = document.getElementsByTagName(<SPAN class="STRING">"table"</SPAN>);
+<SPAN class="KEYWORD">for</SPAN> ( <SPAN class="KEYWORD">var</SPAN> t = 0; t &lt; tables.length; t++ ) {
+  <SPAN class="KEYWORD">var</SPAN> rows = tables[t].getElementsByTagName(<SPAN class="STRING">"tr"</SPAN>);
+  <SPAN class="KEYWORD">for</SPAN> ( <SPAN class="KEYWORD">var</SPAN> i = 1; i &lt; rows.length; i += 2 )
+    <SPAN class="KEYWORD">if</SPAN> ( !/(^|s)odd(s|$)/.test( rows[i].className ) )
+      rows[i].className += <SPAN class="STRING">" odd"</SPAN>;
+}
+</PRE></TD></TR></TABLE>
+<P>Теперь – решение, использующее одну из самых популярных на сегодняшний день библиотек, Prototype:</P>
+<TABLE class="code" width="98%"><TR><TD><PRE>
+$$(<SPAN class="STRING">"table"</SPAN>).each(<SPAN class="KEYWORD">function</SPAN>(table){
+  Selector.findChildElements(table, [<SPAN class="STRING">"tr"</SPAN>])
+    .findAll(<SPAN class="KEYWORD">function</SPAN>(row,i){ <SPAN class="KEYWORD">return</SPAN> i % 2 == 1; })
+    .invoke(<SPAN class="STRING">"addClassName"</SPAN>, <SPAN class="STRING">"odd"</SPAN>);
+});
+</PRE></TD></TR></TABLE>
+<P>Ну а теперь – jQuery:</P>
+<TABLE class="code" width="98%"><TR><TD><PRE>
+$(<SPAN class="STRING">"tr:nth-child(odd)"</SPAN>).addClass(<SPAN class="STRING">"odd"</SPAN>);
+</PRE></TD></TR></TABLE>
+<P>Как видно из этого примера, библиотека jQuery позволяет находить простые и изящные решения для, казалось бы, сложных задач.</P>
+
+<H3>Элементарно, Ватсон<A name="EOD"></A></H3>
+<P>Ключом к пониманию работы jQuery является функция $(). Эта функция, так или иначе, вызывается всеми методами jQuery. Как будет показано дальше, со стороны эта функция выглядит действительно магической.</P>
+<H4>Доллары, доллары, доллары</H4>
+<P>Определение функции $ можно увидеть в листинге 1. Вне зависимости от параметров, переданных в функцию, знак доллара вернет список объектов, над которым уже определены все доступные jQuery-функции (а их немало). Это позволяет работать с любыми объектами – уже существующими на странице, созданными динамически или полученными через AJAX – так, как будто это одни и те же элементы, уже существующие на странице.</P>
+<FONT face="verdana" style="font-size:x-small;margin-left:em"><I>Листинг 1. Определение функции $():</I></FONT><TABLE class="code" width="98%"><TR><TD><PRE>
+$(html)
+$(elems)
+$(fn)
+$(expr, context)
+</PRE></TD></TR></TABLE>
+<P>Разберемся с каждым поподробнее.</P>
+<P><B>$(html)</B></P>
+<P>Позволяет создать html-элементы «на лету» из «чистого» HTML. Например, можно создать элемент div, содержащий параграф с текстом «Ба-бах!» и добавить его к элементу с id="body" таким образом:</P>
+<TABLE class="code" width="98%"><TR><TD><PRE>
+<SPAN class="KEYWORD">var</SPAN> my_div = $(<SPAN class="STRING">"&lt;div&gt;&lt;p&gt;Ба-бах!&lt;/p&gt;&lt;/div&gt;"</SPAN>);
+my_div.appendTo(<SPAN class="STRING">"#body"</SPAN>);
+</PRE></TD></TR></TABLE>
+<P>Или еще короче:</P>
+<TABLE class="code" width="98%"><TR><TD><PRE>
+$(<SPAN class="STRING">"&lt;div&gt;&lt;p&gt;Ба-бах!&lt;/p&gt;&lt;/div&gt;"</SPAN>).appendTo(<SPAN class="STRING">"#body"</SPAN>);
+</PRE></TD></TR></TABLE>
+<P>Элемент до отработки скрипта:</P>
+<TABLE class="code" width="98%"><TR><TD><PRE>
+&lt;div id=<SPAN class="STRING">"body"</SPAN>&gt;&lt;/div&gt;
+</PRE></TD></TR></TABLE>
+<P>Элемент после отработки скрипта:</P>
+<TABLE class="code" width="98%"><TR><TD><PRE>
+&lt;div id=<SPAN class="STRING">"body"</SPAN>&gt;&lt;div&gt;&lt;p&gt;Ба-бах!&lt;/p&gt;&lt;/div&gt;&lt;/div&gt;
+</PRE></TD></TR></TABLE>
+<P><B>$(elems)</B></P>
+<P>Позволяет «прицепить» всю функциональность jQuery к уже существующим элементам страницы (а именно, к элементам из объектной модели документа, из DOM). Примеры:</P>
+<TABLE class="code" width="98%"><TR><TD><PRE>
+$(document.body).css( <SPAN class="STRING">"background-color"</SPAN>, <SPAN class="STRING">"black"</SPAN> );
+$( myForm.elements ).hide();
+</PRE></TD></TR></TABLE>
+<P><B>$(expr[, context])</B></P>
+<P>Это самая магическая форма функции $, и наиболее часто используемая. Первый, обязательный, параметр – это выражение, которое позволит jQuery найти элемент на странице. Второй, необязательный, параметр указывает, где искать этот элемент (по умолчанию jQuery будет искать по всей странице). </P>
+<P>Найдем все элементы p, находящиеся внутри всех элементов div на странице:</P>
+<TABLE class="code" width="98%"><TR><TD><PRE>
+$(<SPAN class="STRING">"div &gt; p"</SPAN>);
+</PRE></TD></TR></TABLE>
+<P>Наш документ:</P>
+<TABLE class="code" width="98%"><TR><TD><PRE>
+&lt;p&gt;one&lt;/p&gt; &lt;div&gt;&lt;p&gt;two&lt;/p&gt;&lt;/div&gt; &lt;p&gt;three&lt;/p&gt;
+</PRE></TD></TR></TABLE>
+<P>Результат:</P>
+<TABLE class="code" width="98%"><TR><TD><PRE>
+[ &lt;p&gt;two&lt;/p&gt; ]
+</PRE></TD></TR></TABLE>
+<P>Найдем все радиокнопки в первой форме на странице:</P>
+<TABLE class="code" width="98%"><TR><TD><PRE>
+$(<SPAN class="STRING">"input:radio"</SPAN>, document.forms[0]);
+</PRE></TD></TR></TABLE>
+<P>Найдем все элементы div в XML, что прислан с сервера с помощью технологии AJAX:</P>
+<TABLE class="code" width="98%"><TR><TD><PRE>
+$(<SPAN class="STRING">"div"</SPAN>, xml.responseXML);
+</PRE></TD></TR></TABLE>
+<P>«Но как же так?» - воскликнет читатель. Как это все работает? </P>
+<P>Дело в том, что в jQuery реализован очень интересный механизм поиска элементов, использующий CSS и Xpath. То есть, для нахождения требуемого элемента вы можете воспользоваться как механизмом селекторов CSS, так и запросами по документу в стиле Xpath. Все еще непонятно? </P>
+<P>CSS в версиях 1-3 предлагает разработчику богатые возможности оформления страниц (как минимум, теоретически). Например, чтобы пометить элементы div в параграфах с классом «highlight» красным цветом, разработчик может составить такую конструкцию:</P>
+<TABLE class="code" width="98%"><TR><TD><PRE>
+p.highlight &gt; div 
+{
+  color: #F00;
+}
+</PRE></TD></TR></TABLE>
+<P>Вспомните пример с раскраской таблицы. Согласно CSS 3 раскрасить таблицу в зебру можно так:</P>
+<TABLE class="code" width="98%"><TR><TD><PRE>
+table tr:nth-child(odd)
+{
+  background-color: magenta;
+}
+</PRE></TD></TR></TABLE>
+<P>Вспомним тогда еще раз, как мы раскрасили таблицу с помощью jQuery:</P>
+<TABLE class="code" width="98%"><TR><TD><PRE>
+$(<SPAN class="STRING">"tr:nth-child(odd)"</SPAN>).addClass(<SPAN class="STRING">"odd"</SPAN>);
+</PRE></TD></TR></TABLE>
+<P><I>Мы использовали селекторы CSS для нахождения нужных нам элементов и манипуляций над ними!</I></P>
+<P>Практически все селекторы из CSS 1-3 можно использовать для нахождения элементов на странице. В конце статьи приведен краткий справочник по доступным селекторам, а пока рассмотрим примеры.</P>
+<P>Найдем элемент с id="unique":</P>
+<TABLE class="code" width="98%"><TR><TD><PRE>
+$(<SPAN class="STRING">"#unique"</SPAN>);  
+<SPAN class="COMMENT">// аналог из CSS:</SPAN>
+<SPAN class="COMMENT">// #unique {...}</SPAN>
+</PRE></TD></TR></TABLE>
+<P>Найдем все элементы A, имеющие класс «external» (то есть все &lt;a class="external"&gt;)</P>
+<TABLE class="code" width="98%"><TR><TD><PRE>
+$(<SPAN class="STRING">"a.external"</SPAN>);
+<SPAN class="COMMENT">// аналог из CSS:</SPAN>
+<SPAN class="COMMENT">// a.external {...}</SPAN>
+</PRE></TD></TR></TABLE>
+<P>Найдем все нечетные элементы div, находящиеся внутри элементов div с классом news-item, который находится внутри элемента div с id="outer"</P>
+<TABLE class="code" width="98%"><TR><TD><PRE>
+$(<SPAN class="STRING">"#outer &gt; div.news-item &gt; p:nth-child(odd)"</SPAN>);
+</PRE></TD></TR></TABLE>
+<P>Как видно, фантазия разработчика ограничена только возможностями CSS. Когда же возможностей CSS не хватает, на помощь приходит XPath.</P>
+<P>Согласно определению из Википедии, XPath (XML Path Language) является языком для обращения к частям XML-документа. Вспомним, что HTML, или вернее, XHTML, является подмножеством XML, и станет понятно, что практически не существует причин, по которым с помощью XPath нельзя было бы обращаться к частям HTML-документа. Вернее, их нет для jQuery, так как эта библиотека поддерживает довольно большое подмножество XPath (более полная информация приведена во врезке) и лихо объединяет его с некоторыми селекторами CSS для создания невероятно гибкого механизма поиска элементов на странице.</P>
+<P>Найдем все элементы P, которые содержат ссылку</P>
+<TABLE class="code" width="98%"><TR><TD><PRE>
+$(<SPAN class="STRING">"p[a]"</SPAN>);
+</PRE></TD></TR></TABLE>
+<P>Найдем все элементы A, которые содержат атрибут rel, равный "nofollow":</P>
+<TABLE class="code" width="98%"><TR><TD><PRE>
+$(<SPAN class="STRING">"//a[@rel='nofollow']"</SPAN>);
+</PRE></TD></TR></TABLE>
+<P>Найдем все видимые элементы LI внутри элемента UL</P>
+<TABLE class="code" width="98%"><TR><TD><PRE>
+$(<SPAN class="STRING">"ul/li:visible"</SPAN>);   <SPAN class="COMMENT">// XPath + селектор</SPAN>
+<SPAN class="COMMENT">// или</SPAN>
+$(<SPAN class="STRING">"ul &gt; li:visible"</SPAN>); <SPAN class="COMMENT">// CSS + селектор</SPAN>
+</PRE></TD></TR></TABLE>
+<P>Как видите, если вы знаете, какой элемент необходимо выбрать, jQuery позволит это сделать. Например, в одном из текущих проектов мы используем вот такой код:</P>
+<TABLE class="code" width="98%"><TR><TD><PRE>
+<SPAN class="COMMENT">// Находим необходимую нам радиокнопку и эмулируем нажатие на нее</SPAN>
+$(<SPAN class="STRING">"input[@value='1']:radio"</SPAN>).click();
+
+<SPAN class="COMMENT">// Находим необходимую нам опцию в списке и выбираем ее 
+// (устанавливаем значение атрибута selected равным "selected"):</SPAN>
+$(<SPAN class="STRING">"option[@value='1']"</SPAN>).attr(<SPAN class="STRING">"selected"</SPAN>, <SPAN class="STRING">"selected"</SPAN>);
+</PRE></TD></TR></TABLE>
+
+
+<H3>На старт, внимание, марш!<A name="E4BAC"></A></H3>
+<P>Большинство (если не все) библиотек JavaScript часто использует событие window.onload. Это событие вызывается после того, как документ полностью загрузился в окно браузера. Это значит, что вызываемый в обработчике этого события код не сработает, пока не загрузятся все изображения, флэш-баннеры и видеоролики на странице.</P>
+<P>jQuery предлагает решение этой проблемы. У разработчика есть возможность выполнить свой код в тот момент, когда доступна объектная модель документа, то есть когда браузер уже получил исходный код страницы полностью, но, возможно, еще не подгрузил различное мультимедийное содержимое (рисунки, видео, флэш).</P>
+<P>Возможность выполнить такой код предлагается методом .ready():</P>
+<TABLE class="code" width="98%"><TR><TD><PRE>
+$(document).ready(
+  <SPAN class="KEYWORD">function</SPAN>() { <SPAN class="COMMENT">/* ... */</SPAN>}
+);
+</PRE></TD></TR></TABLE>
+<P>или его сокращенным вариантом, $(fn):</P>
+<TABLE class="code" width="98%"><TR><TD><PRE>
+$(
+  <SPAN class="KEYWORD">function</SPAN>(){<SPAN class="COMMENT">/* ... */</SPAN>}
+);
+</PRE></TD></TR></TABLE>
+<P>В качестве аргумента в .ready() передается функция, которая будет выполнять все необходимые действия. </P>
+<FONT face="verdana" style="font-size:x-small;margin-left:em"><I>Пример.</I></FONT><TABLE class="code" width="98%"><TR><TD><PRE>
+$(document).ready(
+  <SPAN class="KEYWORD">function</SPAN>()
+<SPAN class="KEYWORD">  </SPAN>{
+    <SPAN class="COMMENT">// добавим ко всем ссылкам на странице некий текст</SPAN>
+    $(<SPAN class="STRING">"a"</SPAN>).append(<SPAN class="STRING">"&lt;span&gt;(opens in new window)&lt;/span&gt;"</SPAN>);
+  }
+);
+</PRE></TD></TR></TABLE>
+<FONT face="verdana" style="font-size:x-small;margin-left:em"><I>Пример.</I></FONT><TABLE class="code" width="98%"><TR><TD><PRE>
+$(document).ready(init);
+<SPAN class="KEYWORD">function</SPAN> init()
+{
+  <SPAN class="COMMENT">// находим все элементы Р с классом highlight и задаем им другой фон</SPAN>
+  $(<SPAN class="STRING">"p.highlight"</SPAN>).css(<SPAN class="STRING">"background-color"</SPAN>, <SPAN class="STRING">"#000"</SPAN>);
+
+  <SPAN class="COMMENT">// естественно, можно выполнять любые действия</SPAN>
+  alert('Функция init()');
+
+  <SPAN class="COMMENT">// вызывать другие функции</SPAN>
+  anotherFunc();
+
+  <SPAN class="COMMENT">// манипулировать объектами в документе</SPAN>
+  document.getElementById(<SPAN class="STRING">"some_id"</SPAN>);
+}
+</PRE></TD></TR></TABLE>
+<FONT face="verdana" style="font-size:x-small;margin-left:em"><I>Пример.</I></FONT><TABLE class="code" width="98%"><TR><TD><PRE>
+<SPAN class="COMMENT">// Используем кратую форму записи</SPAN>
+$(
+  <SPAN class="KEYWORD">function</SPAN>()
+<SPAN class="KEYWORD">  </SPAN>{
+    alert('документ готов!');
+  }
+)
+</PRE></TD></TR></TABLE>
+<TABLE class="tip" width="98%"><TR><TD><strong>СОВЕТ</strong><br><P>Я рекомендую использовать длинную форму записи, то есть $(document).ready(),чтобы избежать неявных ошибок в коде.</P>
+</TD></TR></TABLE>
+
+<H3>Как много нам открытий чудных...<A name="EQEAC"></A></H3>
+<P>jQuery предлагает разработчику большое количество методов для манипуляции элементами документа и их свойствами. Кратко рассмотрим некоторые из этих методов, а также некоторые особенности работы с ними.</P>
+<H4>Ловкость рук и никакого мошенничества</H4>
+<TABLE border="0" cellspacing="2" cellpadding="5"><TR><TH>append(content)/prepend(content)</TH><TD>Добавить переданный элемент или выражение в конец/в начало выбранного элемента.</TD></TR>
+<TR><TH>appendTo(expr)/prependTo(expr)</TH><TD>Добавить выбранный элемент в конец/в начало переданного элемента.</TD></TR>
+<TR><TH>attr(name)</TH><TD>Получить значение атрибута.</TD></TR>
+<TR><TH>attr(params)</TH><TD>Установить значение атрибутов. Атрибуты передаются в виде {ключ1:значение1[, ключ2:значение2[, …]]}</TD></TR>
+<TR><TH>attr(name, value)</TH><TD>Установить значение одного атрибута.</TD></TR>
+<TR><TH>css(name)/css(params)/css(name, value)</TH><TD>Получить/установить значение отдельных параметров CSS. Аналогично функции attr().</TD></TR>
+<TR><TH>text()/text(val)</TH><TD>Получить/задать текст элемента. В случае ввода текста специальные символы HTML заменяются символьными примитивами (entities, например, знак "&gt;" будет заменен &amp;gt;).</TD></TR>
+<TR><TH>empty()</TH><TD>Удалить все подэлементы текущего элемента.</TD></TR>
+</TABLE>
+<P><B>Примеры</B>.</P>
+<P>В следующих примерах мы будем работать со следующим HTML-кодом:</P>
+<TABLE class="code" width="98%"><TR><TD><PRE>
+&lt;div id=<SPAN class="STRING">"my-div"</SPAN>&gt;
+  &lt;a href=<SPAN class="STRING">"http://google.com/"</SPAN> id=<SPAN class="STRING">"my-link"</SPAN>&gt;Ссылка&lt;/a&gt;
+&lt;/div&gt;
+</PRE></TD></TR></TABLE>
+<FONT face="verdana" style="font-size:x-small;margin-left:em"><I>Пример.</I></FONT><TABLE class="code" width="98%"><TR><TD><PRE>
+$(<SPAN class="STRING">"#my-div"</SPAN>).html();    <SPAN class="COMMENT">// Вернет &lt;a href="#" id="my-link"&gt;Ссылка&lt;/a&gt;</SPAN>
+</PRE></TD></TR></TABLE>
+<FONT face="verdana" style="font-size:x-small;margin-left:em"><I>Пример.</I></FONT><TABLE class="code" width="98%"><TR><TD><PRE>
+$(<SPAN class="STRING">"#my-link"</SPAN>).attr(<SPAN class="STRING">"href"</SPAN>);  <SPAN class="COMMENT">// Вернет http://google.com/</SPAN>
+</PRE></TD></TR></TABLE>
+<FONT face="verdana" style="font-size:x-small;margin-left:em"><I>Пример.</I></FONT><TABLE class="code" width="98%"><TR><TD><PRE>
+$(<SPAN class="STRING">"#my-div"</SPAN>).append(<SPAN class="STRING">"&lt;strong&gt;Полужирный текст&lt;/strong&gt;"</SPAN>);
+<SPAN class="COMMENT">// или</SPAN>
+$(<SPAN class="STRING">"&lt;strong&gt;Полужирный текст&lt;/strong&gt;"</SPAN>).appendTo($(<SPAN class="STRING">"#my-div"</SPAN>));
+</PRE></TD></TR></TABLE>
+<P>HTML станет таким:</P>
+<TABLE class="code" width="98%"><TR><TD><PRE>
+&lt;div id=<SPAN class="STRING">"my-div"</SPAN>&gt;
+  &lt;a href=<SPAN class="STRING">"http://google.com/"</SPAN> id=<SPAN class="STRING">"my-link"</SPAN>&gt;Ссылка&lt;/a&gt;
+  &lt;strong&gt;Полужирный текст&lt;/strong&gt;
+&lt;/div&gt;
+</PRE></TD></TR></TABLE>
+<FONT face="verdana" style="font-size:x-small;margin-left:em"><I>Пример.</I></FONT><TABLE class="code" width="98%"><TR><TD><PRE>
+$(<SPAN class="STRING">"#my-div"</SPAN>).empty();
+</PRE></TD></TR></TABLE>
+<P>HTML станет таким:</P>
+<TABLE class="code" width="98%"><TR><TD><PRE>
+&lt;div id=<SPAN class="STRING">"#my-div"</SPAN>&gt;&lt;/div&gt;
+</PRE></TD></TR></TABLE>
+<FONT face="verdana" style="font-size:x-small;margin-left:em"><I>Пример.</I></FONT><TABLE class="code" width="98%"><TR><TD><PRE>
+$(<SPAN class="STRING">"#my-div"</SPAN>).text(<SPAN class="STRING">"&lt;a&gt;Якорь&lt;/a&gt;"</SPAN>);
+</PRE></TD></TR></TABLE>
+<P>HTML станет таким:</P>
+<TABLE class="code" width="98%"><TR><TD><PRE>
+&lt;div id=<SPAN class="STRING">"#my-div"</SPAN>&gt;&amp;lt;a&amp;gt;Якорь&amp;lt;/a&amp;gt;&lt;/div&gt;
+</PRE></TD></TR></TABLE>
+<FONT face="verdana" style="font-size:x-small;margin-left:em"><I>Пример.</I></FONT><TABLE class="code" width="98%"><TR><TD><PRE>
+$(<SPAN class="STRING">"#my-div"</SPAN>).css(
+  {
+    backgroundColor: <SPAN class="STRING">"#F00"</SPAN>,
+    color: <SPAN class="STRING">"#00F"</SPAN>
+  }
+);
+</PRE></TD></TR></TABLE>
+<P>HTML станет таким:</P>
+<TABLE class="code" width="98%"><TR><TD><PRE>
+&lt;div id=<SPAN class="STRING">"my-div"</SPAN> style=<SPAN class="STRING">"background-color: #F00; color: #00F"</SPAN>&gt;
+  &amp;lt;a&amp;gt;Якорь&amp;lt;/a&amp;gt;
+&lt;/div&gt;
+</PRE></TD></TR></TABLE>
+<P>В последнем примере обратите внимание, что для сложносоставных свойств CSS вроде background-color, font-weight и прочих используются их эквиваленты из Javascript (backgroundColor, fontWeight и т.п.).</P>
+
+<H4>Связанные одной цепью</H4>
+<P>Главная особенность большинства методов jQuery – это возможность связывать их в цепочки. Методы, манипулирующие элементами документа, обычно возвращают эти объекты для дальнейшего использования, что позволяет писать примерно следующее:</P>
+<FONT face="verdana" style="font-size:x-small;margin-left:em"><I>Пример.</I></FONT><TABLE class="code" width="98%"><TR><TD><PRE>
+<SPAN class="COMMENT">// Заполняем скрытый элемент &lt;div id="divEdit"&gt;&lt;/div&gt; текстом и показываем его</SPAN>
+$(<SPAN class="STRING">"#divEdit"</SPAN>).html(response).show();
+</PRE></TD></TR></TABLE>
+<FONT face="verdana" style="font-size:x-small;margin-left:em"><I>Пример.</I></FONT><TABLE class="code" width="98%"><TR><TD><PRE>
+<SPAN class="COMMENT">// найти &lt;select id="my_select"&gt;...&lt;/select&gt;</SPAN>
+<SPAN class="KEYWORD">var</SPAN> sel = $(<SPAN class="STRING">"#my_select"</SPAN>);
+
+<SPAN class="COMMENT">// добавляем к нему &lt;option value="1"&gt;Пример опции&lt;/option&gt;</SPAN>
+$(<SPAN class="STRING">"&lt;option&gt;&lt;/option&gt;"</SPAN>)  <SPAN class="COMMENT">// создаем требуемый элемент</SPAN>
+  .attr(<SPAN class="STRING">"value"</SPAN>, 1)     <SPAN class="COMMENT">// устанавливаем значение одного из его атрибутов</SPAN>
+  .html(<SPAN class="STRING">"Пример опции"</SPAN>) <SPAN class="COMMENT">// записываем в него текст</SPAN>
+  .appendTo(sel);       <SPAN class="COMMENT">// прикрепляем к уже существующему элементу</SPAN>
+</PRE></TD></TR></TABLE>
+<P>Таким образом, можно легко описать все действия, происходящие с выбранным элементом, не затрудняясь введением большого количества временных переменных.</P>
+
+<H4>Дважды в одну и ту же реку</H4>
+<P>Некоторые действия в jQuery позволяют вернуться на предыдущий уровень в иерархии тегов. Например:</P>
+<FONT face="verdana" style="font-size:x-small;margin-left:em"><I>HTML</I></FONT><TABLE class="code" width="98%"><TR><TD><PRE>
+&lt;p&gt;&lt;span&gt;Hello&lt;/span&gt;, how are you?&lt;/p&gt;
+</PRE></TD></TR></TABLE>
+<FONT face="verdana" style="font-size:x-small;margin-left:em"><I>Javascript</I></FONT><TABLE class="code" width="98%"><TR><TD><PRE>
+$(<SPAN class="STRING">"p"</SPAN>).find(<SPAN class="STRING">"span"</SPAN>);
+</PRE></TD></TR></TABLE>
+<FONT face="verdana" style="font-size:x-small;margin-left:em"><I>Результат</I></FONT><TABLE class="code" width="98%"><TR><TD><PRE>
+&lt;span&gt;Hello&lt;/span&gt;
+</PRE></TD></TR></TABLE>
+<P>Но что произошло вначале? Сначала был найден элемент P и только потом внутри него был найден элемент SPAN. Что же делать, если мы хотим продолжить работу с коллекцией элементов P? Для этого jQuery предлагает возможность вернуться к предыдущему уровню с помощью метода end(). Например:</P>
+<TABLE class="code" width="98%"><TR><TD><PRE>
+$(<SPAN class="STRING">"p"</SPAN>).find(<SPAN class="STRING">"span"</SPAN>).html(<SPAN class="STRING">"Ahoy"</SPAN>).end().append(<SPAN class="STRING">"&lt;p&gt;I'm fine&lt;p&gt;"</SPAN>);
+</PRE></TD></TR></TABLE>
+<P>Что здесь происходит? Пройдемся по всем этапам:</P>
+<TABLE border="0" cellspacing="2" cellpadding="5"><TR><TD><B>Код</B></TD><TD><B>Текущая коллекция элементов</B></TD></TR>
+<TR><TD>$("p") </TD><TD>[&lt;p&gt;..&lt;/p&gt;]</TD></TR>
+<TR><TD>    .find("span")</TD><TD>[&lt;span&gt;..&lt;/span&gt;]</TD></TR>
+<TR><TD>    .html("Ahoy")</TD><TD>[&lt;span&gt;..&lt;/span&gt;]</TD></TR>
+<TR><TD>    .end()</TD><TD>[&lt;p&gt;..&lt;/p&gt;]</TD></TR>
+<TR><TD>    .append(...);</TD><TD>[&lt;p&gt;..&lt;/p&gt;]</TD></TR>
+</TABLE>
+<P>В результате мы получим вот такой HTML:</P>
+<TABLE class="code" width="98%"><TR><TD><PRE>
+&lt;p&gt;&lt;span&gt;Ahoy&lt;/span&gt;, how are you?&lt;p&gt;I'm fine&lt;/p&gt;&lt;/p&gt;
+</PRE></TD></TR></TABLE>
+<P><I>Пример</I>.</P>
+<OL><LI>Найдем элемент &lt;body&gt;.</LI>
+<LI>В нем найдем все элементы div и зададим им зеленый фон.</LI>
+<LI>Вернемся к элементу &lt;body&gt;.</LI>
+<LI>В нем найдем все элементы span и зададим им красную границу.</LI>
+<LI>Вернемся к элементу &lt;body&gt;.</LI>
+<LI>Зальем элемент &lt;body&gt; черным фоном.</LI>
+</OL>
+<TABLE class="code" width="98%"><TR><TD><PRE>
+$(<SPAN class="STRING">"body"</SPAN>)                // 1
+    .find(<SPAN class="STRING">"div"</SPAN>).css(<SPAN class="STRING">"background-color"</SPAN>, <SPAN class="STRING">"green"</SPAN>)    // 2
+    .end()                // 3
+    .find(<SPAN class="STRING">"span"</SPAN>).css(<SPAN class="STRING">"border"</SPAN>, <SPAN class="STRING">"1px solid #F00"</SPAN>)    // 4
+    .end()                // 5
+    .css(<SPAN class="STRING">"background-color"</SPAN>, <SPAN class="STRING">"#000"</SPAN>);
+</PRE></TD></TR></TABLE>
+<P>Предыдущий код эквивалентен следующему:</P>
+<TABLE class="code" width="98%"><TR><TD><PRE>
+<SPAN class="KEYWORD">var</SPAN> body = $(<SPAN class="STRING">"body"</SPAN>);
+$(<SPAN class="STRING">"div"</SPAN>, body).css(<SPAN class="STRING">"background-color"</SPAN>, <SPAN class="STRING">"green"</SPAN>);
+$(<SPAN class="STRING">"span"</SPAN>, body).css(<SPAN class="STRING">"border"</SPAN>, <SPAN class="STRING">"1px solid #F00"</SPAN>);
+body.css(<SPAN class="STRING">"background-color"</SPAN>, <SPAN class="STRING">"#000"</SPAN>);
+</PRE></TD></TR></TABLE>
+<TABLE class="note" width="98%"><TR><TD><strong>ПРИМЕЧАНИЕ</strong><br><P>Метод end() может как упростить, так и усложнить код, поэтому его использование остается на совести разработчика.</P>
+</TD></TR></TABLE>
+
+
+<H3>Круговая порука<A name="EDPAC"></A></H3>
+<P>Функция $() возвращает коллекцию элементов. Так, $("p") вернет массив всех элементов &lt;p&gt;, какие только могут присутствовать на странице (или пустой массив, если таких элементов не существует). Одним из условий работы большинства функций jQuery является непременная обработка всех элементов в возвращаемой коллекции. Например:</P>
+<P>Цвет всех ссылок на странице станет зеленым:</P>
+<TABLE class="code" width="98%"><TR><TD><PRE>
+$(<SPAN class="STRING">"a"</SPAN>).css(<SPAN class="STRING">"color"</SPAN>, <SPAN class="STRING">"green"</SPAN>); 
+</PRE></TD></TR></TABLE>
+<P>Ко всем элементам div с классом test будет добавлен новый элемент:</P>
+<TABLE class="code" width="98%"><TR><TD><PRE>
+$(<SPAN class="STRING">"div.test"</SPAN>).append(<SPAN class="STRING">"&lt;span&gt;Тестовый элемент&lt;/span&gt;"</SPAN>);
+</PRE></TD></TR></TABLE>
+<P>Но иногда необходимо обратиться к индивидуальным элементам возвращаемой коллекции.</P>
+<H4>Индексы и get([index])</H4>
+<P>Возвращаемая функцией $() коллекция является «псевдо»-массивом DOM-элементов. Поэтому можно обратиться к индивидуальным элементам по их индексу:</P>
+<TABLE class="code" width="98%"><TR><TD><PRE>
+$(<SPAN class="STRING">"p"</SPAN>)[0].className = <SPAN class="STRING">"test"</SPAN>;
+</PRE></TD></TR></TABLE>
+<P>Иногда, правда, необходимо обратиться непосредственно к массиву DOM-объектов, скрытых внутри «псевдо»-массива, которым является объект jQuery. Для этого используется функция get():</P>
+<TABLE class="code" width="98%"><TR><TD><PRE>
+$(<SPAN class="STRING">"p"</SPAN>); <SPAN class="COMMENT">// Получили объект jQuery</SPAN>
+$(<SPAN class="STRING">"p"</SPAN>).get(); <SPAN class="COMMENT">// Получили соответствующую коллекцию DOM-элементов</SPAN>
+</PRE></TD></TR></TABLE>
+<P>Более того, метод get позволяет обращаться непосредственно к индивидуальным элементам коллекции:</P>
+<TABLE class="code" width="98%"><TR><TD><PRE>
+$(<SPAN class="STRING">"a"</SPAN>).get(0); <SPAN class="COMMENT">// Получили первую из всех ссылок на странице</SPAN>
+</PRE></TD></TR></TABLE>
+<P>Пример использования на практике:</P>
+<FONT face="verdana" style="font-size:x-small;margin-left:em"><I>HTML</I></FONT><TABLE class="code" width="98%"><TR><TD><PRE>
+&lt;<SPAN class="KEYWORD">select</SPAN> id=<SPAN class="STRING">"my-select"</SPAN>&gt;
+  &lt;option&gt;Option 1&lt;/option&gt;
+  &lt;option&gt;Option 2&lt;/option&gt;
+&lt;/<SPAN class="KEYWORD">select</SPAN>&gt;
+</PRE></TD></TR></TABLE>
+<FONT face="verdana" style="font-size:x-small;margin-left:em"><I>Javascript</I></FONT><TABLE class="code" width="98%"><TR><TD><PRE>
+$(<SPAN class="STRING">"#my-select"</SPAN>).get(0).selectedIndex = $(<SPAN class="STRING">"#my-select"</SPAN>).get(0).options.length – 1;
+</PRE></TD></TR></TABLE>
+<P>Как видите, здесь мы напрямую манипулируем свойствами объекта (выпадающего списка).</P>
+
+<H4>each(fn)</H4>
+<P>Иногда нужно пробежаться по всем элементам коллекции и выполнить над ними какие-то действия. Для этого нам понадобится функция each. Эта функция принимает в качестве аргумента другую функцию. each() работает в контексте найденных элементов и поэтому каждый раз, когда выполняется переданная ей функция, в этой функции доступна переменная this, указывающая на соответствующий DOM-элемент.</P>
+<FONT face="verdana" style="font-size:x-small;margin-left:em"><I>Пример.</I></FONT><TABLE class="code" width="98%"><TR><TD><PRE>
+$(<SPAN class="STRING">"p"</SPAN>).each(
+  <SPAN class="KEYWORD">function</SPAN>()
+  {
+<SPAN class="COMMENT">    // внутри функции this указывает на текущий DOM-элемент
+</SPAN>    alert(<SPAN class="KEYWORD">this</SPAN>.innerHTML);
+  }
+);
+</PRE></TD></TR></TABLE>
+<P>В этом примере мы находим все элементы p на странице и для каждого из этих элементов вызываем функцию, которая показывает его содержимое.</P>
+<P>Вспомните, что функция $ принимает в качестве параметра любые DOM-элементы. Поэтому alert можно было записать и так: alert($(this).html()). Такой способ, правда, заставляет jQuery производить лишние вычисления, чтобы найти соответствующий элемент, но и он имеет право на существование.</P>
+<P>Функция, передаваемая в метод each(), может принимать на вход один аргумент, который является индексом текущего элемента в коллекции. Для иллюстрации перепишем самый первый пример в статье с помощью each(). Нам необходимо раскрасить все нечетные строки в таблице в другой цвет. Если у нас есть некая таблица с id="zebra" и CSS-класс «odd» для нечетных строк, то можно написать так:</P>
+<TABLE class="code" width="98%"><TR><TD><PRE>
+$(<SPAN class="STRING">"#zebra tr"</SPAN>).each(colorize); <SPAN class="COMMENT">// передаем в each функцию colorize</SPAN>
+
+<SPAN class="KEYWORD">function</SPAN> colorize(index)
+{
+  <SPAN class="KEYWORD">if</SPAN>(index % 2 == 1)       <SPAN class="COMMENT">// index является индексом текущего элемента в коллекции</SPAN>
+    $(<SPAN class="KEYWORD">this</SPAN>).addClass(<SPAN class="STRING">"odd"</SPAN>);
+}
+</PRE></TD></TR></TABLE>
+
+
+<H3>Кто сказал Flash?<A name="EFDAE"></A></H3>
+<P>Грамотная манипуляция свойствами элементов на странице позволила создателям Javascript-библиотек создавать визуальные эффекты, которые раньше были возможны только при использовании технологии Flash. Это и плавное появление, и скрытие объектов, плавное изменение различных свойств этих объектов (фонового цвета, размеров), реализация всевозможных элементов интерфейса вроде сплиттеров, деревьев, перетягиваемых объектов и сортируемых списков.</P>
+<P>В базовой поставке jQuery предлагает лишь ограниченный набор таких эффектов. Остальные эффекты реализуются при помощи модулей расширения (о которых речь пойдет ниже).</P>
+<H4>Animate</H4>
+<P>Ключевой функцией, на которой базируются все остальные, является функция animate:</P>
+<TABLE class="code" width="98%"><TR><TD><PRE>
+animate(params, speed, easing, callback); 
+</PRE></TD></TR></TABLE>
+<P>Здесь:</P>
+<UL style="LIST-STYLE:square"><LI>params – свойства, которые участвуют в анимации в виде пар {ключ: значение}. Например: {height: "show"} или {opacity: 50, width: 100, height: 200}.</LI>
+<LI>speed – скорость в миллисекундах.</LI>
+<LI>easing – замедлениие анимации (замедляется ли к концу, "easein", или, наоборот, ускоряется, "easeout". Дополнительные типы доступны в модулях расширения).</LI>
+<LI>callback – функция, которая будет вызвана после завершения анимации.</LI>
+</UL>
+<P><I>Пример</I>.</P>
+<P>Пусть у нас есть элемент div с каким-нибудь текстом. Мы хотим скрыть этот текст, заменить новым, и показать обновленный текст.</P>
+<TABLE class="code" width="98%"><TR><TD><PRE>
+$(<SPAN class="STRING">"#mydiv"</SPAN>)
+  .animate({height: <SPAN class="STRING">"hide"</SPAN>}, 300)
+  .text(<SPAN class="STRING">"Новый текст"</SPAN>)
+  .animate({height: <SPAN class="STRING">"show"</SPAN>}, 300);
+</PRE></TD></TR></TABLE>
+<TABLE class="note" width="98%"><TR><TD><strong>ПРИМЕЧАНИЕ</strong><br><P>Метод animate манипулирует только теми атрибутами, для которых можно выставить числовое значение (такие как height, weight, opacity, top и т.п.).</P>
+</TD></TR></TABLE>
+
+<H4>Эффекты</H4>
+<P>Метод animate является основой большинства, если не всех, эффектов jQuery и плагинов. Например, jQuery предлагает следующие методы для показа и скрытия элементов:</P>
+<UL style="LIST-STYLE:square"><LI>show([speed[, callback]]) – показать элемент;</LI>
+<LI>hide([speed[, callback]]) – скрыть элемент;</LI>
+<LI>fadeIn(speed[, callback]) – показать элемент путем изменения его прозрачности;</LI>
+<LI>fadeOut(speed[, callback]) – скрыть элемент путем изменения его  прозрачности;</LI>
+<LI>slideDown(speed, callback) – показать элемент, спустив его сверху;</LI>
+<LI>slideUp(speed, callback) – показать элемент, подняв его снизу;</LI>
+</UL>
+<P>где</P>
+<P>speed – скорость в миллисекундах или одно из "slow" (600 миллисекунд) или "fast" (200 миллисекунд);</P>
+<P>callback – функция, которая будет вызвана после выполнения анимации.</P>
+<P>Рассмотрим, например, реализацию функции show:</P>
+<TABLE class="code" width="98%"><TR><TD><PRE>
+show: <SPAN class="KEYWORD">function</SPAN>(speed,callback){
+  <SPAN class="COMMENT">// находим в переданной нам коллекции скрытые элементы (см. врезку)</SPAN>
+  <SPAN class="KEYWORD">var</SPAN> hidden = <SPAN class="KEYWORD">this</SPAN>.filter(<SPAN class="STRING">":hidden"</SPAN>);
+  <SPAN class="COMMENT">// если нам передана скорость, то вызываем метод animate</SPAN>
+  if(speed)
+  {
+    hidden.animate(
+      {
+        height: <SPAN class="STRING">"show"</SPAN>, 
+        width: <SPAN class="STRING">"show"</SPAN>, 
+        opacity: <SPAN class="STRING">"show"</SPAN>
+      }, 
+      speed, 
+      callback
+    )
+  }
+  else
+  {
+    <SPAN class="COMMENT">// иначе просто проходим по коллекции элементов и показываем их,</SPAN>
+    <SPAN class="COMMENT">// меняя стиль display с none на block</SPAN>
+    hidden.each(
+      <SPAN class="KEYWORD">function</SPAN>()
+<SPAN class="KEYWORD">      </SPAN>{
+        <SPAN class="KEYWORD">this</SPAN>.style.display = <SPAN class="KEYWORD">this</SPAN>.oldblock ? <SPAN class="KEYWORD">this</SPAN>.oldblock : <SPAN class="STRING">""</SPAN>;
+        <SPAN class="KEYWORD">if</SPAN> ( jQuery.css(<SPAN class="KEYWORD">this</SPAN>,<SPAN class="STRING">"display"</SPAN>) == <SPAN class="STRING">"none"</SPAN> )
+          <SPAN class="KEYWORD">this</SPAN>.style.display = <SPAN class="STRING">"block"</SPAN>;
+      }
+    );
+  }
+  <SPAN class="KEYWORD">return</SPAN> <SPAN class="KEYWORD">this</SPAN>;
+}
+</PRE></TD></TR></TABLE>
+<P>Скрытая мощь функции animate позволяет создавать поистине удивительные эффекты, многие из которых уже реализованы, например, в модуле расширения Interface (<A href="http://interface.eyecon.ro/" class="link-ext" target="_blank">http://interface.eyecon.ro/</A>).</P>
+<P>Необходимо также заметить, что все эффекты библиотеки jQuery применяются к элементам не сразу, а по очереди. То есть, предположим, что мы написали такой код:</P>
+<TABLE class="code" width="98%"><TR><TD><PRE>
+<SPAN class="KEYWORD">for</SPAN>(i = 0; i &lt; 10; i++)
+{
+  $(<SPAN class="STRING">"#my-div"</SPAN>).animate({height: <SPAN class="STRING">"show"</SPAN>}, 300);
+  $(<SPAN class="STRING">"#my-div"</SPAN>).animate({height: <SPAN class="STRING">"hide"</SPAN>}, 300);
+}
+</PRE></TD></TR></TABLE>
+<P>В результате мы получим не беспорядочное моргание, пока двадцать эффектов борются за право показать/скрыть элемент «my-div», а плавный показ, потом сокрытие, потом снова показ – и так 20 раз. Обратите внимание, что очередь эффектов составляется поэлементно. То есть эффекты, примененные к разным элементам одновременно, будут выполняться одновременно.</P>
+
+
+<H3>AJAX – как много в этом звуке!<A name="EAIAE"></A></H3>
+<P>Web 2.0 неожиданно возродил технологию под названием XMLHttpRequest, появившуюся еще в 2000 году. Эта технология позволяет обращаться к серверу без перезагрузки текущей страницы. На данный момент можно считать, что все современные браузеры реализуют эту технологию в объеме, достаточном для безболезненного ее использования. В новой реинкарнации триумвират XMLHttpRequest, JavaScript и DOM называется AJAX.</P>
+<P>Пуристы Web-технологий различают следующие подвиды этой технологии:</P>
+<UL style="LIST-STYLE:square"><LI>AJAX – Asynchronous JavaScript and XML, асинхронный Javascript и XML. В ответ на запрос с клиента сервер отвечает правильно сфоримированным XML-документом.</LI>
+<LI>AJAH – Asynchronous JavaScript and HTML, асинхронный Javascript и HTML.  В ответ на запрос с клиента сервер отвечает уже сгенерированным HTML-документом или его частью.</LI>
+<LI>AHAH – Asynchronous HTML and HTTP, асинхронный HTML и HTTP. То же самое, что и AJAH.</LI>
+<LI>AJAJ – JavaScript and JSON, асинхронный Javascript и JSON. В ответ на запрос с клиента сервер отвечает правильной записью объекта Javascript в формате JSON (http://json.org).</LI>
+</UL>
+<P>jQuery предлагает реализацию всех трех подвидов технологии AJAX и еще один, AJAJs – все те же и Javascript. Теперь обо всем этом подробнее.</P>
+<P>Базовыми функциями для работы с AJAX являются post() и get() (есть еще более низкоуровневая, ajax(), но мы ее не будем рассматривать):</P>
+<TABLE class="code" width="98%"><TR><TD><PRE>
+$.post(url[, params[, callback]])
+$.get(url[, params[, callback]])
+</PRE></TD></TR></TABLE>
+<P>Здесь:</P>
+<UL style="LIST-STYLE:square"><LI>url – адрес страницы, на которую будет отправлен запрос;</LI>
+<LI>params – параметры, передаваемые в запросе в виде пар «ключ : значение»;</LI>
+<LI>callback – функция, которая будет вызвана в случае успешного завершения вызова.</LI>
+</UL>
+<FONT face="verdana" style="font-size:x-small;margin-left:em"><I>Пример:</I></FONT><TABLE class="code" width="98%"><TR><TD><PRE>
+$.post(
+  '/ajaxtest.php',
+  {
+    type: <SPAN class="STRING">"test-request"</SPAN>,
+    param1: <SPAN class="STRING">"param1"</SPAN>,
+    param2: 2
+  },
+  onAjaxSuccess
+);
+<SPAN class="KEYWORD">function</SPAN> onAjaxSuccess(data)
+{
+  <SPAN class="COMMENT">// Здесь мы получаем данные, отправленные сервером</SPAN>
+  alert(data);
+}
+</PRE></TD></TR></TABLE>
+<P>А что же на сервере? Вызов страницы при помощи технологии AJAX <I>ничем </I>не отличается от простого вызова страницы, например, путем открытия ее в браузере. То есть передаваемые параметры будут доступны на этой странице так же, как если бы они были переданы стандартными методами get или post. На сервере у нас может существовать, например, вот такой ajaxtest.php:</P>
+<TABLE class="code" width="98%"><TR><TD><PRE>
+&lt;?php
+<SPAN class="COMMENT">// Если страница вызвана с помощью .post(), переданные значения будут,
+// как всегда, доступны в глобальной переменной $_POST
+// Если страница вызвана с помощью .get, переданные значения будут,
+// как всегда, доступны в глобальной переменной $_GET
+</SPAN>
+<SPAN class="KEYWORD">echo</SPAN> <SPAN class="STRING">'text'</SPAN>;
+?&gt;
+</PRE></TD></TR></TABLE>
+<P>После того как ajaxtest.php отработает, в функцию onAjaxSuccess на клиенте будет передан текст «text». Обратите внимание на HTTP_X_REQUESTED_WITH. Этот HTTP-заголовок устанавливается jQuery во время запросов с помощью AJAX. Это помогает узнать, тип поступившего запроса и соответственно обрабатывать данные. Во всем остальном запрос через Аякс ничем не отличается от обычного запроса страницы у сервера.</P>
+<TABLE class="note" width="98%"><TR><TD><strong>ПРИМЕЧАНИЕ</strong><br><P>В различных библиотеках, особенно использующих шаблон MVC, часто необходимо знать, как была вызвана страница – открыли ее в браузере или запросили через AJAX? При запросе с помощью технологии AJAX устанавливается HTTP-заголовок HTTP_X_REQUESTED_WITH со значением “XmlHTTPRequest”. Таким образом, в РНР, например, можно узнать, вызвана ли страница с помощью AJAX так:</P>
+</TD></TR></TABLE>
+<TABLE class="code" width="98%"><TR><TD><PRE>
+<SPAN class="KEYWORD">if</SPAN>($_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest')
+{
+  <SPAN class="COMMENT">// выполняем соответствующий код</SPAN>
+}
+</PRE></TD></TR></TABLE>
+<P>Теперь рассмотрим, как работать с четырьмя подвидами AJAX.</P>
+<H4>AJAX</H4>
+<P>Если сервер на запрос возвращает заголовок Content-Type: text/xml и правильно сформированный XML-документ, то в функцию onAjaxSuccess будет передан уже готовый к употреблению DOM этого документа, с которым можно будет работать, используя методы jQuery. Пример:</P>
+<FONT face="verdana" style="font-size:x-small;margin-left:em"><I>ajaxtest2.php:</I></FONT><TABLE class="code" width="98%"><TR><TD><PRE>
+&lt;?php
+  <SPAN class="KEYWORD">header</SPAN>(<SPAN class="STRING">"Content-Type: text/xml; charset=utf-8"</SPAN>);
+?&gt;
+&lt;list&gt;
+  &lt;item id=<SPAN class="STRING">"1"</SPAN>&gt;
+    Item 1 
+  &lt;/item&gt;
+  &lt;item id=<SPAN class="STRING">"2"</SPAN>&gt;
+    Item 2 
+  &lt;/item&gt;
+&lt;/list&gt;
+</PRE></TD></TR></TABLE>
+<FONT face="verdana" style="font-size:x-small;margin-left:em"><I>Наш JavaScript:</I></FONT><TABLE class="code" width="98%"><TR><TD><PRE>
+<SPAN class="COMMENT">// Функцию post опускаем, написать ее не составляет труда</SPAN>
+<SPAN class="KEYWORD">function</SPAN> onAjaxSuccess(xml)
+{
+  <SPAN class="COMMENT">// Получаем коллекцию всех элементов item из пришедшего xml</SPAN>
+  items = $(<SPAN class="STRING">"item"</SPAN>, xml);
+
+  <SPAN class="COMMENT">// Находим item с id="1"</SPAN>
+  item = $(<SPAN class="STRING">"#1"</SPAN>, xml);
+
+  <SPAN class="COMMENT">// или при помощи XPath</SPAN>
+  item2 = $(<SPAN class="STRING">"item[@id='2']"</SPAN>, xml);
+
+  <SPAN class="COMMENT">// Извлекаем текст из элемента</SPAN>
+  alert(item2.html());  
+}
+</PRE></TD></TR></TABLE>
+<P>Как видите, работа с полученным с сервера ответов в виде XML ничем не отличается от работы с уже загруженным в браузер документом.</P>
+
+<H4>AHAH</H4>
+<P>Как уже было видно в первом примере с методом post(), если значение заголовка Content-Type – не «text/xml», ответ с сервера передается как есть, в текстовом виде. Поскольку обычно такой ответ сразу показывается на странице без дополнительной обработки, то нет смысла заводить отдельные функции вроде onAjaxSuccess. Для получения и отображения полученного с сервера HTML jQuery предоставляет метод load:</P>
+<TABLE class="code" width="98%"><TR><TD><PRE>
+load(url[, params[, callback]]);
+</PRE></TD></TR></TABLE>
+<P>Этот метод прикрепляется к любому элементу на странице, в котором планируется показать ответ с сервера. После выполнения запроса ответ с сервера автоматически запишется в соответствующий элемент:</P>
+<TABLE class="code" width="98%"><TR><TD><PRE>
+$(<SPAN class="STRING">"#mydiv"</SPAN>).load(<SPAN class="STRING">"/ajaxtest.php"</SPAN>);
+</PRE></TD></TR></TABLE>
+<P>Мы выполняем запрос к файлу из первого примера про AJAX. После выполнения запроса в элемент с id="mydiv" будет записано слово «text».</P>
+
+<H4>AJAJ</H4>
+<P>Многие разработчики, столкнувшиеся с технологией AJAX, не любят передавать на клиент XML. Объясняется это тем, что XML может быть довольно большим по размеру, и существуют дополнительные трудности при разборе его структуры на клиенте. Благодаря jQuery, разбор XML на клиенте не представляет никакой сложности. А если разработчики активно используют AHAH, то и размеры передаваемого документа перестают быть решающим аргументом.</P>
+<P>И все же многие предпочтут использовать JSON. JSON – это способ записи данных, который позволяет прогнать эту запись через функцию eval() и получить полноценный Javascript-объект. Для работы с данными в таком формате jQuery предлагает метод $.getJSON:</P>
+<TABLE class="code" width="98%"><TR><TD><PRE>
+getJSON(url, params, callback)
+</PRE></TD></TR></TABLE>
+<P>После выполнения запроса ответ с сервера прогоняется через функцию eval(), а полученный объект передается в функцию callback:</P>
+<FONT face="verdana" style="font-size:x-small;margin-left:em"><I>ajaxtest3.php</I></FONT><TABLE class="code" width="98%"><TR><TD><PRE>
+&lt;?php
+  <SPAN class="KEYWORD">header</SPAN>(<SPAN class="STRING">'Content-Type: text/javascript; charset=utf-8'</SPAN>);
+?&gt;
+{
+  params: &lt;?php <SPAN class="KEYWORD">echo</SPAN> <SPAN class="KEYWORD">$_REQUEST</SPAN>[<SPAN class="STRING">'params'</SPAN>]; ?&gt;,
+  response: <SPAN class="STRING">'Наш ответ Чемберлену'</SPAN>
+}
+</PRE></TD></TR></TABLE>
+<FONT face="verdana" style="font-size:x-small;margin-left:em"><I>Javascript:</I></FONT><TABLE class="code" width="98%"><TR><TD><PRE>
+$.getJSON(
+  '/ajaxtest3.php',
+  {params: <SPAN class="STRING">"text"</SPAN>},
+  onAjaxSuccess
+);
+<SPAN class="KEYWORD">function</SPAN> onAjaxSuccess(obj)
+{
+  alert(obj.params);
+  alert(obj.response);
+}
+</PRE></TD></TR></TABLE>
+
+<H4>AJAJs</H4>
+<P>Помимо трех вышеперечисленных способов получения данных с сервера jQuery предлагает еще один. С его помощью можно загрузить и выполнить любой сценарий Javascript с сервера. Для этого используется метод getScript:</P>
+<TABLE class="code" width="98%"><TR><TD><PRE>
+getScript(url[, callback])
+</PRE></TD></TR></TABLE>
+<P>Пример:</P>
+<FONT face="verdana" style="font-size:x-small;margin-left:em"><I>script.js</I></FONT><TABLE class="code" width="98%"><TR><TD><PRE>
+$(<SPAN class="STRING">"a"</SPAN>).css(<SPAN class="STRING">"color"</SPAN>, <SPAN class="STRING">"#0F0"</SPAN>);
+</PRE></TD></TR></TABLE>
+<FONT face="verdana" style="font-size:x-small;margin-left:em"><I>Наш Javascript:</I></FONT><TABLE class="code" width="98%"><TR><TD><PRE>
+$.getScript('/script.js');
+</PRE></TD></TR></TABLE>
+<P>После выполнения этого метода будет загружен и выполнен сценарий script.js, который окрасит все ссылки на странице в зеленый цвет.</P>
+
+
+<H3>Расширяемся...<A name="EMOAE"></A></H3>
+<P>Главной особенностью библиотеки jQuery является ее расширяемость. Практически любой Web-разработчик может дополнить библиотеку своими методами, реализующими, например, свои эффекты или даже собственные селекторы (по типу :visible, :radio и т.п.). Писать модули, расширяющие функциональность jQuery, легко. Достаточно следовать нескольким простым правилам. </P>
+<H4>Наименования</H4>
+<P>Выберите название для своего плагина, например, «tester». Создайте .js-файл и назовите его jquery.tester.js.</P>
+
+<H4>Добавляем собственный метод</H4>
+<P>Чтобы добавить собственный метод, который будет доступен сразу из функции $(), достаточно добавить его в объект fn:</P>
+<TABLE class="code" width="98%"><TR><TD><PRE>
+jQuery.fn.tester = <SPAN class="KEYWORD">function</SPAN>() 
+{
+  alert(<SPAN class="STRING">"Плагин работает!"</SPAN>);
+  <SPAN class="KEYWORD">return</SPAN> <SPAN class="KEYWORD">this</SPAN>;
+};
+</PRE></TD></TR></TABLE>
+<P>Теперь в файле достаточно написать:</P>
+<TABLE class="code" width="98%"><TR><TD><PRE>
+&lt;script src=<SPAN class="STRING">"jquery.js"</SPAN>&gt;
+&lt;script src=<SPAN class="STRING">"jquery.tester.js"</SPAN>&gt;
+&lt;script&gt;
+  $(<SPAN class="STRING">"my-div"</SPAN>).tester();
+&lt;/script&gt;
+</PRE></TD></TR></TABLE>
+<P>и плагин заработает. </P>
+<P>Обратите внимание, что в конце функции мы написали «return this;». Это необходимо для того, чтобы можно было создавать цепочки из методов.</P>
+
+<H4>jQuery.extend</H4>
+<P>Чаще всего пользователи захотят вызывать ваш плагин с какими-то настройками. Ну, например, в таком стиле:</P>
+<TABLE class="code" width="98%"><TR><TD><PRE>
+$(<SPAN class="STRING">"my-div"</SPAN>).tester(
+  {
+    name: <SPAN class="STRING">"Test"</SPAN>,
+    value: <SPAN class="STRING">"1"</SPAN>
+  }
+);
+</PRE></TD></TR></TABLE>
+<P>Более того, вы захотите предоставить какие-то значения по умолчанию. Для этого можно использовать метод extend:</P>
+<TABLE class="code" width="98%"><TR><TD><PRE>
+$.extend(target, prop1, ..., propN)
+</PRE></TD></TR></TABLE>
+<P>Здесь:</P>
+<UL style="LIST-STYLE:square"><LI>target – начальный объект;</LI>
+<LI>prop1-propN – объекты, свойства которых дополняют или изменяют свойства начального объекта.</LI>
+</UL>
+<P>Например:</P>
+<TABLE class="code" width="98%"><TR><TD><PRE>
+<SPAN class="KEYWORD">var</SPAN> obj = {name: <SPAN class="STRING">"Smith"</SPAN>, profession: <SPAN class="STRING">"Agent"</SPAN>};
+<SPAN class="KEYWORD">var</SPAN> obj2 = {name: <SPAN class="STRING">"Neo"</SPAN>, profession: <SPAN class="STRING">"The One"</SPAN>};
+<SPAN class="KEYWORD">var</SPAN> obj3 = {second_job: <SPAN class="STRING">"Virus"</SPAN>};
+
+<SPAN class="KEYWORD">var</SPAN> neo     = $.extend(obj, obj2); <SPAN class="COMMENT">// вернет {name: "Neo", profession: "The One"}</SPAN>
+<SPAN class="KEYWORD">var</SPAN> a_smith = $.extend(obj, obj3); <SPAN class="COMMENT">// вернет {name: "Smith", profession: "Agent", second_job: "Virus"};</SPAN>
+</PRE></TD></TR></TABLE>
+<P>Таким образом, мы можем хранить в плагине значения по умолчанию и заменять их полученными от пользователя:</P>
+<TABLE class="code" width="98%"><TR><TD><PRE>
+ jQuery.fn.tester = <SPAN class="KEYWORD">function</SPAN>(options) {
+  <SPAN class="COMMENT">// Значения по умолчанию</SPAN>
+  <SPAN class="KEYWORD">var</SPAN> settings = {txt: <SPAN class="STRING">"Плагин работает!"</SPAN>, txt2: <SPAN class="STRING">""</SPAN>};
+
+  <SPAN class="COMMENT">// Заменяем значения переданными</SPAN>
+  settings = jQuery.extend(settings, options);
+
+  <SPAN class="COMMENT">// Выводим новые значения</SPAN>
+     alert(<SPAN class="STRING">"txt: "</SPAN> + settings.txt + <SPAN class="STRING">"\n txt2: "</SPAN> + settings.txt2);
+ };
+</PRE></TD></TR></TABLE>
+<P>Теперь мы можем вызывать наш плагин с разными параметрами:</P>
+<TABLE class="code" width="98%"><TR><TD><PRE>
+$(<SPAN class="STRING">"my-div"</SPAN>).tester({txt: <SPAN class="STRING">"Другой текст"</SPAN>});
+$(<SPAN class="STRING">"my-div"</SPAN>).tester({txt: <SPAN class="STRING">"Другой текст"</SPAN>, txt2: <SPAN class="STRING">"Другой текст 2"</SPAN>});
+</PRE></TD></TR></TABLE>
+
+<H4>Пример плагина</H4>
+<P>Рассмотрим пример плагина из официальной документации по jQuery.</P>
+<P>Этот плагин позволит нам писать следующее:</P>
+<TABLE class="code" width="98%"><TR><TD><PRE>
+<SPAN class="COMMENT">// Пометить флажком</SPAN>
+$(<SPAN class="STRING">"input[@type='checkbox']"</SPAN>).check('on');
+<SPAN class="COMMENT">// Снять флажок</SPAN>
+$(<SPAN class="STRING">"input[@type='checkbox']"</SPAN>).check('off');
+<SPAN class="COMMENT">// Переключить флажок</SPAN>
+$(<SPAN class="STRING">"input[@type='checkbox']"</SPAN>).check('toggle');
+</PRE></TD></TR></TABLE>
+<P>Вот как этот плагин реализован:</P>
+<TABLE class="code" width="98%"><TR><TD><PRE>
+jQuery.fn.check = <SPAN class="KEYWORD">function</SPAN>(mode) {
+   <SPAN class="COMMENT">// если mode не определен, используем 'on' по умолчанию</SPAN>
+   <SPAN class="KEYWORD">var</SPAN> mode = mode || 'on';
+   
+   <SPAN class="COMMENT">// В функцию неявно передана коллекция выбранных элементов.</SPAN>
+   <SPAN class="COMMENT">// Поэтому с этой коллекцией можно работать, как с любой другой</SPAN>
+   <SPAN class="COMMENT">// коллекцией элементов в jQuery</SPAN>
+   <SPAN class="COMMENT">// В нашем случае мы воспользуемся методом each()</SPAN>
+   <SPAN class="KEYWORD">return</SPAN> <SPAN class="KEYWORD">this</SPAN>.each(<SPAN class="KEYWORD">function</SPAN>() 
+<SPAN class="KEYWORD">   </SPAN>{
+     <SPAN class="KEYWORD">switch</SPAN>(mode) {
+       <SPAN class="KEYWORD">case</SPAN> 'on':
+         <SPAN class="KEYWORD">this</SPAN>.checked = <SPAN class="KEYWORD">true</SPAN>;
+         <SPAN class="KEYWORD">break</SPAN>;
+       <SPAN class="KEYWORD">case</SPAN> 'off':
+         <SPAN class="KEYWORD">this</SPAN>.checked = <SPAN class="KEYWORD">false</SPAN>;
+         <SPAN class="KEYWORD">break</SPAN>;
+       <SPAN class="KEYWORD">case</SPAN> 'toggle':
+         <SPAN class="KEYWORD">this</SPAN>.checked = !<SPAN class="KEYWORD">this</SPAN>.checked;
+         <SPAN class="KEYWORD">break</SPAN>;
+     }
+   });
+ };
+</PRE></TD></TR></TABLE>
+
+
+<H2>В заключение<A name="EEVAE"></A></H2>
+<P>К сожалению, формат статьи не позволяет в полном объеме рассказать обо всех возможностях библиотеки jQuery и ее плагинах. Но, надеюсь, этой статьи будет достаточно, чтобы заинтересовать разработчиков. В кратком справочнике перечислены селекторы, используемые в jQuery, а также ссылки на интересные ресурсы и различные плагины.</P>
+<H2>Краткий справочник<A name="EKVAE"></A></H2>
+<P><A href="http://docs.jquery.com/DOM/Traversing/Selectors" class="link-ext" target="_blank">http://docs.jquery.com/DOM/Traversing/Selectors</A></P>
+<H3>CSS<A name="ESVAE"></A></H3>
+<H4>Поддерживаемые селекторы CSS</H4>
+<TABLE border="0" cellspacing="2" cellpadding="5"><TR><TH>*</TH><TD>Элемент Е, являющийся n-ым дочерним элементом своего родительского элемента.</TD></TR>
+<TR><TH>E</TH><TD>Элемент типа E.</TD></TR>
+<TR><TH>E:nth-child(n)</TH><TD>Элемент Е, являющийся n-ым дочерним элементом своего родительского элемента.</TD></TR>
+<TR><TH>E:first-child</TH><TD>Элемент Е, являющийся первым дочерним элементом своего родительского элемента.</TD></TR>
+<TR><TH>E:last-child</TH><TD>Элемент Е, являющийся последним дочерним элементом своего родительского элемента.  </TD></TR>
+<TR><TH>E:only-child</TH><TD>Элемент E, являющийся единственным дочерним элементом своего родительского элемента.</TD></TR>
+<TR><TH>E:empty</TH><TD>Элемент E, у которого нет дочерних элементов (включая текстовые узлы).</TD></TR>
+<TR><TH>E:enabled</TH><TD>Активный элемент Е пользовательского интерфейса.</TD></TR>
+<TR><TH>E:disabled</TH><TD>Неактивный элемент Е пользовательского интерфейса.</TD></TR>
+<TR><TH>E:checked</TH><TD>Отмеченный элемент Е пользовательского интерфейса (например, радиокнопка).</TD></TR>
+<TR><TH>E.warning</TH><TD>Элемент E с классом "warning" (class="warning").</TD></TR>
+<TR><TH>E#myid</TH><TD>E с ID равным "myid" (выберет максимум один элемент).</TD></TR>
+<TR><TH>E:not(s)</TH><TD>Элемент E, не соответствующий простому селектору s.</TD></TR>
+<TR><TH>E F</TH><TD>Элемент F, являющийся потомком элемента E</TD></TR>
+<TR><TH>E &gt; F</TH><TD>Элемент F, являющимся дочерним элементом элемента E.</TD></TR>
+<TR><TH>E + F</TH><TD>Элемент F, которому непосредственно предшествует элемент E.</TD></TR>
+<TR><TH>E ~ F</TH><TD>Элемент F, которому предшествует элемент E.</TD></TR>
+<TR><TH>E,F,G</TH><TD>Выбрать все элементы E, F и G.</TD></TR>
+</TABLE>
+
+<H4>Другие селекторы</H4>
+<P>Все селекторы атрибутов должны записываться в стиле XPath, то есть с предваряющим символом «@»:</P>
+<TABLE border="0" cellspacing="2" cellpadding="5"><TR><TH>E[@foo]</TH><TD>элемент E с аттрибутом «foo».</TD></TR>
+<TR><TH>E[@foo=bar]</TH><TD>Элемент E, у которого значение атрибута «foo» равно «bar».</TD></TR>
+<TR><TH>E[@foo^=bar]</TH><TD>Элемент E, у которого значение атрибута «foo» начинается с «bar».</TD></TR>
+<TR><TH>E[@foo$=bar]</TH><TD>Элемент E, у которого значение атрибута «foo» оканчивается на «bar».</TD></TR>
+<TR><TH>E[@foo*=bar]</TH><TD>E, у которого значение атрибута «foo» содержит «bar».</TD></TR>
+</TABLE><FONT face="verdana" style="font-size:x-small;margin-left:1em"><I>-Примеры использования</I></FONT>
+<TABLE border="0" cellspacing="2" cellpadding="5"><TR><TH><B>jQuery</B></TH><TH><B>Аналог из CSS</B></TH></TR>
+<TR><TD>$(“#my-id”)</TD><TD>#my-id {}</TD></TR>
+<TR><TD>$(“a.classname”)</TD><TD>a.classname {}</TD></TR>
+<TR><TD>$(“p, div.myclass, a#my-id”)</TD><TD>p, div.myclass, a#my-id {}</TD></TR>
+<TR><TD>$(“div:last-child”)</TD><TD>div:last-child {}</TD></TR>
+<TR><TD>$(“*:checked”)</TD><TD>*:checked</TD></TR>
+</TABLE>
+
+
+<H3>XPath<A name="E4ZAE"></A></H3>
+<H4>Определение местоположения</H4>
+<P><B>Абсолютные пути </B></P>
+<TABLE class="code" width="98%"><TR><TD><PRE>
+ $(<SPAN class="STRING">"/html/body//p"</SPAN>)
+ $(<SPAN class="STRING">"/*/body//p"</SPAN>)
+ $(<SPAN class="STRING">"//p/../div"</SPAN>)
+</PRE></TD></TR></TABLE>
+<P><B>Относительные пути </B></P>
+<TABLE class="code" width="98%"><TR><TD><PRE>
+ $(<SPAN class="STRING">"a"</SPAN>,<SPAN class="KEYWORD">this</SPAN>)
+ $(<SPAN class="STRING">"p/a"</SPAN>,<SPAN class="KEYWORD">this</SPAN>)
+</PRE></TD></TR></TABLE>
+
+<H4>Поддерживаемые селекторы по оси</H4>
+<P><B>Потомок</B> Элемент содержит потомков </P>
+<TABLE class="code" width="98%"><TR><TD><PRE>
+ $(<SPAN class="STRING">"//div//p"</SPAN>)
+</PRE></TD></TR></TABLE>
+<P><B>Дочерний</B> У элемента есть дочерний элемент </P>
+<TABLE class="code" width="98%"><TR><TD><PRE>
+ $(<SPAN class="STRING">"//div/p"</SPAN>)
+</PRE></TD></TR></TABLE>
+<P><B>Предшествующий соседний элемент</B> Элементу предшествует другой элемент на той же оси </P>
+<TABLE class="code" width="98%"><TR><TD><PRE>
+ $(<SPAN class="STRING">"//div ~ form"</SPAN>)
+</PRE></TD></TR></TABLE>
+<P><B>Родитель</B> Выбирает родительский элемент элемента </P>
+<TABLE class="code" width="98%"><TR><TD><PRE>
+ $(<SPAN class="STRING">"//div/../p"</SPAN>)
+</PRE></TD></TR></TABLE>
+<P>Поддерживаемые предикаты </P>
+<P><B>[@*]</B> Содержит атрибут </P>
+<TABLE class="code" width="98%"><TR><TD><PRE>
+ $(<SPAN class="STRING">"//div[@*]"</SPAN>)
+</PRE></TD></TR></TABLE>
+<P><B>[@foo]</B> Содержит атрибут «foo»</P>
+<TABLE class="code" width="98%"><TR><TD><PRE>
+ $(<SPAN class="STRING">"//input[@checked]"</SPAN>)
+</PRE></TD></TR></TABLE>
+<P><B>[@foo='test']</B> Атрибут «foo» равен «test» </P>
+<TABLE class="code" width="98%"><TR><TD><PRE>
+ $(<SPAN class="STRING">"//a[@ref='nofollow']"</SPAN>)
+</PRE></TD></TR></TABLE>
+<P><B>[Nodelist]</B> Элемент соддержит список узлов, например: </P>
+<TABLE class="code" width="98%"><TR><TD><PRE>
+ $(<SPAN class="STRING">"//div[p]"</SPAN>)
+ $(<SPAN class="STRING">"//div[p/a]"</SPAN>)
+</PRE></TD></TR></TABLE>
+
+<H4>Предикаты, поддерживаемые по-другому</H4>
+<P><B>[last()]</B><I> </I>или <B>[position()=last()] </B>становится <I>:last</I> </P>
+<TABLE class="code" width="98%"><TR><TD><PRE>
+ $(<SPAN class="STRING">"p:last"</SPAN>)
+</PRE></TD></TR></TABLE>
+<P><B>[0]</B> или <B>[position()=0]</B> становится <I>:eq(0)</I> или <I>:first</I> </P>
+<TABLE class="code" width="98%"><TR><TD><PRE>
+ $(<SPAN class="STRING">"p:first"</SPAN>)
+ $(<SPAN class="STRING">"p:eq(0)"</SPAN>)
+</PRE></TD></TR></TABLE>
+<P><B>[position() &lt; 5]</B> становится <I>:lt(5)</I> </P>
+<TABLE class="code" width="98%"><TR><TD><PRE>
+ $(<SPAN class="STRING">"p:lt(5)"</SPAN>)
+</PRE></TD></TR></TABLE>
+<P><B>[position() &gt; 2]</B> становится <I>:gt(2)</I> </P>
+<TABLE class="code" width="98%"><TR><TD><PRE>
+ $(<SPAN class="STRING">"p:gt(2)"</SPAN>)
+</PRE></TD></TR></TABLE>
+
+
+<H3>Специальные селекторы<A name="EJ6AE"></A></H3>
+<P>jQuery поддерживает некоторые селекторы, которые не являются частью стандартов CSS или XPath, но их использование облегчает жизнь.</P>
+<TABLE border="0" cellspacing="2" cellpadding="5"><TR><TH>:even</TH><TD>Выбирает все четные элементы из коллекции.</TD></TR>
+<TR><TH>:odd</TH><TD>Выбирает все нечетные элементы из коллекции.</TD></TR>
+<TR><TH>:eq(0) и :nth(0)</TH><TD>Выбирает элемент с индексом N из коллекции.</TD></TR>
+<TR><TH>:gt(4)</TH><TD>Выбирает элементы с индексом большим, чем N.</TD></TR>
+<TR><TH>:lt(4)</TH><TD>Выбирает элементы с индексом меньшим, чем N.</TD></TR>
+<TR><TH>:first</TH><TD>Эквивалентно :eq(0).</TD></TR>
+<TR><TH>:last</TH><TD>Выбирает последний элемент из коллекции.</TD></TR>
+<TR><TH>:parent</TH><TD>Выбирает все элементы, у которых есть дочерние элементы (включая текст).</TD></TR>
+<TR><TH>:contains('test')</TH><TD>Выбирает все элементы, которые содержат текст.</TD></TR>
+<TR><TH>:visible</TH><TD>Выбирает все видимые элементы (включая элементы со стилями «display» равными «block» или «inline», «visibility» равным «visible» а также элементы форм, не являющихся типа «hidden»).</TD></TR>
+<TR><TH>:hidden</TH><TD>Выбирает все невидимые элементы (включая элементы со стилями «display» равными «none», «visibility» равным «hiden» а также элементы форм,  являющихся типа «hidden»).</TD></TR>
+</TABLE>
+<P></P>
+<FONT face="verdana" style="font-size:x-small;margin-left:em"><I>Примеры:</I></FONT><TABLE class="code" width="98%"><TR><TD><PRE>
+$(<SPAN class="STRING">"p:first"</SPAN>).css(<SPAN class="STRING">"fontWeight"</SPAN>,<SPAN class="STRING">"bold"</SPAN>);
+$(<SPAN class="STRING">"div:hidden"</SPAN>).show();
+$(<SPAN class="STRING">"div:contains('test')"</SPAN>).hide();
+</PRE></TD></TR></TABLE>
+
+<H3>Селекторы форм<A name="EPBAG"></A></H3>
+<TABLE border="0" cellspacing="2" cellpadding="5"><TR><TH>:input</TH><TD>Выбирает все элементы формы (input, select, textarea, button).</TD></TR>
+<TR><TH>:text</TH><TD>Выбирает все текстовые поля (type="text").</TD></TR>
+<TR><TH>:password</TH><TD>Выбирает все поля для ввода паролей  (type="password").</TD></TR>
+<TR><TH>:radio</TH><TD>Выбирает все радиокнопки (type="radio").</TD></TR>
+<TR><TH>:checkbox</TH><TD>Выбирает все флаговые поля (type="checkbox").</TD></TR>
+<TR><TH>:submit</TH><TD>Выбирает все кнопки для отсылки формы (type="submit").</TD></TR>
+<TR><TH>:image</TH><TD>Выбирает все изображения на форме (type="image").</TD></TR>
+<TR><TH>:reset</TH><TD>Выбирает все кнопки очистки формы (type="reset").</TD></TR>
+<TR><TH>:button</TH><TD>Выбирает все остальные кнопки (type="button").</TD></TR>
+</TABLE>
+<P></P>
+<FONT face="verdana" style="font-size:x-small;margin-left:em"><I>Примеры:</I></FONT><TABLE class="code" width="98%"><TR><TD><PRE>
+$(<SPAN class="STRING">"#myForm :input"</SPAN>)
+$(<SPAN class="STRING">"input:radio"</SPAN>, myForm)
+</PRE></TD></TR></TABLE>
+
+<H2>Трюки<A name="EFDAG"></A></H2>
+<H4>Совместимость</H4>
+<P>Возможно, вы уже используете другие библиотеки Javascript, которые также используют знак доллара для своих нужд. Чтобы избежать конфликтов с такими библиотеками, вместо знака доллара достаточно использовать функцию jQuery:</P>
+<TABLE class="code" width="98%"><TR><TD><PRE>
+jQuery(<SPAN class="STRING">"#myid"</SPAN>); <SPAN class="COMMENT">// Эквивалентно $("#myid");</SPAN>
+</PRE></TD></TR></TABLE>
+<P>Самой библиотеке jQuery можно запретить использование знака доллар:</P>
+<TABLE class="code" width="98%"><TR><TD><PRE>
+&lt;script src=<SPAN class="STRING">"prototype.js"</SPAN>&gt;
+&lt;script src=<SPAN class="STRING">"jquery.js"</SPAN>&gt;
+&lt;script&gt;
+jQuery.noConflict();
+      
+<SPAN class="COMMENT">// Дальше используем jQuery через jQuery(...)</SPAN>
+jQuery(<SPAN class="STRING">"#myid"</SPAN>).hide();
+
+<SPAN class="COMMENT">// Используем Prototype через $(...)</SPAN>
+$('myid').addClassName('active').show();
+&lt;/script&gt;
+</PRE></TD></TR></TABLE>
+
+<H4>Определение браузеров</H4>
+<P>Используйте объект $.browser:</P>
+<TABLE class="code" width="98%"><TR><TD><PRE>
+<SPAN class="KEYWORD">if</SPAN>($.browser.ie)...
+<SPAN class="KEYWORD">if</SPAN>($.browser.mozilla)...
+</PRE></TD></TR></TABLE>
+
+<H4>Ускорение выборки</H4>
+<P>Для поиска элемента по id используйте только id. Для поиска элементов по классу используйте название элемента и название класса:</P>
+<TABLE class="code" width="98%"><TR><TD><PRE>
+$(<SPAN class="STRING">"#my-div"</SPAN>)     <SPAN class="COMMENT">// Не используйте $("div#mydiv");</SPAN>
+$(<SPAN class="STRING">"div.div-class"</SPAN>)   <SPAN class="COMMENT">// Не используйте $(".div-class");</SPAN>
+</PRE></TD></TR></TABLE>
+<P>Это связано с тем, что для поиска по id jQuery использует функцию getElmentById. Если использовано имя элемента, то jQuery сначала найдет все элементы с таким именем, и только потом начнет в них искать требуемый id. С классом ситуация обратная. Если имя элемента не указано, jQuery придется пробежаться по всем элементам в документе в поисках требуемого класса.</P>
+
+<H4>Отладка AJAX</H4>
+<P>Главная проблема в работе с технологией AJAX – сложность в определении возникающих ошибок. Незаменимым помощником в этом деле является Firebug – расширение для браузера Firefox. Это расширение позволяет отслеживать отсылаемые и получаемые запросы, проводить отладку скриптов и многое другое. Скачать это расширение можно с сайта <A href="http://getfirebug.com/" class="link-ext" target="_blank">http://getfirebug.com/</A></P>
+
+<H2>Ссылки и библиография<A name="EPFAG"></A></H2>
+<H3>jQuery<A name="ESFAG"></A></H3>
+<UL style="LIST-STYLE:square"><LI><A href="http://jquery.com/" class="link-ext" target="_blank">http://jquery.com/</A> – официальный сайт jQuery</LI>
+<LI><A href="http://visualjquery.com/" class="link-ext" target="_blank">http://visualjquery.com/</A> – документация по jQuery в удобном виде</LI>
+<LI><A href="http://docs.jquery.com/Tutorials" class="link-ext" target="_blank">http://docs.jquery.com/Tutorials</A> – ссылки на различные учебные материалы по jQuery</LI>
+</UL>
+
+<H3>Плагины<A name="EKGAG"></A></H3>
+<UL style="LIST-STYLE:square"><LI><A href="http://interface.eyecon.ro/" class="link-ext" target="_blank">http://interface.eyecon.ro/</A> – библиотека всевозможных эффектов и элементов интерфейса</LI>
+<LI><A href="http://www.malsup.com/jquery/form/" class="link-ext" target="_blank">http://www.malsup.com/jquery/form/</A> – плагин, облегчающий работу с формами и технологией AJAX</LI>
+<LI><A href="http://www.stilbuero.de/jquery/tabs" class="link-ext" target="_blank">http://www.stilbuero.de/jquery/tabs</A> – плагин для создания табов</LI>
+<LI><A href="http://jquery.com/demo/thickbox/" class="link-ext" target="_blank">http://jquery.com/demo/thickbox/</A> – плагин для показа различной информации в «диалоге» внутри окна браузера</LI>
+</UL>
+
+<H3>Разное<A name="EIHAG"></A></H3>
+<UL style="LIST-STYLE:square"><LI><A href="http://www.webdevout.net/browser_support.php" class="link-ext" target="_blank">http://www.webdevout.net/browser_support.php</A> – подробный анализ совместимости популярных браузеров с Web-стандартами.</LI>
+<LI><A href="http://getfirebug.com/" class="link-ext" target="_blank">http://getfirebug.com/</A> – расширение для браузера Firefox, незаменимый помощник в отладке скриптов.</LI>
+<LI><A href="http://jquery.com/blog/2006/10/18/zebra-table-showdown/" class="link-ext" target="_blank">http://jquery.com/blog/2006/10/18/zebra-table-showdown/</A> – пример с раскрашиванием таблицы. Показаны решения, использующие и другие библиотеки.</LI>
+<LI><A href="http://prototypejs.org/" class="link-ext" target="_blank">http://prototypejs.org/</A> – упоминаемая в статье библиотека Prototype.</LI>
+</UL>
+<P></P>
+
+<DIV align="right"><FONT style="font-family:arial;font-size:9pt;color:#8088a0"><I><HR color="#8088a0" width="100%" size="1"><div align="justify"><font size="2">
+                     Эта статья опубликована в журнале 
+                     RSDN Magazine
+                                         
+                        #1-2007. Информацию о журнале можно найти <a href="http://www.rsdn.ru/mag/main.htm">здесь</a></font></div></I></FONT></DIV><script src="jQuery – Javascript нового поколения_files/urchin00.js" type="text/javascript"></script><script type="text/javascript">
+      _uacct = 'UA-1276305-1';
+      if (typeof urchinTracker == "function")
+        urchinTracker();
+    </script><script language="javascript" type="text/javascript">
+			//<!--
+var RndNum4NoCash = Math.round(Math.random() * 1000000000);
+var ar_Tail='unknown'; if (document.referrer) ar_Tail = escape(document.referrer);
+document.write('<img src="http://ad.adriver.ru/cgi-bin/rle.cgi?' + 'sid=103809&bt=21&pz=0&rnd=' + RndNum4NoCash
++ '&tail256=' + ar_Tail + '" border=0 width=1 height=1>')
+//-->
+		</script><noscript><img src="http://ad.adriver.ru/cgi-bin/rle.cgi?sid=103809&amp;bt=21&amp;pz=0&amp;rnd=153611784" border="0" width="1" height="1" alt=""></noscript></BODY>
+</HTML>
+<!-- This document saved from http://www.rsdn.ru/article/inet/jQuery.xml?print -->
