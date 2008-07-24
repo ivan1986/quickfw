@@ -4,9 +4,9 @@ class QuickFW_Plugs
 {
 	protected static $_thisInst = null;
 	protected $base, $defext, $index;
-	
+
 	protected $displayErrorsParams;
-	
+
 	protected function __construct()
 	{
 		global $config;
@@ -16,12 +16,12 @@ class QuickFW_Plugs
 
 		$this->index=$config['redirection']['useIndex'];
 		$this->index=$this->index?'index.php/':'';
-		
+
 		$this->rewriter = $config['redirection']['useRewrite'];
-		
+
 		$this->setDisplayErrorsParams();
 	}
-	
+
 	public static function getInstance()
 	{
 		if (self::$_thisInst === null)
@@ -30,7 +30,7 @@ class QuickFW_Plugs
 		}
 		return self::$_thisInst;
 	}
-	
+
 	public function baseUrl()
 	{
 		return $this->base;
@@ -42,12 +42,12 @@ class QuickFW_Plugs
 		$url = $router->backrewrite($url);
 		return $this->base.$this->index.$url.($url!==''?$this->defext:'');
 	}
-	
+
 	protected $HeaderArr = array();
 	protected $HeaderOut = array();
-	
+
 	protected $IncFiles = array();
-	
+
 	public function addJS($file, $noBase=false)
 	{
 		$this->IncFiles['js'][]=($noBase?'':$this->base).$file;
@@ -59,7 +59,7 @@ class QuickFW_Plugs
 		$this->IncFiles['css'][]=($noBase?'':$this->base).$file;
 		return "";
 	}
-	
+
 	public function outHead($name='default')
 	{
 		$key = '<!--HEAD'.$name.'-->';
@@ -68,7 +68,7 @@ class QuickFW_Plugs
 		$this->HeaderOut[$key]++;
 		return $this->HeaderOut[$key]==0?$key:'';
 	}
-	
+
 	public function getHead($content, $name='default', $join=false)
 	{
 		//для перехвата из PlainPHP
@@ -84,15 +84,15 @@ class QuickFW_Plugs
 		}
 
 		$k = '<!--HEAD'.$name.'-->';
-		
+
 		if (!isset($this->HeaderArr[$k]))
 			$this->HeaderArr[$k]='';
 		if ($join)
 			$this->HeaderArr[$k].=$content;
-		else 
+		else
 			$this->HeaderArr[$k]=$content;
 	}
-	
+
 	public function pluralForm($n, $form1, $form2, $form5)
 	{
 		$n = abs($n) % 100;
@@ -102,7 +102,7 @@ class QuickFW_Plugs
 		if ($n1 == 1) return $form1;
 		return $form5;
 	}
-	
+
 	public function HeaderFilter($text)
 	{
 		$head='';
@@ -122,7 +122,7 @@ class QuickFW_Plugs
 				join('" type="text/javascript"></script>'."\n".'<script src="', $this->IncFiles['js']).
 				'" type="text/javascript"></script>'."\n";
 		}
-		
+
 		foreach ($this->HeaderArr as $k=>$v)
 		{
 			if (!isset($this->HeaderOut[$k]))
@@ -132,13 +132,13 @@ class QuickFW_Plugs
 			}
 		}
 		$head.="</head>\n";
-		
+
 		$text = str_replace('</head>',$head,$text);
 		$text = str_replace(array_keys($this->HeaderArr),array_values($this->HeaderArr),$text);
 		$text = preg_replace('|<!--HEAD.*?-->|','',$text);
 		return $text;
 	}
-	
+
 	public function displayErrors($errors)
 	{
 		$res = '';
@@ -149,7 +149,7 @@ class QuickFW_Plugs
 		}
 		return $res;
 	}
-	
+
 	public function setDisplayErrorsParams($pre='', $post='')
 	{
 		$this->displayErrorsParams = array('pre'=>$pre, 'post'=>$post);
