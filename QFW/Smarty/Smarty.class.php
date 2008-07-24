@@ -527,11 +527,7 @@ class Smarty
     function assign($tpl_var, $value = null)
     {
         if (is_array($tpl_var)){
-            foreach ($tpl_var as $key => $val) {
-                if ($key != '') {
-                    $this->_tpl_vars[$key] = $val;
-                }
-            }
+            $this->_tpl_vars += $tpl_var;
         } elseif ($tpl_var != '') {
             $this->_tpl_vars[$tpl_var] = $value;
         }
