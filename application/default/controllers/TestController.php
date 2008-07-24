@@ -5,7 +5,7 @@ class TestController
 	public function indexModule()
 	{
 		global $router,$view;
-		return "<pre>".$view->render('index.tpl')
+		return "<pre>".$view->render('b.html')
 		."\nМодуль index - ".$router->UriPath.' '.$router->CurPath.' '.$router->ParentPath
 		."\nЭто результат работы модуля Test с параметрами ". var_export(func_get_args(),true)."</pre>";
 	}
@@ -13,7 +13,7 @@ class TestController
 	public function aModule()
 	{
 		global $router,$view;
-		return $view->render('index2.tpl')
+		return $view->render('b.html')
 		."\nМодуль A - ".$router->UriPath.' '.$router->CurPath.' '.$router->ParentPath;
 	}
 

@@ -57,7 +57,7 @@ $config['templater']= array(
 
 $config['templater']= array(
 	'name'      => 'Proxy',
-	'def_tpl'   => 'main.tpl',
+	'def_tpl'   => 'main.html',
 	'exts' => array(
 		'tpl' => 'Smarty',
 		'html' => 'PlainView',

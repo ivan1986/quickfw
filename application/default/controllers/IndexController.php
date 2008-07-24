@@ -4,6 +4,9 @@ class IndexController
 {
 	public function indexAction()
 	{
+		require(LIBPATH.'/datagrid/datagrid.class.php');
+		require(APPPATH.'/default/test.php');
+
 		//echo '<pre>'.QFW::$view->P->siteUrl('test').'</pre>';
 		//$c=getCache('File');
 		//$c->setDirectives(array());
