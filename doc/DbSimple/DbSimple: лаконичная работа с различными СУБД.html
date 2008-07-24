@@ -1,0 +1,2759 @@
+<!-- Engine developed by Dmitry Koteroff (http://dklab.ru), (C) 2004 -->
+<html>
+<head>
+<title>dkLab | Конструктор | DbSimple: лаконичная работа с различными СУБД | Подробности</title><link rel="stylesheet" type="text/css" href="DbSimple/style000.css" media="screen" />
+<META name="verify-v1" content="AdhQ433Py33ev/uxSehHf8AMukUbhFmR7NqPWkgv2Rg=" />
+<meta name="description" content="Лаборатория dk: AJAX-библиотека JsHttpRequest с поддержкой Prototype JS, другие библиотеки, статьи по web-программированию" />
+<meta name="keywords" content="AJAX JsHttpRequest XMLHttpRequest PHP модуль prototype DbSimple apache windows denwer denver windows win32 winxp orphus sshbak статьи web-программирование орфус" />
+
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+</head>
+
+<body bgcolor=#DEDFDE text=black link=blue vlink=#0022FF alink=BB00BB style="padding:2px; margin:2px">
+
+<div style="float:left; width: 160px; padding:8px 0 0 0; text-align:left">
+<div style="padding-bottom:6px; width:160px">
+<noindex>Хостинг предоставлен компанией <a href="http://ruskyhost.ru/">RuskyHost.ru</a></noindex><br/><br/>
+<script type="text/javascript"><!--
+google_ad_client = "pub-7882344363883855";
+google_ad_width = 160;
+google_ad_height = 600;
+google_ad_format = "160x600_as";
+google_ad_type = "text_image";
+google_ad_channel ="";
+google_color_border = "000000";
+google_color_bg = "DEDFDE";
+google_color_link = "0000FF";
+google_color_url = "008000";
+google_color_text = "000000";
+//--></script>
+<script type="text/javascript"
+  src="DbSimple/show_ads.js">
+</script>
+		
+
+
+</div>
+<div style="padding-bottom:6px"><noindex>
+<script language="JavaScript" src="DbSimple/orphus00.js"></script>
+<a href="http://orphus.ru/" id="orphus"><img src="DbSimple/orphus00.gif" alt="Система Orphus" width="121" height="21" border="0"></a>
+
+
+</noindex></div>
+<noindex>
+<div style="padding:2px 0px">
+<a href="http://moikrug.ru/circles/292320383/users/"><img src="DbSimple/button00.gif" alt="" width="80" title="Люди, которые рекомендуют сайт dklab.ru" height="15" border="0"></a>
+</div>
+</noindex>
+
+</div>
+
+<div style="padding: 0px 2px 0px 180px">
+<div style="padding: 0em 1em 0em 1em">
+<div style="float:left; margin-top:0.4em">
+<a href="http://dklab.ru/" title="Go to the home page">Russian version<br>
+<img src="DbSimple/dklab_lo.gif" alt="" border="0" width=108 height=47></a>
+<div style="margin-bottom: 6px"><a id="1" href="">Добавить на Del.icio.us</a>
+<script>document.getElementById('1').href = 'http://del.icio.us/post?url=http://dklab.ru/lib/DbSimple/manual.html&title='+encodeURIComponent(document.title.replace(/.*\|\s*/, ''))</script></div>
+</div>
+
+<div style="float:right; text-align:right; margin-top:0.4em">
+<span style="color:#AAAAAA" title="Отсутствует">English version</span>
+<div style="margin-bottom: 6px"><a id="2" href="">Добавить на Digg.com</a>
+<script>document.getElementById('2').href = 'http://digg.com/submit?phase=2&url=http://dklab.ru/lib/DbSimple/manual.html&title='+encodeURIComponent(document.title.replace(/.*\|\s*/, ''))</script></div>
+</div>
+
+<h2 style="text-align: center; margin: 0px 0px 0.4em 0px; padding">&nbsp;<a class="HeadLink" href="http://dklab.ru/">dkLab</a> | <a href="http://dklab.ru/lib">Конструктор</a> | DbSimple: лаконичная работа с различными СУБД | Подробности&nbsp;</h2>
+
+<center>
+<noindex>
+   <a href="http://dklab.ru/map/" ><img src="DbSimple/gomapico.gif" alt="" border="0" width=17 height=17>Карта сайта</a>
+:: <a title="Обсуждение вопросов Web-разработки и не только." href="http://dklab.ru/redir?http://forum.dklab.ru"><img src="DbSimple/forum000.gif" alt="" border="0" width=16 height=16>Форум «Лаборатории»</a>
+:: <a title="Apache + PHP + MySQL + Perl и т.&nbsp;д. одним оптимизированным дистрибутивом." href="http://www.denwer.ru/"><img src="DbSimple/denwer00.gif" alt="" border="0" width=16 height=16>Проект «Денвер»</a><br>
+   <a title="Технология сообщения об орфографических ошибках на базе энтузиазма пользователя." href="http://orphus.ru/" ><img src="DbSimple/orphus01.gif" alt="" border="0" width=17 height=17>Проект «Orphus»</a>
+:: <a title="Авторские статьи на тему Web-программирования." href="http://dklab.ru/chicken/nablas/"><img src="DbSimple/nabla120.gif" alt="" border="0" width=14 height=15>Куроводство: наблы</a>
+:: <a title="Готовые решения и библиотеки." href="http://dklab.ru/lib/"><img src="DbSimple/lib00000.gif" alt="" border="0" width=25 height=15>Конструктор</a>
+</noindex>
+
+
+</center>
+<br><br>
+<p>
+
+
+
+<table align="right" border="0" cellpadding="5" style="border:3px double black; margin-left:10px"><tr><td>
+
+
+
+
+<a href="http://dklab.ru/redir?http://forum.dklab.ru/comments/lib/DbsimpleV2XLaconicWorkWithVariousSubd.html"><img src="DbSimple/forum_fa.ico" alt="" width="16" height="16" border="0">Обсудить статью в форуме</a><br>
+
+
+<a href="http://dklab.ru/lib/DbSimple/demo.zip"><img src="DbSimple/zip00000.gif" alt="" style="margin-left:1px" border="0" width=15 height=16>Скачать исходные коды</a><br>
+
+
+<a href="http://dklab.ru/lib/DbSimple/demo/test/"><img src="DbSimple/li-dir00.gif" alt="" style="padding-left:-1px; padding-right:4px" border="0" width=11 height=10>Просмотреть примеры online</a><br>
+        
+        <a href="http://dklab.ru/wsvn/lib/DbSimple/trunk/test/DbSimple/"><img src="DbSimple/svn_ico0.gif" alt="" style="padding-right:4px" border="0" width=11 height=11>Просмотреть SVN-репозиторий</a>
+
+
+
+
+
+<hr>
+<b>На странице:</b><br>
+<a href=>Что нужно скрипту от СУБД?</a><br><a href=>Недостатки PEAR DB и ADOdb</a><br><a href=>Библиотека DbSimple</a><br>&nbsp&nbsp&nbsp&nbsp&nbsp<a href=>DSN-подключение к БД</a><br>&nbsp&nbsp&nbsp&nbsp&nbsp<a href=>Обработка ошибок</a><br>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<a href=>Пример ошибки подключения</a><br>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<a href=>Ошибки и исключения</a><br>&nbsp&nbsp&nbsp&nbsp&nbsp<a href=>Основные placeholder-ы</a><br>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<a href=>Строковой (бинарный): ?</a><br>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<a href=>Списковый/ассоциативный: ?a</a><br>&nbsp&nbsp&nbsp&nbsp&nbsp<a href=>Дополнительные placeholder-ы</a><br>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<a href=>Префиксный: ?_</a><br>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<a href=>Идентификаторный: ?#</a><br>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<a href=>Идентификаторно-списковый: ?#</a><br>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<a href=>Целочисленный: ?d</a><br>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<a href=>Вещественный (дробный): ?f</a><br>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<a href=>Ссылочный: ?n</a><br>&nbsp&nbsp&nbsp&nbsp&nbsp<a href=>«Родные» placeholder-ы базы</a><br>&nbsp&nbsp&nbsp&nbsp&nbsp<a href=>Выполнение запросов к БД</a><br>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<a href=>Выборка всего результата: select()</a><br>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<a href=>Выборка ассоциативного массива</a><br>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<a href=>Выборка многомерного массива</a><br>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<a href=>Выборка связанного дерева</a><br>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<a href=>Выборка строки: selectRow()</a><br>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<a href=>Выборка ячейки: selectCell()</a><br>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<a href=>Выборка столбца: selectCol()</a><br>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<a href=>Выборка страницы: selectPage()</a><br>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<a href=>Выполнение обновлений: query()</a><br>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<a href=>Обработка ошибок в запросах</a><br>&nbsp&nbsp&nbsp&nbsp&nbsp<a href=>Макроподстановки в SQL-запросах</a><br>&nbsp&nbsp&nbsp&nbsp&nbsp<a href=>Оптимизация prepare+execute</a><br>&nbsp&nbsp&nbsp&nbsp&nbsp<a href=>Логирование запросов</a><br>&nbsp&nbsp&nbsp&nbsp&nbsp<a href=>Транзакции</a><br>&nbsp&nbsp&nbsp&nbsp&nbsp<a href=>Запросы с атрибутами</a><br>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<a href=>Атрибут BLOB_OBJ: объектные BLOB-поля</a><br>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<a href=>Атрибут CACHE: кэширование запросов</a><br>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<a href=>Зависимость от источников данных</a><br>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<a href=>Работа с кэш-хранилищем</a><br><a href=>Резюме</a><br>
+
+
+</td></tr></table>
+
+
+
+<div style="float:right; padding-top: 10px">
+<i>2006-03-03</i>
+</div>
+
+
+
+<div>
+<a href="http://dklab.ru/lib/DbSimple/demo.zip"><img src="DbSimple/download.gif" alt="" border="0" width=16 height=16></a>
+<a href="http://dklab.ru/lib/DbSimple/demo.zip" style="font-size: 19px; font-weight: bold; text-decoration:none">Скачать библиотеку и примеры</a>
+</div>
+
+
+
+<p><table border=0>
+<tr valign=top>
+<td><nobr><img src="DbSimple/exclam00.gif" alt="Лирическое отступление" width="32" height="32">&nbsp;</td>
+<td><p><i>
+Внимание! Текущая версия библиотеки DbSimple — 2.x. Отличия от версии 1.x: еще более 
+упрощенный интерфейс (совместим с DbSimple 1.x не полностью!); поддержка условных 
+макроподстановок (<nobr><tt>{}</tt></nobr>-блоков) в SQL-запросах; кэширование запросов.
+</i></td>
+</tr>
+</table></p>
+
+<p>В PHP встроено множество функций для работы с самыми разнообразными СУБД. Однако
+у четвертой версии языка есть большой недостаток: все эти функции различаются между
+собой как по числу принимаемых параметров, так и по идеологии работы с базой данных. 
+Например, функция <nobr><tt>mysql_query()</tt></nobr> (для MySQL) принимает идентификатор соединения с БД во втором
+параметре, а аналогичный вызов <nobr><tt>ibase_query()</tt></nobr> (для InterBase/FireBird) — в первом. 
+При использовании «прямых» обращений к таким функциям в большинстве случаев можно
+даже и забыть о том, чтобы перенести сайт на другую СУБД, пусть даже диалекты SQL
+у старой и новой базы почти совпадают и удовлетворяют стандарту <a href="http://www.contrib.andrew.cmu.edu/~shadow/sql/sql1992.txt">SQL'92</a>.
+
+<p>Для «выравнивания» различий и сведения всех обращений к различным СУБД в единый
+интерфейс существует довольно большое число библиотек. Самые популярные из них, пожалуй,
+— библиотека <a href="http://pear.php.net/package/DB">PEAR DB</a> и 
+<a href="http://adodb.sourceforge.net/">ADOdb</a>; PHP версии 5 также поддерживает 
+<a href="http://php.net/pdo">PDO</a>. Все библиотеки умеют работать с более чем десятком 
+различных СУБД, при этом интерфейс выполнения запросов во всех случаях остается одним и тем же.
+
+
+
+<h2><a name=cont0></a><span style="font-size: 18pt">Что нужно скрипту от СУБД?</span></h2>
+
+<p><table border=0>
+<tr valign=top>
+<td><nobr><img src="DbSimple/teapot00.gif" alt="Чайник" width="40" height="40">&nbsp;</td>
+<td><p><i>
+Вы можете спросить: зачем еще одна библиотека, раз их и так написано множество? 
+Штука в том, что скриптам нужны далеко не все операции, предоставляемые PHP 
+(или, например, библиотеками PEAR и ADOdb) для работы с любой СУБД. С другой стороны,
+по-настоящему необходимые операции (см. ниже) должны быть реализованы так, чтобы ими 
+было удобно пользоваться, а этого как раз имеющиеся библиотеки лишены.
+</p></td>
+</tr>
+</table></p>
+
+<p>Ниже я перечислю тот минимум, который, по моему мнению, необходим скриптам для 
+«комфортной» работы с произвольной СУБД. (Звездочками отмечены возможности, которые 
+либо отсутствуют в PEAR DB, ADOdb и PDO, либо же реализованы неудовлетворительно.)
+
+<ul>
+
+<li><b>Интерфейс должен быть максимально простым, ненавязчивым и неизбыточным (*)</b>. Это очень 
+важное требование, потому что работа с SQL порой занимает львиную долю кода PHP-скриптов, и
+от того, насколько она будет «прозрачной», зависит энтузиазм программиста.
+
+<li><b>Поддержка <a href="http://dklab.ru/lib/Database_Placeholder">placeholder-ов</a></b>: для вставки данных в 
+строку SQL-запроса используются специальные маркеры, например, "?", а сами данные передаются
+позже: <tt>query('SELECT * FROM tbl WHERE id=?', $id)</tt>.
+
+<li><b>Абстрагирование от параметров подключения к СУБД</b>: подключение к СУБД
+использует единообразную строку коннекта (DSN — Data Source Name): 
+<nobr><tt>connect("mysql://login:password@database?options")</tt></nobr>.
+
+<li><b>Логирование запросов к СУБД (*)</b>:
+<ul>
+<li>какие запросы с какими параметрами (значениями placeholder-ов) выполнялись в ходе всей работы скрипта;
+<li>какие результаты вернули запросы (для небольших однострочных и скалярных выборок — явно, для 
+многомерных — число строк результата);
+<li>какая строка программы вызвала тот или иной SQL-запрос;
+<li>сколько времени заняло выполнение запроса.
+</ul>
+
+<li><b>Механизм обработки ошибок в SQL-запросах (*)</b>: хотя бы с применением callback-вызова обработчика ошибок,
+которому передается исчерпывающая информация о контексте запроса.
+
+<li><b>Функции простейшей выборки из базы</b> с применением placeholder-ов: 
+<ul>
+<li><nobr><tt>mixed select(string $query [,$arg1...])</tt></nobr>: выборка двумерного массива (список строк);
+<li><nobr><tt>hash selectRow(string $query [,$arg1...])</tt></nobr>: выборка однострочного результата запроса (одна строка);
+<li><nobr><tt>array selectCol(string $query [,$arg1...])</tt></nobr>: выборка одноколоночного результата запроса (один столбец);
+<li><nobr><tt>scalar selectCell(string $query [,$arg1...])</tt></nobr>: выборка скалярного результата запроса (одна ячейка)
+<li><nobr><tt>mixed selectPage(int &$total, string $query [,$arg1...])</tt></nobr>: выборка ограниченного двумерного массива с занесением общего числа записей в переменную;
+<li><nobr><tt>mixed query(string $query [,$arg1...])</tt></nobr>: вызов не-SELECT запроса; для автоинкрементных полей (MySQL) возвращает ID вставленной записи.
+</ul>
+
+<li><b>Простейшее форматирования двумерной выборки (*)</b>:
+<ul>
+<li>в виде ассоциативного массива (возможно, многомерного) с ключами, взятыми из определенного столбца выборки;
+<li>в виде дерева, когда идентификатор элемента берется из одного столбца, а идентификатор его родителя — из другого.
+</ul>
+
+<li><b>Списковые и ассоциативные placholder-ы (*)</b>: чтобы можно было писать что-то типа 
+<nobr><tt>query('SELECT * FROM tbl WHERE id IN(?a)', array(1,2,3))</tt></nobr>, а также короткие UPDATE-выражения,
+в которых все данные берутся из ассоциативного массива.
+
+<li><b>Поддержка транзакций</b>: даже если СУБД не поддерживает транзакции, интерфейс должен быть единым.
+
+<li><b>Поддержка объектных BLOB-полей (*)</b>: если в какой-то BLOB-ячейке хранится запись размером, предположим, 
+500М, должна быть возможность извлечь ее оттуда по кускам, считывая участок за участком в цикле.
+
+</ul>
+
+
+<h2><a name=cont1></a><span style="font-size: 18pt">Недостатки PEAR DB и ADOdb</span></h2>
+
+<p>Обратите внимание, сколько в приведенном списке пунктов, поддержка которых в PEAR DB и ADOdb,
+как мне кажется, находится на неудовлетворительном уровне. В то же время, эти две библиотеки поддерживают
+еще множество возможностей, которые в данный список не вошли в виду их малой практической целесообразности
+и большой избыточности:
+
+<ul>
+<li>громоздкая сортировка ошибок СУБД по их типам;
+<li>различные форматы результата выборки, отличные от ассоциативных массивов (например, выборка в виде объектов PHP);
+<li>вынесение в интерфейс операций prepare и execute (это излишество, ибо функции выборки, заметив, что запросы 
+поступают однотипные, и сами могут решить, что им стоит сделать 1 раз prepare, а потом — 100 раз execute);
+<li>разделение в интерфейсе операций «выполнить запрос» и «получить результат запроса»;
+<li>отдельная обработка SELECT-запросов с <nobr><tt>LIMIT</tt></nobr> (MySQL) или <nobr><tt>FIRST ? SKIP ?</tt></nobr> (InterBase/FireBird);
+<li>работа с последовательностями (поддерживается далеко не всеми СУБД, а эмуляция весьма "кривая").
+</ul>
+
+<p><table border=0>
+<tr valign=top>
+<td><nobr><img src="DbSimple/exclam00.gif" alt="Лирическое отступление" width="32" height="32">&nbsp;</td>
+<td><p><i>
+К счастью, используя PEAR DB и ADOdb, можно написать собственную «обертку», которая будет 
+реализовывать всю функциональность из приведенного выше списка. Вероятно, в будущем она
+и будет написана для DbSimple.
+</i></td>
+</tr>
+</table></p>
+
+<p>Сведя все воедино, можно сказать, что основная масса популярных библиотек абстракции 
+от СУБД имеют три недостатка.
+<ol>
+<li>Весьма большой объем PHP-кода, который нужно подключать к скрипту. Например, 
+минимальный набор файлов PEAR DB для работы с MySQL занимает порядка 150 КБ (5000 
+строк кода), для ADOdb — 200 КБ и 7000 строк. Правда, это все включая комментарии,
+которых в коде очень много, но все равно.
+
+<li>Единый интерфейс оказывается уж очень «многословным» и чрезмерно перегруженным
+ненужными (в большинстве случаев) функциями, в которых немудрено запутаться. 
+Наоборот, некоторые возможности, которые применяются в скриптах очень часто 
+(см. ниже), ими напрямую не поддерживаются. Иными словами, определенный слой 
+абстракции данные библиотеки поддерживают, но это не совсем тот слой, с которыми
+бы «хотели» работать скрипты: он слишком низкоуровневый.
+
+<li>Отладочные функции находятся в зачаточном состоянии, а также работают не 
+на том слое абстракции, на котором их бы «хотели видеть» скрипты. Например,
+самая естественная отладочная информация — какие запросы с какими параметрами
+выполнялись в ходе всей работы скрипта, какие результаты они вернули (хотя бы
+число строк), где именно в PHP-коде вызывались и сколько времени заняли. Для всего 
+этого поддержка в PEAR DB и ADODB отсутствует.
+</ol>
+
+
+
+<h2><a name=cont2></a><span style="font-size: 18pt">Библиотека DbSimple</span></h2>
+
+<p>Вашему вниманию предоставляется новая библиотека работы с СУБД — 
+<a href="http://dklab.ru/lib/DbSimple/demo/lib/">DbSimple</a>. Вот ее основные характеристики.
+
+<ul>
+<li>Исключительно простой и лаконичный интерфейс, который очень удобно использовать в скриптах.
+<li>Условные макроподстановки в теле SQL-запросах (<nobr><tt>{}</tt></nobr>-блоки), позволяющие делать динамически 
+изменяемыми даже очень сложные запросы без ущерба читабельности кода.
+<li>Выполнены все требования списка, приведенного выше. Чуть ниже будут даны подробные примеры 
+по каждому из пунктов.
+<li>Библиотека весьма компактна: например, объем кода для работы с MySQL — 40 КБ (1300 строк);
+в основном, как водится, комментарии.
+<li>В настоящий момент поддерживаются три популярные СУБД: MySQL, PostgreSQL и InterBase/FireBird. 
+Поддержка остальных СУБД может быть добавлена без каких-либо проблем. Возможно даже добавление 
+универсальной поддержки для PEAR DB, ADOdb или PDO, однако это, конечно, подорвет компактность 
+библиотеки, но без ущерба остальным достоинствам.
+<li>Код библиотеки оформлен в соответствии с 
+<a href="http://pear.php.net/manual/ru/standards.php">PEAR Coding Standards</a>.
+</ul>
+
+<p><table border=0>
+<tr valign=top>
+<td><nobr><img src="DbSimple/teapot00.gif" alt="Чайник" width="40" height="40">&nbsp;</td>
+<td><p><i>
+Обращаю особое внимание на то, что DbSimple намеренно не занимается «выравниваниием диалектов» 
+SQL в различных СУБД (что частично пытаются делать PEAR DB и ADOdb). Она лишь позволяет обращаться к 
+ним через единый стандартизированный и очень удобный интерфейс. Что такое «выравнивание диалектов»? 
+Например, в MySQL запрос с ограничением выглядит как "SELECT ... LIMIT m, n", в PostgreSQL — как 
+"SELECT ... OFFSET x LIMIT y", а в FireBird — "SELECT FIRST a SKIP b ...". Это и есть «разные 
+диалекты». Вы должны сами решить, какую СУБД используете, и соответствующим образом составлять 
+запросы; DbSimple вам в этом не поможет (по крайней мере, это не тот слой абстракции, на котором
+осуществляется выравнивание диалектов). Также DbSimple не является слоем получения 
+стандартизированных метаданных БД (информации о структуре таблиц, полей, индексов и т.&nbsp;д.).
+</p></td>
+</tr>
+</table></p>
+
+
+<h3><a name=cont3></a>DSN-подключение к БД</h3>
+
+<p>В простейшем случае код подключения к БД будет выглядеть примерно так:
+
+
+<p><table cellspacing="1" cellpadding="6" border="0" align="center">
+  <tr bgcolor="#DDDDDD"> 
+  	
+    
+    <td width="100%"><font size=-1>
+    	<b>
+    		<a name="#list1" href="" title="Ссылка на текущий листинг.">Листинг 1</a>
+    	</b>
+    </td>
+    <td align="right" nowrap><font size=-1><a href="" onclick="
+      if (document.body.createTextRange) {
+        var BodyRange = document.body.createTextRange(); 
+        BodyRange.moveToElementText(this.parentNode.parentNode.parentNode.nextSibling.firstChild); 
+        BodyRange.execCommand('Copy');  
+        alert('Код скопирован в буфер обмена Windows.');
+      } else {
+        alert('Ваш браузер не поддерживает операции с буфером обмена.');
+      }
+      return false;
+    "><span class="genmed">скопировать код в буфер обмена</span></a></td>
+  </tr>
+  <tr bgcolor="#F0F0F0">
+    
+    <td colspan="2"><font size="+0"><pre  style="margin: 0px"><font color="green">// Подключаем библиотеку.</font>
+require_once "DbSimple/Generic.php";
+<font color="green">// Устанавливаем соединение.</font>
+&#36;DB = DbSimple_Generic::connect("mysql:<font color="green">//Логин:Пароль@Хост/База");</font>
+<font color="green">// Дальше работаем с соединением (или текущей транзакцией) &#36;DB. </font>
+<font color="green">// Например: &#36;DB-&gt;select(...).</font></pre></td>
+  </tr>
+</table></p>
+
+<p>Формат DSN-строки тот же самый, что используется в PEAR DB. Для других СУБД DSN-строка 
+может выглядеть более сложно. Спецификация параметров, следующих после "?" в DSN, 
+определяется конкретной библиотекой поддержки той или иной СУБД. Вот пример для InterBase/FireBird:
+<nobr><tt>ibase://Логин:Пароль@Хост/База?ROLE=...&CHARSET=win1251&BUFFERS=0&DIALECT=3</tt></nobr>. 
+
+<p>Статическая функция <nobr><tt>DbSimple_Generic::connect</tt></nobr> работает так:
+<ol>
+<li>Разбирает DSN-строку, выделяя имя СУБД.
+<li>Пытается подключить файл <nobr><tt>ИмяСУБД.php</tt></nobr>, находящейся в пределах директории библиотеки 
+DbSimple.
+<li>Создает объект класса <nobr><tt>DbSimple_ИмяСУБД</tt></nobr>, который и возвращается.
+</ol>
+
+<p>Например, в нашем случае в <nobr><tt>$DB</tt></nobr> будет записан объект класса <nobr><tt>DbSimple_Mysql</tt></nobr>.
+
+<p><table border=0>
+<tr valign=top>
+<td><nobr><img src="DbSimple/exclam00.gif" alt="Лирическое отступление" width="32" height="32">&nbsp;</td>
+<td><p><i>
+В случае, если возникнет ошибка подключения, никакое сообщение выведено <i>не будет</i>,
+и работа программы не завершится. Ошибка будет сгенерирована только при назначении 
+функции-обработчика ошибок. Это может показаться неудобным, однако следующий раздел 
+расставит все на свои места.
+</i></td>
+</tr>
+</table></p>
+
+
+<h3><a name=cont4></a>Обработка ошибок</h3>
+
+<p>Нечего даже и думать работать с базой, пока вы не убедитесь, что у вас есть удобный
+инструмент для обработки ошибок. Ошибки могут возникать на самых разных местах, таких 
+как: подключение к БД, выполнение SQL-запросов, старт транзакции и т.&nbsp;д. Все эти ситуации
+обрабатываются библиотекой DbSimple единообразно — при помощи запуска <i>пользовательского 
+обработчика ошибок</i> (error handler):
+
+
+<p><table cellspacing="1" cellpadding="6" border="0" align="center">
+  <tr bgcolor="#DDDDDD"> 
+  	
+    
+    <td width="100%"><font size=-1>
+    	<b>
+    		<a name="#list2" href="" title="Ссылка на текущий листинг.">Листинг 2</a>
+    	</b>
+    </td>
+    <td align="right" nowrap><font size=-1><a href="" onclick="
+      if (document.body.createTextRange) {
+        var BodyRange = document.body.createTextRange(); 
+        BodyRange.moveToElementText(this.parentNode.parentNode.parentNode.nextSibling.firstChild); 
+        BodyRange.execCommand('Copy');  
+        alert('Код скопирован в буфер обмена Windows.');
+      } else {
+        alert('Ваш браузер не поддерживает операции с буфером обмена.');
+      }
+      return false;
+    "><span class="genmed">скопировать код в буфер обмена</span></a></td>
+  </tr>
+  <tr bgcolor="#F0F0F0">
+    
+    <td colspan="2"><font size="+0"><pre  style="margin: 0px"><span style="background:#DDDDDD">&lt;?php</span> ## Подключение к БД.
+require_once "../../lib/config.php";
+require_once "DbSimple/Generic.php";
+
+<font color="green">// Подключаемся к БД.</font>
+&#36;DATABASE = DbSimple_Generic::connect('mysql:<font color="green">//test:test@localhost1/non-existed-db');</font>
+
+<font color="green">// Устанавливаем обработчик ошибок.</font>
+&#36;DATABASE-&gt;setErrorHandler('databaseErrorHandler');
+
+<font color="green">// Код обработчика ошибок SQL.</font>
+function databaseErrorHandler(&#36;message, &#36;info)
+{
+    <font color="green">// Если использовалась @, ничего не делать.</font>
+    if (!error_reporting()) return;
+    <font color="green">// Выводим подробную информацию об ошибке.</font>
+    echo "SQL Error: &#36;message&lt;br&gt;&lt;pre&gt;"; 
+    print_r(&#36;info);
+    echo "&lt;/pre&gt;";
+    exit();
+}
+<span style="background:#DDDDDD">?&gt;</span></pre></td>
+  </tr>
+</table></p>
+
+<p>Обратите внимание на то, что мы выполняем <nobr><tt>$DB-&gt;setErrorHandler('databaseErrorHandler')</tt></nobr> 
+<i>сразу же</i> после того, как установили подключение к БД (создали объект <nobr><tt>$DB</tt></nobr>).
+Как уже говорилось выше, если во время вызова <nobr><tt>connect()</tt></nobr> произошла ошибка, она нигде
+не отобразится, но последующий вызов <nobr><tt>setErrorHandler()</tt></nobr> ее <i>обработает</i> стандартным 
+способом.
+
+
+
+<h4><a name=cont5></a>Пример ошибки подключения</h4>
+
+<p>Предположим, мы допустили опечатку и попытались присоединиться к хосту <nobr><tt>localhost1</tt></nobr>, 
+а не <nobr><tt>localhost</tt></nobr>. В этом случае во время установки обработчика ошибок будет выведено
+следующее сообщение:
+
+
+<p><table cellspacing="1" cellpadding="6" border="0" align="center">
+  <tr bgcolor="#DDDDDD"> 
+  	
+    
+    <td width="100%"><font size=-1>
+    	<b>
+    		<a name="#list3" href="" title="Ссылка на текущий листинг.">Листинг 3</a>
+    	</b>
+    </td>
+    <td align="right" nowrap><font size=-1><a href="" onclick="
+      if (document.body.createTextRange) {
+        var BodyRange = document.body.createTextRange(); 
+        BodyRange.moveToElementText(this.parentNode.parentNode.parentNode.nextSibling.firstChild); 
+        BodyRange.execCommand('Copy');  
+        alert('Код скопирован в буфер обмена Windows.');
+      } else {
+        alert('Ваш браузер не поддерживает операции с буфером обмена.');
+      }
+      return false;
+    "><span class="genmed">скопировать код в буфер обмена</span></a></td>
+  </tr>
+  <tr bgcolor="#F0F0F0">
+    
+    <td colspan="2"><font size="+0"><pre  style="margin: 0px">SQL Error: Unknown MySQL Server Host 'localhost1' (11001) at .../connect.php line 17
+Array
+(
+    [code] =&gt; 2005
+    [message] =&gt; Unknown MySQL Server Host 'localhost1' (11001)
+    [query] =&gt; mysql_connect()
+    [context] =&gt; .../connect.php line 17
+)</pre></td>
+  </tr>
+</table></p>
+
+<p><table border=0>
+<tr valign=top>
+<td><nobr><img src="DbSimple/teapot00.gif" alt="Чайник" width="40" height="40">&nbsp;</td>
+<td><p><i>
+Конечно, при желании вы можете оформить сообщение об ошибке гораздо аккуратнее. 
+Вы можете даже записать его в логи сервера, а не выводить на экран.
+</p></td>
+</tr>
+</table></p>
+
+<p>Как видите, ошибка подключения не была «потеряна». Отображается: код ошибки, подробное сообщение, 
+ошибочный SQL-запрос (в нашем случае это не запрос, а вызов функции подключения), а также имя
+файла и номер строки, в которых была вызвана библиотека DbSimple.
+
+
+
+<h4><a name=cont6></a>Ошибки и исключения</h4>
+
+<p>Помимо вывода диагностики, какова должна быть реакция скрипта на возникновение ошибки 
+в SQL-запросе? Существует как минимум два варианта:
+<ol>
+<li>Вернуть какое-нибудь недопустимое значение вместо результирующих данных. Так поступает PEAR DB: 
+если запрос завершается неудачно, возвращается признак ошибки — объект класса <nobr><tt>PEAR_Error</tt></nobr>, и вы 
+должны проверять наличие этого признака явно.
+<li>Немедленно завершить работу программы.
+</ol>
+
+<p>Первый способ неудобен тем, что расставлять повсюду в скрипте проверки весьма утомительно. Возникает
+соблазн этого не делать, а значит, потенциальная возможность «упустить» ошибку. Моя практика показала, 
+что в подавляющем большинстве случаев самое логичное, что можно сделать при возникновении SQL-ошибки, — 
+это немедленно завершить работу скрипта. Ведь код, выполняющий SQL-запрос, ожидает получить его результат
+и чаще всего не готов к тому, что «кина не будет».
+
+<p>Но, конечно, бывают и ситуации, когда ошибку необходимо «молча проглотить». Самый распространенный
+пример: нам нужно обновить некоторую запись в таблице, если она там уже существует, или добавить 
+новую — если ее там нет. С использованием DbSimple и того обработчика ошибок,
+который мы написали выше, это будет выглядеть примерно так:
+
+
+<p><table cellspacing="1" cellpadding="6" border="0" align="center">
+  <tr bgcolor="#DDDDDD"> 
+  	
+    
+    <td width="100%"><font size=-1>
+    	<b>
+    		<a name="#list4" href="" title="Ссылка на текущий листинг.">Листинг 4</a>
+    	</b>
+    </td>
+    <td align="right" nowrap><font size=-1><a href="" onclick="
+      if (document.body.createTextRange) {
+        var BodyRange = document.body.createTextRange(); 
+        BodyRange.moveToElementText(this.parentNode.parentNode.parentNode.nextSibling.firstChild); 
+        BodyRange.execCommand('Copy');  
+        alert('Код скопирован в буфер обмена Windows.');
+      } else {
+        alert('Ваш браузер не поддерживает операции с буфером обмена.');
+      }
+      return false;
+    "><span class="genmed">скопировать код в буфер обмена</span></a></td>
+  </tr>
+  <tr bgcolor="#F0F0F0">
+    
+    <td colspan="2"><font size="+0"><pre  style="margin: 0px"><font color="green">// Обратите внимание на "@"!</font>
+if (!@&#36;DB-&gt;query('UPDATE tbl SET field=? WHERE id=1', &#36;field)) {
+  <font color="green">// Здесь идет реакция на ошибку, если она возникла. </font>
+  <font color="green">// Контекст ошибки можно получить через &#36;DB-&gt;error.</font>
+  &#36;DB-&gt;query('INSERT INTO tbl(id, field) VALUES(1, ?)', &#36;field)
+}</pre></td>
+  </tr>
+</table></p>
+
+<p>Взгляните еще раз на код callback-функции <nobr><tt>databaseErrorHandler()</tt></nobr> выше. Применение инструкции 
+<nobr><tt>if (!error_reporting()) return</tt></nobr> заставляет обработчик не завершать работу скрипта (и не выводить 
+диагностику), если вызову SQL-запроса предшествовал оператор PHP <nobr><tt>@</tt></nobr>. Таким образом, мы имеем 
+возможность задействовать оба варианта реакции на ошибку, причем по умолчанию используется тот 
+вариант, который оказывается самым логичным в большинстве случаев (второй).
+
+<p><table border=0>
+<tr valign=top>
+<td><nobr><img src="DbSimple/exclam00.gif" alt="Лирическое отступление" width="32" height="32">&nbsp;</td>
+<td><p><i>
+Конечно, идеальным решением было бы не завершать скрипт по <nobr><tt>exit()</tt></nobr>, а генерировать <nobr><tt>исключение</tt></nobr> 
+инструкцией <nobr><tt>throw</tt></nobr>, которое потом будет перехвачено в блоке <nobr><tt>catch</tt></nobr>. Однако исключения поддерживаются
+только в PHP5. Если вы используете PHP5, вы можете доработать функцию-обработчик ошибки так, чтобы
+она генерировала исключение вместо завершения работы всей программы. Подробнее об исключениях 
+читайте в <a href="http://www.php.net/manual/ru/language.exceptions.php">документации PHP</a>.
+</i></td>
+</tr>
+</table></p>
+
+
+
+<h3><a name=cont7></a>Основные placeholder-ы</h3>
+
+<p>Чтобы избежать самой популярной среди скриптописателей 
+проблемы с безопасностью — SQL Injection, существует хороший способ: использовать в запросах
+placeholder-ы и переложить обработку «небезопасных» данных на плечи библиотеки работы с СУБД
+(см. <a href="http://dklab.ru/lib/Database_Placeholder">статью</a> на эту тему). Иными словами, там, где
+«плохой» программист пишет «дырявый» код:
+
+<p><table cellspacing="1" cellpadding="6" border="0" align="center">
+  <tr bgcolor="#DDDDDD"> 
+  	
+    
+    <td width="100%"><font size=-1>
+    	<b>
+    		<a name="#list5" href="" title="Ссылка на текущий листинг.">Листинг 5</a>
+    	</b>
+    </td>
+    <td align="right" nowrap><font size=-1><a href="" onclick="
+      if (document.body.createTextRange) {
+        var BodyRange = document.body.createTextRange(); 
+        BodyRange.moveToElementText(this.parentNode.parentNode.parentNode.nextSibling.firstChild); 
+        BodyRange.execCommand('Copy');  
+        alert('Код скопирован в буфер обмена Windows.');
+      } else {
+        alert('Ваш браузер не поддерживает операции с буфером обмена.');
+      }
+      return false;
+    "><span class="genmed">скопировать код в буфер обмена</span></a></td>
+  </tr>
+  <tr bgcolor="#F0F0F0">
+    
+    <td colspan="2"><font size="+0"><pre  style="margin: 0px">&#36;DB-&gt;select("SELECT * FROM tbl WHERE a='&#36;a' AND b='&#36;b'");</pre></td>
+  </tr>
+</table></p>
+«хороший» применит placeholder-ы:
+
+<p><table cellspacing="1" cellpadding="6" border="0" align="center">
+  <tr bgcolor="#DDDDDD"> 
+  	
+    
+    <td width="100%"><font size=-1>
+    	<b>
+    		<a name="#list6" href="" title="Ссылка на текущий листинг.">Листинг 6</a>
+    	</b>
+    </td>
+    <td align="right" nowrap><font size=-1><a href="" onclick="
+      if (document.body.createTextRange) {
+        var BodyRange = document.body.createTextRange(); 
+        BodyRange.moveToElementText(this.parentNode.parentNode.parentNode.nextSibling.firstChild); 
+        BodyRange.execCommand('Copy');  
+        alert('Код скопирован в буфер обмена Windows.');
+      } else {
+        alert('Ваш браузер не поддерживает операции с буфером обмена.');
+      }
+      return false;
+    "><span class="genmed">скопировать код в буфер обмена</span></a></td>
+  </tr>
+  <tr bgcolor="#F0F0F0">
+    
+    <td colspan="2"><font size="+0"><pre  style="margin: 0px">&#36;DB-&gt;select('SELECT * FROM tbl WHERE a=? AND b=?', &#36;a, &#36;b);</pre></td>
+  </tr>
+</table></p>
+и, тем самым, гарантированно избавит себя от дыр вида SQL Injection. Основными для DbSimple 
+являются placeholder-ы <nobr><tt>?</tt></nobr> (вставка строки) и <nobr><tt>?a</tt></nobr> 
+(вставка списка или массива). Они используются в подавляющем большинстве случаев.
+
+
+
+<h4><a name=cont8></a>Строковой (бинарный): ?</h4>
+
+<p>Это самый простой вид placeholder-а, используемый в подавляющем большинстве случаев. 
+Вставляемое на его место значение обрамляется апострофами ('), при этом все символы, 
+которые СУБД считает служебными, экранируются в соответствии с правилами этой СУБД 
+(например, в MySQL перед апострофами вставляется \, а в FireBird - апострофы удваиваются).
+
+
+<p><table cellspacing="1" cellpadding="6" border="0" align="center">
+  <tr bgcolor="#DDDDDD"> 
+  	
+    
+    <td width="100%"><font size=-1>
+    	<b>
+    		<a name="#list7" href="" title="Ссылка на текущий листинг.">Листинг 7</a>
+    	</b>
+    </td>
+    <td align="right" nowrap><font size=-1><a href="" onclick="
+      if (document.body.createTextRange) {
+        var BodyRange = document.body.createTextRange(); 
+        BodyRange.moveToElementText(this.parentNode.parentNode.parentNode.nextSibling.firstChild); 
+        BodyRange.execCommand('Copy');  
+        alert('Код скопирован в буфер обмена Windows.');
+      } else {
+        alert('Ваш браузер не поддерживает операции с буфером обмена.');
+      }
+      return false;
+    "><span class="genmed">скопировать код в буфер обмена</span></a></td>
+  </tr>
+  <tr bgcolor="#F0F0F0">
+    
+    <td colspan="2"><font size="+0"><pre  style="margin: 0px">&#36;DB-&gt;select('SELECT * FROM tbl WHERE a=?', "test'string");
+<font color="green">// MySQL: SELECT * FROM tbl WHERE a='test\'string'</font>
+<font color="green">// FireBird: SELECT * FROM tbl WHERE a='test''string'</font></pre></td>
+  </tr>
+</table></p>
+
+<p><table border=0>
+<tr valign=top>
+<td><nobr><img src="DbSimple/exclam00.gif" alt="Лирическое отступление" width="32" height="32">&nbsp;</td>
+<td><p><i>
+Правила экранирования задаются для каждой СУБД отдельно. За это отвечает
+виртуальный метод <nobr><tt>escape()</tt></nobr>.
+</i></td>
+</tr>
+</table></p>
+
+<p>Правильнее было бы назвать данный placeholder не строковым, а бинарным, т.к.
+с его помощью в БД можно вставлять произвольные бинарные данные (в том числе
+— картинки, исполняемые файлы и т.&nbsp;д.).
+
+<p>Если значение подставляемого параметра равно <nobr><tt>null</tt></nobr>, вместо обрамления его 
+апострофами вставляется ключевое слово SQL NULL. Это же верно и для всех 
+остальных типов placeholder-ов.
+
+
+<p><table cellspacing="1" cellpadding="6" border="0" align="center">
+  <tr bgcolor="#DDDDDD"> 
+  	
+    
+    <td width="100%"><font size=-1>
+    	<b>
+    		<a name="#list8" href="" title="Ссылка на текущий листинг.">Листинг 8</a>
+    	</b>
+    </td>
+    <td align="right" nowrap><font size=-1><a href="" onclick="
+      if (document.body.createTextRange) {
+        var BodyRange = document.body.createTextRange(); 
+        BodyRange.moveToElementText(this.parentNode.parentNode.parentNode.nextSibling.firstChild); 
+        BodyRange.execCommand('Copy');  
+        alert('Код скопирован в буфер обмена Windows.');
+      } else {
+        alert('Ваш браузер не поддерживает операции с буфером обмена.');
+      }
+      return false;
+    "><span class="genmed">скопировать код в буфер обмена</span></a></td>
+  </tr>
+  <tr bgcolor="#F0F0F0">
+    
+    <td colspan="2"><font size="+0"><pre  style="margin: 0px">&#36;DB-&gt;query('UPDATE tbl SET a=?', null);
+<font color="green">// MySQL: UPDATE tbl SET a=NULL</font></pre></td>
+  </tr>
+</table></p>
+
+
+
+<h4><a name=cont9></a>Списковый/ассоциативный: ?a</h4>
+
+<p>Данный вид placeholder-ов удобно использовать для составления 
+IN-выражений в SQL — при условии, что в программе имеется список
+с перечисленными значениями:
+
+
+<p><table cellspacing="1" cellpadding="6" border="0" align="center">
+  <tr bgcolor="#DDDDDD"> 
+  	
+    
+    <td width="100%"><font size=-1>
+    	<b>
+    		<a name="#list9" href="" title="Ссылка на текущий листинг.">Листинг 9</a>
+    	</b>
+    </td>
+    <td align="right" nowrap><font size=-1><a href="" onclick="
+      if (document.body.createTextRange) {
+        var BodyRange = document.body.createTextRange(); 
+        BodyRange.moveToElementText(this.parentNode.parentNode.parentNode.nextSibling.firstChild); 
+        BodyRange.execCommand('Copy');  
+        alert('Код скопирован в буфер обмена Windows.');
+      } else {
+        alert('Ваш браузер не поддерживает операции с буфером обмена.');
+      }
+      return false;
+    "><span class="genmed">скопировать код в буфер обмена</span></a></td>
+  </tr>
+  <tr bgcolor="#F0F0F0">
+    
+    <td colspan="2"><font size="+0"><pre  style="margin: 0px">&#36;ids = array(1, 101, 303);
+&#36;DB-&gt;select('SELECT name FROM tbl WHERE id IN(?a)', &#36;ids);
+<font color="green">// SELECT name FROM tbl WHERE id IN(1, 101, 303)</font></pre></td>
+  </tr>
+</table></p>
+
+<p>Помните, что в случае передачи пустого списка вы получите 
+ошибочный SQL-запрос:
+
+
+<p><table cellspacing="1" cellpadding="6" border="0" align="center">
+  <tr bgcolor="#DDDDDD"> 
+  	
+    
+    <td width="100%"><font size=-1>
+    	<b>
+    		<a name="#list10" href="" title="Ссылка на текущий листинг.">Листинг 10</a>
+    	</b>
+    </td>
+    <td align="right" nowrap><font size=-1><a href="" onclick="
+      if (document.body.createTextRange) {
+        var BodyRange = document.body.createTextRange(); 
+        BodyRange.moveToElementText(this.parentNode.parentNode.parentNode.nextSibling.firstChild); 
+        BodyRange.execCommand('Copy');  
+        alert('Код скопирован в буфер обмена Windows.');
+      } else {
+        alert('Ваш браузер не поддерживает операции с буфером обмена.');
+      }
+      return false;
+    "><span class="genmed">скопировать код в буфер обмена</span></a></td>
+  </tr>
+  <tr bgcolor="#F0F0F0">
+    
+    <td colspan="2"><font size="+0"><pre  style="margin: 0px">&#36;ids = array();
+&#36;DB-&gt;select('SELECT name FROM tbl WHERE id IN(?a)', &#36;ids);
+<font color="green">// SELECT name FROM tbl WHERE id IN() - ОШИБКА!</font></pre></td>
+  </tr>
+</table></p>
+
+<p>Если в качестве параметра передан ассоциативный массив (ключи 
+массива не целочисленные, а строковые), DbSimple заменяет <nobr><tt>?a</tt></nobr>  
+набором пар <nobr><tt>ключ=значение</tt></nobr>. Это удобно использовать в UPDATE-запросах:
+
+
+<p><table cellspacing="1" cellpadding="6" border="0" align="center">
+  <tr bgcolor="#DDDDDD"> 
+  	
+    
+    <td width="100%"><font size=-1>
+    	<b>
+    		<a name="#list11" href="" title="Ссылка на текущий листинг.">Листинг 11</a>
+    	</b>
+    </td>
+    <td align="right" nowrap><font size=-1><a href="" onclick="
+      if (document.body.createTextRange) {
+        var BodyRange = document.body.createTextRange(); 
+        BodyRange.moveToElementText(this.parentNode.parentNode.parentNode.nextSibling.firstChild); 
+        BodyRange.execCommand('Copy');  
+        alert('Код скопирован в буфер обмена Windows.');
+      } else {
+        alert('Ваш браузер не поддерживает операции с буфером обмена.');
+      }
+      return false;
+    "><span class="genmed">скопировать код в буфер обмена</span></a></td>
+  </tr>
+  <tr bgcolor="#F0F0F0">
+    
+    <td colspan="2"><font size="+0"><pre  style="margin: 0px">&#36;row = array(
+  'id'   =&gt; 10,
+  'date' =&gt; "2006-03-02"
+);
+&#36;DB-&gt;query('UPDATE tbl SET ?a', &#36;row);
+<font color="green">// MySQL: UPDATE tbl SET `id`='10', `date`='2006-03-02'</font></pre></td>
+  </tr>
+</table></p>
+
+
+
+<h3><a name=cont10></a>Дополнительные placeholder-ы</h3>
+
+<p>Для удобства работы DbSimple поддерживает еще целый набор видов 
+placeholder-ов, которые будут описаны далее. Они используются значительно
+реже и, как правило, позволяют просто сократить письмо. Если вы думаете,
+что все это слишком сложно для понимания, — не используйте дополнительные 
+placeholder-ы.
+
+
+
+<h4><a name=cont11></a>Префиксный: ?_</h4>
+
+<p>Часто все имена таблиц, используемых в программе, имеют один
+и тот же префикс. Например, в форуме phpBB этот префикс, как правило, 
+равен <nobr><tt>phpbb_</tt></nobr>, и таблицы называются <nobr><tt>phpbb_users</tt></nobr>, <nobr><tt>phpbb_sessions</tt></nobr> и 
+т.&nbsp;д. Это делается для того, чтобы в одной базе данных можно было хранить
+сразу несколько наборов таблиц для разных форумов, избегая конфликтов 
+имен.
+
+<p>Префиксный placeholder заменяется на некоторое фиксированное значение, 
+ранее установленное для объекта базы данных:
+
+
+<p><table cellspacing="1" cellpadding="6" border="0" align="center">
+  <tr bgcolor="#DDDDDD"> 
+  	
+    
+    <td width="100%"><font size=-1>
+    	<b>
+    		<a name="#list12" href="" title="Ссылка на текущий листинг.">Листинг 12</a>
+    	</b>
+    </td>
+    <td align="right" nowrap><font size=-1><a href="" onclick="
+      if (document.body.createTextRange) {
+        var BodyRange = document.body.createTextRange(); 
+        BodyRange.moveToElementText(this.parentNode.parentNode.parentNode.nextSibling.firstChild); 
+        BodyRange.execCommand('Copy');  
+        alert('Код скопирован в буфер обмена Windows.');
+      } else {
+        alert('Ваш браузер не поддерживает операции с буфером обмена.');
+      }
+      return false;
+    "><span class="genmed">скопировать код в буфер обмена</span></a></td>
+  </tr>
+  <tr bgcolor="#F0F0F0">
+    
+    <td colspan="2"><font size="+0"><pre  style="margin: 0px">define(TABLE_PREFIX, 'phpbb_'); <font color="green">// с подчерком!</font>
+&#36;DB-&gt;setIdentPrefix(TABLE_PREFIX); 
+...
+&#36;DB-&gt;select('SELECT * FROM ?_users');
+<font color="green">// SELECT * FROM phpbb_users</font>
+
+<font color="green">// Сравните:</font>
+&#36;DB-&gt;select('SELECT * FROM '.TABLE_PREFIX.'_users');</pre></td>
+  </tr>
+</table></p>
+
+<p><table border=0>
+<tr valign=top>
+<td><nobr><img src="DbSimple/teapot00.gif" alt="Чайник" width="40" height="40">&nbsp;</td>
+<td><p><i>
+Если быть точным, <nobr><tt>?_</tt></nobr> не является обычным placeholder-ом, т.к. для него
+очередное значение не извлекается из списка параметров, а берется из
+другого источника. Это скорее удобная макроподстановка.
+</p></td>
+</tr>
+</table></p>
+
+
+
+<h4><a name=cont12></a>Идентификаторный: ?#</h4>
+
+<p>Ключевые слова SQL, такие как <nobr><tt>date</tt></nobr>, <nobr><tt>int</tt></nobr> и т.&nbsp;д., не могут использоваться в 
+качестве имен полей и таблиц. Например, у вас не получится создать в таблице
+столбец с именем <nobr><tt>date</tt></nobr>. Тем не менее, многие СУБД предлагают способы,
+позволяющие все же ссылаться на подобные объекты. Имена идентификаторов
+следует окружить теми или иными ограничителями:
+
+<ul>
+<li>MySQL использует обратные апострофы (backticks): table.`date`.
+<li>FireBird заставляет применять кавычки: table."date".
+<li>Microsoft SQL Server использует квадратные скобки: table.[date].
+</ul>
+
+<p>Идентификаторный placeholder заставляет СУБД воспринимать значение 
+как идентификатор:
+
+
+<p><table cellspacing="1" cellpadding="6" border="0" align="center">
+  <tr bgcolor="#DDDDDD"> 
+  	
+    
+    <td width="100%"><font size=-1>
+    	<b>
+    		<a name="#list13" href="" title="Ссылка на текущий листинг.">Листинг 13</a>
+    	</b>
+    </td>
+    <td align="right" nowrap><font size=-1><a href="" onclick="
+      if (document.body.createTextRange) {
+        var BodyRange = document.body.createTextRange(); 
+        BodyRange.moveToElementText(this.parentNode.parentNode.parentNode.nextSibling.firstChild); 
+        BodyRange.execCommand('Copy');  
+        alert('Код скопирован в буфер обмена Windows.');
+      } else {
+        alert('Ваш браузер не поддерживает операции с буфером обмена.');
+      }
+      return false;
+    "><span class="genmed">скопировать код в буфер обмена</span></a></td>
+  </tr>
+  <tr bgcolor="#F0F0F0">
+    
+    <td colspan="2"><font size="+0"><pre  style="margin: 0px">&#36;DB-&gt;select('SELECT ?# FROM tbl', 'date');
+<font color="green">// MySQL: SELECT `date` FROM tbl</font>
+<font color="green">// FireBird: SELECT "date" FROM tbl</font>
+
+&#36;DB-&gt;select('SELECT ID AS ?# FROM tbl', 'this is ID');
+<font color="green">// MySQL: SELECT ID AS `this is ID` FROM tbl</font>
+<font color="green">// FireBird: SELECT ID AS "this is ID" FROM tbl</font></pre></td>
+  </tr>
+</table></p>
+
+<p>Конечно, использование идентификаторного placeholder-а полностью защищает
+от уязвимостей вида SQL Injection. Передаваемый параметр обрамляется
+«идентификаторными кавычками», а если они встречаются в нем самом, то 
+экранируются специфичным для СУБД образом.
+
+<p><table border=0>
+<tr valign=top>
+<td><nobr><img src="DbSimple/exclam00.gif" alt="Лирическое отступление" width="32" height="32">&nbsp;</td>
+<td><p><i>
+Правила экранирования определятюся тем же самым виртуальным методом <nobr><tt>escape()</tt></nobr>. 
+Для экранирования в стиле идентификаторов второй параметр полагается равным <nobr><tt>true</tt></nobr>.
+</i></td>
+</tr>
+</table></p>
+
+
+
+<h4><a name=cont13></a>Идентификаторно-списковый: ?#</h4>
+
+<p>Уже знакомый нам идентификаторный placeholder <nobr><tt>?#</tt></nobr> может принимать в качестве 
+значения не только строку, но также и массив (список значений). Это очень удобно для 
+формирования INSERT-запросов в соответствии со стандартом SQL'92:
+
+
+<p><table cellspacing="1" cellpadding="6" border="0" align="center">
+  <tr bgcolor="#DDDDDD"> 
+  	
+    
+    <td width="100%"><font size=-1>
+    	<b>
+    		<a name="#list14" href="" title="Ссылка на текущий листинг.">Листинг 14</a>
+    	</b>
+    </td>
+    <td align="right" nowrap><font size=-1><a href="" onclick="
+      if (document.body.createTextRange) {
+        var BodyRange = document.body.createTextRange(); 
+        BodyRange.moveToElementText(this.parentNode.parentNode.parentNode.nextSibling.firstChild); 
+        BodyRange.execCommand('Copy');  
+        alert('Код скопирован в буфер обмена Windows.');
+      } else {
+        alert('Ваш браузер не поддерживает операции с буфером обмена.');
+      }
+      return false;
+    "><span class="genmed">скопировать код в буфер обмена</span></a></td>
+  </tr>
+  <tr bgcolor="#F0F0F0">
+    
+    <td colspan="2"><font size="+0"><pre  style="margin: 0px">&#36;row = array('id' =&gt; 101, 'name' =&gt; 'Rabbit', 'age' =&gt; 30);
+&#36;DB-&gt;query('INSERT INTO table(?#) VALUES(?a)', array_keys(&#36;row), array_values(&#36;row));</pre></td>
+  </tr>
+</table></p>
+
+<p>В зависимости от того, передаете вы placeholder-у <nobr><tt>?#</tt></nobr> массив или строку, он 
+"развернется" в список идентификаторов или в единственный идентификатор соответственно.
+
+<p><table border=0>
+<tr valign=top>
+<td><nobr><img src="DbSimple/teapot00.gif" alt="Чайник" width="40" height="40">&nbsp;</td>
+<td><p><i>
+Вы можете спросить, почему же для вставки списка значений используется отдельный 
+placeholder <nobr><tt>?a</tt></nobr>, а для списка идентификаторов — тот же самый <nobr><tt>?#</tt></nobr>. Ответ достаточно 
+прост: применение <nobr><tt>?</tt></nobr> для обработки и скаляра, и списка небезопасно, т.к. данные могут быть получены 
+из формы и представлены злоумышленником в виде массива. Например, можно передать 
+<nobr><tt>id[]=1&id[]=2</tt></nobr> вместо <nobr><tt>id=1</tt></nobr> в QUERY_STRING и "сломать" запрос <nobr><tt>$DB-&gt;select('SELECT * FROM table WHERE id=?', $_GET['id'])</tt></nobr>. 
+В то же время, "фальсифицировать" передачу списка идентификаторов вместо единственного значения 
+практически невозможно.
+</p></td>
+</tr>
+</table></p>
+
+
+
+<h4><a name=cont14></a>Целочисленный: ?d</h4>
+
+<p>Переданный параметр преобразуется в целое цисло и вставляется без 
+обрамления апострофами. В случае ошибки конвертирования вставляется 0.
+
+<p><table border=0>
+<tr valign=top>
+<td><nobr><img src="DbSimple/teapot00.gif" alt="Чайник" width="40" height="40">&nbsp;</td>
+<td><p><i>
+Может возникнуть вопрос, зачем нужны целочисленные placeholder-ы, если
+СУБД и так умеют преобразовывать строки в числа? Например, MySQL 
+конвертирует '10' в 10 при вставке в числовое поле. Оказывается, это
+верно не для всех существующих в мире СУБД. Кроме того, предложение
+<nobr><tt>FIRST ? SKIP ?</tt></nobr> FireBird (или <nobr><tt>LIMIT ?, ?</tt></nobr> MySQL) требует обязательной
+подстановки чисел, а не строк.
+</p></td>
+</tr>
+</table></p>
+
+
+
+<h4><a name=cont15></a>Вещественный (дробный): ?f</h4>
+
+<p>Вещественный placeholder можно использовать для передачи дробных (вещественных)
+чисел в СУБД. В зависимости от локальных настроек для разделения компонент
+PHP использует либо точку, либо запятую, в то время как стандарт SQL требует
+обязательного использования точки безотносительно к локальным настройкам. Чтобы 
+не связываться с локальными настройками, просто применяйте дробный placeholder.
+
+
+
+<h4><a name=cont16></a>Ссылочный: ?n</h4>
+
+<p>В большинстве таблиц, с которыми приходится работать, присутствует 
+целочисленный столбец с именем <nobr><tt>ID</tt></nobr> — <i>первичный ключ</i> данной таблицы. 
+На этот столбец устанавливают уникальный индекс и "навешивают" 
+<nobr><tt>auto_increment</tt></nobr> (MySQL) или триггеры-генераторы (остальные СУБД), чтобы
+при вставке очередной записи в таблицу она автоматически получала 
+уникальный номер (как правило, отличный от нуля).
+
+<p>На первичный ключ очень удобно ссылаться из другой (или из той же самой) 
+таблицы, такие ссылки называют <i>внешними ключами</i>. Например, у нас 
+может быть таблица <nobr><tt>forest</tt></nobr> с полями <nobr><tt>(ID, PARENT_ID, NAME)</tt></nobr>, 
+определяющая множество деревьев. Чтобы не нарушать ссылочной целостности, 
+корневой элемент каждого дерева должен иметь <nobr><tt>PARENT_ID=NULL</tt></nobr>.
+
+<p>Предположим, мы пишем скрипт, который вставляет в <nobr><tt>forest</tt></nobr> 
+новую запись. ID родительского узла передается так: 
+<nobr><tt>http://example.com/tree.php?parent=123</tt></nobr>. Что делать, когда нам нужно
+передать NULL в качестве идентификатора родителя?
+
+
+<p><table cellspacing="1" cellpadding="6" border="0" align="center">
+  <tr bgcolor="#DDDDDD"> 
+  	
+    
+    <td width="100%"><font size=-1>
+    	<b>
+    		<a name="#list15" href="" title="Ссылка на текущий листинг.">Листинг 15</a>
+    	</b>
+    </td>
+    <td align="right" nowrap><font size=-1><a href="" onclick="
+      if (document.body.createTextRange) {
+        var BodyRange = document.body.createTextRange(); 
+        BodyRange.moveToElementText(this.parentNode.parentNode.parentNode.nextSibling.firstChild); 
+        BodyRange.execCommand('Copy');  
+        alert('Код скопирован в буфер обмена Windows.');
+      } else {
+        alert('Ваш браузер не поддерживает операции с буфером обмена.');
+      }
+      return false;
+    "><span class="genmed">скопировать код в буфер обмена</span></a></td>
+  </tr>
+  <tr bgcolor="#F0F0F0">
+    
+    <td colspan="2"><font size="+0"><pre  style="margin: 0px">&#36;DB-&gt;query(
+  'INSERT INTO forest(PARENT_ID, NAME) VALUES(?, ?)', 
+  (&#36;_GET['parent']? &#36;_GET['parent'] : null), &#36;name
+);</pre></td>
+  </tr>
+</table></p>
+
+<p>Теперь можно передать в GET-параметр <nobr><tt>parent</tt></nobr> значение "" или 0 для вставки NULL.
+
+<p>Ссылочный placeholder позволяет немного упростить письмо:
+
+
+<p><table cellspacing="1" cellpadding="6" border="0" align="center">
+  <tr bgcolor="#DDDDDD"> 
+  	
+    
+    <td width="100%"><font size=-1>
+    	<b>
+    		<a name="#list16" href="" title="Ссылка на текущий листинг.">Листинг 16</a>
+    	</b>
+    </td>
+    <td align="right" nowrap><font size=-1><a href="" onclick="
+      if (document.body.createTextRange) {
+        var BodyRange = document.body.createTextRange(); 
+        BodyRange.moveToElementText(this.parentNode.parentNode.parentNode.nextSibling.firstChild); 
+        BodyRange.execCommand('Copy');  
+        alert('Код скопирован в буфер обмена Windows.');
+      } else {
+        alert('Ваш браузер не поддерживает операции с буфером обмена.');
+      }
+      return false;
+    "><span class="genmed">скопировать код в буфер обмена</span></a></td>
+  </tr>
+  <tr bgcolor="#F0F0F0">
+    
+    <td colspan="2"><font size="+0"><pre  style="margin: 0px">&#36;DB-&gt;query(
+  'INSERT INTO forest(PARENT_ID, NAME) VALUES(?n, ?)', 
+  &#36;_GET['parent'], &#36;name
+);</pre></td>
+  </tr>
+</table></p>
+
+<p>Подставляемое значение преобразуется в целое число. Если это число
+равно нулю, то вместо него подставляется <nobr><tt>NULL</tt></nobr>, иначе — оно само.
+
+<p><table border=0>
+<tr valign=top>
+<td><nobr><img src="DbSimple/exclam00.gif" alt="Лирическое отступление" width="32" height="32">&nbsp;</td>
+<td><p><i>
+Ссылочный placeholder крайне удобно применять для "выправления" баз данных
+MySQL типа MyISAM, если для "узлов-сирот" применялся не <nobr><tt>NULL</tt></nobr> в качестве
+родителя, а обычный 0. К сожалению, такое часто встречается на практике, т.к. 
+MyISAM, в отличие от BDB и InnoDB, не поддерживает ссылочную целостность,
+а написать <nobr><tt>PARENT_ID=?</tt></nobr> вместо <nobr><tt>PARENT_ID&lt;=&gt;?</tt></nobr> бывает весьма заманчиво. 
+(См. <a href="http://dev.mysql.com/doc/refman/5.0/en/comparison-operators.html">документацию MySQL</a> на операторы <nobr><tt>IS_NULL</tt></nobr> и &lt;=&gt; в отношении NULL-значений.)
+</i></td>
+</tr>
+</table></p>
+
+
+
+
+
+<h3><a name=cont17></a>«Родные» placeholder-ы базы</h3>
+
+<p>Некоторые СУБД (например, InterBase/FireBird) сами поддерживают 
+placeholder-ы. Правда, их набор обычно ограничивается одним-единственным
+видом: скалярным placeholder-ом "?", применяемым как для строк, так и для
+целых и дробных чисел:
+
+
+<p><table cellspacing="1" cellpadding="6" border="0" align="center">
+  <tr bgcolor="#DDDDDD"> 
+  	
+    
+    <td width="100%"><font size=-1>
+    	<b>
+    		<a name="#list17" href="" title="Ссылка на текущий листинг.">Листинг 17</a>
+    	</b>
+    </td>
+    <td align="right" nowrap><font size=-1><a href="" onclick="
+      if (document.body.createTextRange) {
+        var BodyRange = document.body.createTextRange(); 
+        BodyRange.moveToElementText(this.parentNode.parentNode.parentNode.nextSibling.firstChild); 
+        BodyRange.execCommand('Copy');  
+        alert('Код скопирован в буфер обмена Windows.');
+      } else {
+        alert('Ваш браузер не поддерживает операции с буфером обмена.');
+      }
+      return false;
+    "><span class="genmed">скопировать код в буфер обмена</span></a></td>
+  </tr>
+  <tr bgcolor="#F0F0F0">
+    
+    <td colspan="2"><font size="+0"><pre  style="margin: 0px">ibase_query(&#36;link, 'SELECT * FROM tbl WHERE id=?', 100);</pre></td>
+  </tr>
+</table></p>
+
+<p>Естественно, быстродействие от применения "родных" placeholder-ов 
+базы только увеличивается (нет необходимости преобразовывать данные
+в строковой SQL-запрос), поэтому DbSimple, где это возможно, 
+применяет встроенные placeholder-ы. Например, их поддержка реализована
+в модуле работы с InterBase.
+
+<p><table border=0>
+<tr valign=top>
+<td><nobr><img src="DbSimple/teapot00.gif" alt="Чайник" width="40" height="40">&nbsp;</td>
+<td><p><i>
+Отдельную сложность при работе с "родными" placeholder-ами составляет
+логирование запросов к СУБД, также поддерживаемое DbSimple. Действительно,
+в журнал должны идти запросы с уже проставленными параметрами. Поэтому
+DbSimple при включенном логировании "расширяет" placeholder-ы самостоятельно.
+</p></td>
+</tr>
+</table></p>
+
+<p>В качестве "родных" placeholder-ов могут использоваться только строковой 
+(<nobr><tt>?</tt></nobr>) и численный (<nobr><tt>?d</tt></nobr> и <nobr><tt>?f</tt></nobr>) placeholder-ы. Все остальные типы (в том 
+числе списковый, идентификаторный и т.&nbsp;д.) по-прежнему обрабатываются самой
+библиотекой DbSimple.
+
+
+
+<h3><a name=cont18></a>Выполнение запросов к БД</h3>
+
+<p>Библиотека DbSimple имеет в своем имени слово simple ("простой") потому,
+что она максимально упрощает процедуру выполнения запросов к базе данных.
+
+
+
+<h4><a name=cont19></a>Выборка всего результата: select()</h4>
+
+<p>Данный метод является самым простым и универсальным. С его помощью вы можете
+выполнить запрос к базе данных и (если это SELECT-запрос) получить в двумерный
+массив все строки результата операции.
+
+
+<p><table cellspacing="1" cellpadding="6" border="0" align="center">
+  <tr bgcolor="#DDDDDD"> 
+  	
+    
+    <td width="100%"><font size=-1>
+    	<b>
+    		<a name="#list18" href="" title="Ссылка на текущий листинг.">Листинг 18</a>
+    	</b>
+    </td>
+    <td align="right" nowrap><font size=-1><a href="" onclick="
+      if (document.body.createTextRange) {
+        var BodyRange = document.body.createTextRange(); 
+        BodyRange.moveToElementText(this.parentNode.parentNode.parentNode.nextSibling.firstChild); 
+        BodyRange.execCommand('Copy');  
+        alert('Код скопирован в буфер обмена Windows.');
+      } else {
+        alert('Ваш браузер не поддерживает операции с буфером обмена.');
+      }
+      return false;
+    "><span class="genmed">скопировать код в буфер обмена</span></a></td>
+  </tr>
+  <tr bgcolor="#F0F0F0">
+    
+    <td colspan="2"><font size="+0"><pre  style="margin: 0px">&#36;rows = &#36;DB-&gt;select(
+  'SELECT * FROM ?_users WHERE username LIKE ?', 'к%'
+);
+foreach (&#36;rows as &#36;numRow=&gt;&#36;row) {
+  foreach (&#36;row as &#36;colName=&gt;&#36;cellValue) {
+    echo "&#36;numRow: &#36;colName = &#36;cellValue&lt;br&gt;";
+  }
+}</pre></td>
+  </tr>
+</table></p>
+
+<p>Если вам не нужны все строки результата, ограничьте выборку стаднартными
+средствами SQL — например, предложением <nobr><tt>LIMIT</tt></nobr> в MySQL:
+
+
+<p><table cellspacing="1" cellpadding="6" border="0" align="center">
+  <tr bgcolor="#DDDDDD"> 
+  	
+    
+    <td width="100%"><font size=-1>
+    	<b>
+    		<a name="#list19" href="" title="Ссылка на текущий листинг.">Листинг 19</a>
+    	</b>
+    </td>
+    <td align="right" nowrap><font size=-1><a href="" onclick="
+      if (document.body.createTextRange) {
+        var BodyRange = document.body.createTextRange(); 
+        BodyRange.moveToElementText(this.parentNode.parentNode.parentNode.nextSibling.firstChild); 
+        BodyRange.execCommand('Copy');  
+        alert('Код скопирован в буфер обмена Windows.');
+      } else {
+        alert('Ваш браузер не поддерживает операции с буфером обмена.');
+      }
+      return false;
+    "><span class="genmed">скопировать код в буфер обмена</span></a></td>
+  </tr>
+  <tr bgcolor="#F0F0F0">
+    
+    <td colspan="2"><font size="+0"><pre  style="margin: 0px">&#36;rows = &#36;DB-&gt;select('SELECT * FROM ?_users LIMIT 10');
+foreach (&#36;rows as &#36;numRow=&gt;&#36;row) {
+  ...
+}</pre></td>
+  </tr>
+</table></p>
+
+<p><table border=0>
+<tr valign=top>
+<td><nobr><img src="DbSimple/exclam00.gif" alt="Лирическое отступление" width="32" height="32">&nbsp;</td>
+<td><p><i>
+Обратите внимание, что промежуточный слой абстракции "объект-результат"
+не используется, а выборка в любом случае производится полностью, от
+первой записи до последней. Это сделано совсем не случайно: я имею
+твердую уверенность, что данный слой абстракции в скриптах совершенно
+излишен и только запутывает программу. Хотите ограничить выборку или
+устроить выборочную навигацию по результату (seeking) — используйте
+для этого средства SQL, а не PHP.
+</i></td>
+</tr>
+</table></p>
+
+
+
+<h5><a name=cont20></a>Выборка ассоциативного массива</h5>
+
+<p>Результат выборки, который попал в <nobr><tt>$rows</tt></nobr> (см. предыдущий пример),
+является <i>списком массивов</i>. Иными словами, ключи <nobr><tt>$rows</tt></nobr> — 
+целые числа, большие либо равные нулю и идущие по порядку.
+
+<p>В ряде случаев оказывается удобным индексировать результат не целыми
+числами, а ассоциативными значениями, взятыми в одном из столбцов 
+выборки. Например, если мы выбираем пользователей, в качестве ключа 
+может быть использован их primary key в базе (идентификатор).
+
+<p>Чтобы DbSimple сформировал ассоциативный массив, а не список, 
+используйте для столбца фиксированное имя <nobr><tt>ARRAY_KEY</tt></nobr>:
+
+
+<p><table cellspacing="1" cellpadding="6" border="0" align="center">
+  <tr bgcolor="#DDDDDD"> 
+  	
+    
+    <td width="100%"><font size=-1>
+    	<b>
+    		<a name="#list20" href="" title="Ссылка на текущий листинг.">Листинг 20</a>
+    	</b>
+    </td>
+    <td align="right" nowrap><font size=-1><a href="" onclick="
+      if (document.body.createTextRange) {
+        var BodyRange = document.body.createTextRange(); 
+        BodyRange.moveToElementText(this.parentNode.parentNode.parentNode.nextSibling.firstChild); 
+        BodyRange.execCommand('Copy');  
+        alert('Код скопирован в буфер обмена Windows.');
+      } else {
+        alert('Ваш браузер не поддерживает операции с буфером обмена.');
+      }
+      return false;
+    "><span class="genmed">скопировать код в буфер обмена</span></a></td>
+  </tr>
+  <tr bgcolor="#F0F0F0">
+    
+    <td colspan="2"><font size="+0"><pre  style="margin: 0px">&#36;rows = &#36;DB-&gt;select(
+  'SELECT user_id AS ARRAY_KEY, * FROM ?_users'
+);
+foreach (&#36;rows as &#36;userId=&gt;&#36;userData) {
+  ...
+}
+echo &#36;rows[&#36;_REQUEST['uid']]['username'];
+echo &#36;rows[&#36;_REQUEST['uid']]['ARRAY_KEY']; <font color="green">// ошибка: нет поля</font></pre></td>
+  </tr>
+</table></p>
+
+<p>По наличию столбца с именем <nobr><tt>ARRAY_KEY</tt></nobr> библиотека определит, какой
+формат данных вы ожидаете получить, и произведет соответствующие 
+преобразования. Т.к. этот столбец является служебным, он сам в результат
+выборки не попадет (см. последнюю строчку примера).
+
+
+<h5><a name=cont21></a>Выборка многомерного массива</h5>
+
+<p>Если результат выборки необходимо оформить в виде многомерного ассоциативного 
+массива, используйте следующий синтаксис:
+
+
+<p><table cellspacing="1" cellpadding="6" border="0" align="center">
+  <tr bgcolor="#DDDDDD"> 
+  	
+    
+    <td width="100%"><font size=-1>
+    	<b>
+    		<a name="#list21" href="" title="Ссылка на текущий листинг.">Листинг 21</a>
+    	</b>
+    </td>
+    <td align="right" nowrap><font size=-1><a href="" onclick="
+      if (document.body.createTextRange) {
+        var BodyRange = document.body.createTextRange(); 
+        BodyRange.moveToElementText(this.parentNode.parentNode.parentNode.nextSibling.firstChild); 
+        BodyRange.execCommand('Copy');  
+        alert('Код скопирован в буфер обмена Windows.');
+      } else {
+        alert('Ваш браузер не поддерживает операции с буфером обмена.');
+      }
+      return false;
+    "><span class="genmed">скопировать код в буфер обмена</span></a></td>
+  </tr>
+  <tr bgcolor="#F0F0F0">
+    
+    <td colspan="2"><font size="+0"><pre  style="margin: 0px">&#36;messagesByTopics = &#36;DB-&gt;select('
+    SELECT 
+        message_topic_id AS ARRAY_KEY_1,
+        message_id AS ARRAY_KEY_2,
+        message_subject, message_text
+    FROM 
+        ?_message
+');</pre></td>
+  </tr>
+</table></p>
+
+<p>На выходе получится <i>двумерный</i> ассоциативный массив: <nobr><tt>$messagesByForumsAndTopics[topicId][messageId] = messageData</tt></nobr>. 
+Поле <nobr><tt>message_topic_id</tt></nobr>, объявленное как <nobr><tt>ARRAY_KEY_1</tt></nobr>, стало первым индексом массива, а поле <nobr><tt>message_id</tt></nobr> (<nobr><tt>ARRAY_KEY_2</tt></nobr>) — вторым.
+
+<p>Существует и специальный вариант данного синтаксиса, позволяющий формировать индексы массивов в возрастающем порядке,
+а не на основе величины, полученной из БД:
+
+
+<p><table cellspacing="1" cellpadding="6" border="0" align="center">
+  <tr bgcolor="#DDDDDD"> 
+  	
+    
+    <td width="100%"><font size=-1>
+    	<b>
+    		<a name="#list22" href="" title="Ссылка на текущий листинг.">Листинг 22</a>
+    	</b>
+    </td>
+    <td align="right" nowrap><font size=-1><a href="" onclick="
+      if (document.body.createTextRange) {
+        var BodyRange = document.body.createTextRange(); 
+        BodyRange.moveToElementText(this.parentNode.parentNode.parentNode.nextSibling.firstChild); 
+        BodyRange.execCommand('Copy');  
+        alert('Код скопирован в буфер обмена Windows.');
+      } else {
+        alert('Ваш браузер не поддерживает операции с буфером обмена.');
+      }
+      return false;
+    "><span class="genmed">скопировать код в буфер обмена</span></a></td>
+  </tr>
+  <tr bgcolor="#F0F0F0">
+    
+    <td colspan="2"><font size="+0"><pre  style="margin: 0px">&#36;usersByCity = &#36;DB-&gt;select('
+    SELECT 
+        city_id AS ARRAY_KEY_1, 
+        NULL AS ARRAY_KEY_2,
+        user_name, user_email
+    FROM 
+        ?_user
+');</pre></td>
+  </tr>
+</table></p>
+
+<p>В данном примере будет получен <i>массив списков пользователей</i> <nobr><tt>$usersByCity[cityId][] = userData</tt></nobr>. Т.е. каждый 
+элемент массива, соответствующий некоторому городу, содержит <i>обычный список</i> записей с данными пользователей. Мы достигли
+получения обычного списка, передав <nobr><tt>NULL</tt></nobr> в качестве <nobr><tt>ARRAY_KEY_2</tt></nobr>.
+
+<p><table border=0>
+<tr valign=top>
+<td><nobr><img src="DbSimple/exclam00.gif" alt="Лирическое отступление" width="32" height="32">&nbsp;</td>
+<td><p><i>
+Вообще, специальными являются все поля вида <nobr><tt>ARRAY_KEY*</tt></nobr> (здесь "*" означает "любой текст"). Перед формированием индексов
+ассоциативного массива эти поля сортируются в алфавитном порядке, так что <nobr><tt>ARRAY_KEY_1</tt></nobr> всегда будет более "ранним" индексом,
+чем <nobr><tt>ARRAY_KEY_2</tt></nobr>.
+</i></td>
+</tr>
+</table></p>
+
+
+<h5><a name=cont22></a>Выборка связанного дерева</h5>
+
+<p>Иногда в таблице хранится древовидная структура: каждая запись содержит
+поле <nobr><tt>parent_id</tt></nobr>, ссылающееся на ID родительского элемента. DbSimple 
+облегчает выборку и такой структуры, формируя вложенные древовидным 
+образом массивы:
+
+
+<p><table cellspacing="1" cellpadding="6" border="0" align="center">
+  <tr bgcolor="#DDDDDD"> 
+  	
+    
+    <td width="100%"><font size=-1>
+    	<b>
+    		<a name="#list23" href="" title="Ссылка на текущий листинг.">Листинг 23</a>
+    	</b>
+    </td>
+    <td align="right" nowrap><font size=-1><a href="" onclick="
+      if (document.body.createTextRange) {
+        var BodyRange = document.body.createTextRange(); 
+        BodyRange.moveToElementText(this.parentNode.parentNode.parentNode.nextSibling.firstChild); 
+        BodyRange.execCommand('Copy');  
+        alert('Код скопирован в буфер обмена Windows.');
+      } else {
+        alert('Ваш браузер не поддерживает операции с буфером обмена.');
+      }
+      return false;
+    "><span class="genmed">скопировать код в буфер обмена</span></a></td>
+  </tr>
+  <tr bgcolor="#F0F0F0">
+    
+    <td colspan="2"><font size="+0"><pre  style="margin: 0px">&#36;forest = &#36;DB-&gt;select('
+  SELECT 
+    user_id   AS ARRAY_KEY, 
+    parent_id AS PARENT_KEY,
+    * 
+  FROM ?_users
+');</pre></td>
+  </tr>
+</table></p>
+
+<p>Строго говоря, на выходе в <nobr><tt>$forest</tt></nobr> мы получаем не дерево, а <i>лес</i> — 
+набор однокоренных деревьев. Дело в том, что в результатах выборки могут
+присутствовать сразу несколько элементов, не имеющих родителей.
+Все такие элементы объявляются вершинами дерева, а их "дети" строятся
+по правилу: <nobr><tt>PARENT_KEY</tt></nobr> "ребенка" равен <nobr><tt>ARRAY_KEY</tt></nobr> "родителя".
+
+<p>У каждого элемента результирующего массива, помимо его собственных
+данных (в нашем случае это <nobr><tt>*</tt></nobr> — все поля записи), имеется запись
+с ключом <nobr><tt>childNodes</tt></nobr>. В ней-то и содержится массив всех "детей"
+текущего элемента (или пустой массив, если это листовая вершина).
+
+
+
+<h4><a name=cont23></a>Выборка строки: selectRow()</h4>
+
+<p>Выше мы видели, что, используя один-единственный метод <nobr><tt>select()</tt></nobr>,
+можно осуществлять любые выборки из базы данных, по желанию форматируя
+их в виде ассоциативного массива или дерева.
+
+<p>Часто бывают случаи, когда выборка гарантировано состоит из одной 
+записи. Предположим, у нас есть ID некоторого объекта, и мы хотим
+получить данные его полей. Можно для этого воспользоваться методом 
+<nobr><tt>select()</tt></nobr>, а потом взять первую строку результата, однако удобнее
+будет применить метод <nobr><tt>selectRow()</tt></nobr>:
+
+
+<p><table cellspacing="1" cellpadding="6" border="0" align="center">
+  <tr bgcolor="#DDDDDD"> 
+  	
+    
+    <td width="100%"><font size=-1>
+    	<b>
+    		<a name="#list24" href="" title="Ссылка на текущий листинг.">Листинг 24</a>
+    	</b>
+    </td>
+    <td align="right" nowrap><font size=-1><a href="" onclick="
+      if (document.body.createTextRange) {
+        var BodyRange = document.body.createTextRange(); 
+        BodyRange.moveToElementText(this.parentNode.parentNode.parentNode.nextSibling.firstChild); 
+        BodyRange.execCommand('Copy');  
+        alert('Код скопирован в буфер обмена Windows.');
+      } else {
+        alert('Ваш браузер не поддерживает операции с буфером обмена.');
+      }
+      return false;
+    "><span class="genmed">скопировать код в буфер обмена</span></a></td>
+  </tr>
+  <tr bgcolor="#F0F0F0">
+    
+    <td colspan="2"><font size="+0"><pre  style="margin: 0px">&#36;row = &#36;DB-&gt;selectRow(
+  'SELECT * FROM ?_users WHERE user_id=?', &#36;uid
+);
+<font color="green">// Теперь в &#36;row - массив вида имяПоля =&gt; значениеПоля.</font></pre></td>
+  </tr>
+</table></p>
+
+
+
+<h4><a name=cont24></a>Выборка ячейки: selectCell()</h4>
+
+<p>Иногда нам нужны данные в еще более простом формате, чем 
+выдает <nobr><tt>selectRow()</tt></nobr>. Например, мы хотим получить имя
+пользователя, зная его ID, и при этом совершенно не интересуемся
+всеми остальными его полями. Метод <nobr><tt>selectCell()</tt></nobr> подходит
+здесь как нельзя лучше:
+
+
+<p><table cellspacing="1" cellpadding="6" border="0" align="center">
+  <tr bgcolor="#DDDDDD"> 
+  	
+    
+    <td width="100%"><font size=-1>
+    	<b>
+    		<a name="#list25" href="" title="Ссылка на текущий листинг.">Листинг 25</a>
+    	</b>
+    </td>
+    <td align="right" nowrap><font size=-1><a href="" onclick="
+      if (document.body.createTextRange) {
+        var BodyRange = document.body.createTextRange(); 
+        BodyRange.moveToElementText(this.parentNode.parentNode.parentNode.nextSibling.firstChild); 
+        BodyRange.execCommand('Copy');  
+        alert('Код скопирован в буфер обмена Windows.');
+      } else {
+        alert('Ваш браузер не поддерживает операции с буфером обмена.');
+      }
+      return false;
+    "><span class="genmed">скопировать код в буфер обмена</span></a></td>
+  </tr>
+  <tr bgcolor="#F0F0F0">
+    
+    <td colspan="2"><font size="+0"><pre  style="margin: 0px">&#36;userName = &#36;DB-&gt;selectCell(
+  'SELECT username FROM ?_users WHERE user_id=?', &#36;uid
+);
+<font color="green">// В &#36;userName - строка, имя пользователя.</font></pre></td>
+  </tr>
+</table></p>
+
+
+
+<h4><a name=cont25></a>Выборка столбца: selectCol()</h4>
+
+<p>Последний вид форматирования результатов выборки — получение
+одного столбца. Метод <nobr><tt>selectCol()</tt></nobr> трактует результат как
+массив-столбец и возвращает данные в виде списка:
+
+
+<p><table cellspacing="1" cellpadding="6" border="0" align="center">
+  <tr bgcolor="#DDDDDD"> 
+  	
+    
+    <td width="100%"><font size=-1>
+    	<b>
+    		<a name="#list26" href="" title="Ссылка на текущий листинг.">Листинг 26</a>
+    	</b>
+    </td>
+    <td align="right" nowrap><font size=-1><a href="" onclick="
+      if (document.body.createTextRange) {
+        var BodyRange = document.body.createTextRange(); 
+        BodyRange.moveToElementText(this.parentNode.parentNode.parentNode.nextSibling.firstChild); 
+        BodyRange.execCommand('Copy');  
+        alert('Код скопирован в буфер обмена Windows.');
+      } else {
+        alert('Ваш браузер не поддерживает операции с буфером обмена.');
+      }
+      return false;
+    "><span class="genmed">скопировать код в буфер обмена</span></a></td>
+  </tr>
+  <tr bgcolor="#F0F0F0">
+    
+    <td colspan="2"><font size="+0"><pre  style="margin: 0px">&#36;cities = &#36;DB-&gt;selectCol('SELECT city_name FROM ?_cities');
+<font color="green">// В &#36;cities - список имен всех городов.</font></pre></td>
+  </tr>
+</table></p>
+
+<p>Можно также индексировать массив ассоциативными значениями, а не 
+целыми числами. Это делается при помощи служебного поля 
+с уже знакомым именем <nobr><tt>ARRAY_KEY</tt></nobr>:
+
+
+<p><table cellspacing="1" cellpadding="6" border="0" align="center">
+  <tr bgcolor="#DDDDDD"> 
+  	
+    
+    <td width="100%"><font size=-1>
+    	<b>
+    		<a name="#list27" href="" title="Ссылка на текущий листинг.">Листинг 27</a>
+    	</b>
+    </td>
+    <td align="right" nowrap><font size=-1><a href="" onclick="
+      if (document.body.createTextRange) {
+        var BodyRange = document.body.createTextRange(); 
+        BodyRange.moveToElementText(this.parentNode.parentNode.parentNode.nextSibling.firstChild); 
+        BodyRange.execCommand('Copy');  
+        alert('Код скопирован в буфер обмена Windows.');
+      } else {
+        alert('Ваш браузер не поддерживает операции с буфером обмена.');
+      }
+      return false;
+    "><span class="genmed">скопировать код в буфер обмена</span></a></td>
+  </tr>
+  <tr bgcolor="#F0F0F0">
+    
+    <td colspan="2"><font size="+0"><pre  style="margin: 0px">&#36;citiesById = &#36;DB-&gt;selectCol(
+  'SELECT city_id AS ARRAY_KEY, city_name FROM ?_cities'
+);
+foreach (&#36;citiesById as &#36;id=&gt;&#36;name) { ... }</pre></td>
+  </tr>
+</table></p>
+
+<p><table border=0>
+<tr valign=top>
+<td><nobr><img src="DbSimple/teapot00.gif" alt="Чайник" width="40" height="40">&nbsp;</td>
+<td><p><i>
+Кстати говоря, результат, полученный в предыдущем примере, можно
+"один-в-один" использовать вместе с библиотекой 
+<a href="http://dklab.ru/lib/HTML_FormPersister/">HTML_FormPersister</a>,
+сформировав из него выпадающий список городов (SELECT).
+</p></td>
+</tr>
+</table></p>
+
+
+
+<h4><a name=cont26></a>Выборка страницы: selectPage()</h4>
+
+<p>Организация страничного навигатора по некоторому результату выборки 
+может оказаться настоящей головной болью, если не знать, как оптимальнее 
+всего подойти к этому вопросу. Помимо выполнения запроса на получение 
+строк очередной страницы нужно дополнительно подсчитывать <i>общее</i> 
+число записей. Иными словами, нам нужен один запрос с предложением <nobr><tt>LIMIT</tt></nobr>, 
+и один — с выборкой <nobr><tt>COUNT(*)</tt></nobr>.
+
+<p>Метод <nobr><tt>selectPage()</tt></nobr> сводит эти две операции к одному вызову. С его
+помощью вы передаете СУБД запрос с необходимыми вам <nobr><tt>LIMIT</tt></nobr>-ограничениями,
+а библиотека дополнительно производит еще и <nobr><tt>COUNT</tt></nobr>-запрос:
+
+
+<p><table cellspacing="1" cellpadding="6" border="0" align="center">
+  <tr bgcolor="#DDDDDD"> 
+  	
+    
+    <td width="100%"><font size=-1>
+    	<b>
+    		<a name="#list28" href="" title="Ссылка на текущий листинг.">Листинг 28</a>
+    	</b>
+    </td>
+    <td align="right" nowrap><font size=-1><a href="" onclick="
+      if (document.body.createTextRange) {
+        var BodyRange = document.body.createTextRange(); 
+        BodyRange.moveToElementText(this.parentNode.parentNode.parentNode.nextSibling.firstChild); 
+        BodyRange.execCommand('Copy');  
+        alert('Код скопирован в буфер обмена Windows.');
+      } else {
+        alert('Ваш браузер не поддерживает операции с буфером обмена.');
+      }
+      return false;
+    "><span class="genmed">скопировать код в буфер обмена</span></a></td>
+  </tr>
+  <tr bgcolor="#F0F0F0">
+    
+    <td colspan="2"><font size="+0"><pre  style="margin: 0px">&#36;rows = &#36;DB-&gt;selectPage(
+  &#36;totalRows,
+  'SELECT * FROM ?_users LIMIT ?d, ?d',
+  &#36;from, &#36;pageSize
+);
+<font color="green">// Теперь:</font>
+<font color="green">// - в &#36;rows: данные очередной страницы</font>
+<font color="green">// - в &#36;totalRows: общее число записей в полной выборке</font></pre></td>
+  </tr>
+</table></p>
+
+<p>Обратите особое внимание, что первый параметр метода является 
+<b>ссылочным</b>: в переменную, указанную на его месте, 
+записывается общее число попадающих под запрос записей,
+без учета <nobr><tt>LIMIT</tt></nobr>-предложения.
+
+<p><table border=0>
+<tr valign=top>
+<td><nobr><img src="DbSimple/exclam00.gif" alt="Лирическое отступление" width="32" height="32">&nbsp;</td>
+<td><p><i>
+Метод <nobr><tt>selectPage()</tt></nobr> можно использовать только для «простых» SQL-запросов, 
+не содержащих предложение <nobr><tt>UNION</tt></nobr>. В противном случае результат не определен.
+</i></td>
+</tr>
+</table></p>
+
+
+<h4><a name=cont27></a>Выполнение обновлений: query()</h4>
+
+<p>Как видите, до сих пор повествование "крутилось" вокруг различных
+вариаций метода <nobr><tt>select()</tt></nobr>, предназначенного для организации выборок
+из базы данных (SELECT). Но ведь существуют еще и команды вставки
+(INSERT) и обновления (UPDATE) данных. Как быть с ними?
+
+<p>Библиотека DbSimple поддерживает метод <nobr><tt>query()</tt></nobr>, который удобно
+использовать именно для подобных запросов. А теперь — сюрприз: 
+<nobr><tt>query()</tt></nobr> является ни чем иным, как <i>полным синонимом</i> для 
+пресловутого <nobr><tt>select()</tt></nobr>. А называется он по-другому, чтобы не 
+пришлось думать: как это — <nobr><tt>INSERT</tt></nobr> в <nobr><tt>select()</tt></nobr>.
+
+<p>Метод <nobr><tt>query()</tt></nobr> (а значит, и <nobr><tt>select()</tt></nobr> тоже!) возвращает 
+различные значения для <nobr><tt>INSERT</tt></nobr> и <nobr><tt>UPDATE</tt></nobr>-запросов:
+
+<ul>
+<li>В <nobr><tt>UPDATE</tt></nobr>-запросах возвращается число строк, задействованных в
+обновлении. Оно вполне может быть нулевым, что не является признаком 
+ошибки.
+<li>В <nobr><tt>INSERT</tt></nobr>-запросах возвращается значение автоинкрементного поля
+(если оно имелось в таблице). Естественно, это работает только в СУБД,
+поддерживающих auto_increment (например, в MySQL).
+</ul>
+
+<p>Вот несколько примеров:
+
+
+<p><table cellspacing="1" cellpadding="6" border="0" align="center">
+  <tr bgcolor="#DDDDDD"> 
+  	
+    
+    <td width="100%"><font size=-1>
+    	<b>
+    		<a name="#list29" href="" title="Ссылка на текущий листинг.">Листинг 29</a>
+    	</b>
+    </td>
+    <td align="right" nowrap><font size=-1><a href="" onclick="
+      if (document.body.createTextRange) {
+        var BodyRange = document.body.createTextRange(); 
+        BodyRange.moveToElementText(this.parentNode.parentNode.parentNode.nextSibling.firstChild); 
+        BodyRange.execCommand('Copy');  
+        alert('Код скопирован в буфер обмена Windows.');
+      } else {
+        alert('Ваш браузер не поддерживает операции с буфером обмена.');
+      }
+      return false;
+    "><span class="genmed">скопировать код в буфер обмена</span></a></td>
+  </tr>
+  <tr bgcolor="#F0F0F0">
+    
+    <td colspan="2"><font size="+0"><pre  style="margin: 0px"><font color="green">// Обновляем запись.</font>
+&#36;DB-&gt;query(
+  'UPDATE ?_users SET ?a WHERE user_id=?',
+  &#36;userData, &#36;userData['user_id']
+);
+<font color="green">// Вставляем запись (MySQL).</font>
+&#36;userId = &#36;DB-&gt;query('INSERT INTO ?_users SET ?a', &#36;userData);</pre></td>
+  </tr>
+</table></p>
+
+
+<h4><a name=cont28></a><a name="errhandle"></a>Обработка ошибок в запросах</h4>
+
+<p><a href="">Выше</a> было сказано, что при возникновении ошибки
+запроса вызывается зарегистрированный ранее обработчик ошибок. Он, как правило, 
+завершает работу скрипта и выдает исчерпывающую информацию о контексте вызова 
+запроса. В большинстве случаев это поведение — самое разумное, однако для
+некоторых запросов может понадобиться временно отключить стандартный механизм
+и обработать ошибку вручную, непосредственно в коде программы.
+
+<p>Библиотека DbSimple позволяет <i>позапросно</i> отключать обработку 
+ошибок, используя для этого стандартную нотацию PHP — оператор <nobr><tt>@</tt></nobr>. 
+Иными словами, поставив <nobr><tt>@</tt></nobr> перед вызовом любого из методов DbSimple,
+вы заставите этот метод вернуть <nobr><tt>null</tt></nobr> в случае возникновения проблем.
+Далее вы можете извлечь контекст выполнения запроса из свойства <nobr><tt>error</tt></nobr> 
+(краткое описание ошибки — из <nobr><tt>errmsg</tt></nobr>) и поступить с этой информацией
+так, как вам нужно.
+
+<p><table border=0>
+<tr valign=top>
+<td><nobr><img src="DbSimple/teapot00.gif" alt="Чайник" width="40" height="40">&nbsp;</td>
+<td><p><i>
+Конечно, не следует злоупотреблять данной возможностью. Используйте ее 
+только в случае, если вы точно уверены, что обрабатываете ошибку вручную
+непосредственно после выполнения запроса.
+</p></td>
+</tr>
+</table></p>
+
+<p>Типичный пример: мы хотим вставить некоторую запись в таблицу, но,
+если она там уже имеется (нарушение уникальности), не завершать работу 
+программы, а выводить пользователю аккуратное предупреждение в форме. 
+Это можно сделать так:
+
+
+<p><table cellspacing="1" cellpadding="6" border="0" align="center">
+  <tr bgcolor="#DDDDDD"> 
+  	
+    
+    <td width="100%"><font size=-1>
+    	<b>
+    		<a name="#list30" href="" title="Ссылка на текущий листинг.">Листинг 30</a>
+    	</b>
+    </td>
+    <td align="right" nowrap><font size=-1><a href="" onclick="
+      if (document.body.createTextRange) {
+        var BodyRange = document.body.createTextRange(); 
+        BodyRange.moveToElementText(this.parentNode.parentNode.parentNode.nextSibling.firstChild); 
+        BodyRange.execCommand('Copy');  
+        alert('Код скопирован в буфер обмена Windows.');
+      } else {
+        alert('Ваш браузер не поддерживает операции с буфером обмена.');
+      }
+      return false;
+    "><span class="genmed">скопировать код в буфер обмена</span></a></td>
+  </tr>
+  <tr bgcolor="#F0F0F0">
+    
+    <td colspan="2"><font size="+0"><pre  style="margin: 0px"><font color="green">// Предположим, по полю username имеется уникальный индекс.</font>
+if (!@&#36;DB-&gt;query('INSERT INTO ?_users SET username=?', &#36;name)) {
+  echo 'Такой пользователь уже существует, попробуйте другое имя';
+}</pre></td>
+  </tr>
+</table></p>
+
+
+<h3><a name=cont29></a>Макроподстановки в SQL-запросах</h3>
+
+<p>Каждый, кто писал скрипты со сложными запросами к СУБД, знает,
+какие проблемы начинаются, если запрос требуется составлять динамически. 
+Например, если нам требуется добавить в выражение WHERE некоторое ограничение,
+если пользователь поставил галочку в форме, и не выполнять его в противном 
+случае. Традиционно в таких случаях применяют динамическое составление 
+SQL-запросов, формируя их в виде строки:
+
+
+<p><table cellspacing="1" cellpadding="6" border="0" align="center">
+  <tr bgcolor="#DDDDDD"> 
+  	
+    
+    <td width="100%"><font size=-1>
+    	<b>
+    		<a name="#list31" href="" title="Ссылка на текущий листинг.">Листинг 31</a>
+    	</b>
+    </td>
+    <td align="right" nowrap><font size=-1><a href="" onclick="
+      if (document.body.createTextRange) {
+        var BodyRange = document.body.createTextRange(); 
+        BodyRange.moveToElementText(this.parentNode.parentNode.parentNode.nextSibling.firstChild); 
+        BodyRange.execCommand('Copy');  
+        alert('Код скопирован в буфер обмена Windows.');
+      } else {
+        alert('Ваш браузер не поддерживает операции с буфером обмена.');
+      }
+      return false;
+    "><span class="genmed">скопировать код в буфер обмена</span></a></td>
+  </tr>
+  <tr bgcolor="#F0F0F0">
+    
+    <td colspan="2"><font size="+0"><pre  style="margin: 0px">&#36;sql = '
+    SELECT *
+    FROM goods
+    WHERE category_id = ?
+';
+if (!empty(&#36;_POST['activated_at'])) {
+    &#36;sql .= ' AND activated_at IS NOT NULL';
+}
+&#36;sql .= " ORDER BY price";
+&#36;rows = &#36;DB-&gt;select(&#36;sql, &#36;categoryId);</pre></td>
+  </tr>
+</table></p>
+
+<p>Теперь представьте, что на <nobr><tt>activated_at</tt></nobr> наложено более сложное условие, 
+учитывающее также и его величину:
+
+
+<p><table cellspacing="1" cellpadding="6" border="0" align="center">
+  <tr bgcolor="#DDDDDD"> 
+  	
+    
+    <td width="100%"><font size=-1>
+    	<b>
+    		<a name="#list32" href="" title="Ссылка на текущий листинг.">Листинг 32</a>
+    	</b>
+    </td>
+    <td align="right" nowrap><font size=-1><a href="" onclick="
+      if (document.body.createTextRange) {
+        var BodyRange = document.body.createTextRange(); 
+        BodyRange.moveToElementText(this.parentNode.parentNode.parentNode.nextSibling.firstChild); 
+        BodyRange.execCommand('Copy');  
+        alert('Код скопирован в буфер обмена Windows.');
+      } else {
+        alert('Ваш браузер не поддерживает операции с буфером обмена.');
+      }
+      return false;
+    "><span class="genmed">скопировать код в буфер обмена</span></a></td>
+  </tr>
+  <tr bgcolor="#F0F0F0">
+    
+    <td colspan="2"><font size="+0"><pre  style="margin: 0px">&#36;query = array(&#36;categoryId);
+&#36;sql = '
+    SELECT *
+    FROM goods
+    WHERE category_id = ?
+';
+if (!empty(&#36;_POST['activated_at'])) {
+    &#36;sql .= ' AND activated_at &gt; ?';
+    &#36;placeholders[] = &#36;_POST['activated_at'];
+}
+&#36;sql .= " ORDER BY price";
+array_unshift(&#36;query, &#36;sql);
+&#36;rows = call_user_func_array(array(&amp;&#36;DB, 'select'), &#36;query);</pre></td>
+  </tr>
+</table></p>
+
+<p>В примере выше мы используем всего одно динамическое поле, но на практике их 
+может быть значительно больше. В результате читабельность кода резко снижается, не говоря
+уж о читабельности генерируемых SQL-запросов...
+
+<p>К счастью, данная проблема относится к классу беспроигрышно-разрешимых. А именно,
+имеется такой синтаксис, который позволяет создавать динамические SQL-запросы без
+какого-либо снижения читабельности кода! Он используется в DbSimple:
+
+
+<p><table cellspacing="1" cellpadding="6" border="0" align="center">
+  <tr bgcolor="#DDDDDD"> 
+  	
+    
+    <td width="100%"><font size=-1>
+    	<b>
+    		<a name="#list33" href="" title="Ссылка на текущий листинг.">Листинг 33</a>
+    	</b>
+    </td>
+    <td align="right" nowrap><font size=-1><a href="" onclick="
+      if (document.body.createTextRange) {
+        var BodyRange = document.body.createTextRange(); 
+        BodyRange.moveToElementText(this.parentNode.parentNode.parentNode.nextSibling.firstChild); 
+        BodyRange.execCommand('Copy');  
+        alert('Код скопирован в буфер обмена Windows.');
+      } else {
+        alert('Ваш браузер не поддерживает операции с буфером обмена.');
+      }
+      return false;
+    "><span class="genmed">скопировать код в буфер обмена</span></a></td>
+  </tr>
+  <tr bgcolor="#F0F0F0">
+    
+    <td colspan="2"><font size="+0"><pre  style="margin: 0px">&#36;rows = &#36;DB-&gt;select('
+        SELECT *
+        FROM goods
+        WHERE 
+            category_id = ?
+          { AND activated_at &gt; ? }
+    ',
+    &#36;categoryId,
+    (empty(&#36;_POST['activated_at'])? DBSIMPLE_SKIP : &#36;_POST['activated_at'])
+);</pre></td>
+  </tr>
+</table></p>
+
+<p>Обратите внимание на блок, обрамленный фигурными скобками (<nobr><tt>{}</tt></nobr>-блок). Нетрудно 
+догадаться, как он работает: если хотя бы один placeholder, используемый в этом блоке,
+имеет специальное значение <nobr><tt>DBSIMPLE_SKIP</tt></nobr>, то весь блок удаляется из запроса, в 
+противном случае удаляются только обрамляющие фигурные скобки (точнее, они заменяются на 
+пробелы, чтобы сформированный SQL-запрос хорошо читался).
+
+<p><table border=0>
+<tr valign=top>
+<td><nobr><img src="DbSimple/teapot00.gif" alt="Чайник" width="40" height="40">&nbsp;</td>
+<td><p><i>
+В настоящий момент значение <nobr><tt>DBSIMPLE_SKIP</tt></nobr> определяется в библиотеке как <nobr><tt>log(0)</tt></nobr>. 
+Т.к. логарифма нуля в природе не существует, константа принимает значение "недопустимое 
+значение: логарифм нуля" (оказывается, есть в PHP такое значение для числа с плавающей 
+точкой), и вероятность того, что кому-то потребуется вставить его в БД, падает до 
+нуля (да оно и не вставится для большинства СУБД).
+</p></td>
+</tr>
+</table></p>
+
+<p>Начав однажды пользоваться <nobr><tt>{}</tt></nobr>-макросами, через некоторое время перестаешь понимать,
+как же обходился без них раньше. Вот еще примеры запросов с макроподстановками:
+
+
+<p><table cellspacing="1" cellpadding="6" border="0" align="center">
+  <tr bgcolor="#DDDDDD"> 
+  	
+    
+    <td width="100%"><font size=-1>
+    	<b>
+    		<a name="#list34" href="" title="Ссылка на текущий листинг.">Листинг 34</a>
+    	</b>
+    </td>
+    <td align="right" nowrap><font size=-1><a href="" onclick="
+      if (document.body.createTextRange) {
+        var BodyRange = document.body.createTextRange(); 
+        BodyRange.moveToElementText(this.parentNode.parentNode.parentNode.nextSibling.firstChild); 
+        BodyRange.execCommand('Copy');  
+        alert('Код скопирован в буфер обмена Windows.');
+      } else {
+        alert('Ваш браузер не поддерживает операции с буфером обмена.');
+      }
+      return false;
+    "><span class="genmed">скопировать код в буфер обмена</span></a></td>
+  </tr>
+  <tr bgcolor="#F0F0F0">
+    
+    <td colspan="2"><font size="+0"><pre  style="margin: 0px">&#36;rows = &#36;DB-&gt;select('
+        SELECT *
+        FROM 
+            goods g
+          { JOIN category c ON c.id = g.category_id AND c.name = ? }
+    ',
+    (empty(&#36;_POST['cat_name'])? DBSIMPLE_SKIP : &#36;_POST['cat_name'])
+);</pre></td>
+  </tr>
+</table></p>
+
+
+<p><table cellspacing="1" cellpadding="6" border="0" align="center">
+  <tr bgcolor="#DDDDDD"> 
+  	
+    
+    <td width="100%"><font size=-1>
+    	<b>
+    		<a name="#list35" href="" title="Ссылка на текущий листинг.">Листинг 35</a>
+    	</b>
+    </td>
+    <td align="right" nowrap><font size=-1><a href="" onclick="
+      if (document.body.createTextRange) {
+        var BodyRange = document.body.createTextRange(); 
+        BodyRange.moveToElementText(this.parentNode.parentNode.parentNode.nextSibling.firstChild); 
+        BodyRange.execCommand('Copy');  
+        alert('Код скопирован в буфер обмена Windows.');
+      } else {
+        alert('Ваш браузер не поддерживает операции с буфером обмена.');
+      }
+      return false;
+    "><span class="genmed">скопировать код в буфер обмена</span></a></td>
+  </tr>
+  <tr bgcolor="#F0F0F0">
+    
+    <td colspan="2"><font size="+0"><pre  style="margin: 0px">&#36;rows = &#36;DB-&gt;select('
+        SELECT *
+        FROM 
+            goods g
+          { JOIN category c ON c.id = g.category_id AND 1 = ? }
+        WHERE 
+            1 = 1
+          { AND c.name = ? }
+    ',
+    (empty(&#36;_POST['cat_name'])? DBSIMPLE_SKIP : 1),
+    (empty(&#36;_POST['cat_name'])? DBSIMPLE_SKIP : &#36;_POST['cat_name'])
+);</pre></td>
+  </tr>
+</table></p>
+
+<p>В последнем примере применены два интересных приема.
+<ul>
+<li>Первый <nobr><tt>{}</tt></nobr>-блок содержит placeholder, единственным назначением которого
+является указание, следует пропустить тело блока или нет. Если он равен 1, то
+выполняется «бесполезное» условие 1 = 1, и блок остается. Если же он равен 
+<nobr><tt>DBSIMPLE_SKIP</tt></nobr>, то блок удаляется.
+<li>Второй <nobr><tt>{}</tt></nobr>-блок тоже используется довольно интересно. Он начинается с
+ключевого слова <nobr><tt>AND</tt></nobr>, поэтому мы вынуждены написать перед ним «бесполезное»
+и всегда истинное выражение <nobr><tt>1 = 1</tt></nobr>, чтобы не получить синтаксическую ошибку. 
+(Кстати, для <nobr><tt>OR</tt></nobr>-выражения надо было бы писать <nobr><tt>1 = 0</tt></nobr>.)
+</ul>
+
+<p>Отсюда мораль: не всегда бесполезные на первый взгляд условия действительно 
+не имеют смысла. Иногда их очень удобно использовать совместно с условными блоками.
+
+
+
+<h3><a name=cont30></a>Оптимизация prepare+execute</h3>
+
+<p>В скриптах, вставляющих много записей в таблицу, запросы обновления
+обычно выполняются в цикле. Они имеют одну и ту же структуру, различаясь
+лишь значениями параметров (placeholder-ов). Чтобы СУБД не приходилось
+каждый раз разбирать синтаксис запроса (транслировать во внутреннее
+представления), применяется идеология prepare+execute. С использованием
+гипотетического синтаксиса это выглядит так:
+
+
+<p><table cellspacing="1" cellpadding="6" border="0" align="center">
+  <tr bgcolor="#DDDDDD"> 
+  	
+    
+    <td width="100%"><font size=-1>
+    	<b>
+    		<a name="#list36" href="" title="Ссылка на текущий листинг.">Листинг 36</a>
+    	</b>
+    </td>
+    <td align="right" nowrap><font size=-1><a href="" onclick="
+      if (document.body.createTextRange) {
+        var BodyRange = document.body.createTextRange(); 
+        BodyRange.moveToElementText(this.parentNode.parentNode.parentNode.nextSibling.firstChild); 
+        BodyRange.execCommand('Copy');  
+        alert('Код скопирован в буфер обмена Windows.');
+      } else {
+        alert('Ваш браузер не поддерживает операции с буфером обмена.');
+      }
+      return false;
+    "><span class="genmed">скопировать код в буфер обмена</span></a></td>
+  </tr>
+  <tr bgcolor="#F0F0F0">
+    
+    <td colspan="2"><font size="+0"><pre  style="margin: 0px"><font color="green">// Подготавливаем "скелет" запроса и транслируем его.</font>
+&#36;sth = prepare('INSERT INTO tbl(field) VALUES(?)');
+<font color="green">// В цикле выполняем уже оттранслированный запрос.</font>
+foreach (&#36;array as &#36;item) {
+  <font color="green">// Подставляем различные значения параметров.</font>
+  &#36;sth-&gt;execute(&#36;item);
+}</pre></td>
+  </tr>
+</table></p>
+
+<p>Практически все библиотеки абстракции от СУБД (в том числе ADODB и 
+PEAR DB) поддерживают независимые операции <nobr><tt>prepare()</tt></nobr> и <nobr><tt>execute()</tt></nobr>,
+работающие примерно так же, как описано выше. Однократное выполнение
+prepare с последующим многократным execute позволяет 
+существенно улучшить производительность, однако дается это за счет
+традиционного усложнения синтаксиса запросов.
+
+<p>Рад сообщить, что в DbSimple данная дилемма решена беспроигрышно:
+библиотека имеет только одну операцию выполнения запроса <nobr><tt>query()</tt></nobr>,
+однако, несмотря на это, поддерживает многократный execute без prepare. В 
+итоге мы получаем прирост производительности без изменения интерфейса
+— хороший пример правильного выбора слоя абстракции для реализации этой 
+возможности.
+
+<p><table border=0>
+<tr valign=top>
+<td><nobr><img src="DbSimple/teapot00.gif" alt="Чайник" width="40" height="40">&nbsp;</td>
+<td><p><i>
+Вынесение слоя абстракции prepare+execute за рамки DbSimple (как это 
+делают все остальные библиотеки) не представляется имеющим какой-либо 
+смысл, т.к. это все легко можно автоматизировать. Что DbSimple и делает.
+</p></td>
+</tr>
+</table></p>
+
+<p>Итак, если выполняется серия запросов с одинаковой структурой, но разными
+значениями placeholder-ов, DbSimple <i>автоматически</i> делает одну операцию
+prepare и много операций execute. Естественно, это работает только для СУБД, 
+умеющих работать по схеме prepare+execute (например, в InterBase/FireBird). 
+Здесь особенно полезна поддержка "родных" placeholder-ов базы, сильно ускоряющая 
+работу: в большинстве случаев накладных расходов вообще нет.
+
+<p>Пример теперь можно переписать так:
+
+
+<p><table cellspacing="1" cellpadding="6" border="0" align="center">
+  <tr bgcolor="#DDDDDD"> 
+  	
+    
+    <td width="100%"><font size=-1>
+    	<b>
+    		<a name="#list37" href="" title="Ссылка на текущий листинг.">Листинг 37</a>
+    	</b>
+    </td>
+    <td align="right" nowrap><font size=-1><a href="" onclick="
+      if (document.body.createTextRange) {
+        var BodyRange = document.body.createTextRange(); 
+        BodyRange.moveToElementText(this.parentNode.parentNode.parentNode.nextSibling.firstChild); 
+        BodyRange.execCommand('Copy');  
+        alert('Код скопирован в буфер обмена Windows.');
+      } else {
+        alert('Ваш браузер не поддерживает операции с буфером обмена.');
+      }
+      return false;
+    "><span class="genmed">скопировать код в буфер обмена</span></a></td>
+  </tr>
+  <tr bgcolor="#F0F0F0">
+    
+    <td colspan="2"><font size="+0"><pre  style="margin: 0px">foreach (&#36;array as &#36;item) {
+  <font color="green">// Подставляем различные значения параметров.</font>
+  &#36;DB-&gt;query('INSERT INTO tbl(field) VALUES(?)', &#36;item);
+}</pre></td>
+  </tr>
+</table></p>
+
+Операция prepare будет выполнена только при первом получении
+запроса "<nobr><tt>INSERT INTO tbl(field) VALUES(?)</tt></nobr>", а во всех остальных
+случаях запустится только execute, экономя время.
+
+
+
+<h3><a name=cont31></a>Логирование запросов</h3>
+
+<p>При отладке и оптимизации скриптов неоценимую помощь может оказать
+журнал всех SQL-запросов, выполняемых в ходе работы. Для вывода этого
+журнала удобнее всего использовать библиотеку 
+<a href="http://dklab.ru/lib/Debug_HackerConsole">Debug_HackerConsole</a>, чтобы
+не засорять лог-файлы лишней информацией, которую все равно мало кто 
+будет читать.
+
+<p>DbSimple позволяет назначить функцию, которая будет вызываться
+при выполнении каждого запроса:
+
+
+<p><table cellspacing="1" cellpadding="6" border="0" align="center">
+  <tr bgcolor="#DDDDDD"> 
+  	
+    
+    <td width="100%"><font size=-1>
+    	<b>
+    		<a name="#list38" href="" title="Ссылка на текущий листинг.">Листинг 38</a>
+    	</b>
+    </td>
+    <td align="right" nowrap><font size=-1><a href="" onclick="
+      if (document.body.createTextRange) {
+        var BodyRange = document.body.createTextRange(); 
+        BodyRange.moveToElementText(this.parentNode.parentNode.parentNode.nextSibling.firstChild); 
+        BodyRange.execCommand('Copy');  
+        alert('Код скопирован в буфер обмена Windows.');
+      } else {
+        alert('Ваш браузер не поддерживает операции с буфером обмена.');
+      }
+      return false;
+    "><span class="genmed">скопировать код в буфер обмена</span></a></td>
+  </tr>
+  <tr bgcolor="#F0F0F0">
+    
+    <td colspan="2"><font size="+0"><pre  style="margin: 0px">&#36;DB-&gt;setLogger('myLogger');
+function myLogger(&#36;db, &#36;sql)
+{
+  <font color="green">// Находим контекст вызова этого запроса.</font>
+  &#36;caller = &#36;db-&gt;findLibraryCaller();
+  &#36;tip = "at ".@&#36;caller['file'].' line '.@&#36;caller['line'];
+  <font color="green">// Печатаем запрос (конечно, Debug_HackerConsole лучше).</font>
+  echo "&lt;xmp title=\"&#36;tip\"&gt;"; 
+  print_r(&#36;sql); 
+  echo "&lt;/xmp&gt;";
+}</pre></td>
+  </tr>
+</table></p>
+
+<p>Этой функции передается полный текст запроса, в котором placeholder-ы уже 
+заменены на свои значения (это касается также и "родных" placeholder-ов базы).
+Контекст (файл и номер строки), в котором был запущен данный запрос, вы можете
+получить при помощи метода <nobr><tt>findLibraryCaller()</tt></nobr>.
+
+<p>Функция логирования запускается не только для обычных SQL-запросов,
+но также и для вывода статистики. Например, для команд:
+
+
+<p><table cellspacing="1" cellpadding="6" border="0" align="center">
+  <tr bgcolor="#DDDDDD"> 
+  	
+    
+    <td width="100%"><font size=-1>
+    	<b>
+    		<a name="#list39" href="" title="Ссылка на текущий листинг.">Листинг 39</a>
+    	</b>
+    </td>
+    <td align="right" nowrap><font size=-1><a href="" onclick="
+      if (document.body.createTextRange) {
+        var BodyRange = document.body.createTextRange(); 
+        BodyRange.moveToElementText(this.parentNode.parentNode.parentNode.nextSibling.firstChild); 
+        BodyRange.execCommand('Copy');  
+        alert('Код скопирован в буфер обмена Windows.');
+      } else {
+        alert('Ваш браузер не поддерживает операции с буфером обмена.');
+      }
+      return false;
+    "><span class="genmed">скопировать код в буфер обмена</span></a></td>
+  </tr>
+  <tr bgcolor="#F0F0F0">
+    
+    <td colspan="2"><font size="+0"><pre  style="margin: 0px">&#36;rows = &#36;DB-&gt;select('SELECT * FROM U_GET_PARAM_LIST');</pre></td>
+  </tr>
+</table></p>
+
+<p>будет выполнена серия из двух вызовов обработчика:
+
+
+<p><table cellspacing="1" cellpadding="6" border="0" align="center">
+  <tr bgcolor="#DDDDDD"> 
+  	
+    
+    <td width="100%"><font size=-1>
+    	<b>
+    		<a name="#list40" href="" title="Ссылка на текущий листинг.">Листинг 40</a>
+    	</b>
+    </td>
+    <td align="right" nowrap><font size=-1><a href="" onclick="
+      if (document.body.createTextRange) {
+        var BodyRange = document.body.createTextRange(); 
+        BodyRange.moveToElementText(this.parentNode.parentNode.parentNode.nextSibling.firstChild); 
+        BodyRange.execCommand('Copy');  
+        alert('Код скопирован в буфер обмена Windows.');
+      } else {
+        alert('Ваш браузер не поддерживает операции с буфером обмена.');
+      }
+      return false;
+    "><span class="genmed">скопировать код в буфер обмена</span></a></td>
+  </tr>
+  <tr bgcolor="#F0F0F0">
+    
+    <td colspan="2"><font size="+0"><pre  style="margin: 0px">SELECT * FROM U_GET_PARAM_LIST;
+  --- 13 ms = 4+3+6; returned 30 row(s);</pre></td>
+  </tr>
+</table></p>
+
+<p>Здесь "<nobr><tt>SELECT ...</tt></nobr>" — это первый вызов функции логирования, а 
+"<nobr><tt>--- 13 ms ..</tt></nobr>" — второй вызов. Вы можете заметить, что, 
+фактически, во втором случае никакой запрос не выполнялся: т.к.
+текст представляет собой "голый" комментарий, выполнять просто 
+нечего. Такого рода "запросы" библиотека генерирует при соединении
+с базой данных, при запуске новой транзакции, работе с 
+BLOB-объектами и т.&nbsp;д. Они все носят чисто информационный характер 
+и в базу не идут.
+
+<p>Итак, информационные записи содержат:
+<ul>
+<li>Время выполнения запроса.
+<li>В случае возникновения ошибки СУБД — текст этой ошибки с кратким 
+указанием контекста вызова.
+<li>Для SELECT-запросов: число строк результата. Если строка всего
+одна, и данных не слишком много, она будет включена прямо в 
+информационную запись.
+<li>Для UPDATE- и INSERT-запросов: признак успешности выполнения.
+</ul>
+
+<p><table border=0>
+<tr valign=top>
+<td><nobr><img src="DbSimple/exclam00.gif" alt="Лирическое отступление" width="32" height="32">&nbsp;</td>
+<td><p><i>
+Если функция логирования не установлена, библиотека работает гораздо
+быстрее: ведь ей нет необходимости "вручную" разворачивать "родные" 
+placeholder-ы, собирать статистическую информацию, а также определять
+контекст вызова запроса. Таким образом, на хостинге, где отладка
+не нужна, просто не назначайте функцию-логгер.
+</i></td>
+</tr>
+</table></p>
+
+
+
+<h3><a name=cont32></a>Транзакции</h3>
+
+<p>Транзакции поддерживаются методами <nobr><tt>$DB-&gt;transaction()</tt></nobr>,
+<nobr><tt>commit()</tt></nobr> и <nobr><tt>rollback()</tt></nobr>. У каждого соединения в любой момент времени
+может существовать только одна текущая транзакция.
+
+
+
+<h3><a name=cont33></a>Запросы с атрибутами</h3>
+
+<p>Каждый запрос может быть снабжен одним или несколькими атрибутами, являющимися 
+некоторыми указаниями для DbSimple. Они оформляются в виде SQL-комментариев, идущих 
+перед телом запроса, и имеют формат:
+
+
+<p><table cellspacing="1" cellpadding="6" border="0" align="center">
+  <tr bgcolor="#DDDDDD"> 
+  	
+    
+    <td width="100%"><font size=-1>
+    	<b>
+    		<a name="#list41" href="" title="Ссылка на текущий листинг.">Листинг 41</a>
+    	</b>
+    </td>
+    <td align="right" nowrap><font size=-1><a href="" onclick="
+      if (document.body.createTextRange) {
+        var BodyRange = document.body.createTextRange(); 
+        BodyRange.moveToElementText(this.parentNode.parentNode.parentNode.nextSibling.firstChild); 
+        BodyRange.execCommand('Copy');  
+        alert('Код скопирован в буфер обмена Windows.');
+      } else {
+        alert('Ваш браузер не поддерживает операции с буфером обмена.');
+      }
+      return false;
+    "><span class="genmed">скопировать код в буфер обмена</span></a></td>
+  </tr>
+  <tr bgcolor="#F0F0F0">
+    
+    <td colspan="2"><font size="+0"><pre  style="margin: 0px">&#151; AttributeName: AttributeValue</pre></td>
+  </tr>
+</table></p>
+
+
+<h4><a name=cont34></a>Атрибут BLOB_OBJ: объектные BLOB-поля</h4>
+
+<p>Если BLOB-ы очень большие, можно работать с ними как с объектами,
+выполняя read и write "кусками".
+
+<p>Для того, чтобы получить blob-поля в виде объектов, а не в виде строки,
+используйте синтаксис:
+
+
+<p><table cellspacing="1" cellpadding="6" border="0" align="center">
+  <tr bgcolor="#DDDDDD"> 
+  	
+    
+    <td width="100%"><font size=-1>
+    	<b>
+    		<a name="#list42" href="" title="Ссылка на текущий листинг.">Листинг 42</a>
+    	</b>
+    </td>
+    <td align="right" nowrap><font size=-1><a href="" onclick="
+      if (document.body.createTextRange) {
+        var BodyRange = document.body.createTextRange(); 
+        BodyRange.moveToElementText(this.parentNode.parentNode.parentNode.nextSibling.firstChild); 
+        BodyRange.execCommand('Copy');  
+        alert('Код скопирован в буфер обмена Windows.');
+      } else {
+        alert('Ваш браузер не поддерживает операции с буфером обмена.');
+      }
+      return false;
+    "><span class="genmed">скопировать код в буфер обмена</span></a></td>
+  </tr>
+  <tr bgcolor="#F0F0F0">
+    
+    <td colspan="2"><font size="+0"><pre  style="margin: 0px">&#36;row = &#36;DB-&gt;selectRow(<nobr>'
+    &#151;</nobr> BLOB_OBJ: true
+    SELECT * FROM table WHERE id=123
+');</pre></td>
+  </tr>
+</table></p>
+
+<p>В результате в <nobr><tt>$row['blob_field']</tt></nobr> окажется не строка, равная содержимому
+blob-а, а объект <nobr><tt>DbSimple_*_Blob</tt></nobr>, у которого есть метод <nobr><tt>read()</tt></nobr>.
+
+
+<h4><a name=cont35></a>Атрибут CACHE: кэширование запросов</h4>
+
+<p><table border=0>
+<tr valign=top>
+<td><nobr><img src="DbSimple/exclam00.gif" alt="Лирическое отступление" width="32" height="32">&nbsp;</td>
+<td><p><i>
+<b>Внимание:</b> данная функциональность находится в разработке и в настоящее время 
+может работать нестабильно. Используйте ее с осторожностью.
+</i></td>
+</tr>
+</table></p>
+
+<p>Кэширование осуществляется в предположении, что один и тот же запрос, выполняемый
+через небольшой промежуток времени, вернет одинаковый результат. Для управления этим
+промежутком используется синтаксис:
+
+
+<p><table cellspacing="1" cellpadding="6" border="0" align="center">
+  <tr bgcolor="#DDDDDD"> 
+  	
+    
+    <td width="100%"><font size=-1>
+    	<b>
+    		<a name="#list43" href="" title="Ссылка на текущий листинг.">Листинг 43</a>
+    	</b>
+    </td>
+    <td align="right" nowrap><font size=-1><a href="" onclick="
+      if (document.body.createTextRange) {
+        var BodyRange = document.body.createTextRange(); 
+        BodyRange.moveToElementText(this.parentNode.parentNode.parentNode.nextSibling.firstChild); 
+        BodyRange.execCommand('Copy');  
+        alert('Код скопирован в буфер обмена Windows.');
+      } else {
+        alert('Ваш браузер не поддерживает операции с буфером обмена.');
+      }
+      return false;
+    "><span class="genmed">скопировать код в буфер обмена</span></a></td>
+  </tr>
+  <tr bgcolor="#F0F0F0">
+    
+    <td colspan="2"><font size="+0"><pre  style="margin: 0px">&#36;row = &#36;DB-&gt;select(<nobr>'
+    &#151;</nobr> CACHE: 10h 20m 30s
+    SELECT * FROM table WHERE id=123
+');</pre></td>
+  </tr>
+</table></p>
+
+<p>Здесь "10h 20m 30s" - промежуток времени, в течение которого запрос будет браться из кэша. 
+(Если указано только число, то оно трактуется как промежуток времени в секундах.)
+
+
+<h5><a name=cont36></a>Зависимость от источников данных</h5>
+
+<p>Вы можете также использовать дополнительные условия для управления инвалидацией кэша. Например,
+если одна из таблиц, участвующих в запросе, изменилась, следует считать кэш недействительным.
+Вы можете сообщить об этом DbSimple при помощи следующей конструкции:
+
+
+<p><table cellspacing="1" cellpadding="6" border="0" align="center">
+  <tr bgcolor="#DDDDDD"> 
+  	
+    
+    <td width="100%"><font size=-1>
+    	<b>
+    		<a name="#list44" href="" title="Ссылка на текущий листинг.">Листинг 44</a>
+    	</b>
+    </td>
+    <td align="right" nowrap><font size=-1><a href="" onclick="
+      if (document.body.createTextRange) {
+        var BodyRange = document.body.createTextRange(); 
+        BodyRange.moveToElementText(this.parentNode.parentNode.parentNode.nextSibling.firstChild); 
+        BodyRange.execCommand('Copy');  
+        alert('Код скопирован в буфер обмена Windows.');
+      } else {
+        alert('Ваш браузер не поддерживает операции с буфером обмена.');
+      }
+      return false;
+    "><span class="genmed">скопировать код в буфер обмена</span></a></td>
+  </tr>
+  <tr bgcolor="#F0F0F0">
+    
+    <td colspan="2"><font size="+0"><pre  style="margin: 0px">&#36;row = &#36;DB-&gt;select(<nobr>'
+    &#151;</nobr> CACHE: 10h 20m 30s, forum.modified, topic.modified
+    SELECT * 
+    FROM forum JOIN topic ON topic.forum_id=forum.id 
+    WHERE id=123
+');</pre></td>
+  </tr>
+</table></p>
+
+<p>Здесь предполагается, что в таблице <nobr><tt>forum</tt></nobr> имеется столбец с именем <nobr><tt>modified</tt></nobr>, хранящий
+дату последнего изменения записи (аналогично и с таблицей <nobr><tt>topic</tt></nobr>). Как только в указанных таблицах
+появляется новая запись, библиотека это обнаруживает, делая запрос <nobr><tt>SELECT MAX(forum.modified) FROM forum</tt></nobr>, 
+и очищает кэш. 
+
+<p><table border=0>
+<tr valign=top>
+<td><nobr><img src="DbSimple/teapot00.gif" alt="Чайник" width="40" height="40">&nbsp;</td>
+<td><p><i>
+Конечно, чтобы инвалидация работала правильно, вы должны перечислить все таблицы, от которых 
+зависит запрос. Кроме того, убедитесь, что с полем <nobr><tt>modified</tt></nobr> в БД связан индекс, иначе запрос
+на получение самой новой записи может работать очень долго.
+</p></td>
+</tr>
+</table></p>
+
+<h5><a name=cont37></a>Работа с кэш-хранилищем</h5>
+
+<p>При работе с кэшем используются две общие операции: запись данных в кэш и чтение данных из кэша. 
+Сама библиотека DbSimple не содержит методов, которые их реализуют. Это и понятно: в каждом конкретном 
+приложении используется своя собственная система кэширования. 
+
+<p>Пожалуй, самым оптимальным вариантом можно считать применение 
+<a href="http://www.danga.com/memcached/">memcached</a>, т.к. он поддерживает автоматическую очистку 
+старых записей кэша на основе частоты их использования. Однако, если memcached недоступен, то подойдет и 
+любая другая реализация (например, на файлах).
+
+<p>Для подключения кэш-функции к библиотеке используется следующий синтаксис:
+
+
+<p><table cellspacing="1" cellpadding="6" border="0" align="center">
+  <tr bgcolor="#DDDDDD"> 
+  	
+    
+    <td width="100%"><font size=-1>
+    	<b>
+    		<a name="#list45" href="" title="Ссылка на текущий листинг.">Листинг 45</a>
+    	</b>
+    </td>
+    <td align="right" nowrap><font size=-1><a href="" onclick="
+      if (document.body.createTextRange) {
+        var BodyRange = document.body.createTextRange(); 
+        BodyRange.moveToElementText(this.parentNode.parentNode.parentNode.nextSibling.firstChild); 
+        BodyRange.execCommand('Copy');  
+        alert('Код скопирован в буфер обмена Windows.');
+      } else {
+        alert('Ваш браузер не поддерживает операции с буфером обмена.');
+      }
+      return false;
+    "><span class="genmed">скопировать код в буфер обмена</span></a></td>
+  </tr>
+  <tr bgcolor="#F0F0F0">
+    
+    <td colspan="2"><font size="+0"><pre  style="margin: 0px"><font color="green">// Connect to database.</font>
+&#36;DB = DbSimple_Generic::connect(&#36;dsn);
+<font color="green">// Set caching function.</font>
+&#36;DB-&gt;setCacher('myCacher');
+<font color="green">// Define caching function.</font>
+function myCacher(&#36;key, &#36;value)
+{
+    <font color="green">// Если &#36;value !== null, то следует записать его в кэш с ключом &#36;key.</font>
+    <font color="green">// Если &#36;value === null, то следует вернуть значение кэша с ключом &#36;key.</font>
+}</pre></td>
+  </tr>
+</table></p>
+
+
+
+<h2><a name=cont38></a><span style="font-size: 18pt">Резюме</span></h2>
+
+<p>Библиотека DbSimple является удобным инструментом для тех, кто пишет скрипты с 
+использованием большого разнообразия сложных SQL-запросов. Ее основная черта — простота
+и лаконичность повседневного применения. А вот и другие два плюса библиотеки: расширенная 
+поддержка placeholder-ов и условные макроблоки.
+<br>
+<center>
+<script type="text/javascript"><!--
+google_ad_client = "pub-7882344363883855";
+google_ad_width = 728;
+google_ad_height = 90;
+google_ad_format = "728x90_as";
+google_ad_type = "text_image";
+google_ad_channel = "";
+google_color_border = "336699";
+google_color_bg = "FFFFFF";
+google_color_link = "0000FF";
+google_color_text = "000000";
+google_color_url = "008000";
+//-->
+</script>
+<script type="text/javascript"
+  src="DbSimple/show_ads.js">
+</script><br/>
+Консультации и продажа <a href="http://www.icf.ru/" target="_blank">Microsoft crm</a> узнайте больше | <a href="http://www.lawyerfirm.ru/" target="_blank">юридические услуги</a> Москва | <a href="http://www.luxterm.ru/" target="_blank">настенные котлы Viessmann</a>
+</center>
+<br>
+
+</div>
+</div>
+
+
+
+<hr height=1 style="clear:both">
+
+<div style="float:left; padding-bottom:3px">
+    <div style="float:left">
+        Дмитрий Котеров, Лаборатория dk. &copy;1999-2008    </div>
+</div>
+
+<div style="float:right; text-align:right">
+    <script language=JavaScript>
+    <!--
+    function getCookie(name) {
+      var p = name + "=";
+      var si = document.cookie.indexOf(p);
+      if(si == -1) return null;
+      var ei = document.cookie.indexOf(";", si + p.length);
+      if(ei == -1) ei = document.cookie.length;
+      return unescape(document.cookie.substring(si + p.length, ei));
+    }
+    //-->
+    </script>
+    <script language=JavaScript>
+    <!--
+      var s = getCookie("page_time");
+      if (s) {
+        document.write("Generation time: "+s+" s<br>");
+      }
+    //-->
+    </script>
+    GZip <script language=JavaScript>
+      <!--
+      var s = getCookie("page_size");
+      if (s) {
+        var p = s.split(/,\s*/);
+        document.write("enabled: <span title='стало'>"+p[1]+"</span>/<span title='было'>"+p[0]+"</span> <span title='откусили'>("+(100-Math.round(p[1]/p[0]*100))+"%)</span>");
+      } else {
+        document.write("disabled");
+      }
+      //-->
+      </script>
+</div>
+
+<center>
+    <a id="1" href="">Добавить на Del.icio.us</a>
+<script>document.getElementById('1').href = 'http://del.icio.us/post?url=http://dklab.ru/lib/DbSimple/manual.html&title='+encodeURIComponent(document.title.replace(/.*\|\s*/, ''))</script>&nbsp;
+    <a id="2" href="">Добавить на Digg.com</a>
+<script>document.getElementById('2').href = 'http://digg.com/submit?phase=2&url=http://dklab.ru/lib/DbSimple/manual.html&title='+encodeURIComponent(document.title.replace(/.*\|\s*/, ''))</script>&nbsp;
+    <a id="3" href="">Добавить на reddit.com</a>
+<script>document.getElementById('3').href = 'http://reddit.com/submit?url=http://dklab.ru/lib/DbSimple/manual.html&title='+encodeURIComponent(document.title.replace(/.*\|\s*/, ''))</script>
+</center>
+
+<!--
+<script type="text/javascript" language="JavaScript" src="/js/Autohyphen.js"></script>
+<script>
+new Autohyphen().hyphenizeTree(document.getElementById('adv'+'test'.substring(0,0)+'Block'));
+</script>
+-->
+<!-- <script type="text/javascript" language="JavaScript" src="/js/LinkClassifier.js"></script> -->
+
+<script src="DbSimple/urchin00.js" type="text/javascript">
+</script>
+<script type="text/javascript">
+_uacct = "UA-1168534-1";
+if (window.urchinTracker) urchinTracker();
+</script>
+</body>
+</html>
+<!-- This document saved from http://dklab.ru/lib/DbSimple/manual.html -->

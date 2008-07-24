@@ -1,0 +1,36 @@
+body a.current, body .a.current {
+  color: #000000;
+  font-weight: bold;
+  text-decoration: none;
+  cursor: text;
+}
+
+body a.missed, body .a.missed {
+  text-decoration: none;
+  text-decoration: line-through;
+  cursor: default;
+}
+
+body a.outer {
+  background: url(outer000.gif) no-repeat center left;
+  padding-left: 14px;
+}
+
+body a.anchor {
+  background: url(anchor00.gif) no-repeat center left;
+  padding-left: 16px;
+}
+
+a.active {
+  font-weight: bold;
+}
+
+.prmt {
+  width: 80%;
+  border: 1px dashed #736F6E;
+  padding: 2px 60px 5px 60px;
+  text-align: center;
+  font-size: 0.8em;
+  margin: 2px auto 2px auto;
+  background: url(prmt0000.gif) 0 center no-repeat;
+}

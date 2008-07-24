@@ -1,0 +1,1529 @@
+<!-- Engine developed by Dmitry Koteroff (http://dklab.ru), (C) 2004 -->
+<html>
+<head>
+<title>dkLab | Конструктор | JsHttpRequest 5: кроссбраузерный AJAX + закачка файлов | Полная документация</title><link rel="stylesheet" type="text/css" href="JsHttpRequest/style000.css" media="screen" />
+<META name="verify-v1" content="AdhQ433Py33ev/uxSehHf8AMukUbhFmR7NqPWkgv2Rg=" />
+<meta name="description" content="Лаборатория dk: AJAX-библиотека JsHttpRequest с поддержкой Prototype JS, другие библиотеки, статьи по web-программированию" />
+<meta name="keywords" content="AJAX JsHttpRequest XMLHttpRequest PHP модуль prototype DbSimple apache windows denwer denver windows win32 winxp orphus sshbak статьи web-программирование орфус" />
+
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+</head>
+
+<body bgcolor=#DEDFDE text=black link=blue vlink=#0022FF alink=BB00BB style="padding:2px; margin:2px">
+
+<div style="float:left; width: 160px; padding:8px 0 0 0; text-align:left">
+<div style="padding-bottom:6px; width:160px">
+<noindex>Хостинг предоставлен компанией <a href="http://ruskyhost.ru/">RuskyHost.ru</a></noindex><br/><br/>
+<script type="text/javascript"><!--
+google_ad_client = "pub-7882344363883855";
+google_ad_width = 160;
+google_ad_height = 600;
+google_ad_format = "160x600_as";
+google_ad_type = "text_image";
+google_ad_channel ="";
+google_color_border = "000000";
+google_color_bg = "DEDFDE";
+google_color_link = "0000FF";
+google_color_url = "008000";
+google_color_text = "000000";
+//--></script>
+<script type="text/javascript"
+  src="JsHttpRequest/show_ads.js">
+</script>
+		
+
+
+</div>
+<div style="padding-bottom:6px"><noindex>
+<script language="JavaScript" src="JsHttpRequest/orphus00.js"></script>
+<a href="http://orphus.ru/" id="orphus"><img src="JsHttpRequest/orphus00.gif" alt="Система Orphus" width="121" height="21" border="0"></a>
+
+
+</noindex></div>
+<noindex>
+<div style="padding:2px 0px">
+<a href="http://moikrug.ru/circles/292320383/users/"><img src="JsHttpRequest/button00.gif" alt="" width="80" title="Люди, которые рекомендуют сайт dklab.ru" height="15" border="0"></a>
+</div>
+</noindex>
+
+</div>
+
+<div style="padding: 0px 2px 0px 180px">
+<div style="padding: 0em 1em 0em 1em">
+<div style="float:left; margin-top:0.4em">
+<a href="http://dklab.ru/" title="Go to the home page">Russian version<br>
+<img src="JsHttpRequest/dklab_lo.gif" alt="" border="0" width=108 height=47></a>
+<div style="margin-bottom: 6px"><a id="1" href="">Добавить на Del.icio.us</a>
+<script>document.getElementById('1').href = 'http://del.icio.us/post?url=http://dklab.ru/lib/JsHttpRequest/manual.html&title='+encodeURIComponent(document.title.replace(/.*\|\s*/, ''))</script></div>
+</div>
+
+<div style="float:right; text-align:right; margin-top:0.4em">
+<a href="http://en.dklab.ru/lib/JsHttpRequest/manual.html" title="Switch to English version of this page" ifcur="<b>*</b>">English version<br>
+<img src="JsHttpRequest/dklab_lp.gif" alt="" border="0" width=108 height=47></a>
+<div style="margin-bottom: 6px"><a id="2" href="">Добавить на Digg.com</a>
+<script>document.getElementById('2').href = 'http://digg.com/submit?phase=2&url=http://dklab.ru/lib/JsHttpRequest/manual.html&title='+encodeURIComponent(document.title.replace(/.*\|\s*/, ''))</script></div>
+</div>
+
+<h2 style="text-align: center; margin: 0px 0px 0.4em 0px; padding">&nbsp;<a class="HeadLink" href="http://dklab.ru/">dkLab</a> | <a href="http://dklab.ru/lib">Конструктор</a> | <a href="http://dklab.ru/lib/JsHttpRequest/">JsHttpRequest 5: кроссбраузерный AJAX + закачка файлов</a> | Полная документация&nbsp;</h2>
+
+<center>
+<noindex>
+   <a href="http://dklab.ru/map/" ><img src="JsHttpRequest/gomapico.gif" alt="" border="0" width=17 height=17>Карта сайта</a>
+:: <a title="Обсуждение вопросов Web-разработки и не только." href="http://dklab.ru/redir?http://forum.dklab.ru"><img src="JsHttpRequest/forum000.gif" alt="" border="0" width=16 height=16>Форум «Лаборатории»</a>
+:: <a title="Apache + PHP + MySQL + Perl и т.&nbsp;д. одним оптимизированным дистрибутивом." href="http://www.denwer.ru/"><img src="JsHttpRequest/denwer00.gif" alt="" border="0" width=16 height=16>Проект «Денвер»</a><br>
+   <a title="Технология сообщения об орфографических ошибках на базе энтузиазма пользователя." href="http://orphus.ru/" ><img src="JsHttpRequest/orphus01.gif" alt="" border="0" width=17 height=17>Проект «Orphus»</a>
+:: <a title="Авторские статьи на тему Web-программирования." href="http://dklab.ru/chicken/nablas/"><img src="JsHttpRequest/nabla120.gif" alt="" border="0" width=14 height=15>Куроводство: наблы</a>
+:: <a title="Готовые решения и библиотеки." href="http://dklab.ru/lib/"><img src="JsHttpRequest/lib00000.gif" alt="" border="0" width=25 height=15>Конструктор</a>
+</noindex>
+
+
+</center>
+<br><br>
+<p>
+
+
+
+<table align="right" border="0" cellpadding="5" style="border:3px double black; margin-left:10px"><tr><td>
+
+
+<table border=0 cellpadding=0 cellspacing=0>
+
+<tr><td>
+<table cellpadding=1 cellspacing=0><tr valign=center>
+<td></td>
+<td valign=top><img src="JsHttpRequest/li-page0.gif" alt="" vspace="8" border="0" width=11 height=10></td>
+<td width=1><img src="JsHttpRequest/dot00000.gif" alt="" width="&#36;1" height="&#36;1"></td>
+<td><font size=2><b>Полная документация</b></td>
+</td>
+</tr></table>
+</td></tr>
+<tr><td>
+<table cellpadding=1 cellspacing=0><tr valign=center>
+<td></td>
+<td valign=top><font size=2><a href=http://dklab.ru/lib/JsHttpRequest/protocol.html><img src="JsHttpRequest/li-page0.gif" alt="" vspace="8" border="0" width=11 height=10></a></td>
+<td width=1><img src="JsHttpRequest/dot00000.gif" alt="" width="&#36;1" height="&#36;1"></td>
+<td><font size=2><a href=http://dklab.ru/lib/JsHttpRequest/protocol.html>Протокол передачи данных</a></td>
+</td>
+</tr></table>
+</td></tr>
+</table>
+<hr>
+
+
+
+<a href="http://dklab.ru/redir?http://forum.dklab.ru/js/jshttprequest/"><img src="JsHttpRequest/forum_fa.ico" alt="" width="16" height="16" border="0">Обсудить статью в форуме</a><br>
+
+
+<a href="http://dklab.ru/lib/JsHttpRequest/demo.zip"><img src="JsHttpRequest/zip00000.gif" alt="" style="margin-left:1px" border="0" width=15 height=16>Скачать исходные коды</a><br>
+
+
+<a href="http://dklab.ru/lib/JsHttpRequest/demo/test/"><img src="JsHttpRequest/li-dir00.gif" alt="" style="padding-left:-1px; padding-right:4px" border="0" width=11 height=10>Просмотреть примеры online</a><br>
+        
+        <a href="http://dklab.ru/wsvn/lib/JsHttpRequest/trunk/test/JsHttpRequest/"><img src="JsHttpRequest/svn_ico0.gif" alt="" style="padding-right:4px" border="0" width=11 height=11>Просмотреть SVN-репозиторий</a>
+
+
+
+
+
+<hr>
+<b>На странице:</b><br>
+<a href=>Введение</a><br><a href=>Использование библиотеки</a><br>&nbsp&nbsp&nbsp&nbsp&nbsp<a href=>JavaScript: объект JsHttpRequest (frontend)</a><br>&nbsp&nbsp&nbsp&nbsp&nbsp<a href=>PHP: класс JsHttpRequest (backend)</a><br>&nbsp&nbsp&nbsp&nbsp&nbsp<a href=>Закачка файлов на сервер</a><br>&nbsp&nbsp&nbsp&nbsp&nbsp<a href=>Посылка целой формы на сервер</a><br>&nbsp&nbsp&nbsp&nbsp&nbsp<a href=>Кэширование и выбор метода загрузки</a><br>&nbsp&nbsp&nbsp&nbsp&nbsp<a href=>Упрощенный интерфейс библиотеки</a><br>&nbsp&nbsp&nbsp&nbsp&nbsp<a href=>Работа совместно с библиотекой Prototype</a><br>&nbsp&nbsp&nbsp&nbsp&nbsp<a href=>Перехват ошибок в PHP-загрузчике</a><br><a href=>Принцип работы JsHttpRequest</a><br>&nbsp&nbsp&nbsp&nbsp&nbsp<a href=>Протокол обмена данными</a><br>&nbsp&nbsp&nbsp&nbsp&nbsp<a href=>Состав библиотеки</a><br>&nbsp&nbsp&nbsp&nbsp&nbsp<a href=>Модульная структура библиотеки</a><br>&nbsp&nbsp&nbsp&nbsp&nbsp<a href=>Решение проблемы с кодировками</a><br><a href=>Резюме</a><br>
+
+
+</td></tr></table>
+
+
+
+<div style="float:right; padding-top: 10px">
+<i>2006-07-29</i>
+</div>
+
+
+
+<div>
+<a href="http://dklab.ru/lib/JsHttpRequest/demo.zip"><img src="JsHttpRequest/download.gif" alt="" border="0" width=16 height=16></a>
+<a href="http://dklab.ru/lib/JsHttpRequest/demo.zip" style="font-size: 19px; font-weight: bold; text-decoration:none">Скачать библиотеку и примеры</a>
+</div>
+
+
+
+<p>В данной статье описывается библиотека JsHttpRequest (лицензия LGPL), реализующая загрузку данных методом <a href="http://en.wikipedia.org/wiki/AJAX">AJAX</a> 
+    (<a href="http://www.google.ru/search?q=Remote+Scripting">Remote Scripting</a>). Вот краткий перечень ее ключевых возможностей и отличий от аналогов:
+
+    <ul>
+    <li><b>Кроссбраузерность</b>. Библиотека работает в IE5.0+, Mozilla 1.7+, Firefox 1.0+, Opera 7.20+, Safari (здесь "+" означает "в этой и более новых версиях"). Кроме того, код может работать без поддержки ActiveX и XMLHttpRequest (однако, если эти возможности включены в браузер, они автоматически задействуются). 
+    Кроссбраузерность гарантируется автоматическим framework-ом для тестирования библиотеки.
+
+    <li><b>Поддержка и "прозрачная" работа с любыми кодировками</b> (в том числе русскоязычными). Вы можете писать скрипты так, как привыкли к этому раньше, обо всем остальном позаботится библиотека. Если вы используете windows-1251, koi8-r или UTF-8, вам даже нет необходимости инсталлировать какие-либо дополнительные расширения PHP (типа iconv или mbstring).</li>
+
+    <li><b>Закачка файлов</b> (upload) из браузера на сервер без перезагрузки страницы.
+
+    <li><b>Совместимость с библиотекой <a href="http://prototypejs.org/">prototype</a></b>. <nobr>Prototype &#151;</nobr> это популярное средство для упрощения работы JavaScript-программиста, включающее поддержку AJAX и другие возможности. Библиотека JsHttpRequest может быть использована в качестве ее серверной PHP-части (после подключение небольшого модуля совместимости JsHttpRequest-prototype.js). При этом все дополнительные возможности, присущие <b>JsHttpRequest</b> (кроссбраузерность, закачка файлов, работа с русскими кодировками и т.&nbsp;д.), остаются в силе.
+
+    <li><b>Полная поддержка отладочных возможностей PHP</b>. Если в скрипте на серверной стороне происходит ошибка (включая фатальную, например, вызов неопределенной функции), клиентская часть имеет возможность корректно ее обработать и вывести диагностику. Помимо данных ответа, ей передается выходной поток скрипта, содержащий текст ошибки PHP.
+
+    <li><b>Передача многомерных структур</b> (аналог <a href="http://json.org/">JSON</a>) в данных запроса и ответа сервера. При этом используются стандартные средства PHP — многомерные массивы (данные запроса можно получить из <nobr><tt>$_REQUEST</tt></nobr>, данные ответа записываются в <nobr><tt>$_RESULT</tt></nobr>), а также стандартные средства JavaScript — вложенные объекты и свойства. Никакого XML на уровне API: работа происходит "родными" средствами языков.
+
+    <li><b>Поддержка сессий PHP</b> стандартными средствами.
+
+    <li><b>Выбор оптимального метода загрузки</b> данных (XMLHttpRequest, Microsoft.XMLHTTP, &lt;SCRIPT&gt;, &lt;IFRAME&gt;)  в зависимости от браузера. В частности, возможность загружать данные с других хостов.
+
+    <li><b>Компонентность библиотеки</b> позволяет отключить ненужные методы загрузки и тем самым 
+    сократить объем JavaScript-кода. Например, если вы не планируете закачивать файлы
+    AJAX-ом, вы можете выбрать версию с поддержкой только XML- и SCRIPT-загрузчиков.
+    
+    <li><b>Интерфейс</b>, совместимый с XMLHttpRequest.
+    </ul>
+    
+
+
+
+<h2><a name=cont0></a><span style="font-size: 18pt">Введение</span></h2>
+<p>Не так давно определенную популярность получил новый сервис Google: так называемый Google Suggest. Те, кто еще не видел, что это такое, могут посмотреть прямо сейчас: <a href="http://www.google.com/webhp?complete=1&hl=en">http://www.google.com/webhp?complete=1&hl=en</a>.
+    <p><center><img src="JsHttpRequest/suggest0.gif" alt="Пример автодополнения запроса в Google Suggest" border="1" width=489 height=348></center>
+
+
+
+<p><table border=0>
+<tr valign=top>
+<td><nobr><img src="JsHttpRequest/teapot00.gif" alt="Чайник" width="40" height="40">&nbsp;</td>
+<td><p><i>
+Работа Google Suggest заключается в том, что по нескольким введенным буквам специальная программа на JavaScript обращается к сайту Google и запрашивает у него 10 самых "популярных" слов, начинающихся с тех же букв. Скрипт срабатывает настолько быстро, что выпадающий список с вариантами появляется практически мгновенно. Естественно, перезагрузка страницы при этом не производится — все реализовано на JavaScript и DHTML.
+
+
+</p></td>
+</tr>
+</table></p>
+<p>Для реализации "динамической подгрузки" Google использует следующие средства:
+    <ol>
+    <li>В Internet Explorer: ActiveX-компонента с именем Msxml2.XMLHTTP или Microsoft.XMLHTTP.
+    <li>В Mozilla и Firefox: встроенный класс <nobr><tt>XMLHttpRequest</tt></nobr>.
+    <li>В Opera: динамически создаваемый <nobr><tt>&lt;IFRAME&gt;</tt></nobr> нулевого размера (скрытый).
+    </ol>
+
+
+
+<p>Про то, как работает Google Suggest, в Интернете пишут все, кому не лень, и я совершенно не собираюсь повторяться. Вместо этого я представлю другой подход под названием <b>JsHttpRequest</b>, несколько обходящий Google Suggest по совместимости с различными браузерами и гибкости использования.
+
+
+
+<p>Метод, который реализует динамическую подгрузку в Google Suggest, проиллюстрирован ниже на примере загрузки исходного текста текущей страницы. (Работу с <nobr><tt>&lt;IFRAME&gt;</tt></nobr> я здесь не привожу, потому что она довольно сложна. Речь идет только о классе <nobr><tt>XMLHttpRequest</tt></nobr> и ActiveX-компоненте <nobr><tt>Microsoft.XMLHTTP</tt></nobr>).
+
+
+
+
+<p><table cellspacing="1" cellpadding="6" border="0" align="center">
+  <tr bgcolor="#DDDDDD"> 
+  	
+    
+    <td width="100%"><font size=-1>
+    	<b>
+    		<a name="#list1" href="" title="Ссылка на текущий листинг.">Листинг 1</a>: test/JsHttpRequest/ActiveX.htm
+    	</b>
+    </td>
+    <td align="right" nowrap><font size=-1><a href="" onclick="
+      if (document.body.createTextRange) {
+        var BodyRange = document.body.createTextRange(); 
+        BodyRange.moveToElementText(this.parentNode.parentNode.parentNode.nextSibling.firstChild); 
+        BodyRange.execCommand('Copy');  
+        alert('Код скопирован в буфер обмена Windows.');
+      } else {
+        alert('Ваш браузер не поддерживает операции с буфером обмена.');
+      }
+      return false;
+    "><span class="genmed">скопировать код в буфер обмена</span></a></td>
+  </tr>
+  <tr bgcolor="#F0F0F0">
+    
+    <td colspan="2"><font size="+0"><pre  caption="test/JsHttpRequest/ActiveX.htm" style="margin: 0px">&lt;script&gt;
+function doLoad() {
+  var req = window.XMLHttpRequest? 
+    new XMLHttpRequest() : 
+    new ActiveXObject("Microsoft.XMLHTTP");
+  req.onreadystatechange = function() {
+    if (req.readyState == 4) 
+      alert('Loaded:\n'+req.responseText);
+  }
+  req.open("GET", document.location, true);
+  req.send(null);
+}
+&lt;/script&gt;
+&lt;input type="button" value="Show me" onclick="doLoad()"&gt;</pre></td>
+  </tr>
+</table></p>
+<p>Этот код будет работать только в Mozilla (Firefox), а также в IE (при включенных ActiveX). Opera 7.x, а также пользователи, выключившие себе ActiveX по соображениям безопасности, "отдыхают".
+
+
+
+
+
+
+<h2><a name=cont1></a><span style="font-size: 18pt">Использование библиотеки</span></h2>
+<p>Чтобы вам не было чересчур скучно, я сразу демонстрирую библиотеку JsHttpRequest "в действии". Введите несколько слов в текстовом поле <nobr>внизу &#151;</nobr> через 2 секунды появятся результаты поиска по этим словам на форуме <a href="http://forum.dklab.ru/">http://forum.dklab.ru</a>. Страница при этом перезагружена <i>не будет</i>.
+
+
+
+<p>
+
+<style>
+<!--
+.forumline  { background-color: white; border: 2px #006699 solid; }
+.forumlink{ font-weight: bold; font-size: 12px; color : #006699; }
+a.forumlink{ text-decoration: none; color : #006699; }
+a.forumlink:hover{ text-decoration: underline; color : #DD6900; }
+.topictitle{ font-weight: bold; font-size: 11px; color : #000000; }
+a.topictitle:link{ text-decoration: none; color : #006699; }
+a.topictitle:visited{ text-decoration: none; color : #5493B4; }
+a.topictitle:hover{ text-decoration: underline; color : #DD6900; }
+td.row1 { background-color: #EFEFEF; }
+td.row2 { background-color: #DEE3E7; }
+th {color: #FFA34F; font-size: 17px; font-weight : bold; background-color: #006699; height: 25px; }
+th.thTop {font-weight: bold; border: #FFFFFF; border-style: solid; height: 28px; border-width: 1px 0px 0px 0px; }
+.genmed { font-size : 11px; }
+-->
+</style>
+<form onsubmit="return false">
+<table border="0" width="100%" cellpadding="0" cellspacing="0">
+<tr><td><input type=text size="70" onfocus="if (!this.filled) this.value=''; this.filled=1" style="width:100&#37;" title="" id="liveSearchMain" value="Результаты поиска появятся через 2 секунды, без перезагрузки."></td></tr>
+<tr><td><div id="liveSearchDivMain" style="width:100%; line-height:1px"></div></td></tr>
+</table>
+</form>
+<script language="JavaScript">
+<!--
+window.BASE_SITE = "http://forum.dklab.ru";
+//-->
+</script>
+<script language="JavaScript" src="JsHttpRequest/common00.js"></script>
+<script language="JavaScript" src="JsHttpRequest/JsHttpRe.js"></script>
+<script language="JavaScript" src="JsHttpRequest/LiveSear.js"></script>
+<script language="JavaScript">
+<!--
+  var lsd = document.getElementById("liveSearchDivMain");
+  var liveSearch = lsd && new LiveSearch(document.getElementById('liveSearchMain'), lsd);
+//-->
+</script>
+
+<p><table border=0>
+<tr valign=top>
+<td><nobr><img src="JsHttpRequest/teapot00.gif" alt="Чайник" width="40" height="40">&nbsp;</td>
+<td><p><i>Код подгрузки данных с форума для первого примера, пожалуй, слишком сложен. Поэтому далее мы разберем более простой код, специально написанный для облегчения понимания.</p></td>
+</tr>
+</table></p>
+
+
+<h3><a name=cont2></a>JavaScript: объект JsHttpRequest (frontend)</h3>
+<p>Использовать объект <nobr><tt>JsHttpRequest</tt></nobr> в JavaScript-программе совсем просто. Собственно, его интерфейс практически не 
+    отличается от интерфейсов Firefox-овского <nobr><tt>XMLHttpRequest</tt></nobr> или IE-шного <nobr><tt>Microsoft.XMLHTTP</tt></nobr> (он специально так разрабатывался).
+
+
+
+<p>Приведу пример страницы, которая обеспечивает генерацию хэш-кода <a href="http://php.net/md5">MD5</a> для 
+    введенной пользователем строки. Само вычисление происходит на сервере, а браузер лишь обращается к последнему 
+    за данными, используя объект <nobr><tt>JsHttpRequest</tt></nobr>. (<a href="http://dklab.ru/lib/JsHttpRequest/demo/test/JsHttpRequest/smpl_frontend.htm">Этот же пример в действии.</a>)
+
+
+
+
+<p><table cellspacing="1" cellpadding="6" border="0" align="center">
+  <tr bgcolor="#DDDDDD"> 
+  	
+    
+    <td width="100%"><font size=-1>
+    	<b>
+    		<a name="#list2" href="" title="Ссылка на текущий листинг.">Листинг 2</a>: test/JsHttpRequest/smpl_frontend.htm
+    	</b>
+    </td>
+    <td align="right" nowrap><font size=-1><a href="" onclick="
+      if (document.body.createTextRange) {
+        var BodyRange = document.body.createTextRange(); 
+        BodyRange.moveToElementText(this.parentNode.parentNode.parentNode.nextSibling.firstChild); 
+        BodyRange.execCommand('Copy');  
+        alert('Код скопирован в буфер обмена Windows.');
+      } else {
+        alert('Ваш браузер не поддерживает операции с буфером обмена.');
+      }
+      return false;
+    "><span class="genmed">скопировать код в буфер обмена</span></a></td>
+  </tr>
+  <tr bgcolor="#F0F0F0">
+    
+    <td colspan="2"><font size="+0"><pre  caption="test/JsHttpRequest/smpl_frontend.htm" style="margin: 0px">&lt;script src="../../lib/JsHttpRequest/JsHttpRequest.js"&gt;&lt;/script&gt;
+&lt;script type="text/javascript" language="JavaScript"&gt;
+function doLoad(value) {
+    <font color="green">// Create new JsHttpRequest object.</font>
+    var req = new JsHttpRequest();
+    <font color="green">// Code automatically called on load finishing.</font>
+    req.onreadystatechange = function() {
+        if (req.readyState == 4) {
+            <font color="green">// Write result to page element (_RESULT becomes responseJS). </font>
+            document.getElementById('result').innerHTML = 
+                '&lt;b&gt;MD5("'+req.responseJS.q+'")&lt;/b&gt; = ' +
+                '"' + req.responseJS.md5 + '"&lt;br&gt; ';
+            <font color="green">// Write debug information too (output becomes responseText).</font>
+            document.getElementById('debug').innerHTML = req.responseText;
+        }
+    }
+    <font color="green">// Prepare request object (automatically choose GET or POST).</font>
+    req.open(null, 'smpl_backend.php', true);
+    <font color="green">// Send data to backend.</font>
+    req.send( { q: value } );
+}
+&lt;/script&gt;
+
+&lt;form&gt;
+    Text: &lt;input type="text" name="text"&gt;
+    &lt;input type="button" value="Calculate MD5" 
+      onclick="doLoad(this.form.text.value)"&gt;
+&lt;/form&gt;
+
+&lt;div id="result" style="border:1px solid #000; padding:2px"&gt;
+    Structured results
+&lt;/div&gt;
+&lt;div id="debug" style="border:1px dashed red; padding:2px"&gt;
+    Debug info
+&lt;/div&gt;</pre></td>
+  </tr>
+</table></p>
+<p>Если внимательно посмотреть, хорошо видно, что применение JsHttpRequest ничем принципиальным не отличается от использования <nobr><tt>XMLHttpRequest</tt></nobr> или <nobr><tt>Microsoft.XMLHTTP</tt></nobr>. Однако имеется одна важная особенность библиотеки: результат работы <nobr><tt>smpl_backend.php</tt></nobr> удобно получать из свойства <nobr><tt>req.responseJS</tt></nobr>. Как видно из контекста, в него загрузчик помещает следующий объект: 
+
+
+
+
+<p><table cellspacing="1" cellpadding="6" border="0" align="center">
+  <tr bgcolor="#DDDDDD"> 
+  	
+    
+    <td width="100%"><font size=-1>
+    	<b>
+    		<a name="#list3" href="" title="Ссылка на текущий листинг.">Листинг 3</a>: результирующий объект
+    	</b>
+    </td>
+    <td align="right" nowrap><font size=-1><a href="" onclick="
+      if (document.body.createTextRange) {
+        var BodyRange = document.body.createTextRange(); 
+        BodyRange.moveToElementText(this.parentNode.parentNode.parentNode.nextSibling.firstChild); 
+        BodyRange.execCommand('Copy');  
+        alert('Код скопирован в буфер обмена Windows.');
+      } else {
+        alert('Ваш браузер не поддерживает операции с буфером обмена.');
+      }
+      return false;
+    "><span class="genmed">скопировать код в буфер обмена</span></a></td>
+  </tr>
+  <tr bgcolor="#F0F0F0">
+    
+    <td colspan="2"><font size="+0"><pre  caption="результирующий объект" style="margin: 0px">{ 
+  q:   'запрос', 
+  md5: 'MD5-код введенной строки' 
+}
+</pre></td>
+  </tr>
+</table></p>
+<p>В поле <nobr><tt>req.responseText</tt></nobr> хранятся данные, выданные скриптом <nobr><tt>smpl_backend.php</tt></nobr> в свой выходной поток (операторами <nobr><tt>echo</tt></nobr>). В большинстве случаев они содержат лишь сообщения об ошибках (если ошибки имели место), и именно поэтому данное свойство трактуется как отладочное. 
+
+
+
+<p><table border=0>
+<tr valign=top>
+<td><nobr><img src="JsHttpRequest/exclam00.gif" alt="Лирическое отступление" width="32" height="32">&nbsp;</td>
+<td><p><i>
+Впрочем, ничто не мешает написать загрузчик так, чтобы он передавал основной результат своей работы именно в виде <nobr><tt>req.responseText</tt></nobr> (хотя это и не очень <nobr>удобно &#151;</nobr> см. ниже).
+
+
+</i></td>
+</tr>
+</table></p>
+<p>Итак, после получения ответа от сервера у объекта <nobr><tt>req</tt></nobr> появляются следующие свойства:
+    <ul>
+    <li><nobr><tt>responseJS</tt></nobr>: данные произвольной структуры (например, многомерные массивы), сгенерированные загрузчиком.
+    <li><nobr><tt>responseText</tt></nobr>: прочие данные и сообщения об ошибках.
+    </ul>
+
+
+
+
+
+<h3><a name=cont3></a>PHP: класс JsHttpRequest (backend)</h3>
+<p>Теперь пришло время посмотреть, как выглядит загрузчик <nobr><tt>smpl_backend.php</tt></nobr>. Он крайне прост.
+
+
+
+
+<p><table cellspacing="1" cellpadding="6" border="0" align="center">
+  <tr bgcolor="#DDDDDD"> 
+  	
+    
+    <td width="100%"><font size=-1>
+    	<b>
+    		<a name="#list4" href="" title="Ссылка на текущий листинг.">Листинг 4</a>: test/JsHttpRequest/smpl_backend.php
+    	</b>
+    </td>
+    <td align="right" nowrap><font size=-1><a href="" onclick="
+      if (document.body.createTextRange) {
+        var BodyRange = document.body.createTextRange(); 
+        BodyRange.moveToElementText(this.parentNode.parentNode.parentNode.nextSibling.firstChild); 
+        BodyRange.execCommand('Copy');  
+        alert('Код скопирован в буфер обмена Windows.');
+      } else {
+        alert('Ваш браузер не поддерживает операции с буфером обмена.');
+      }
+      return false;
+    "><span class="genmed">скопировать код в буфер обмена</span></a></td>
+  </tr>
+  <tr bgcolor="#F0F0F0">
+    
+    <td colspan="2"><font size="+0"><pre  caption="test/JsHttpRequest/smpl_backend.php" style="margin: 0px"><span style="background:#DDDDDD">&lt;?php</span>
+<font color="green">// Load JsHttpRequest backend.</font>
+require_once "../../lib/JsHttpRequest/JsHttpRequest.php";
+<font color="green">// Create main library object. You MUST specify page encoding!</font>
+&#36;JsHttpRequest =&amp; new JsHttpRequest("windows-1251");
+<font color="green">// Store resulting data in &#36;_RESULT array (will appear in req.responseJs).</font>
+&#36;GLOBALS['_RESULT'] = array(
+  "q"     =&gt; @&#36;_REQUEST['q'],
+  "md5"   =&gt; md5(@&#36;_REQUEST['q']),
+); 
+<font color="green">// Below is unparsed stream data (will appear in req.responseText).</font>
+<span style="background:#DDDDDD">?&gt;</span>
+&lt;pre&gt;
+&lt;b&gt;Request method:&lt;/b&gt; <span style="background:#DDDDDD">&lt;?</span>=&#36;_SERVER['REQUEST_METHOD'] . "\n"<span style="background:#DDDDDD">?&gt;</span>
+&lt;b&gt;Loader used:&lt;/b&gt; <span style="background:#DDDDDD">&lt;?</span>=&#36;JsHttpRequest-&gt;LOADER . "\n"<span style="background:#DDDDDD">?&gt;</span>
+&lt;b&gt;_REQUEST:&lt;/b&gt; <span style="background:#DDDDDD">&lt;?</span>=print_r(&#36;_REQUEST, 1)<span style="background:#DDDDDD">?&gt;</span>
+&lt;/pre&gt;</pre></td>
+  </tr>
+</table></p>
+<p>Как видите, нам достаточно лишь получить параметры, переданные JavaScript-частью, из стандартных переменных PHP (<nobr><tt>$_GET</tt></nobr> или <nobr><tt>$_POST</tt></nobr> или <nobr><tt>$_REQUEST</tt></nobr>), а затем заполнить специальный массив <nobr><tt>$_RESULT</tt></nobr> данными произвольной структуры. (В нашем случае это ассоциативный массив.) Этот массив будет передан в неизменном виде в JavaScript-код и попадет в свойство responseJS. К счастью, массивы PHP и объекты JavaScript устроены практически одинаково, поэтому можно безболезненно производить перевод PHP-массива:
+
+
+
+<p><table cellspacing="1" cellpadding="6" border="0" align="center">
+  <tr bgcolor="#DDDDDD"> 
+  	
+    
+    <td width="100%"><font size=-1>
+    	<b>
+    		<a name="#list5" href="" title="Ссылка на текущий листинг.">Листинг 5</a>: PHP-массив с результатом работы
+    	</b>
+    </td>
+    <td align="right" nowrap><font size=-1><a href="" onclick="
+      if (document.body.createTextRange) {
+        var BodyRange = document.body.createTextRange(); 
+        BodyRange.moveToElementText(this.parentNode.parentNode.parentNode.nextSibling.firstChild); 
+        BodyRange.execCommand('Copy');  
+        alert('Код скопирован в буфер обмена Windows.');
+      } else {
+        alert('Ваш браузер не поддерживает операции с буфером обмена.');
+      }
+      return false;
+    "><span class="genmed">скопировать код в буфер обмена</span></a></td>
+  </tr>
+  <tr bgcolor="#F0F0F0">
+    
+    <td colspan="2"><font size="+0"><pre  caption="PHP-массив с результатом работы" style="margin: 0px">&#36;_RESULT === array(
+  "q"   =&gt; 'query',
+  "md5" =&gt; 'MD5-code of entered string'
+)</pre></td>
+  </tr>
+</table></p>
+...в идентичный ему объект JavaScript: 
+
+
+
+<p><table cellspacing="1" cellpadding="6" border="0" align="center">
+  <tr bgcolor="#DDDDDD"> 
+  	
+    
+    <td width="100%"><font size=-1>
+    	<b>
+    		<a name="#list6" href="" title="Ссылка на текущий листинг.">Листинг 6</a>: идентичный ему JavaScript-объект
+    	</b>
+    </td>
+    <td align="right" nowrap><font size=-1><a href="" onclick="
+      if (document.body.createTextRange) {
+        var BodyRange = document.body.createTextRange(); 
+        BodyRange.moveToElementText(this.parentNode.parentNode.parentNode.nextSibling.firstChild); 
+        BodyRange.execCommand('Copy');  
+        alert('Код скопирован в буфер обмена Windows.');
+      } else {
+        alert('Ваш браузер не поддерживает операции с буфером обмена.');
+      }
+      return false;
+    "><span class="genmed">скопировать код в буфер обмена</span></a></td>
+  </tr>
+  <tr bgcolor="#F0F0F0">
+    
+    <td colspan="2"><font size="+0"><pre  caption="идентичный ему JavaScript-объект" style="margin: 0px">req.responseJS === { 
+  q:   'query', 
+  md5: 'MD5-code of entered string' 
+}</pre></td>
+  </tr>
+</table></p>
+
+
+<h3><a name=cont4></a>Закачка файлов на сервер</h3>
+<p>Библиотека JsHttpRequest поддерживает возможность закачки файлов на сервер без перезагрузки страницы. Интерфейс для этого используется тот же самый, только вместо строкового или числового значения, передаваемого методу <nobr><tt>send()</tt></nobr>, вы должны передать ему ссылку на HTML-элемент типа <nobr><tt>&lt;INPUT type="file"&gt;</tt></nobr>: 
+
+
+
+
+
+<p><table cellspacing="1" cellpadding="6" border="0" align="center">
+  <tr bgcolor="#DDDDDD"> 
+  	
+    
+    <td width="100%"><font size=-1>
+    	<b>
+    		<a name="#list7" href="" title="Ссылка на текущий листинг.">Листинг 7</a>: test/JsHttpRequest/upl_frontend.htm
+    	</b>
+    </td>
+    <td align="right" nowrap><font size=-1><a href="" onclick="
+      if (document.body.createTextRange) {
+        var BodyRange = document.body.createTextRange(); 
+        BodyRange.moveToElementText(this.parentNode.parentNode.parentNode.nextSibling.firstChild); 
+        BodyRange.execCommand('Copy');  
+        alert('Код скопирован в буфер обмена Windows.');
+      } else {
+        alert('Ваш браузер не поддерживает операции с буфером обмена.');
+      }
+      return false;
+    "><span class="genmed">скопировать код в буфер обмена</span></a></td>
+  </tr>
+  <tr bgcolor="#F0F0F0">
+    
+    <td colspan="2"><font size="+0"><pre  caption="test/JsHttpRequest/upl_frontend.htm" style="margin: 0px">&lt;script src="../../lib/JsHttpRequest/JsHttpRequest.js"&gt;&lt;/script&gt;
+&lt;script type="text/javascript" language="JavaScript"&gt;
+function doLoad(value) {
+    <font color="green">// Create new JsHttpRequest object.</font>
+    var req = new JsHttpRequest();
+    <font color="green">// Code automatically called on load finishing.</font>
+    req.onreadystatechange = function() {
+        if (req.readyState == 4) {
+            <font color="green">// Write result to page element (_RESULT becomes responseJS). </font>
+            document.getElementById('result').innerHTML = 
+                '&lt;b&gt;MD5("'+req.responseJS.q+'")&lt;/b&gt; = ' +
+                '"' + req.responseJS.md5 + '"&lt;br&gt; ';
+            <font color="green">// Write debug information too (output becomes responseText).</font>
+            document.getElementById('debug').innerHTML = req.responseText;
+        }
+    }
+    <font color="green">// Prepare request object (automatically choose GET or POST).</font>
+    req.open(null, 'upl_backend.php', true);
+    <font color="green">// Send data to backend.</font>
+    req.send( { q: value } );
+}
+&lt;/script&gt;
+
+<font color="green">&lt;!-- Please note that we must specify enctype to multipart/form-data! --&gt;</font>
+&lt;form method="post" enctype="multipart/form-data" onsubmit="return false"&gt;
+    File: &lt;input type="file" name="upl"&gt;
+    &lt;input type="button" value="Calculate MD5" 
+      onclick="doLoad(this.form.upl)"&gt;
+&lt;/form&gt;
+
+&lt;div id="result" style="border:1px solid #000; padding:2px"&gt;
+    Structured results
+&lt;/div&gt;
+&lt;div id="debug" style="border:1px dashed red; padding:2px"&gt;
+    Debug info
+&lt;/div&gt;</pre></td>
+  </tr>
+</table></p>
+<p>См. этот пример в действии: файл <a href="http://dklab.ru/lib/JsHttpRequest/demo/test/JsHttpRequest/upl_frontend.htm">upl_frontend.htm</a>. Скрипт-загрузчик <nobr><tt>upl_backend.php</tt></nobr> выглядит обычным образом: используются стандартные возможности PHP по работе с закачанными файлами. 
+
+
+
+
+<p><table cellspacing="1" cellpadding="6" border="0" align="center">
+  <tr bgcolor="#DDDDDD"> 
+  	
+    
+    <td width="100%"><font size=-1>
+    	<b>
+    		<a name="#list8" href="" title="Ссылка на текущий листинг.">Листинг 8</a>: test/JsHttpRequest/upl_backend.php
+    	</b>
+    </td>
+    <td align="right" nowrap><font size=-1><a href="" onclick="
+      if (document.body.createTextRange) {
+        var BodyRange = document.body.createTextRange(); 
+        BodyRange.moveToElementText(this.parentNode.parentNode.parentNode.nextSibling.firstChild); 
+        BodyRange.execCommand('Copy');  
+        alert('Код скопирован в буфер обмена Windows.');
+      } else {
+        alert('Ваш браузер не поддерживает операции с буфером обмена.');
+      }
+      return false;
+    "><span class="genmed">скопировать код в буфер обмена</span></a></td>
+  </tr>
+  <tr bgcolor="#F0F0F0">
+    
+    <td colspan="2"><font size="+0"><pre  caption="test/JsHttpRequest/upl_backend.php" style="margin: 0px"><span style="background:#DDDDDD">&lt;?php</span>
+<font color="green">// Load JsHttpRequest backend.</font>
+require_once "../../lib/JsHttpRequest/JsHttpRequest.php";
+<font color="green">// Create main library object. You MUST specify page encoding!</font>
+&#36;JsHttpRequest =&amp; new JsHttpRequest("windows-1251");
+<font color="green">// Store resulting data in &#36;_RESULT array (will appear in req.responseJs).</font>
+&#36;GLOBALS['_RESULT'] = array(
+  "q"     =&gt; 'file ' . &#36;_FILES['q']['name'],
+  "md5"   =&gt; md5(@file_get_contents(&#36;_FILES['q']['tmp_name'])),
+); 
+<font color="green">// Below is unparsed stream data (will appear in req.responseText).</font>
+<span style="background:#DDDDDD">?&gt;</span>
+&lt;pre&gt;
+&lt;b&gt;Uploaded files:&lt;/b&gt; <span style="background:#DDDDDD">&lt;?</span>=print_r(&#36;_FILES, 1)<span style="background:#DDDDDD">?&gt;</span>
+&lt;/pre&gt;</pre></td>
+  </tr>
+</table></p>
+<p>Значение атрибута <nobr><tt>name</tt></nobr> тэга <nobr><tt>&lt;INPUT type="file"&gt;</tt></nobr> не имеет никакого значения: файл 
+    всегда приходит на сервер с идентификатором, указанным при вызове метода <nobr><tt>send()</tt></nobr> (в нашем примере 
+    это "q", хотя INPUT-поле называется "upl").
+
+    <p>При организации закачки вам нужно учитывать следующие правила.
+    <ul>
+    <li>Закачивать можно только файлы, которые пользователь выбрал при помощи элемента формы <nobr><tt>&lt;INPUT type="file"&gt;</tt></nobr>. Это единственный способ, разрешенный политикой безопасности браузеров.
+    <li>Помещайте INPUT-поля для закачки внутрь контейнера <nobr><tt>&lt;form&gt;...&lt;/form&gt;</tt></nobr>. В противном случае закачка будет работать далеко не во всех браузерах.
+    <li>У тэга <nobr><tt>FORM</tt></nobr> обязательно устанавливайте атрибут <nobr><tt>enctype="multipart/form-data"</tt></nobr>, иначе закачка не заработает в IE (браузер имеет ошибку, не позволяющую динамически изменять данный атрибут). Собственно, атрибут <nobr><tt>enctype</tt></nobr> — единственный необходимый; все остальные атрибуты не обязательны.
+    <li>Если вы закачиваете сразу несколько файлов, все они должны принадлежать одной и той же форме. Закачка файлов, элементы INPUT которых расположены в разных формах, невозможна.
+    </ul>
+    <p>В случае нарушения любого из перечисленных выше правил библиотека JsHttpRequest выдаст сообщение об ошибке, которое вы сможете легко обнаружить. 
+
+
+
+
+<h3><a name=cont5></a>Посылка целой формы на сервер</h3>
+<p>Часто требуется послать на сервер не отдельные значения, а множество элементов, уже сгруппированных в HTML-форму. Вместо того, чтобы вручную перечислять все эти элементы в параметре метода <nobr><tt>send()</tt></nobr>, вы можете просто передать ему ссылку на контейнер FORM в одном из элементов ассоциативного массива: 
+
+
+
+
+<p><table cellspacing="1" cellpadding="6" border="0" align="center">
+  <tr bgcolor="#DDDDDD"> 
+  	
+    
+    <td width="100%"><font size=-1>
+    	<b>
+    		<a name="#list9" href="" title="Ссылка на текущий листинг.">Листинг 9</a>: test/JsHttpRequest/frm_frontend.htm
+    	</b>
+    </td>
+    <td align="right" nowrap><font size=-1><a href="" onclick="
+      if (document.body.createTextRange) {
+        var BodyRange = document.body.createTextRange(); 
+        BodyRange.moveToElementText(this.parentNode.parentNode.parentNode.nextSibling.firstChild); 
+        BodyRange.execCommand('Copy');  
+        alert('Код скопирован в буфер обмена Windows.');
+      } else {
+        alert('Ваш браузер не поддерживает операции с буфером обмена.');
+      }
+      return false;
+    "><span class="genmed">скопировать код в буфер обмена</span></a></td>
+  </tr>
+  <tr bgcolor="#F0F0F0">
+    
+    <td colspan="2"><font size="+0"><pre  caption="test/JsHttpRequest/frm_frontend.htm" style="margin: 0px">&lt;script src="../../lib/JsHttpRequest/JsHttpRequest.js"&gt;&lt;/script&gt;
+&lt;script type="text/javascript" language="JavaScript"&gt;
+function doLoad(value) {
+    <font color="green">// Create new JsHttpRequest object.</font>
+    var req = new JsHttpRequest();
+    <font color="green">// Code automatically called on load finishing.</font>
+    req.onreadystatechange = function() {
+        if (req.readyState == 4) {
+            <font color="green">// Write result to page element (_RESULT become responseJS). </font>
+            document.getElementById('result').innerHTML = 
+                'MD5('+req.responseJS.q+') = ' +
+                '"' + req.responseJS.md5 + '"&lt;br&gt; ';
+            <font color="green">// Write debug information too (output become responseText).</font>
+            document.getElementById('debug').innerHTML = req.responseText;
+        }
+    }
+    <font color="green">// Prepare request object (automatically choose GET or POST).</font>
+    req.open(null, 'frm_backend.php', true);
+    <font color="green">// Send data to backend.</font>
+    req.send( { q: value } );
+}
+&lt;/script&gt;
+
+<font color="green">&lt;!-- Please note that we must specify enctype to multipart/form-data! --&gt;</font>
+&lt;form method="post" id="f" enctype="multipart/form-data" onsubmit="return false"&gt;
+    Text: &lt;input type="text" name="txt"&gt;
+    File: &lt;input type="file" name="upl"&gt;
+    &lt;input type="button" value="Calculate MD5" 
+     onclick="doLoad(document.getElementById('f'))"&gt;
+&lt;/form&gt;
+
+&lt;div id="result" style="border:1px solid #000; padding:2px"&gt;
+    Structured results
+&lt;/div&gt;
+&lt;div id="debug" style="border:1px dashed red; padding:2px"&gt;
+    Debug info
+&lt;/div&gt;</pre></td>
+  </tr>
+</table></p>
+<p>См. этот пример в действии: файл <a href="http://dklab.ru/lib/JsHttpRequest/demo/test/JsHttpRequest/frm_frontend.htm">frm_frontend.htm</a>.
+
+
+
+
+
+<h3><a name=cont6></a>Кэширование и выбор метода загрузки</h3>
+<p>Библиотека JsHttpRequest поддерживает несколько возможностей, которых нет в XMLHttpRequest.
+    <p>Вы можете включить режим кэширования результата запросов к загрузчику: 
+
+
+
+
+<p><table cellspacing="1" cellpadding="6" border="0" align="center">
+  <tr bgcolor="#DDDDDD"> 
+  	
+    
+    <td width="100%"><font size=-1>
+    	<b>
+    		<a name="#list10" href="" title="Ссылка на текущий листинг.">Листинг 10</a>: включение кэширования
+    	</b>
+    </td>
+    <td align="right" nowrap><font size=-1><a href="" onclick="
+      if (document.body.createTextRange) {
+        var BodyRange = document.body.createTextRange(); 
+        BodyRange.moveToElementText(this.parentNode.parentNode.parentNode.nextSibling.firstChild); 
+        BodyRange.execCommand('Copy');  
+        alert('Код скопирован в буфер обмена Windows.');
+      } else {
+        alert('Ваш браузер не поддерживает операции с буфером обмена.');
+      }
+      return false;
+    "><span class="genmed">скопировать код в буфер обмена</span></a></td>
+  </tr>
+  <tr bgcolor="#F0F0F0">
+    
+    <td colspan="2"><font size="+0"><pre  caption="включение кэширования" style="margin: 0px"><font color="green">// Enable caching of the query results</font>
+req.caching = true;</pre></td>
+  </tr>
+</table></p>
+<p>Теперь, если вы дважды вызовете метод <nobr><tt>send()</tt></nobr> с теми же данными в параметрах, во второй раз обращение на сервер не произойдет, а будет возвращен результат первого обращения. Такой режим удобен в случаях, когда с сервера подгружаются статичные данные (например, элементы выпадающих списков городов). Конечно, кэширование следует отключать, если вы отправляете на сервере какие-то данные, введенные пользователем.
+
+    <p>По умолчанию библиотека JsHttpRequest старается сама выбрать оптимальный тип загрузчика данных, исходя из возможностей, поддеживаемых браузером. Например, в Firefox будет практически всегда использован встроенный объект XMLHttpRequest (но только не в случае, когда производится закачка файлов: в последнем случае всегда применяется загрузчик, основанный на FORM и IFRAME). Однако иногда (например, при написании скриптов тестирования библиотеки) требуется явно указать, какой загрузчик требуется использовать. Это можно сделать, присвоив значение свойству <nobr><tt>loader</tt></nobr> объекта-библиотеки:
+
+
+
+
+<p><table cellspacing="1" cellpadding="6" border="0" align="center">
+  <tr bgcolor="#DDDDDD"> 
+  	
+    
+    <td width="100%"><font size=-1>
+    	<b>
+    		<a name="#list11" href="" title="Ссылка на текущий листинг.">Листинг 11</a>: явное указание загрузчика
+    	</b>
+    </td>
+    <td align="right" nowrap><font size=-1><a href="" onclick="
+      if (document.body.createTextRange) {
+        var BodyRange = document.body.createTextRange(); 
+        BodyRange.moveToElementText(this.parentNode.parentNode.parentNode.nextSibling.firstChild); 
+        BodyRange.execCommand('Copy');  
+        alert('Код скопирован в буфер обмена Windows.');
+      } else {
+        alert('Ваш браузер не поддерживает операции с буфером обмена.');
+      }
+      return false;
+    "><span class="genmed">скопировать код в буфер обмена</span></a></td>
+  </tr>
+  <tr bgcolor="#F0F0F0">
+    
+    <td colspan="2"><font size="+0"><pre  caption="явное указание загрузчика" style="margin: 0px"><font color="green">// Always use FORM loader.</font>
+req.loader = 'FORM';</pre></td>
+  </tr>
+</table></p>
+<p>Наконец, выбор оптимального метода загрузки (GET или POST) можно также поручить библиотеке, указав в первом параметре функции <nobr><tt>open()</tt></nobr> нетипичное для XMLHttpRequest значение <nobr><tt>null</tt></nobr> (обычно там указывают "GET" или "POST"; <nobr><tt>null</tt></nobr> предоставит выбор наилучшего метода библиотеке). Естественно, если данные невозможно загрузить явно указанным методом (или загрузчиком), библиотека сообщит об этом ошибкой.
+
+
+
+
+
+<h3><a name=cont7></a>Упрощенный интерфейс библиотеки</h3>
+<p>Приведенные выше примеры показывают, что контекст использования библиотеки JsHttpRequest практически всегда один и тот же. Вначале создается объект библиотеки, затем устанавливаются его свойства и указывается функция, которая будет вызвана при окончании загрузки. Далее осуществляется посылка запроса на сервер.
+
+    <p>Чтобы не писать один и тот же код по многу раз, объект <nobr><tt>JsHttpRequest</tt></nobr> имеет специальный метод <nobr><tt>query()</tt></nobr>, реализующий описанную только что логику. Пример его использования (файл <a href="http://dklab.ru/lib/JsHttpRequest/demo/test/JsHttpRequest/md5_frontend.htm">md5_frontend.htm</a>). 
+
+
+
+
+<p><table cellspacing="1" cellpadding="6" border="0" align="center">
+  <tr bgcolor="#DDDDDD"> 
+  	
+    
+    <td width="100%"><font size=-1>
+    	<b>
+    		<a name="#list12" href="" title="Ссылка на текущий листинг.">Листинг 12</a>: test/JsHttpRequest/md5_frontend.htm
+    	</b>
+    </td>
+    <td align="right" nowrap><font size=-1><a href="" onclick="
+      if (document.body.createTextRange) {
+        var BodyRange = document.body.createTextRange(); 
+        BodyRange.moveToElementText(this.parentNode.parentNode.parentNode.nextSibling.firstChild); 
+        BodyRange.execCommand('Copy');  
+        alert('Код скопирован в буфер обмена Windows.');
+      } else {
+        alert('Ваш браузер не поддерживает операции с буфером обмена.');
+      }
+      return false;
+    "><span class="genmed">скопировать код в буфер обмена</span></a></td>
+  </tr>
+  <tr bgcolor="#F0F0F0">
+    
+    <td colspan="2"><font size="+0"><pre  caption="test/JsHttpRequest/md5_frontend.htm" style="margin: 0px">&lt;script src="../../lib/JsHttpRequest/JsHttpRequest.js"&gt;&lt;/script&gt;
+&lt;script language="JavaScript"&gt;
+    <font color="green">// Function is called when we need to calculate MD5.</font>
+    function calculate_md5() {
+        JsHttpRequest.query(
+            'md5_backend.php', <font color="green">// backend</font>
+            {
+                <font color="green">// pass a text value </font>
+                'str': document.getElementById("mystr").value,  
+                <font color="green">// path a file to be uploaded</font>
+                'upl': document.getElementById("myupl")
+            },
+            <font color="green">// Function is called when an answer arrives. </font>
+            function(result, errors) {
+                <font color="green">// Write errors to the debug div.</font>
+                document.getElementById("debug").innerHTML = errors; 
+                <font color="green">// Write the answer.</font>
+                if (result) {
+                    document.getElementById("ans").innerHTML = 
+                        'MD5("' + result["str"] + '") = ' + result["md5"];
+                }
+            },
+            false  <font color="green">// do not disable caching</font>
+        );
+    }
+&lt;/script&gt;
+
+<font color="green">&lt;!-- Please note that we must specify enctype to multipart/form-data! --&gt;</font>
+&lt;form method="post" enctype="multipart/form-data" onsubmit="return false"&gt;
+    Enter a text: &lt;input type="text" id="mystr"&gt;&lt;br&gt;
+    ...or upload a file: &lt;input type="file" id="myupl"&gt;&lt;br&gt;
+    &lt;input type="button" value="Calculate MD5" onclick="calculate_md5()"&gt;
+&lt;/form&gt;
+
+&lt;div id="ans" style="border:1px solid #000; padding:2px"&gt;
+    Structured results
+&lt;/div&gt;
+&lt;div id="debug" style="border:1px dashed red; padding:2px"&gt;
+    Debug info
+&lt;/div&gt;</pre></td>
+  </tr>
+</table></p>
+<p>Как видите, этот пример делает почти то же самое, что и <a href="http://dklab.ru/lib/JsHttpRequest/demo/test/JsHttpRequest/smpl_frontend.htm">smpl_frontend.htm</a>, однако его код значительно короче и понятнее.
+
+
+
+
+
+
+
+
+
+<h3><a name=cont8></a>Работа совместно с библиотекой Prototype</h3>
+<a href="http://prototypejs.org/">Prototype</a> &#151; это популярное средство для упрощения работы JavaScript-программиста, включающее поддержку AJAX и другие возможности. Библиотека JsHttpRequest может быть использована в качестве ее серверной PHP-части (после подключение небольшого модуля совместимости JsHttpRequest-prototype.js). При этом все дополнительные возможности, присущие <b>JsHttpRequest</b> (кроссбраузерность, закачка файлов, работа с русскими кодировками и т.&nbsp;д.), остаются в силе.
+
+
+
+
+<p><table cellspacing="1" cellpadding="6" border="0" align="center">
+  <tr bgcolor="#DDDDDD"> 
+  	
+    
+    <td width="100%"><font size=-1>
+    	<b>
+    		<a name="#list13" href="" title="Ссылка на текущий листинг.">Листинг 13</a>: Использование стандартных функций Prototype
+    	</b>
+    </td>
+    <td align="right" nowrap><font size=-1><a href="" onclick="
+      if (document.body.createTextRange) {
+        var BodyRange = document.body.createTextRange(); 
+        BodyRange.moveToElementText(this.parentNode.parentNode.parentNode.nextSibling.firstChild); 
+        BodyRange.execCommand('Copy');  
+        alert('Код скопирован в буфер обмена Windows.');
+      } else {
+        alert('Ваш браузер не поддерживает операции с буфером обмена.');
+      }
+      return false;
+    "><span class="genmed">скопировать код в буфер обмена</span></a></td>
+  </tr>
+  <tr bgcolor="#F0F0F0">
+    
+    <td colspan="2"><font size="+0"><pre  caption="Использование стандартных функций Prototype" style="margin: 0px">&lt;script src="../../lib/JsHttpRequest/JsHttpRequest.js"&gt;&lt;/script&gt;
+&lt;script src="../../lib/JsHttpRequest/JsHttpRequest-prototype.js&gt;&lt;/script&gt;
+&lt;script language="JavaScript"&gt;
+new Ajax.Request('your_ajax_script.php', {
+  method: 'get',
+  parameters: {
+    name: 'Дмитрий',  
+    file: &#36;("my_upload_file")
+  },
+  onFailure: function(tr) {
+    alert('Error code: ' + tr.status + '\n');
+    alert(tr.responseText);
+  },
+  onSuccess: function(tr) {
+    &#36;("result").innerHTML = tr.responseJS.hello; 
+    if (tr.responseText) alert(tr.responseText);
+  }
+});
+&lt;/script&gt;</pre></td>
+  </tr>
+</table></p>
+<p>Конечно, вы можете использовать и любые другие возможности prototype для работы с AJAX (например, функции динамической подгрузки данных в HTML-элемент).
+
+
+
+
+
+
+
+
+<h3><a name=cont9></a>Перехват ошибок в PHP-загрузчике</h3>
+<p>Ключевым отличием библиотеки JsHttpRequest от аналогов является то, что системы, написанные с ее помощью, очень легко отлаживать. Традиционно отладка AJAX-приложений считается достаточно сложной проблемой. Дело в том, что данные поступают от PHP-части в JavaScript-часть в определенном (и весьма строгом) формате, и любое нарушение этого формата (например, из-за ошибки в скрипте-загрузчике) приведет к ошибкам в JavaScript-коде.
+
+    <p>Библиотека JsHttpRequest берет на себя всю "грязную работу" по конвертированию данных из формата, стандартного для PHP, в формат, принятый в JavaScript. Она перехватывает выходной поток PHP-скрипта (в том числе — сообщения о синтаксических и других ошибках) и накапливает его в специальном буфере, чтобы потом передать в свойство responseText объекта JavaScript. Вы также физически не сможете заполнить массив <nobr><tt>$_RESULT</tt></nobr> так, чтобы это нарушило формат передачи данных: массивы PHP однозначно транслируются в объекты JavaScript. 
+
+    <p>Т.к. все сообщения об ошибках (например, вызов несуществующей функции) PHP печатает прямо в выходной поток (как будто бы через <nobr><tt>echo</tt></nobr>), логично воспринимать <i>все</i> содержимое выходного потока скрипта в качестве отладочного текста. Если вы помните, этот текст доступен в свойстве <nobr><tt>req.responseText</tt></nobr>, пустом при корректном завершении загрузчика. Благодаря механизму перехвата ни одна, даже самая серьезная, ошибка в PHP-программе не сгенерирует некорректного JavaScript-кода. Вместо этого текст ошибки попадет в <nobr><tt>req.responseText</tt></nobr>.
+
+
+
+
+<p>Вы можете убедиться, что перехват ошибок работает, запустив пример <a href="http://dklab.ru/lib/JsHttpRequest/demo/test/JsHttpRequest/md5_frontend.htm">md5_frontend.htm</a>, приведенный выше, и введя в строке текста слово "error". Наверное, Вы уже обратили внимание, что в отладочном блоке выводится сообщение о фатальной ошибке PHP (вызов неопределенной функции), которая привела к немедленному завершению скрипта:
+
+
+
+
+<p><table cellspacing="1" cellpadding="6" border="0" align="center">
+  <tr bgcolor="#DDDDDD"> 
+  	
+    
+    <td width="100%"><font size=-1>
+    	<b>
+    		<a name="#list14" href="" title="Ссылка на текущий листинг.">Листинг 14</a>: пример перехваченной фатальной ошибки PHP
+    	</b>
+    </td>
+    <td align="right" nowrap><font size=-1><a href="" onclick="
+      if (document.body.createTextRange) {
+        var BodyRange = document.body.createTextRange(); 
+        BodyRange.moveToElementText(this.parentNode.parentNode.parentNode.nextSibling.firstChild); 
+        BodyRange.execCommand('Copy');  
+        alert('Код скопирован в буфер обмена Windows.');
+      } else {
+        alert('Ваш браузер не поддерживает операции с буфером обмена.');
+      }
+      return false;
+    "><span class="genmed">скопировать код в буфер обмена</span></a></td>
+  </tr>
+  <tr bgcolor="#F0F0F0">
+    
+    <td colspan="2"><font size="+0"><pre  caption="пример перехваченной фатальной ошибки PHP" style="margin: 0px">Fatal error: Call to undefined function 
+error_demonstration__make_a_mistake_calling_undefined_function()
+in load.php on line 15</pre></td>
+  </tr>
+</table></p>
+
+<p>Ну а чтобы все окончательно прояснилось, приведем примерный результат работы скрипта <a href="http://dklab.ru/lib/JsHttpRequest/demo/test/JsHttpRequest/md5_backend.php">md5_backend.php</a>, как его 
+    "видит" браузер (уже после перевода его библиотекой JsHttpRequest в формат, "понятный" для JavaScript-кода). Результат выглядит так даже в случае возникновения фатальной ошибки.
+
+
+
+
+<p><table cellspacing="1" cellpadding="6" border="0" align="center">
+  <tr bgcolor="#DDDDDD"> 
+  	
+    
+    <td width="100%"><font size=-1>
+    	<b>
+    		<a name="#list15" href="" title="Ссылка на текущий листинг.">Листинг 15</a>: пример формата результата
+    	</b>
+    </td>
+    <td align="right" nowrap><font size=-1><a href="" onclick="
+      if (document.body.createTextRange) {
+        var BodyRange = document.body.createTextRange(); 
+        BodyRange.moveToElementText(this.parentNode.parentNode.parentNode.nextSibling.firstChild); 
+        BodyRange.execCommand('Copy');  
+        alert('Код скопирован в буфер обмена Windows.');
+      } else {
+        alert('Ваш браузер не поддерживает операции с буфером обмена.');
+      }
+      return false;
+    "><span class="genmed">скопировать код в буфер обмена</span></a></td>
+  </tr>
+  <tr bgcolor="#F0F0F0">
+    
+    <td colspan="2"><font size="+0"><pre  caption="пример формата результата" style="margin: 0px">JsHttpRequest.dataReady({
+  "id": "123", <font color="green">// this ID is passed from JavaScript frontend</font>
+  "js": { 
+      "str": "строка", 
+      "md5": "MD5-код введенной строки" 
+  },
+  "text": "Здесь идут отладочные сообщения и ошибки."
+})</pre></td>
+  </tr>
+</table></p>
+
+
+
+
+<h2><a name=cont10></a><span style="font-size: 18pt">Принцип работы JsHttpRequest</span></h2>
+<p>В зависимости от возможностей браузера и особенностей передаваемых данных библиотека JsHttpRequest использует 3 различных способа загрузки данных ("загрузчика").
+    <ol>
+    
+    <li>Для IE5 и IE6 используется ActiveX-компонента Microsoft.XMLHTTP или Msxml2.XMLHTTP. Однако, чтобы она заработала, вы должны включить ActiveX в настройках браузера. И хотя по умолчанию данная функция как раз включена, многие пользователи, наслышанные о многочисленных дырах IE, вручную ее отключают. Для Mozilla, Firefox и Opera 8 (и старше), а также для IE7 применяется класс <nobr><tt>XMLHttpRequest</tt></nobr>. У него есть небольшой недостаток: по умолчанию запрещено загружать данные откуда-то, кроме как с текущего сайта. Т.е. вы не можете подгзузить какую-то информацию со стороннего сайта, даже если JsHttpRequest на нем установлен.
+
+    <li>Если ни один из описанных выше методов не доступен, производится попытка использовать динамически создаваемый тэг <nobr><tt>&lt;SCRIPT&gt;</tt></nobr>. Этот способ работает во всех браузерах и позволяет посылать запросы даже на отличающийся от текущего домен, но у него есть большой недостаток: данные возможно передавать только методом GET (POST недоступен), а значит, их размер сильно ограничен.
+    <p><table border=0>
+<tr valign=top>
+<td><nobr><img src="JsHttpRequest/exclam00.gif" alt="Лирическое отступление" width="32" height="32">&nbsp;</td>
+<td><p><i>
+    При использовании данного метода в поведении библиотеки JsHttpRequest имеются два отличия от стандартного <nobr><tt>XMLHttpRequest</tt></nobr>. Во-первых, библиотека поддерживает только асинхронную загрузку данных (работа без ожидания: скрипт никогда не "замораживается", если ответ от сервера еще не пришел). Во-вторых, в случае обрыва соединения при загрузке данных это нельзя обнаружить. Данные ограничения не могут быть обойдены, но, к счастью, почти не ограничивают область применимости библиотеки.
+    </i></td>
+</tr>
+</table></p>
+    <li>Наконец, если требуется закачать на сервер тот или иной файл (upload), используется единственно возможный алгоритм: применение динамически создаваемых <nobr><tt>&lt;IFRAME&gt;</tt></nobr> и <nobr><tt>&lt;FORM&gt;</tt></nobr>. Главный недостаток этого метода: при изменении атрибута <nobr><tt>src</tt></nobr> у <nobr><tt>&lt;IFRAME&gt;</tt></nobr> раздается характерный щелчок и добавляется запись в "историю браузера", так что кнопка <b>Back</b> (<b>Назад</b>) начинает работать неправильно. К счастью, в современных браузерах эта проблема не возникает, но в старых она может наблюдаться.
+    </ol>
+
+    <p><table border=0>
+<tr valign=top>
+<td><nobr><img src="JsHttpRequest/exclam00.gif" alt="Лирическое отступление" width="32" height="32">&nbsp;</td>
+<td><p><i>
+    Если вас не устраивает встроенный в JsHttpRequest алгоритм автоматического выбора загрузчика, вы можете явно указать, какой загрузчик и какой метод (GET или POST) использовать. Это делается при помощи присваивания значений "SCRIPT", "XML" или "FORM" свойству <nobr><tt>loader</tt></nobr> объекта библиотеки, а также указания метода ("GET" или "POST") в первом параметре функции <nobr><tt>open()</tt></nobr>.
+    </i></td>
+</tr>
+</table></p>
+
+
+
+<h3><a name=cont11></a>Протокол обмена данными</h3>
+<p>Рассмотрим, как работает библиотека, на примере самого кроссбраузерного способа загрузки данных. Речь о динамическом создании и присоединении к текущей странице тэга <nobr><tt>&lt;SCRIPT&gt;</tt></nobr>. Такому тэгу следует указать атрибут <nobr><tt>src</tt></nobr>, совпадающий с адресом серверного скрипта подгрузки данных (написанного, к примеру, на PHP).
+
+
+
+<p><table border=0>
+<tr valign=top>
+<td><nobr><img src="JsHttpRequest/teapot00.gif" alt="Чайник" width="40" height="40">&nbsp;</td>
+<td><p><i>
+Конечно, загружаемый скрипт должен выдавать корректный код на JavaScript. Обычный текст таким методом не подгрузишь. О том, чтобы обеспечить корректность JavaScript-кода, полностью заботится библиотека.
+
+
+</p></td>
+</tr>
+</table></p>
+<p>Предположим, что при нажатии на кнопку JavaScript-программа вставляет (c использованием DOM) в текущую страницу следующий тэг:
+
+
+
+
+<p><table cellspacing="1" cellpadding="6" border="0" align="center">
+  <tr bgcolor="#DDDDDD"> 
+  	
+    
+    <td width="100%"><font size=-1>
+    	<b>
+    		<a name="#list16" href="" title="Ссылка на текущий листинг.">Листинг 16</a>: обращение к загрузчику
+    	</b>
+    </td>
+    <td align="right" nowrap><font size=-1><a href="" onclick="
+      if (document.body.createTextRange) {
+        var BodyRange = document.body.createTextRange(); 
+        BodyRange.moveToElementText(this.parentNode.parentNode.parentNode.nextSibling.firstChild); 
+        BodyRange.execCommand('Copy');  
+        alert('Код скопирован в буфер обмена Windows.');
+      } else {
+        alert('Ваш браузер не поддерживает операции с буфером обмена.');
+      }
+      return false;
+    "><span class="genmed">скопировать код в буфер обмена</span></a></td>
+  </tr>
+  <tr bgcolor="#F0F0F0">
+    
+    <td colspan="2"><font size="+0"><pre  caption="обращение к загрузчику" style="margin: 0px">&lt;script language="JavaScript" src="load.php?room=303&amp;JsHttpRequest=101-script"&gt;&lt;/script&gt;</pre></td>
+  </tr>
+</table></p>
+<p>Что при этом произойдет? Браузер немедленно обратится к серверу со следующим запросом: 
+
+
+
+
+<p><table cellspacing="1" cellpadding="6" border="0" align="center">
+  <tr bgcolor="#DDDDDD"> 
+  	
+    
+    <td width="100%"><font size=-1>
+    	<b>
+    		<a name="#list17" href="" title="Ссылка на текущий листинг.">Листинг 17</a>: URL запрошенного загрузчика
+    	</b>
+    </td>
+    <td align="right" nowrap><font size=-1><a href="" onclick="
+      if (document.body.createTextRange) {
+        var BodyRange = document.body.createTextRange(); 
+        BodyRange.moveToElementText(this.parentNode.parentNode.parentNode.nextSibling.firstChild); 
+        BodyRange.execCommand('Copy');  
+        alert('Код скопирован в буфер обмена Windows.');
+      } else {
+        alert('Ваш браузер не поддерживает операции с буфером обмена.');
+      }
+      return false;
+    "><span class="genmed">скопировать код в буфер обмена</span></a></td>
+  </tr>
+  <tr bgcolor="#F0F0F0">
+    
+    <td colspan="2"><font size="+0"><pre  caption="URL запрошенного загрузчика" style="margin: 0px">load.php?room=303&amp;JsHttpRequest=101-script</pre></td>
+  </tr>
+</table></p>
+<p>В результате на сервере запустится скрипт <nobr><tt>load.php</tt></nobr>, который получит в <nobr><tt>QUERY_STRING</tt></nobr> параметры <nobr><tt>load.php?room=303&JsHttpRequest=101-script</tt></nobr> (конечно, аргументы могут быть произвольными). Программа отработает (к примеру, обратится к базе данных) и напечатает в качестве результирующей страницы следующий текст:
+
+
+
+
+<p><table cellspacing="1" cellpadding="6" border="0" align="center">
+  <tr bgcolor="#DDDDDD"> 
+  	
+    
+    <td width="100%"><font size=-1>
+    	<b>
+    		<a name="#list18" href="" title="Ссылка на текущий листинг.">Листинг 18</a>: пример результата работы загрузчика
+    	</b>
+    </td>
+    <td align="right" nowrap><font size=-1><a href="" onclick="
+      if (document.body.createTextRange) {
+        var BodyRange = document.body.createTextRange(); 
+        BodyRange.moveToElementText(this.parentNode.parentNode.parentNode.nextSibling.firstChild); 
+        BodyRange.execCommand('Copy');  
+        alert('Код скопирован в буфер обмена Windows.');
+      } else {
+        alert('Ваш браузер не поддерживает операции с буфером обмена.');
+      }
+      return false;
+    "><span class="genmed">скопировать код в буфер обмена</span></a></td>
+  </tr>
+  <tr bgcolor="#F0F0F0">
+    
+    <td colspan="2"><font size="+0"><pre  caption="пример результата работы загрузчика" style="margin: 0px">JsHttpRequest.dataReady({
+  "id": "101", <font color="green">// this ID is passed from JavaScript frontend</font>
+  "js": [
+    "Это некоторые данные.",
+    "Они могут иметь произвольную структуру...",
+    { "test": "...и вложенность" }
+  ],
+  "text": "А здесь идет простой отладочный текст."
+})
+
+</pre></td>
+  </tr>
+</table></p>
+<p><table border=0>
+<tr valign=top>
+<td><nobr><img src="JsHttpRequest/teapot00.gif" alt="Чайник" width="40" height="40">&nbsp;</td>
+<td><p><i>
+<b>Внимание!</b> Приведенный выше формат результирующих данных - это лишь пример одного из используемых способов передачи данных. Если Вас интересует подробное описание, см. документ <a href="http://dklab.ru/lib/JsHttpRequest/protocol.html">Протокол передачи данных</a>.
+
+
+</p></td>
+</tr>
+</table></p>
+
+<p>Итак, PHP-скрипт <nobr><tt>load.php</tt></nobr> напечатал в свой выходной поток текст, являющийся по совместительству корректной JavaScript-программой. Он будет использован браузером в качестве источника данных произвольной структуры.
+
+
+
+<p><table border=0>
+<tr valign=top>
+<td><nobr><img src="JsHttpRequest/exclam00.gif" alt="Лирическое отступление" width="32" height="32">&nbsp;</td>
+<td><p><i>
+М-ммм... "Программа, пишущая другие программы"... "Источник"... Определенно "Matrix has you".
+
+
+</i></td>
+</tr>
+</table></p>
+<p>В итоге код на JavaScript, сгенерированный PHP-скриптом <nobr><tt>load.php</tt></nobr>, будет выполнен браузером! Как видите, вызывается метод <nobr><tt>dataReady()</tt></nobr> объекта <nobr><tt>JsHttpRequest</tt></nobr>, которому передается:
+    <ol>
+    <li>Уникальный <i>идентификатор загрузки</i> (чтобы не спутать одни данные с другими, ведь страница может одновременно запросить сведения сразу из нескольких источников). Этот идентификатор всегда попадает в backend-код из GET-параметра "JsHttpRequest" (вспомните <nobr><tt>QUERY_STRING</tt></nobr> из примера: <nobr><tt>load.php?room=303&JsHttpRequest=101-script</tt></nobr>) и представляет собой целое число. (После дефиса, который идет за числом, указывается использованный тип загрузчика: "xml" или "script" или "form".)
+    <li><i>Произвольные</i> данные, полученные программой <nobr><tt>load.php</tt></nobr>, например, из БД.
+    <li>Некоторый <i>текст</i>, который может быть использован в отладочных целях (например, там удобно указывать сообщения об ошибках, возникших в PHP-программе, т.е. содержимое стандартного выходного потока скрипта).
+    </ol>
+
+
+
+<p>Ну а уж функция <nobr><tt>JsHttpRequest.dataReady()</tt></nobr> заботится о доставке загруженых данных конечному потребителю, осуществляя также <i>кэширование</i> одинаковых запросов (если это разрешено).
+
+
+
+<p><table border=0>
+<tr valign=top>
+<td><nobr><img src="JsHttpRequest/teapot00.gif" alt="Чайник" width="40" height="40">&nbsp;</td>
+<td><p><i>
+Динамическая генерация тэга <nobr><tt>&lt;SCRIPT&gt;</tt></nobr> имеет одно важное достоинство: при использовании такого подхода "история" браузера (history) не засоряется лишними ссылками, а при загрузке не слышно щелчка, издаваемого многими браузерами во время перехода на другую страницу. Нужно также заметить, что в Firefox имеется небольшая ошибка, в результате которой статус-строка не очищается после загрузки <nobr><tt>&lt;SCRIPT&gt;</tt></nobr>-компонента (в ней остается сообщение "Loading ..."). Впрочем, эта ошибка ни на что не влияет и, вероятно, будет в скором времени исправлена разработчиками.
+
+
+</p></td>
+</tr>
+</table></p>
+
+<h3><a name=cont12></a>Состав библиотеки</h3>
+<p>Библиотека JsHttpRequest состоит из двух частей, работающих совместно друг с другом:
+
+
+<ul>
+<li><a href="http://dklab.ru/lib/JsHttpRequest/demo/lib/JsHttpRequest/JsHttpRequest.js">JsHttpRequest.js</a>,&nbsp;14&nbsp;КБ:
+JavaScript-код, определяющий объект <nobr><tt>JsHttpRequest</tt></nobr>. <nobr>Это &#151;</nobr> так называемый <i>frontend</i> системы ("передний проход"). Его следует подключать к страницам с помощью тэга: 
+
+
+
+<p><table cellspacing="1" cellpadding="6" border="0" align="center">
+  <tr bgcolor="#DDDDDD"> 
+  	
+    
+    <td width="100%"><font size=-1>
+    	<b>
+    		<a name="#list19" href="" title="Ссылка на текущий листинг.">Листинг 19</a>: подключение библиотеки в JavaScript
+    	</b>
+    </td>
+    <td align="right" nowrap><font size=-1><a href="" onclick="
+      if (document.body.createTextRange) {
+        var BodyRange = document.body.createTextRange(); 
+        BodyRange.moveToElementText(this.parentNode.parentNode.parentNode.nextSibling.firstChild); 
+        BodyRange.execCommand('Copy');  
+        alert('Код скопирован в буфер обмена Windows.');
+      } else {
+        alert('Ваш браузер не поддерживает операции с буфером обмена.');
+      }
+      return false;
+    "><span class="genmed">скопировать код в буфер обмена</span></a></td>
+  </tr>
+  <tr bgcolor="#F0F0F0">
+    
+    <td colspan="2"><font size="+0"><pre  caption="подключение библиотеки в JavaScript" style="margin: 0px">&lt;script language="JavaScript" src="JsHttpRequest/JsHttpRequest.js"&gt;
+&lt;/script&gt;</pre></td>
+  </tr>
+</table></p><li><a href="http://dklab.ru/lib/JsHttpRequest/demo/lib/JsHttpRequest/JsHttpRequest.php">JsHttpRequest.php</a>,&nbsp;16&nbsp;КБ: 
+PHP-код, в котором определяются функции для облегчения написания загрузчиков на PHP. <nobr>Это &#151;</nobr> так называемый <i>backend</i> системы ("задний проход"). Его следует включать в самое начало программы оператором: 
+
+
+
+<p><table cellspacing="1" cellpadding="6" border="0" align="center">
+  <tr bgcolor="#DDDDDD"> 
+  	
+    
+    <td width="100%"><font size=-1>
+    	<b>
+    		<a name="#list20" href="" title="Ссылка на текущий листинг.">Листинг 20</a>: подключение библиотеки в PHP
+    	</b>
+    </td>
+    <td align="right" nowrap><font size=-1><a href="" onclick="
+      if (document.body.createTextRange) {
+        var BodyRange = document.body.createTextRange(); 
+        BodyRange.moveToElementText(this.parentNode.parentNode.parentNode.nextSibling.firstChild); 
+        BodyRange.execCommand('Copy');  
+        alert('Код скопирован в буфер обмена Windows.');
+      } else {
+        alert('Ваш браузер не поддерживает операции с буфером обмена.');
+      }
+      return false;
+    "><span class="genmed">скопировать код в буфер обмена</span></a></td>
+  </tr>
+  <tr bgcolor="#F0F0F0">
+    
+    <td colspan="2"><font size="+0"><pre  caption="подключение библиотеки в PHP" style="margin: 0px">require_once "JsHttpRequest/JsHttpRequest.php";</pre></td>
+  </tr>
+</table></p></ul>
+
+<p>В качестве языка для написания загрузчиков пока что поддерживается только PHP, однако в будущем возможно написание backend-модулей и на других языках. (На самом деле, версии для Perl и C++ уже есть, однако они недостаточно стабильны для того, чтобы включать их в дистрибутив.)
+
+
+
+<p>Для уменьшения размера ускорения загрузки основного frontend-модуля библиотеки ее JavaScript-код сжат при помощи утилит в составе пакета <a href="http://dojotoolkit.org/">Dojo Toolkit</a>. (<a href="http://dklab.ru/lib/JsHttpRequest/demo/lib/JsHttpRequest/JsHttpRequest.js">Здесь</a> Вы можете посмотреть, как он выглядит после сжатия.)
+
+
+
+
+
+
+<h3><a name=cont13></a>Модульная структура библиотеки</h3>
+<p>В дистрибутиве библиотеки имеются также две дополнительные директории: <nobr><tt>lib/JsHttpRequest/debug</tt></nobr> и <nobr><tt>lib/JsHttpRequest/mini</tt></nobr>.
+
+    <ul>
+    <li>В директории <a href="http://dklab.ru/lib/JsHttpRequest/demo/lib/JsHttpRequest/debug/">debug</a> хранятся исходные тексты библиотеки frontend-поддержки, со всеми комментариями, отступами и пробелами. Если Вам кажется, что Вы нашли в библиотеке баг, пожалуйста, вначале попробуйте использовать <a href="http://dklab.ru/lib/JsHttpRequest/demo/lib/JsHttpRequest/debug/">эти версии</a> для локализации проблемы, а уж только затем пишите в форум.
+    <li>В директории <a href="http://dklab.ru/lib/JsHttpRequest/demo/lib/JsHttpRequest/mini/">mini</a> хранятся "урезанные" версии библиотеки. Например, там можно найти версию, поддерживающую только метод загрузки SCRIPT (<a href="http://dklab.ru/lib/JsHttpRequest/demo/lib/JsHttpRequest/mini/JsHttpRequest-script.js">JsHttpRequest-script.js</a>), удобную, если Вы загружаете данные только с "чужих" серверов. Она занимает всего 8 КБ.
+    </ul>
+
+    <p>Если Вы взглянете на <a href="http://dklab.ru/lib/JsHttpRequest/demo/lib/JsHttpRequest/debug/JsHttpRequest.js">исходный код frontend-модуля</a>, Вы заметите, что можете самостоятельно скомпоновать необходимый Вам набор загрузочных модулей. Для этого просто удалите кусок кода, хранящий тот или иной загрузчик.
+
+
+
+
+<h3><a name=cont14></a>Решение проблемы с кодировками</h3>
+<p>При формировании запроса к загрузчику может потребоваться передать ему строки, содержащие русские буквы. Естественно, их нельзя напрямую передавать в URL, а вначале нужно URL-<nobr>кодировать &#151;</nobr> преобразовать каждый символ русского алфавита к виду <nobr><tt> %XX</tt></nobr>, где <nobr><tt>XX</tt></nobr> &#151; код символа.
+
+    <p>В JavaScript имеется функция <nobr><tt>escape()</tt></nobr>, которая URL-кодирует строку данных. К сожалению, она возвращает результат <i>только</i> в виде Unicode. Например, строка <nobr><tt>"проба"</tt></nobr> представляется ей так <nobr><tt>"%u043F%u0440%u043E%u0431%u0430"</tt></nobr>. В PHP нет функций, умеющих раскодировать такое представление данных (<a href="http://php.net/urldecode">urldecode()</a> тут плохой помощник, ибо она не поддерживает формат <nobr><tt> %uXXXX</tt></nobr>). Функция <nobr><tt>escape()</tt></nobr> позволяет закодировать совершенно любой символ, будь то русская буква, литера греческого алфавита или даже китайский иероглиф.
+
+    <p><table border=0>
+<tr valign=top>
+<td><nobr><img src="JsHttpRequest/exclam00.gif" alt="Лирическое отступление" width="32" height="32">&nbsp;</td>
+<td><p><i>
+    Вообще говоря, в последних версиях JavaScript имеется функция <nobr><tt>encodeURIComponent()</tt></nobr>, умеющая кодировать данные в обход Unicode. Однако она не поддерживается, например, в Internet Explorer 5.0, так что из соображения кроссбраузерности нам не подходит.
+    </i></td>
+</tr>
+</table></p>
+    <p>К счастью, популярное расширение <nobr><tt>iconv</tt></nobr> для PHP поддерживает функцию для преобразования данных во всевозможных кодировках, так что перекодировать из Unicode в windows-1251 не составляет для backend-библиотеки JsHttpRequest особых сложностей.
+
+    <p><table border=0>
+<tr valign=top>
+<td><nobr><img src="JsHttpRequest/exclam00.gif" alt="Лирическое отступление" width="32" height="32">&nbsp;</td>
+<td><p><i>
+    По многочисленным просьбам, библиотека JsHttpRequest может работать и без <nobr><tt>iconv</tt></nobr>, если основной кодировкой сайта является <nobr><tt>windows-1251</tt></nobr>, <nobr><tt>koi8-r</tt></nobr> или <nobr><tt>UTF-8</tt></nobr>. Функции и таблицы перевода из Unicode в одну из этих кодировок встроены в сам модуль.
+    </i></td>
+</tr>
+</table></p>
+    <p>Итак, вы можете вызывать метод <nobr><tt>send()</tt></nobr> объекта JsHttpRequest, не задумываясь о кодировках данных. Вам не нужно ничего перекодировать вручную ни в серверном, ни в клиентском коде: библиотека берет всю эту работу на себя.
+
+    <p><table border=0>
+<tr valign=top>
+<td><nobr><img src="JsHttpRequest/teapot00.gif" alt="Чайник" width="40" height="40">&nbsp;</td>
+<td><p><i>
+    Еще раз: если вы хотите использовать библиотеку JsHttpRequest с кодировками, отличными от <nobr><tt>windows-1251</tt></nobr>, <nobr><tt>koi8-r</tt></nobr> и <nobr><tt>UTF-8</tt></nobr>, на сервере должно быть установлено расширение PHP <nobr><tt>iconv</tt></nobr>. У большинства хостеров оно стоит, но, 
+    если вдруг окажется, что его нет (к позору провайдера), хостеру не составит труда установить модуль.
+    </p></td>
+</tr>
+</table></p>
+
+
+
+
+
+
+<h2><a name=cont15></a><span style="font-size: 18pt">Резюме</span></h2>
+<p>Подведем итоги этой большой статьи. Вначале я перечислю ссылки на программные модули, упоминаемые выше.
+
+
+
+<ul>
+<li>JavaScript-frontend библиотеки JsHttpRequest: <a href="http://dklab.ru/lib/JsHttpRequest/demo/lib/JsHttpRequest/JsHttpRequest.js">JsHttpRequest.js</a>.
+<li>PHP-backend библиотеки JsHttpRequest: <a href="http://dklab.ru/lib/JsHttpRequest/demo/lib/JsHttpRequest/JsHttpRequest.php">JsHttpRequest.php</a>.
+</ul>
+
+<p>Пример использования библиотеки:
+<ul>
+<li><a href="http://dklab.ru/lib/JsHttpRequest/demo/test/JsHttpRequest/">Все примеры из статьи</a> (<a href="http://dklab.ru/lib/JsHttpRequest/demo.zip">zip</a>).
+</ul>
+
+<p>Библиотека JsHttpRequest активно используется на форуме <a href="http://forum.dklab.ru/">forum.dklab.ru</a>. А именно, через нее реализованы следующие функции:
+    <ul>
+    <li>"Живой поиск": на каждой странице форума имеется поле, в которое можно ввести поисковый запрос и сразу же получить результат, минуя перезагрузку страницы.
+    <li>"Живой поиск" в форме добавления нового топика: то же самое, но срабатывает при вводе темы нового сообщения.
+    <li>"Живой предпросмотр": рядом со ссылками на топики приведена специальная пиктограмма, наведя мышь на которую, можно просмотреть первое сообщение топика.
+    <li>"Живая карма": пользователи могут изменять карму (рейтинг) друг другу, не перезагружая страницу.
+    </ul>
+
+
+
+<p>Статьи в Интернете:
+<ul>
+<li><a href="http://en.wikipedia.org/wiki/AJAX">Ajax (programming) - Wikipedia, the free encyclopedia</a>.
+<li><a href="http://developer.apple.com/internet/webcontent/xmlhttpreq.html">Dynamic HTML and XML: The XMLHttpRequest Object</a>.
+<li><a href="http://www.mozilla.org/xmlextras/">XML Extras (in Mozilla)</a>.
+<li><a href="http://msdn.microsoft.com/library/en-us/dnexxml/html/xml031899.asp">Expanded XML Support in Internet Explorer 5</a>.
+<li><a href="http://developer.apple.com/internet/webcontent/iframe.html">Remote Scripting with IFRAME</a>.
+<li>Результаты поиска в Google: <a href="http://www.google.com/search?q=XMLHttpRequest">XMLHttpRequest</a>, <a href="http://www.google.com/search?num=20&hl=en&lr=&q=remote+scripting">remote scripting</a>, <a href="http://www.google.com/search?num=20&hl=en&lr=&q=ajax">AJAX</a>.
+</ul>
+
+<p>
+Автор библиотеки выражает благодарность <a href="http://forum.dklab.ru/users/YupyNasretdinov/">Юрию Насретдинову</a> за перевод статьи на английский, а также ценные замечания, касающиеся библиотеки. 
+
+
+<br>
+<center>
+<script type="text/javascript"><!--
+google_ad_client = "pub-7882344363883855";
+google_ad_width = 728;
+google_ad_height = 90;
+google_ad_format = "728x90_as";
+google_ad_type = "text_image";
+google_ad_channel = "";
+google_color_border = "336699";
+google_color_bg = "FFFFFF";
+google_color_link = "0000FF";
+google_color_text = "000000";
+google_color_url = "008000";
+//-->
+</script>
+<script type="text/javascript"
+  src="JsHttpRequest/show_ads.js">
+</script><br/>
+<a href="http://www.max-style.ru/" target="_blank">Ремонт квартир по приемлемым ценам выполняется предприятием Максимум.</a> | Растаможка. <a href="http://www.logistics.su/" target="_blank">международные перевозки</a> грузов. | <a href="http://www.sof-shavua.co.il/" target="_blank">&#1510;&#1497;&#1502;&#1512;&#1497;&#1501;</a> &#1489;&#1512;&#1488;&#1513; &#1508;&#1497;&#1504;&#1492; | <a href="http://www.?????-???-????.com/" target="_blank">&#1489;&#1497;&#1496;&#1493;&#1495; &#1512;&#1499;&#1489;</a> &#1495;&#1493;&#1489;&#1492; | <a href="http://www.?????-?????-???????.com/" target="_blank">&#1489;&#1504;&#1497;&#1497;&#1514; &#1488;&#1514;&#1512;&#1497;&#1501;</a> SEOweb
+</center>
+<br>
+
+</div>
+</div>
+
+
+
+<hr height=1 style="clear:both">
+
+<div style="float:left; padding-bottom:3px">
+    <div style="float:left">
+        Дмитрий Котеров, Лаборатория dk. &copy;1999-2008    </div>
+</div>
+
+<div style="float:right; text-align:right">
+    <script language=JavaScript>
+    <!--
+    function getCookie(name) {
+      var p = name + "=";
+      var si = document.cookie.indexOf(p);
+      if(si == -1) return null;
+      var ei = document.cookie.indexOf(";", si + p.length);
+      if(ei == -1) ei = document.cookie.length;
+      return unescape(document.cookie.substring(si + p.length, ei));
+    }
+    //-->
+    </script>
+    <script language=JavaScript>
+    <!--
+      var s = getCookie("page_time");
+      if (s) {
+        document.write("Generation time: "+s+" s<br>");
+      }
+    //-->
+    </script>
+    GZip <script language=JavaScript>
+      <!--
+      var s = getCookie("page_size");
+      if (s) {
+        var p = s.split(/,\s*/);
+        document.write("enabled: <span title='стало'>"+p[1]+"</span>/<span title='было'>"+p[0]+"</span> <span title='откусили'>("+(100-Math.round(p[1]/p[0]*100))+"%)</span>");
+      } else {
+        document.write("disabled");
+      }
+      //-->
+      </script>
+</div>
+
+<center>
+    <a id="1" href="">Добавить на Del.icio.us</a>
+<script>document.getElementById('1').href = 'http://del.icio.us/post?url=http://dklab.ru/lib/JsHttpRequest/manual.html&title='+encodeURIComponent(document.title.replace(/.*\|\s*/, ''))</script>&nbsp;
+    <a id="2" href="">Добавить на Digg.com</a>
+<script>document.getElementById('2').href = 'http://digg.com/submit?phase=2&url=http://dklab.ru/lib/JsHttpRequest/manual.html&title='+encodeURIComponent(document.title.replace(/.*\|\s*/, ''))</script>&nbsp;
+    <a id="3" href="">Добавить на reddit.com</a>
+<script>document.getElementById('3').href = 'http://reddit.com/submit?url=http://dklab.ru/lib/JsHttpRequest/manual.html&title='+encodeURIComponent(document.title.replace(/.*\|\s*/, ''))</script>
+</center>
+
+<!--
+<script type="text/javascript" language="JavaScript" src="/js/Autohyphen.js"></script>
+<script>
+new Autohyphen().hyphenizeTree(document.getElementById('adv'+'test'.substring(0,0)+'Block'));
+</script>
+-->
+<!-- <script type="text/javascript" language="JavaScript" src="/js/LinkClassifier.js"></script> -->
+
+<script src="JsHttpRequest/urchin00.js" type="text/javascript">
+</script>
+<script type="text/javascript">
+_uacct = "UA-1168534-1";
+if (window.urchinTracker) urchinTracker();
+</script>
+</body>
+</html>
+<!-- This document saved from http://dklab.ru/lib/JsHttpRequest/manual.html -->
