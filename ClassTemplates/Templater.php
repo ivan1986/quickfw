@@ -116,8 +116,8 @@ class Templater_Templater
 			$this->assign('content',$content);
 			$content = $this->fetch($this->mainTemplate);
 		}
-		//echo $content;
-        return $content;
+		$content = $this->P->HeaderFilter($content);
+		return $content;
 	}
 
 }
