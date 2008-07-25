@@ -1,0 +1,108 @@
+<?php
+//------------------------------------------------------------------ 
+//*** Turkish (tr) - provided by: Murat HALAÇOÐLU murat@halacoglu.com       
+//------------------------------------------------------------------    
+function setLanguage(){ 
+    $lang['='] = "=";  // "equal"; 
+    $lang['>'] = ">";  // "bigger"; 
+    $lang['<'] = "<";  // "smaller";            
+    $lang['add'] = "Ekle"; 
+    $lang['add_new'] = "+ Yeni Ekle"; 
+    $lang['add_new_record'] = "Yeni Kayýt Ekle";
+    $lang['adding_operation_completed'] = "Kayýt Ýþlemi Tamamlandý!";
+    $lang['adding_operation_uncompleted'] = "Ýþlem Tamamlanamadý Hata Oluþtu!";
+    $lang['and'] = "ve";
+    $lang['any'] = "hiç"; 
+    $lang['ascending'] = "Küçükten Büyüðe"; 
+    $lang['back'] = "Geri"; 
+    $lang['cancel'] = "Ýptal";
+    $lang['cancel_creating_new_record'] = "Yeni kayýdý iptal etmek istiyormusun?";
+    $lang['check_all'] = "Hepsini Seç";
+    $lang['clear'] = "Clear";        
+    $lang['create'] = "Oluþtur"; 
+    $lang['create_new_record'] = "Yeni kayýt oluþtur"; 
+    $lang['current'] = "Þimdiki"; 
+    $lang['delete'] = "Sil"; 
+    $lang['delete_record'] = "Kayýt Sil";
+    $lang['delete_selected'] = "Seçilileri Sil";
+    $lang['delete_selected_records'] = "Seçili kayýtlarý silmek istiyormusun?";
+    $lang['delete_this_record'] = "Bu kayýtý silmek istiyormusun?";         
+    $lang['deleting_operation_completed'] = "Silme iþlemi tamamlandý!";
+    $lang['deleting_operation_uncompleted'] = "Silme iþlemi baþarýsýz!";
+    $lang['descending'] = "Büyükten Küçüðe";
+    $lang['details'] = "Detaylar";
+    $lang['details_selected'] = "View selected";                
+    $lang['edit'] = "Düzenle";
+    $lang['edit_selected'] = "Edit selected";    
+    $lang['edit_record'] = "Kayýdý Düzenle";
+    $lang['edit_selected_records'] = "Are you sure you want to edit the selected records?";                   
+    $lang['errors'] = "Errors";            
+    $lang['export_to_excel'] = "Excele Aktar";
+    $lang['export_to_pdf'] = "PDF Aktar";    
+    $lang['export_to_xml'] = "Xmle Aktar";
+    $lang['export_message'] = "<label class=\"class_label\">The file _FILE_ is ready. After you finish downloading,</label> <a class=\"class_error_message\" href=\"javascript: window.close();\">close this window</a>.";
+    $lang['field'] = "Alan"; 
+    $lang['field_value'] = "Alan Deðeri";
+    $lang['file_find_error'] = "Cannot find file: <b>_FILE_</b>. <br>Check if this file exists and you use a correct path!";                                    
+    $lang['file_opening_error'] = "Bir dosya açýlamýyor. Dosya izinlerini kontrol edin.";
+    $lang['file_writing_error'] = "Bir dosya yazýlamýyor. Dosya yazma izinlerini kontrol edin!";
+    $lang['file_invalid file_size'] = "Geçersiz dosya boyutu";
+    $lang['file_uploading_error'] = "Upload iþleminde hata oluþtu.!";
+    $lang['file_deleting_error'] = "There was an error while deleting!";
+    $lang['first'] = "Birinci";
+    $lang['handle_selected_records'] = "Are you sure you want to handle the selected records?";
+    $lang['hide_search'] = "Aramayý Gizle";
+    $lang['last'] = "Son";
+    $lang['like'] = "Benzer";
+    $lang['like%'] = "like%";  // "begins with"; 
+    $lang['%like'] = "%like";  // "ends with";
+    $lang['%like%'] = "%like%"; 
+    $lang['loading_data'] = "loading data...";
+    $lang['max'] = "max";    
+    $lang['next'] = "Ýleri";
+    $lang['no'] = "Hayýr";        
+    $lang['no_data_found'] = "Kayýt Bulunamadý"; 
+    $lang['no_data_found_error'] = "Kayýt bulunamadý. Hatalý syantax.";        
+    $lang['no_image'] = "Resim Yok";
+    $lang['not_like'] = "Benzer Olmayan";
+    $lang['of'] = "of";
+    $lang['or'] = "veya";    
+    $lang['pages'] = "Sayfalar";        
+    $lang['page_size'] = "Sayfa boyutu"; 
+    $lang['previous'] = "Önceki";    
+    $lang['printable_view'] = "Yazdýrýlabilir Görünüm";
+    $lang['print_now'] = "Þimdi Yazdýr";
+    $lang['print_now_title'] = "Bu sayfayý yazýcýya gönder";
+    $lang['record_n'] = "Kayýt #"; 
+    $lang['refresh_page'] = "Refresh Page";
+    $lang['remove'] = "Sil";
+    $lang['reset'] = "Reset";                        
+    $lang['results'] = "Sonuçlar";
+    $lang['required_fields_msg'] = "<font color='#cd0000'>*</font> iþaretli bölümler gereklidir.";
+    $lang['search'] = "Arama"; 
+    $lang['search_d'] = "Arama"; // (description) 
+    $lang['search_type'] = "Arama Tipi"; 
+    $lang['select'] = "seç";
+    $lang['set_date'] = "Tarihi Ayarla";
+    $lang['sort'] = "Sort";    
+    $lang['total'] = "Toplam";
+    $lang['turn_on_debug_mode'] = "For more information, turn on debug mode.";    
+    $lang['uncheck_all'] = "Hepsini Seçme";
+    $lang['unhide_search'] = "Unhide Arama";
+    $lang['unique_field_error'] = "The field _FIELD_ allows only unique values - please reenter!";            
+    $lang['update'] = "Güncelle"; 
+    $lang['update_record'] = "Kayýt güncelle";
+    $lang['updating_operation_completed'] = "Kayýt güncelleme baþarýlý!";
+    $lang['updating_operation_uncompleted'] = "Baþarýsýz kayýt güncelleme!";
+    $lang['upload'] = "Yükle";
+    $lang['view'] = "Gör"; 
+    $lang['view_details'] = "Detaylarý Gör";
+    $lang['warnings'] = "Warnings";               
+    $lang['with_selected'] = "Seçilenleri";
+    $lang['wrong_field_name'] = "Yanlýþ dosya adý";
+    $lang['wrong_parameter_error'] = "Wrong parameter in [<b>_FIELD_</b>]: _VALUE_";    
+    $lang['yes'] = "Evet";    
+    
+    return $lang;
+}
+?>

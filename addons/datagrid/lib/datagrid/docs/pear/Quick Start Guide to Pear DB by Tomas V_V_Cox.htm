@@ -1,0 +1,449 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!-- saved from url=(0041)http://vulcanonet.com/soft/?pack=pear_tut -->
+<HTML><HEAD><TITLE>Quick Start Guide to Pear DB by Tomas V.V.Cox</TITLE>
+<META http-equiv=Content-Type content="text/html; charset=windows-1251">
+<META content="MSHTML 6.00.2800.1561" name=GENERATOR></HEAD>
+<BODY bgColor=white>
+
+<b>See <a href="http://vulcanonet.com/soft/?pack=pear_tut">last updated version</a></b>
+
+<CENTER>
+<H1>Quick Start Guide to Pear DB</H1></CENTER>
+<TABLE width="75%" align=center bgColor=#0055ff border=1 bodercolordark="white" 
+bodercolorlight="white">
+  <TBODY>
+  <TR>
+    <TD><FONT color=white>Summary:</FONT></TD>
+    <TD><FONT color=white>A tutorial about how to use Pear DB</FONT></TD></TR>
+  <TR>
+    <TD><FONT color=white>Maintainer/PHP Initials:</FONT></TD>
+    <TD><A href="mailto:cox@idecnet.com"><FONT color=white>Tomas 
+      V.V.Cox</FONT></A> <FONT color=white>(<A href="mailto:cox@php.net"><FONT 
+      color=white>cox</FONT></A>) </FONT></TD></TR>
+  <TR>
+    <TD><FONT color=white>Software Version:</FONT></TD>
+    <TD><FONT color=white>n/a (n/a)</FONT></TD></TR>
+  <TR>
+    <TD><FONT color=white>Documentation Last Update:</FONT></TD>
+    <TD><FONT color=white>2003/03/04</FONT></TD></TR>
+  <TR>
+    <TD><FONT color=white>Download:<BR>(right click-&gt;save as<BR>over the 
+      link)</FONT></TD>
+    <TD><A 
+      href="http://vulcanonet.com/soft/index.php?pack=pear_tut&amp;showsource=1"><FONT 
+      color=white>./index.php?pack=pear_tut&amp;showsource=1</FONT></A>&nbsp;</TD></TR></TBODY></TABLE>
+<TABLE width="100%" border=0>
+  <TBODY>
+  <TR>
+    <TD align=right></TD></TR></TBODY></TABLE>
+<HR>
+
+<P><B><I>Translations of this document:</I></B></P>
+<UL>
+  <LI>English (original): <A 
+  href="http://vulcanonet.com/soft/pear_tut/">http://vulcanonet.com/soft/pear_tut/</A> 
+  by Tomas V.V.Cox (cox@vulcanonet.com) 
+  <LI>French: <A 
+  href="http://articles.phpheaven.net/article.php3?id_article=10">http://articles.phpheaven.net/article.php3?id_article=10</A> 
+  by Nicolas Hoizey (nhoizey@phpheaven.net) 
+  <LI>Russian: <A href="http://pear.sf.net/">http://pear.sf.net/</A> by Vitaly 
+  N. Kravchenko (kvn@phbme.ntu-kpi.kiev.ua) 
+  <LI>German: <A 
+  href="http://www-user.tu-chemnitz.de/~meal/php/peardoc/">http://www-user.tu-chemnitz.de/~meal/php/peardoc/</A> 
+  by Alexander Merz (alexmerz@php.net) 
+  <LI>Japanese: <A 
+  href="http://www.avantexchange.com/php/pear_tut.html">http://www.avantexchange.com/php/pear_tut.html</A> 
+  by Naoki Shima (murahachibu@php.net) 
+  <LI>Thai: <A 
+  href="http://www.exzilla.net/docs/pear/">http://www.exzilla.net/docs/pear/</A> 
+  by Narisa N. (narisa@exzilla.net) </LI></UL>
+<P><B>A new PEAR DB Manual in experimental state is already avaible at the <A 
+href="http://pear.php.net/manual/en/core.db.php">PEAR manual</A>. Check it 
+out!</B></P>
+<HR>
+
+<H2>Table Of contents</H2>
+<H2><A name=toc1>1. <A 
+href="http://vulcanonet.com/soft/?pack=pear_tut#ss1">Introduction (write 
+me!)</A></A></H2>
+<H2><A name=toc2>2. <A 
+href="http://vulcanonet.com/soft/?pack=pear_tut#ss2">Getting and Installing 
+Pear</A></A></H2>
+<H2><A name=toc3>3. <A href="http://vulcanonet.com/soft/?pack=pear_tut#ss3">Pear 
+DB Usage</A></A></H2>
+<UL>
+  <LI><A href="http://vulcanonet.com/soft/?pack=pear_tut#ss3.1">3.1 Connecting 
+  and Disconnecting from a database</A> 
+  <LI><A href="http://vulcanonet.com/soft/?pack=pear_tut#ss3.2">3.2 Doing a 
+  query to the database</A> 
+  <LI><A href="http://vulcanonet.com/soft/?pack=pear_tut#ss3.3">3.3 Fetch the 
+  rows from the query</A> 
+  <UL>
+    <LI><A href="http://vulcanonet.com/soft/?pack=pear_tut#ss3.3.1">3.3.1 Fetch 
+    row functions</A> 
+    <LI><A href="http://vulcanonet.com/soft/?pack=pear_tut#ss3.3.2">3.3.2 Select 
+    the format of the fetched row</A> 
+    <LI><A href="http://vulcanonet.com/soft/?pack=pear_tut#ss3.3.3">3.3.3 Set 
+    the format of the fetched row</A> 
+    <LI><A href="http://vulcanonet.com/soft/?pack=pear_tut#ss3.3.4">3.3.4 Fetch 
+    rows by number</A> 
+    <LI><A href="http://vulcanonet.com/soft/?pack=pear_tut#ss3.3.5">3.3.5 Free 
+    the result</A> </LI></UL>
+  <LI><A href="http://vulcanonet.com/soft/?pack=pear_tut#ss3.4">3.4 Quick data 
+  retrieving</A> 
+  <LI><A href="http://vulcanonet.com/soft/?pack=pear_tut#ss3.5">3.5 Getting more 
+  info from query results (numRows, numCols, affectedRows, tableInfo)</A> 
+  <LI><A href="http://vulcanonet.com/soft/?pack=pear_tut#ss3.6">3.6 
+  Sequences</A> 
+  <LI><A href="http://vulcanonet.com/soft/?pack=pear_tut#ss3.7">3.7 Prepare 
+  &amp; Execute/ExcuteMultiple (not yet written)</A> 
+  <LI><A href="http://vulcanonet.com/soft/?pack=pear_tut#ss3.8">3.8 autoCommit, 
+  commit and rollback (not yet written)</A> </LI></UL>
+<H2><A name=toc4>4. <A 
+href="http://vulcanonet.com/soft/?pack=pear_tut#ss4">Avaible methods 
+map</A></A></H2>
+<H2><A name=toc5>5. <A 
+href="http://vulcanonet.com/soft/?pack=pear_tut#ss5">Error Handling</A></A></H2>
+<UL>
+  <LI><A href="http://vulcanonet.com/soft/?pack=pear_tut#ss5.1">5.1 Getting the 
+  error message from a Pear DB Error</A> 
+  <LI><A href="http://vulcanonet.com/soft/?pack=pear_tut#ss5.2">5.2 Debuging 
+  Pear DB Errors</A> 
+  <LI><A href="http://vulcanonet.com/soft/?pack=pear_tut#ss5.3">5.3 Taking 
+  automatic actions on errors</A> </LI></UL>
+<H2><A name=toc6>6. <A 
+href="http://vulcanonet.com/soft/?pack=pear_tut#ss6">Thanks</A></A></H2>
+<HR>
+
+<H2><A name=ss1>1. Introduction (write me!)</A></H2>
+<P>This is a tutorial about how to use the Pear DB extension. Pear DB, is a set 
+of classes that provides:</P>
+<UL>
+  <LI>Database abstraction 
+  <LI>Advanced error handling 
+  <LI>etc </LI></UL><BR>
+<HR>
+
+<H2><A name=ss2>2. Getting and Installing Pear</A></H2>
+<P>For the moment the <A href="http://pear.php.net/">Pear Project</A> is still 
+under heavy development, so the best way to get it, is from the CVS (the Pear DB 
+distribution that comes with PHP is outdated, also the one that comes with PHP 
+4.0.6!). Then, the only thing you need to do, is add the Pear base directory to 
+your <I>include_path</I> entry in <I>php.ini</I>. You can also do it, using: 
+<I>ini_set('include_path', '/pear_base_dir')</I>.</P>
+<P>Here is an example step by step:</P>
+<TABLE borderColor=black cellSpacing=0 cellPadding=5 width="100%" 
+bgColor=#dddddd border=1>
+  <TBODY>
+  <TR>
+    <TD><PRE>Where you want to place Pear files
+<B># cd /usr/local/lib</B>
+Log to the repository (use "phpfi" as password):
+<B># cvs -d :pserver:cvsread@cvs.php.net:/repository login</B>
+Launch this command to get all the pear files. You can use it also
+for update yet downloaded files. Other options may be "today", "last month", etc.
+I recommend the "last week" option because normally the possible bugs generated
+by new commits are found and fixed in one week :-)
+<B># cvs -d :pserver:cvsread@cvs.php.net:/repository export -D "last week" php4/pear</B>
+Edit your <I>php.ini</I> and add the directory
+<I>/usr/local/lib/php4/pear</I> to your <I>include_path</I> entry. If you don't have
+access to php.ini, you can use <I>ini_set('include_path', 'path_to_pear');</I> in
+your code.
+</PRE></TR></TBODY></TABLE>
+<P>The complete documentation of the PHP CVS can be found <A 
+href="http://cvs.php.net/">here</A>.</P>
+<P><I>Please note that Pear DB requires PHP &gt; 4.0.4, but other packages 
+inside Pear like the XML Parser ot the pear installer script will require PHP 
+&gt;= 4.0.5.</I></P>
+<P><B>For the moment this guide only covers the last CVS version of Pear DB, but 
+may be is valid for any recent version.</B></P>
+<HR>
+
+<H2><A name=ss3>3. Pear DB Usage</A></H2>
+<H3><A name=ss3.1>3.1 Connecting and Disconnecting from a database</A></H3>
+<TABLE cellSpacing=0 cellPadding=5 width="100%" bgColor=#dddddd border=1>
+  <TBODY>
+  <TR>
+    <TD><PRE><CODE><FONT color=#000000>
+<FONT color=#0000bb>&lt;?php<BR></FONT><FONT color=#ff8000>// The pear base directory must be in your include_path<BR></FONT><FONT color=#007700>require_once </FONT><FONT color=#dd0000>'DB.php'</FONT><FONT color=#007700>;<BR></FONT><FONT color=#0000bb>$user </FONT><FONT color=#007700>= </FONT><FONT color=#dd0000>'foo'</FONT><FONT color=#007700>;<BR></FONT><FONT color=#0000bb>$pass </FONT><FONT color=#007700>= </FONT><FONT color=#dd0000>'bar'</FONT><FONT color=#007700>;<BR></FONT><FONT color=#0000bb>$host </FONT><FONT color=#007700>= </FONT><FONT color=#dd0000>'localhost'</FONT><FONT color=#007700>;<BR></FONT><FONT color=#0000bb>$db_name </FONT><FONT color=#007700>= </FONT><FONT color=#dd0000>'clients_db'</FONT><FONT color=#007700>;<BR><BR></FONT><FONT color=#ff8000>// Data Source Name: This is the universal connection string<BR></FONT><FONT color=#0000bb>$dsn </FONT><FONT color=#007700>= </FONT><FONT color=#dd0000>"mysql://$user:$pass@$host/$db_name"</FONT><FONT color=#007700>;<BR><BR></FONT><FONT color=#ff8000>// DB::connect will return a Pear DB object on success<BR>// or a Pear DB Error object on error<BR>// You can also set to TRUE the second param<BR>// if you want a persistent connection:<BR>// $db = DB::connect($dsn, true);<BR></FONT><FONT color=#0000bb>$db </FONT><FONT color=#007700>= </FONT><FONT color=#0000bb>DB</FONT><FONT color=#007700>::</FONT><FONT color=#0000bb>connect</FONT><FONT color=#007700>(</FONT><FONT color=#0000bb>$dsn</FONT><FONT color=#007700>);<BR><BR></FONT><FONT color=#ff8000>// With DB::isError you can differentiate between an error or<BR>// a valid connection.<BR></FONT><FONT color=#007700>if (</FONT><FONT color=#0000bb>DB</FONT><FONT color=#007700>::</FONT><FONT color=#0000bb>isError</FONT><FONT color=#007700>(</FONT><FONT color=#0000bb>$db</FONT><FONT color=#007700>)) {<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;die (</FONT><FONT color=#0000bb>$db</FONT><FONT color=#007700>-&gt;</FONT><FONT color=#0000bb>getMessage</FONT><FONT color=#007700>());<BR>}<BR>....<BR></FONT><FONT color=#ff8000>// You can disconnect from the database with:<BR></FONT><FONT color=#0000bb>$db</FONT><FONT color=#007700>-&gt;</FONT><FONT color=#0000bb>disconnect</FONT><FONT color=#007700>();<BR></FONT><FONT color=#0000bb>?&gt;</FONT>
+</FONT>
+</CODE></PRE></TD></TR></TBODY></TABLE>
+<P>The Data Source Name connection string (<I>$dsn</I> param in the above 
+example), has the following permited formats (directly copied from the parseDSN 
+method from pear/DB.php):</P>
+<TABLE cellSpacing=0 cellPadding=5 width="100%" bgColor=#dddddd border=1>
+  <TBODY>
+  <TR>
+    <TD><PRE><CODE><FONT color=#000000>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;&nbsp;phptype: Database backend used in PHP (mysql, odbc etc.)<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;&nbsp;dbsyntax: Database used with regards to SQL syntax etc.<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;&nbsp;protocol: Communication protocol to use (tcp, unix etc.)<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;&nbsp;hostspec: Host specification (hostname[:port])<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;&nbsp;database: Database to use on the DBMS server<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;&nbsp;username: User name for login<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;&nbsp;password: Password for login<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* The format of the supplied DSN is in its fullest form:<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;&nbsp;phptype(dbsyntax)://username:password@protocol+hostspec/database<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* Most variations are allowed:<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;&nbsp;phptype://username:password@protocol+hostspec:110//usr/db_file.db<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;&nbsp;phptype://username:password@hostspec/database_name<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;&nbsp;phptype://username:password@hostspec<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;&nbsp;phptype://username@hostspec<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;&nbsp;phptype://hostspec/database<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;&nbsp;phptype://hostspec<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;&nbsp;phptype(dbsyntax)<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;&nbsp;phptype</FONT>
+</CODE></PRE></TD></TR></TBODY></TABLE>
+<P>The Databases currently supported (the <I>phptype</I> DSN part) are:</P>
+<TABLE cellSpacing=0 cellPadding=5 width="100%" bgColor=#dddddd border=1>
+  <TBODY>
+  <TR>
+    <TD><PRE><CODE><FONT color=#000000>
+mysql&nbsp;&nbsp;-&gt; MySQL<BR>pgsql&nbsp;&nbsp;-&gt; PostgreSQL<BR>ibase&nbsp;&nbsp;-&gt; InterBase<BR>msql&nbsp;&nbsp;&nbsp;-&gt; Mini SQL<BR>mssql&nbsp;&nbsp;-&gt; Microsoft SQL Server<BR>oci8&nbsp;&nbsp;&nbsp;-&gt; Oracle 7/8/8i<BR>odbc&nbsp;&nbsp;&nbsp;-&gt; ODBC (Open Database Connectivity)<BR>sybase -&gt; SyBase<BR>ifx&nbsp;&nbsp;&nbsp;&nbsp;-&gt; Informix<BR>fbsql&nbsp;&nbsp;-&gt; FrontBase</FONT>
+</CODE></PRE></TD></TR></TBODY></TABLE>
+<P>Please note, that some features may be not supported by all database 
+backends. Please refer to the Pear DB extensions status document located at: 
+<I>&lt;pear base dir&gt;/DB/STATUS</I> to get the detailed list.</P>
+<H3><A name=ss3.2>3.2 Doing a query to the database</A></H3>
+<TABLE cellSpacing=0 cellPadding=5 width="100%" bgColor=#dddddd border=1>
+  <TBODY>
+  <TR>
+    <TD><PRE><CODE><FONT color=#000000>
+<FONT color=#0000bb>&lt;?php<BR></FONT><FONT color=#ff8000>// Once you have a valid DB object<BR></FONT><FONT color=#007700>...<BR></FONT><FONT color=#0000bb>$sql </FONT><FONT color=#007700>= </FONT><FONT color=#dd0000>"select * from clients"</FONT><FONT color=#007700>;<BR></FONT><FONT color=#ff8000>// If the query is a "SELECT", $db-&gt;query will return<BR>// a DB Result object on success.<BR>// Else it simply will return a DB_OK<BR>// On failure it will return a DB Error object.<BR></FONT><FONT color=#0000bb>$result </FONT><FONT color=#007700>= </FONT><FONT color=#0000bb>$db</FONT><FONT color=#007700>-&gt;</FONT><FONT color=#0000bb>query</FONT><FONT color=#007700>(</FONT><FONT color=#0000bb>$sql</FONT><FONT color=#007700>);<BR></FONT><FONT color=#ff8000>// Always check that $result is not an error<BR></FONT><FONT color=#007700>if (</FONT><FONT color=#0000bb>DB</FONT><FONT color=#007700>::</FONT><FONT color=#0000bb>isError</FONT><FONT color=#007700>(</FONT><FONT color=#0000bb>$result</FONT><FONT color=#007700>)) {<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;die (</FONT><FONT color=#0000bb>$result</FONT><FONT color=#007700>-&gt;</FONT><FONT color=#0000bb>getMessage</FONT><FONT color=#007700>());<BR>}<BR>....<BR></FONT><FONT color=#0000bb>?&gt;</FONT>
+</FONT>
+</CODE></PRE></TD></TR></TBODY></TABLE>
+<H3><A name=ss3.3>3.3 Fetch the rows from the query</A></H3>
+<H4><A name=ss3.3.1>3.3.1 Fetch row functions</A></H4>
+<TABLE cellSpacing=0 cellPadding=5 width="100%" bgColor=#dddddd border=1>
+  <TBODY>
+  <TR>
+    <TD><PRE><CODE><FONT color=#000000>
+<FONT color=#0000bb>&lt;?php<BR></FONT><FONT color=#ff8000>// Once you have a valid DB Result object<BR></FONT><FONT color=#007700>...<BR></FONT><FONT color=#ff8000>// Get each row of data on each iteration until<BR>// there is no more rows<BR></FONT><FONT color=#007700>while (</FONT><FONT color=#0000bb>$row </FONT><FONT color=#007700>= </FONT><FONT color=#0000bb>$result</FONT><FONT color=#007700>-&gt;</FONT><FONT color=#0000bb>fetchRow</FONT><FONT color=#007700>()) {<BR>&nbsp;&nbsp;&nbsp;&nbsp;</FONT><FONT color=#0000bb>$id </FONT><FONT color=#007700>= </FONT><FONT color=#0000bb>$row</FONT><FONT color=#007700>[</FONT><FONT color=#0000bb>0</FONT><FONT color=#007700>];<BR>}<BR></FONT><FONT color=#0000bb>?&gt;</FONT>
+</FONT>
+</CODE></PRE></TD></TR></TBODY></TABLE>
+<P>Instead of <I>fetchRow()</I> you can use <B><I>fetchInto()</I></B> who 
+directly assigns by reference the <I>$row</I> value:</P>
+<TABLE cellSpacing=0 cellPadding=5 width="100%" bgColor=#dddddd border=1>
+  <TBODY>
+  <TR>
+    <TD><PRE><CODE><FONT color=#000000>
+<FONT color=#0000bb>&lt;?php<BR></FONT><FONT color=#007700>...<BR>while (</FONT><FONT color=#0000bb>$result</FONT><FONT color=#007700>-&gt;</FONT><FONT color=#0000bb>fetchInto</FONT><FONT color=#007700>(</FONT><FONT color=#0000bb>$row</FONT><FONT color=#007700>)) {<BR>&nbsp;&nbsp;&nbsp;&nbsp;</FONT><FONT color=#0000bb>$id </FONT><FONT color=#007700>= </FONT><FONT color=#0000bb>$row</FONT><FONT color=#007700>[</FONT><FONT color=#0000bb>0</FONT><FONT color=#007700>];<BR>}<BR></FONT><FONT color=#0000bb>?&gt;</FONT>
+</FONT>
+</CODE></PRE></TD></TR></TBODY></TABLE>
+<H4><A name=ss3.3.2>3.3.2 Select the format of the fetched row</A></H4>
+<P>The fetch modes supported are <I>DB_FETCHMODE_ORDERED</I> (default), 
+<I>DB_FETCHMODE_ASSOC</I> and <I>DB_FETCHMODE_OBJECT</I>.</P>Examples of the 
+data structure returned by the fetch row methods:
+<P></P>
+<TABLE cellSpacing=0 cellPadding=5 width="100%" bgColor=#dddddd border=1>
+  <TBODY>
+  <TR>
+    <TD><PRE><CODE><FONT color=#000000>
+<FONT color=#0000bb>&lt;?php<BR>$res </FONT><FONT color=#007700>= </FONT><FONT color=#0000bb>$db</FONT><FONT color=#007700>-&gt;</FONT><FONT color=#0000bb>query</FONT><FONT color=#007700>(</FONT><FONT color=#dd0000>'select id, name, email from users'</FONT><FONT color=#007700>);<BR></FONT><FONT color=#0000bb>$row </FONT><FONT color=#007700>= </FONT><FONT color=#0000bb>$res</FONT><FONT color=#007700>-&gt;</FONT><FONT color=#0000bb>fetchRow</FONT><FONT color=#007700>(</FONT><FONT color=#0000bb>$mode</FONT><FONT color=#007700>);<BR><BR></FONT><FONT color=#ff8000>//With $mode = DB_FETCHMODE_ORDERED<BR>//The default behavior is to return an ordered array.<BR></FONT><FONT color=#0000bb>$row </FONT><FONT color=#007700>= array (<BR>&nbsp;&nbsp;&nbsp;&nbsp;</FONT><FONT color=#0000bb>0 </FONT><FONT color=#007700>=&gt; &lt;</FONT><FONT color=#0000bb>column </FONT><FONT color=#dd0000>"id" </FONT><FONT color=#0000bb>data</FONT><FONT color=#007700>&gt;,<BR>&nbsp;&nbsp;&nbsp;&nbsp;</FONT><FONT color=#0000bb>1 </FONT><FONT color=#007700>=&gt; &lt;</FONT><FONT color=#0000bb>column </FONT><FONT color=#dd0000>"name" </FONT><FONT color=#0000bb>data</FONT><FONT color=#007700>&gt;,<BR>&nbsp;&nbsp;&nbsp;&nbsp;</FONT><FONT color=#0000bb>2 </FONT><FONT color=#007700>=&gt; &lt;</FONT><FONT color=#0000bb>column </FONT><FONT color=#dd0000>"email" </FONT><FONT color=#0000bb>data</FONT><FONT color=#007700>&gt;<BR>);<BR><BR></FONT><FONT color=#0000bb>$id </FONT><FONT color=#007700>= </FONT><FONT color=#0000bb>$row</FONT><FONT color=#007700>[</FONT><FONT color=#0000bb>0</FONT><FONT color=#007700>];<BR><BR></FONT><FONT color=#ff8000>//With $mode = DB_FETCHMODE_ASSOC<BR>//Returns an associative array with column names as array keys:<BR></FONT><FONT color=#0000bb>$row </FONT><FONT color=#007700>= array (<BR>&nbsp;&nbsp;&nbsp;&nbsp;</FONT><FONT color=#dd0000>'id'&nbsp;&nbsp;&nbsp;&nbsp;</FONT><FONT color=#007700>=&gt; &lt;</FONT><FONT color=#0000bb>column </FONT><FONT color=#dd0000>"id" </FONT><FONT color=#0000bb>data</FONT><FONT color=#007700>&gt;,<BR>&nbsp;&nbsp;&nbsp;&nbsp;</FONT><FONT color=#dd0000>'name'&nbsp;&nbsp;</FONT><FONT color=#007700>=&gt; &lt;</FONT><FONT color=#0000bb>column </FONT><FONT color=#dd0000>"name" </FONT><FONT color=#0000bb>data</FONT><FONT color=#007700>&gt;,<BR>&nbsp;&nbsp;&nbsp;&nbsp;</FONT><FONT color=#dd0000>'email' </FONT><FONT color=#007700>=&gt; &lt;</FONT><FONT color=#0000bb>column </FONT><FONT color=#dd0000>"email" </FONT><FONT color=#0000bb>data</FONT><FONT color=#007700>&gt;<BR>);<BR><BR></FONT><FONT color=#0000bb>$id </FONT><FONT color=#007700>= </FONT><FONT color=#0000bb>$row</FONT><FONT color=#007700>[</FONT><FONT color=#dd0000>'id'</FONT><FONT color=#007700>];<BR><BR></FONT><FONT color=#ff8000>//With $mode = DB_FETCHMODE_OBJECT<BR>//Returns a DB_row object with column names as properties:<BR></FONT><FONT color=#0000bb>$row </FONT><FONT color=#007700>= </FONT><FONT color=#0000bb>db_row Object <BR></FONT><FONT color=#007700>(<BR>&nbsp;&nbsp;&nbsp;&nbsp;[</FONT><FONT color=#0000bb>id</FONT><FONT color=#007700>]&nbsp;&nbsp;&nbsp;&nbsp;=&gt; &lt;</FONT><FONT color=#0000bb>column </FONT><FONT color=#dd0000>"id" </FONT><FONT color=#0000bb>data</FONT><FONT color=#007700>&gt;,<BR>&nbsp;&nbsp;&nbsp;&nbsp;[</FONT><FONT color=#0000bb>name</FONT><FONT color=#007700>]&nbsp;&nbsp;=&gt; &lt;</FONT><FONT color=#0000bb>column </FONT><FONT color=#dd0000>"name" </FONT><FONT color=#0000bb>data</FONT><FONT color=#007700>&gt;,<BR>&nbsp;&nbsp;&nbsp;&nbsp;[</FONT><FONT color=#0000bb>email</FONT><FONT color=#007700>] =&gt; &lt;</FONT><FONT color=#0000bb>column </FONT><FONT color=#dd0000>"email" </FONT><FONT color=#0000bb>data</FONT><FONT color=#007700>&gt;<BR>)<BR><BR></FONT><FONT color=#0000bb>$id </FONT><FONT color=#007700>= </FONT><FONT color=#0000bb>$row</FONT><FONT color=#007700>-&gt;</FONT><FONT color=#0000bb>id</FONT><FONT color=#007700>;<BR></FONT><FONT color=#0000bb>?&gt;</FONT>
+</FONT>
+</CODE></PRE></TD></TR></TBODY></TABLE>
+<H4><A name=ss3.3.3>3.3.3 Set the format of the fetched row</A></H4>
+<P>You can supply the fetch mode to use to the <I>fetchrow() / fetchInto()</I> 
+method or also you can set a default mode for your DB instance. </P>
+<TABLE cellSpacing=0 cellPadding=5 width="100%" bgColor=#dddddd border=1>
+  <TBODY>
+  <TR>
+    <TD><PRE><CODE><FONT color=#000000>
+<FONT color=#0000bb>&lt;?php<BR></FONT><FONT color=#007700>...<BR></FONT><FONT color=#ff8000>// 1) Set the mode per call:<BR></FONT><FONT color=#007700>while (</FONT><FONT color=#0000bb>$row </FONT><FONT color=#007700>= </FONT><FONT color=#0000bb>$result</FONT><FONT color=#007700>-&gt;</FONT><FONT color=#0000bb>fetchRow</FONT><FONT color=#007700>(</FONT><FONT color=#0000bb>DB_FETCHMODE_ASSOC</FONT><FONT color=#007700>)) {<BR>&nbsp;&nbsp;&nbsp;&nbsp;[..]<BR>}<BR>while (</FONT><FONT color=#0000bb>$result</FONT><FONT color=#007700>-&gt;</FONT><FONT color=#0000bb>fetchInto</FONT><FONT color=#007700>(</FONT><FONT color=#0000bb>$row</FONT><FONT color=#007700>, </FONT><FONT color=#0000bb>DB_FETCHMODE_ASSOC</FONT><FONT color=#007700>)) {<BR>&nbsp;&nbsp;&nbsp;&nbsp;[..]<BR>}<BR><BR></FONT><FONT color=#ff8000>// 2) Set the mode for all calls:<BR></FONT><FONT color=#0000bb>$db </FONT><FONT color=#007700>= </FONT><FONT color=#0000bb>DB</FONT><FONT color=#007700>::</FONT><FONT color=#0000bb>connect</FONT><FONT color=#007700>(</FONT><FONT color=#0000bb>$dsn</FONT><FONT color=#007700>);<BR></FONT><FONT color=#ff8000>// this will set a default fetchmode for this Pear DB instance<BR>// (for all queries)<BR></FONT><FONT color=#0000bb>$db</FONT><FONT color=#007700>-&gt;</FONT><FONT color=#0000bb>setFetchMode</FONT><FONT color=#007700>(</FONT><FONT color=#0000bb>DB_FETCHMODE_ASSOC</FONT><FONT color=#007700>);<BR></FONT><FONT color=#0000bb>$result </FONT><FONT color=#007700>= </FONT><FONT color=#0000bb>$db</FONT><FONT color=#007700>-&gt;</FONT><FONT color=#0000bb>query</FONT><FONT color=#007700>(...);<BR>while (</FONT><FONT color=#0000bb>$row </FONT><FONT color=#007700>= </FONT><FONT color=#0000bb>$result</FONT><FONT color=#007700>-&gt;</FONT><FONT color=#0000bb>fetchRow</FONT><FONT color=#007700>()) {<BR>&nbsp;&nbsp;&nbsp;&nbsp;</FONT><FONT color=#0000bb>$id </FONT><FONT color=#007700>= </FONT><FONT color=#0000bb>$row</FONT><FONT color=#007700>[</FONT><FONT color=#dd0000>'id'</FONT><FONT color=#007700>];<BR>}<BR></FONT><FONT color=#0000bb>?&gt;</FONT>
+</FONT>
+</CODE></PRE></TD></TR></TBODY></TABLE>
+<H4><A name=ss3.3.4>3.3.4 Fetch rows by number</A></H4>
+<P>The Pear DB fetch system also supports an extra param to the fetch statement, 
+so from a result you can <B>fetch rows by number</B>. This is specially helpful 
+if you only want to show sets of an entire result (for example in building <A 
+href="http://vulcanonet.com/soft/index.php?pack=pager">paginated HTML 
+lists</A>), fetch rows in an special order, etc.
+<P>
+<TABLE cellSpacing=0 cellPadding=5 width="100%" bgColor=#dddddd border=1>
+  <TBODY>
+  <TR>
+    <TD><PRE><CODE><FONT color=#000000>
+<FONT color=#0000bb>&lt;?php<BR></FONT><FONT color=#007700>...<BR></FONT><FONT color=#ff8000>// the row to start fetching<BR></FONT><FONT color=#0000bb>$from </FONT><FONT color=#007700>= </FONT><FONT color=#0000bb>50</FONT><FONT color=#007700>;<BR></FONT><FONT color=#ff8000>// how many results per page<BR></FONT><FONT color=#0000bb>$res_per_page </FONT><FONT color=#007700>= </FONT><FONT color=#0000bb>10</FONT><FONT color=#007700>;<BR></FONT><FONT color=#ff8000>// the last row to fetch for this page<BR></FONT><FONT color=#0000bb>$to </FONT><FONT color=#007700>= </FONT><FONT color=#0000bb>$from </FONT><FONT color=#007700>+ </FONT><FONT color=#0000bb>$res_per_page</FONT><FONT color=#007700>;<BR>foreach (</FONT><FONT color=#0000bb>range</FONT><FONT color=#007700>(</FONT><FONT color=#0000bb>$from</FONT><FONT color=#007700>, </FONT><FONT color=#0000bb>$to</FONT><FONT color=#007700>) as </FONT><FONT color=#0000bb>$rownum</FONT><FONT color=#007700>) {<BR>&nbsp;&nbsp;&nbsp;&nbsp;if (!</FONT><FONT color=#0000bb>$row </FONT><FONT color=#007700>= </FONT><FONT color=#0000bb>$res</FONT><FONT color=#007700>-&gt;</FONT><FONT color=#0000bb>fetchrow</FONT><FONT color=#007700>(</FONT><FONT color=#0000bb>$fetchmode</FONT><FONT color=#007700>, </FONT><FONT color=#0000bb>$rownum</FONT><FONT color=#007700>)) {<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;break;<BR>&nbsp;&nbsp;&nbsp;&nbsp;}<BR>&nbsp;&nbsp;&nbsp;&nbsp;</FONT><FONT color=#0000bb>$id </FONT><FONT color=#007700>= </FONT><FONT color=#0000bb>$row</FONT><FONT color=#007700>[</FONT><FONT color=#0000bb>0</FONT><FONT color=#007700>];<BR>&nbsp;&nbsp;&nbsp;&nbsp;....<BR>}<BR></FONT><FONT color=#0000bb>?&gt;</FONT>
+</FONT>
+</CODE></PRE></TD></TR></TBODY></TABLE>
+<H4><A name=ss3.3.5>3.3.5 Free the result</A></H4>
+<P>Once you have finished with the result, you can free it with the 
+<I><B>free()</B></I> method:
+<P>
+<TABLE cellSpacing=0 cellPadding=5 width="100%" bgColor=#dddddd border=1>
+  <TBODY>
+  <TR>
+    <TD><PRE><CODE><FONT color=#000000>
+<FONT color=#0000bb>&lt;?php<BR></FONT><FONT color=#007700>...<BR></FONT><FONT color=#0000bb>$result </FONT><FONT color=#007700>= </FONT><FONT color=#0000bb>$db</FONT><FONT color=#007700>-&gt;</FONT><FONT color=#0000bb>query</FONT><FONT color=#007700>(</FONT><FONT color=#dd0000>'SELECT * FROM clients'</FONT><FONT color=#007700>);<BR>while (</FONT><FONT color=#0000bb>$row </FONT><FONT color=#007700>= </FONT><FONT color=#0000bb>$result</FONT><FONT color=#007700>-&gt;</FONT><FONT color=#0000bb>fetchRow</FONT><FONT color=#007700>()) {<BR>&nbsp;&nbsp;&nbsp;&nbsp;...<BR>}<BR></FONT><FONT color=#0000bb>$result</FONT><FONT color=#007700>-&gt;</FONT><FONT color=#0000bb>free</FONT><FONT color=#007700>();<BR></FONT><FONT color=#0000bb>?&gt;</FONT>
+</FONT>
+</CODE></PRE></TD></TR></TBODY></TABLE>
+<H3><A name=ss3.4>3.4 Quick data retrieving</A></H3>
+<P>Pear DB provides some special ways to retrieve information from a query 
+without the need of using <I>fetchRow()</I> and loop throw results. These are 
+the methods <I>getOne</I>, <I>getRow</I>, <I>getCol</I>, <I>getAssoc</I> and 
+<I>getAll</I>. Here are some examples of use:</P>
+<TABLE cellSpacing=0 cellPadding=5 width="100%" bgColor=#dddddd border=1>
+  <TBODY>
+  <TR>
+    <TD><PRE><CODE><FONT color=#000000>
+<FONT color=#0000bb>&lt;?php<BR></FONT><FONT color=#007700>require_once </FONT><FONT color=#dd0000>'DB.php'</FONT><FONT color=#007700>;<BR></FONT><FONT color=#0000bb>$db </FONT><FONT color=#007700>= </FONT><FONT color=#0000bb>DB</FONT><FONT color=#007700>::</FONT><FONT color=#0000bb>connect</FONT><FONT color=#007700>(</FONT><FONT color=#dd0000>'pgsql://postgres@unix+localhost/clients_db'</FONT><FONT color=#007700>);<BR></FONT><FONT color=#ff8000>// -----------------------------------------------------------<BR>// getOne retrieves the first result of the first column<BR>// from a query<BR></FONT><FONT color=#0000bb>$numrows </FONT><FONT color=#007700>= </FONT><FONT color=#0000bb>$db</FONT><FONT color=#007700>-&gt;</FONT><FONT color=#0000bb>getOne</FONT><FONT color=#007700>(</FONT><FONT color=#dd0000>'select count(id) from clients'</FONT><FONT color=#007700>);<BR></FONT><FONT color=#ff8000>// -----------------------------------------------------------<BR>// getRow will fetch the first row and return it as an array<BR></FONT><FONT color=#0000bb>$sql </FONT><FONT color=#007700>= </FONT><FONT color=#dd0000>'select name, address, phone from clients where id=1'</FONT><FONT color=#007700>;<BR>if (</FONT><FONT color=#0000bb>is_array</FONT><FONT color=#007700>(</FONT><FONT color=#0000bb>$row </FONT><FONT color=#007700>= </FONT><FONT color=#0000bb>$db</FONT><FONT color=#007700>-&gt;</FONT><FONT color=#0000bb>getRow</FONT><FONT color=#007700>(</FONT><FONT color=#0000bb>$sql</FONT><FONT color=#007700>))) {<BR>&nbsp;&nbsp;&nbsp;&nbsp;list(</FONT><FONT color=#0000bb>$name</FONT><FONT color=#007700>, </FONT><FONT color=#0000bb>$address</FONT><FONT color=#007700>, </FONT><FONT color=#0000bb>$phone</FONT><FONT color=#007700>) = </FONT><FONT color=#0000bb>$row</FONT><FONT color=#007700>;<BR>}<BR></FONT><FONT color=#ff8000>// -----------------------------------------------------------<BR>// getCol will return an array with the data of the<BR>// selected column. It accepts the column number to retrieve<BR>// as the second param.<BR>// The next sentence could return for example:<BR>// $all_client_names = array('Stig', 'Jon', 'Colin');<BR></FONT><FONT color=#0000bb>$all_client_names </FONT><FONT color=#007700>= </FONT><FONT color=#0000bb>$db</FONT><FONT color=#007700>-&gt;</FONT><FONT color=#0000bb>getCol</FONT><FONT color=#007700>(</FONT><FONT color=#dd0000>'select name from clients'</FONT><FONT color=#007700>);<BR></FONT><FONT color=#ff8000>// -----------------------------------------------------------<BR>// Other functions are: getAssoc() and getAll().<BR>// For the moment refer to their in-line documentation<BR>// at pear/DB/common.php<BR>// -----------------------------------------------------------<BR></FONT><FONT color=#0000bb>?&gt;</FONT>
+</FONT>
+</CODE></PRE></TD></TR></TBODY></TABLE>
+<P>The <I>"get*() family methods"</I> will do all the dirty job for you, this 
+is: launch the query, fetch the data and free the result. Please note that as 
+all Pear DB functions they will return a Pear DB_error object on errors.</P>
+<H3><A name=ss3.5>3.5 Getting more info from query results (numRows, numCols, 
+affectedRows, tableInfo)</A></H3>
+<P>With Pear DB you have many ways to retrieve useful information from query 
+results. These are: 
+<UL>
+  <LI><B>numRows()</B>: Returns the total number of rows returned from a 
+  "SELECT" query. 
+  <LI><B>numCols()</B>: Returns the total number of columns returned from a 
+  "SELECT" query. 
+  <LI><B>affectedRows()</B>: Returns the number of rows affected by a data 
+  manipulation query ("INSERT", "UPDATE" or "DELETE"). 
+  <LI><B>tableInfo()</B>: Returns an associative array with information about 
+  the returned fields from a "SELECT" query. </LI></UL>
+<P>Examples of use:</P>
+<TABLE cellSpacing=0 cellPadding=5 width="100%" bgColor=#dddddd border=1>
+  <TBODY>
+  <TR>
+    <TD><PRE><CODE><FONT color=#000000>
+<FONT color=#0000bb>&lt;?php<BR></FONT><FONT color=#007700>...<BR></FONT><FONT color=#0000bb>$db </FONT><FONT color=#007700>= </FONT><FONT color=#0000bb>DB</FONT><FONT color=#007700>::</FONT><FONT color=#0000bb>connect</FONT><FONT color=#007700>(</FONT><FONT color=#0000bb>$dsn</FONT><FONT color=#007700>);<BR></FONT><FONT color=#0000bb>$sql </FONT><FONT color=#007700>= </FONT><FONT color=#dd0000>'select * from clients'</FONT><FONT color=#007700>;<BR></FONT><FONT color=#0000bb>$res </FONT><FONT color=#007700>= </FONT><FONT color=#0000bb>$db</FONT><FONT color=#007700>-&gt;</FONT><FONT color=#0000bb>query</FONT><FONT color=#007700>(</FONT><FONT color=#0000bb>$sql</FONT><FONT color=#007700>);<BR></FONT><FONT color=#ff8000>// Don't forget to check if the returned result from your<BR>// action is a Pear Error object. If you get a error message<BR>// like 'DB_error: database not capable', means that<BR>// your database backend doesn't support this action.<BR>//<BR>// Number of rows<BR></FONT><FONT color=#007700>echo </FONT><FONT color=#0000bb>$res</FONT><FONT color=#007700>-&gt;</FONT><FONT color=#0000bb>numRows</FONT><FONT color=#007700>();<BR></FONT><FONT color=#ff8000>// Number of cols<BR></FONT><FONT color=#007700>echo </FONT><FONT color=#0000bb>$res</FONT><FONT color=#007700>-&gt;</FONT><FONT color=#0000bb>numCols</FONT><FONT color=#007700>();<BR></FONT><FONT color=#ff8000>// Table Info<BR></FONT><FONT color=#0000bb>print_r </FONT><FONT color=#007700>(</FONT><FONT color=#0000bb>$res</FONT><FONT color=#007700>-&gt;</FONT><FONT color=#0000bb>tableInfo</FONT><FONT color=#007700>());<BR></FONT><FONT color=#ff8000>// Affected rows<BR></FONT><FONT color=#0000bb>$sql </FONT><FONT color=#007700>= </FONT><FONT color=#dd0000>"delete from clients"</FONT><FONT color=#007700>;<BR></FONT><FONT color=#ff8000>// remember that this statement won't return a result object<BR></FONT><FONT color=#0000bb>$db</FONT><FONT color=#007700>-&gt;</FONT><FONT color=#0000bb>query</FONT><FONT color=#007700>(</FONT><FONT color=#0000bb>$sql</FONT><FONT color=#007700>);<BR>echo </FONT><FONT color=#dd0000>'I have deleted ' </FONT><FONT color=#007700>. </FONT><FONT color=#0000bb>$db</FONT><FONT color=#007700>-&gt;</FONT><FONT color=#0000bb>affectedRows</FONT><FONT color=#007700>() . </FONT><FONT color=#dd0000>'clients'</FONT><FONT color=#007700>;<BR></FONT><FONT color=#0000bb>?&gt;</FONT>
+</FONT>
+</CODE></PRE></TD></TR></TBODY></TABLE>
+<H3><A name=ss3.6>3.6 Sequences</A></H3>
+<P>Sequences is a way of offering unique IDs for data rows. If you do most of 
+you work with e.g. MySQL, think of sequences as another way of doing 
+AUTO_INCREMENT. It's quite simple, first you request an ID, and then you insert 
+that value in the ID field of the new row you're creating. You can have more 
+than one sequence for all your tables, just be sure that you always use the same 
+sequence for any particular table. </P>
+<TABLE cellSpacing=0 cellPadding=5 width="100%" bgColor=#dddddd border=1>
+  <TBODY>
+  <TR>
+    <TD><PRE><CODE><FONT color=#000000>
+<FONT color=#0000bb>&lt;?php<BR></FONT><FONT color=#007700>...<BR></FONT><FONT color=#ff8000>// Get an ID (if the sequence doesn't exist, it will be created)<BR></FONT><FONT color=#0000bb>$id </FONT><FONT color=#007700>= </FONT><FONT color=#0000bb>$db</FONT><FONT color=#007700>-&gt;</FONT><FONT color=#0000bb>nextID</FONT><FONT color=#007700>(</FONT><FONT color=#dd0000>'mySequence'</FONT><FONT color=#007700>);<BR><BR></FONT><FONT color=#ff8000>// Use the ID in your INSERT query<BR></FONT><FONT color=#0000bb>$res </FONT><FONT color=#007700>= </FONT><FONT color=#0000bb>$db</FONT><FONT color=#007700>-&gt;</FONT><FONT color=#0000bb>query</FONT><FONT color=#007700>(</FONT><FONT color=#dd0000>"INSERT INTO myTable (id,text) VALUES ($id,'foo')"</FONT><FONT color=#007700>);<BR>...<BR></FONT><FONT color=#0000bb>?&gt;</FONT>
+</FONT>
+</CODE></PRE></TD></TR></TBODY></TABLE>
+<H3><A name=ss3.7>3.7 Prepare &amp; Execute/ExcuteMultiple (not yet 
+written)</A></H3>
+<TABLE cellSpacing=0 cellPadding=5 width="100%" bgColor=#dddddd border=1>
+  <TBODY>
+  <TR>
+    <TD><PRE><CODE><FONT color=#000000>
+<FONT color=#0000bb>&lt;?php<BR></FONT><FONT color=#ff8000>// UNTESTED CODE !!!<BR>//<BR>// Example inserting data<BR></FONT><FONT color=#0000bb>$alldata </FONT><FONT color=#007700>= array(<BR>&nbsp;&nbsp;array(</FONT><FONT color=#0000bb>1</FONT><FONT color=#007700>, </FONT><FONT color=#dd0000>'one'</FONT><FONT color=#007700>, </FONT><FONT color=#dd0000>'en'</FONT><FONT color=#007700>),<BR>&nbsp;&nbsp;array(</FONT><FONT color=#0000bb>2</FONT><FONT color=#007700>, </FONT><FONT color=#dd0000>'two'</FONT><FONT color=#007700>, </FONT><FONT color=#dd0000>'to'</FONT><FONT color=#007700>),<BR>&nbsp;&nbsp;array(</FONT><FONT color=#0000bb>3</FONT><FONT color=#007700>, </FONT><FONT color=#dd0000>'three'</FONT><FONT color=#007700>, </FONT><FONT color=#dd0000>'tre'</FONT><FONT color=#007700>),<BR>&nbsp;&nbsp;array(</FONT><FONT color=#0000bb>4</FONT><FONT color=#007700>, </FONT><FONT color=#dd0000>'four'</FONT><FONT color=#007700>, </FONT><FONT color=#dd0000>'fire'</FONT><FONT color=#007700>)<BR>);<BR></FONT><FONT color=#0000bb>$sth </FONT><FONT color=#007700>= </FONT><FONT color=#0000bb>$dbh</FONT><FONT color=#007700>-&gt;</FONT><FONT color=#0000bb>prepare</FONT><FONT color=#007700>(</FONT><FONT color=#dd0000>"INSERT INTO numbers VALUES(?,?,?)"</FONT><FONT color=#007700>);<BR>foreach (</FONT><FONT color=#0000bb>$alldata </FONT><FONT color=#007700>as </FONT><FONT color=#0000bb>$row</FONT><FONT color=#007700>) {<BR>&nbsp;&nbsp;&nbsp;&nbsp;</FONT><FONT color=#0000bb>$dbh</FONT><FONT color=#007700>-&gt;</FONT><FONT color=#0000bb>execute</FONT><FONT color=#007700>(</FONT><FONT color=#0000bb>$sth</FONT><FONT color=#007700>, </FONT><FONT color=#0000bb>$row</FONT><FONT color=#007700>);<BR>}<BR></FONT><FONT color=#ff8000>//Here's an example of a file placeholder:<BR></FONT><FONT color=#0000bb>$myfile </FONT><FONT color=#007700>= </FONT><FONT color=#dd0000>"/tmp/image.jpg"</FONT><FONT color=#007700>;<BR></FONT><FONT color=#0000bb>$sth </FONT><FONT color=#007700>= </FONT><FONT color=#0000bb>$dbh</FONT><FONT color=#007700>-&gt;</FONT><FONT color=#0000bb>prepare</FONT><FONT color=#007700>(</FONT><FONT color=#dd0000>'INSERT INTO images (?, &amp;)'</FONT><FONT color=#007700>);<BR></FONT><FONT color=#0000bb>$dbh</FONT><FONT color=#007700>-&gt;</FONT><FONT color=#0000bb>execute</FONT><FONT color=#007700>(</FONT><FONT color=#0000bb>$sth</FONT><FONT color=#007700>, array(</FONT><FONT color=#dd0000>"this is me"</FONT><FONT color=#007700>, </FONT><FONT color=#0000bb>$myfile</FONT><FONT color=#007700>));<BR></FONT><FONT color=#ff8000>//After I commit a bugfix that I have on my laptop, you can use<BR>//parameter arrays in the getXxx methods too:<BR></FONT><FONT color=#0000bb>$ver </FONT><FONT color=#007700>= </FONT><FONT color=#0000bb>$dbh</FONT><FONT color=#007700>-&gt;</FONT><FONT color=#0000bb>getOne</FONT><FONT color=#007700>(</FONT><FONT color=#dd0000>"SELECT stableversion FROM packages WHERE name = ?"</FONT><FONT color=#007700>,<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;array(</FONT><FONT color=#0000bb>$package</FONT><FONT color=#007700>));<BR></FONT><FONT color=#0000bb>?&gt;</FONT>
+</FONT>
+</CODE></PRE></TD></TR></TBODY></TABLE>
+<H3><A name=ss3.8>3.8 autoCommit, commit and rollback (not yet written)</A></H3>
+<TABLE cellSpacing=0 cellPadding=5 width="100%" bgColor=#dddddd border=1>
+  <TBODY>
+  <TR>
+    <TD><PRE><CODE><FONT color=#000000>
+<FONT color=#0000bb>&lt;?php<BR></FONT><FONT color=#ff8000>//examples here<BR></FONT><FONT color=#0000bb>?&gt;</FONT>
+</FONT>
+</CODE></PRE></TD></TR></TBODY></TABLE><BR>
+<HR>
+
+<H2><A name=ss4>4. Avaible methods map</A></H2>
+<TABLE cellSpacing=0 cellPadding=5 width="100%" bgColor=#dddddd border=1>
+  <TBODY>
+  <TR>
+    <TD><PRE><CODE><FONT color=#000000>
+<FONT color=#0000bb>&lt;?php<BR></FONT><FONT color=#ff8000>/*<BR>* From the DB_(driver) objects<BR>*/<BR>// get the object with, ie:<BR></FONT><FONT color=#0000bb>$db </FONT><FONT color=#007700>= </FONT><FONT color=#0000bb>DB</FONT><FONT color=#007700>::</FONT><FONT color=#0000bb>connect</FONT><FONT color=#007700>(</FONT><FONT color=#dd0000>'mysql://user:pass@localhost/my_db'</FONT><FONT color=#007700>);<BR> <BR></FONT><FONT color=#ff8000>// Set options<BR></FONT><FONT color=#0000bb>$db</FONT><FONT color=#007700>-&gt;</FONT><FONT color=#0000bb>setErrorHandling</FONT><FONT color=#007700>();<BR></FONT><FONT color=#0000bb>$db</FONT><FONT color=#007700>-&gt;</FONT><FONT color=#0000bb>setFetchmode</FONT><FONT color=#007700>();<BR></FONT><FONT color=#ff8000>// Information<BR></FONT><FONT color=#0000bb>$db</FONT><FONT color=#007700>-&gt;</FONT><FONT color=#0000bb>affectedRows</FONT><FONT color=#007700>();<BR></FONT><FONT color=#0000bb>$db</FONT><FONT color=#007700>-&gt;</FONT><FONT color=#0000bb>tableInfo</FONT><FONT color=#007700>();<BR></FONT><FONT color=#ff8000>// Database manipulation<BR></FONT><FONT color=#0000bb>$db</FONT><FONT color=#007700>-&gt;</FONT><FONT color=#0000bb>query</FONT><FONT color=#007700>();<BR></FONT><FONT color=#ff8000>// Data fetch<BR></FONT><FONT color=#0000bb>$db</FONT><FONT color=#007700>-&gt;</FONT><FONT color=#0000bb>nextId</FONT><FONT color=#007700>();<BR></FONT><FONT color=#0000bb>$db</FONT><FONT color=#007700>-&gt;</FONT><FONT color=#0000bb>getOne</FONT><FONT color=#007700>();<BR></FONT><FONT color=#0000bb>$db</FONT><FONT color=#007700>-&gt;</FONT><FONT color=#0000bb>getRow</FONT><FONT color=#007700>();<BR></FONT><FONT color=#0000bb>$db</FONT><FONT color=#007700>-&gt;</FONT><FONT color=#0000bb>getCol</FONT><FONT color=#007700>();<BR></FONT><FONT color=#0000bb>$db</FONT><FONT color=#007700>-&gt;</FONT><FONT color=#0000bb>getAssoc</FONT><FONT color=#007700>();<BR></FONT><FONT color=#0000bb>$db</FONT><FONT color=#007700>-&gt;</FONT><FONT color=#0000bb>getAll</FONT><FONT color=#007700>();<BR></FONT><FONT color=#ff8000>// Place holders and execute related<BR></FONT><FONT color=#0000bb>$db</FONT><FONT color=#007700>-&gt;</FONT><FONT color=#0000bb>quote</FONT><FONT color=#007700>();<BR></FONT><FONT color=#0000bb>$db</FONT><FONT color=#007700>-&gt;</FONT><FONT color=#0000bb>prepare</FONT><FONT color=#007700>();<BR></FONT><FONT color=#0000bb>$db</FONT><FONT color=#007700>-&gt;</FONT><FONT color=#0000bb>execute</FONT><FONT color=#007700>();<BR></FONT><FONT color=#0000bb>$db</FONT><FONT color=#007700>-&gt;</FONT><FONT color=#0000bb>executeMultiple</FONT><FONT color=#007700>();<BR></FONT><FONT color=#ff8000>// Transactions<BR></FONT><FONT color=#0000bb>$db</FONT><FONT color=#007700>-&gt;</FONT><FONT color=#0000bb>autoCommit</FONT><FONT color=#007700>();<BR></FONT><FONT color=#0000bb>$db</FONT><FONT color=#007700>-&gt;</FONT><FONT color=#0000bb>commit</FONT><FONT color=#007700>();<BR></FONT><FONT color=#0000bb>$db</FONT><FONT color=#007700>-&gt;</FONT><FONT color=#0000bb>rollback</FONT><FONT color=#007700>();<BR></FONT><FONT color=#ff8000>// Disconnection<BR></FONT><FONT color=#0000bb>$db</FONT><FONT color=#007700>-&gt;</FONT><FONT color=#0000bb>disconnect</FONT><FONT color=#007700>();<BR> <BR></FONT><FONT color=#ff8000>/*<BR>* From DB_result objects<BR>*/<BR>// get the object with, ie: <BR></FONT><FONT color=#0000bb>$res </FONT><FONT color=#007700>= </FONT><FONT color=#0000bb>$db</FONT><FONT color=#007700>-&gt;</FONT><FONT color=#0000bb>query</FONT><FONT color=#007700>(</FONT><FONT color=#dd0000>'select * from foo'</FONT><FONT color=#007700>);<BR> <BR></FONT><FONT color=#ff8000>// Data fetch<BR></FONT><FONT color=#0000bb>$res</FONT><FONT color=#007700>-&gt;</FONT><FONT color=#0000bb>fetchRow</FONT><FONT color=#007700>();<BR></FONT><FONT color=#0000bb>$res</FONT><FONT color=#007700>-&gt;</FONT><FONT color=#0000bb>fetchInto</FONT><FONT color=#007700>();<BR></FONT><FONT color=#ff8000>// Result Info<BR></FONT><FONT color=#0000bb>$res</FONT><FONT color=#007700>-&gt;</FONT><FONT color=#0000bb>numCols</FONT><FONT color=#007700>();<BR></FONT><FONT color=#0000bb>$res</FONT><FONT color=#007700>-&gt;</FONT><FONT color=#0000bb>numRows</FONT><FONT color=#007700>();<BR></FONT><FONT color=#0000bb>$res</FONT><FONT color=#007700>-&gt;</FONT><FONT color=#0000bb>tableInfo</FONT><FONT color=#007700>();<BR></FONT><FONT color=#ff8000>// Free<BR></FONT><FONT color=#0000bb>$res</FONT><FONT color=#007700>-&gt;</FONT><FONT color=#0000bb>free</FONT><FONT color=#007700>();<BR> <BR></FONT><FONT color=#ff8000>/*<BR>* From DB_error objects<BR>*/<BR>// get the object with, ie:<BR></FONT><FONT color=#0000bb>$error </FONT><FONT color=#007700>= </FONT><FONT color=#0000bb>$db</FONT><FONT color=#007700>-&gt;</FONT><FONT color=#0000bb>query</FONT><FONT color=#007700>(</FONT><FONT color=#dd0000>'select * from no_table'</FONT><FONT color=#007700>);<BR> <BR></FONT><FONT color=#0000bb>$error</FONT><FONT color=#007700>-&gt;</FONT><FONT color=#0000bb>getMessage</FONT><FONT color=#007700>();<BR></FONT><FONT color=#0000bb>$error</FONT><FONT color=#007700>-&gt;</FONT><FONT color=#0000bb>getDebugInfo</FONT><FONT color=#007700>();<BR></FONT><FONT color=#0000bb>$error</FONT><FONT color=#007700>-&gt;</FONT><FONT color=#0000bb>toString</FONT><FONT color=#007700>();<BR></FONT><FONT color=#0000bb>?&gt;</FONT>
+</FONT>
+</CODE></PRE></TD></TR></TBODY></TABLE><BR>
+<HR>
+
+<H2><A name=ss5>5. Error Handling</A></H2>
+<H3><A name=ss5.1>5.1 Getting the error message from a Pear DB Error</A></H3>
+<P>All errors returned by Pear DB are Pear Errors. Here is a way to retrieve 
+information of it:</P>
+<TABLE cellSpacing=0 cellPadding=5 width="100%" bgColor=#dddddd border=1>
+  <TBODY>
+  <TR>
+    <TD><PRE><CODE><FONT color=#000000>
+<FONT color=#0000bb>&lt;?php<BR></FONT><FONT color=#007700>...<BR></FONT><FONT color=#0000bb>$res </FONT><FONT color=#007700>= </FONT><FONT color=#0000bb>$db</FONT><FONT color=#007700>-&gt;</FONT><FONT color=#0000bb>query</FONT><FONT color=#007700>(</FONT><FONT color=#dd0000>'select * from no_table'</FONT><FONT color=#007700>);<BR>if (</FONT><FONT color=#0000bb>DB</FONT><FONT color=#007700>::</FONT><FONT color=#0000bb>isError</FONT><FONT color=#007700>(</FONT><FONT color=#0000bb>$res</FONT><FONT color=#007700>)) {<BR>&nbsp;&nbsp;&nbsp;&nbsp;</FONT><FONT color=#ff8000>// get the portable error string<BR>&nbsp;&nbsp;&nbsp;&nbsp;</FONT><FONT color=#007700>echo </FONT><FONT color=#0000bb>$res</FONT><FONT color=#007700>-&gt;</FONT><FONT color=#0000bb>getMessage</FONT><FONT color=#007700>();<BR>}<BR></FONT><FONT color=#0000bb>?&gt;</FONT>
+</FONT>
+</CODE></PRE></TD></TR></TBODY></TABLE>
+<H3><A name=ss5.2>5.2 Debuging Pear DB Errors</A></H3>
+<P>Pear DB use a portable error messages system to output errors to the user. 
+This has many advantages like provide an easy way to translate it into other 
+languages or take a specific action on a specific error. But this don't give 
+many information to the developer on what was happen. To catch the real error 
+given from the database backend plus the last query you launched, you can use 
+the <I>getDebugInfo()</I> method:</P>
+<TABLE cellSpacing=0 cellPadding=5 width="100%" bgColor=#dddddd border=1>
+  <TBODY>
+  <TR>
+    <TD><PRE><CODE><FONT color=#000000>
+<FONT color=#0000bb>&lt;?php<BR>$sql </FONT><FONT color=#007700>= </FONT><FONT color=#dd0000>'select * from no_table'</FONT><FONT color=#007700>;<BR>if (</FONT><FONT color=#0000bb>DB</FONT><FONT color=#007700>::</FONT><FONT color=#0000bb>isError</FONT><FONT color=#007700>(</FONT><FONT color=#0000bb>$res </FONT><FONT color=#007700>= </FONT><FONT color=#0000bb>$db</FONT><FONT color=#007700>-&gt;</FONT><FONT color=#0000bb>query</FONT><FONT color=#007700>(</FONT><FONT color=#0000bb>$sql</FONT><FONT color=#007700>))) {<BR>&nbsp;&nbsp;&nbsp;&nbsp;</FONT><FONT color=#ff8000>// get the native backend error<BR>&nbsp;&nbsp;&nbsp;&nbsp;// and the last query<BR>&nbsp;&nbsp;&nbsp;&nbsp;</FONT><FONT color=#007700>echo </FONT><FONT color=#0000bb>$res</FONT><FONT color=#007700>-&gt;</FONT><FONT color=#0000bb>getDebugInfo</FONT><FONT color=#007700>();<BR>}<BR></FONT><FONT color=#0000bb>?&gt;</FONT>
+</FONT>
+</CODE></PRE></TD></TR></TBODY></TABLE>
+<P>Normaly when a PHP function fails, it will print an error message. In Pear 
+these behaviour has been disabled. But perhaps sometimes you'll need to see 
+these messages to trap obscure errors in your code. This can be done with the 
+<I>set_error_handler</I> PHP function, documented in the <A 
+href="http://php.net/manual/en/function.set-error-handler.php">PHP Manual</A>. 
+Here is a quick example:</P>
+<TABLE cellSpacing=0 cellPadding=5 width="100%" bgColor=#dddddd border=1>
+  <TBODY>
+  <TR>
+    <TD><PRE><CODE><FONT color=#000000>
+<FONT color=#0000bb>&lt;?php<BR></FONT><FONT color=#ff8000>// what messages to report<BR></FONT><FONT color=#0000bb>error_reporting </FONT><FONT color=#007700>(</FONT><FONT color=#0000bb>E_ALL </FONT><FONT color=#007700>^ </FONT><FONT color=#0000bb>E_NOTICE</FONT><FONT color=#007700>);<BR></FONT><FONT color=#ff8000>// this function will handle all reported errors<BR></FONT><FONT color=#007700>function </FONT><FONT color=#0000bb>my_error_handler </FONT><FONT color=#007700>(</FONT><FONT color=#0000bb>$errno</FONT><FONT color=#007700>, </FONT><FONT color=#0000bb>$errstr</FONT><FONT color=#007700>, </FONT><FONT color=#0000bb>$errfile</FONT><FONT color=#007700>, </FONT><FONT color=#0000bb>$errline</FONT><FONT color=#007700>) {<BR>&nbsp;&nbsp;&nbsp;&nbsp;echo </FONT><FONT color=#dd0000>"In $errfile, line: $errline\n&lt;br&gt;$errstr"</FONT><FONT color=#007700>;<BR>}<BR></FONT><FONT color=#0000bb>set_error_handler </FONT><FONT color=#007700>(</FONT><FONT color=#dd0000>'my_error_handler'</FONT><FONT color=#007700>);<BR></FONT><FONT color=#0000bb>$db </FONT><FONT color=#007700>= </FONT><FONT color=#0000bb>DB</FONT><FONT color=#007700>::</FONT><FONT color=#0000bb>connect</FONT><FONT color=#007700>(</FONT><FONT color=#dd0000>'pgsql://postgres@localhost/no_db'</FONT><FONT color=#007700>);<BR>...<BR></FONT><FONT color=#0000bb>?&gt;</FONT>
+</FONT>
+</CODE></PRE></TD></TR></TBODY></TABLE>
+<H3><A name=ss5.3>5.3 Taking automatic actions on errors</A></H3>
+<P>As you can see, Pear DB do extensive error checking and reporting, feature 
+that force the developer to always check if the result from his action had 
+returned an error or not. Pear DB take care also of this tired task, and 
+provides a very flexible system to automatic do actions when a error occurs.</P>
+<P>The avaible actions are:
+<P>
+<UL>
+  <LI>Return the error object (PEAR_ERROR_RETURN). This is the default action. 
+  <LI>Print error (PEAR_ERROR_PRINT) 
+  <LI>Print the error message and abort execution (PEAR_ERROR_DIE) 
+  <LI>Use the PHP funcion <I>trigger_error()</I> to raise a PHP error 
+  (PEAR_ERROR_TRIGGER) 
+  <LI>Pass the error object to a function or object method (PEAR_ERROR_CALLBACK) 
+  </LI></UL>
+<P>A simple example:</P>
+<TABLE cellSpacing=0 cellPadding=5 width="100%" bgColor=#dddddd border=1>
+  <TBODY>
+  <TR>
+    <TD><PRE><CODE><FONT color=#000000>
+<FONT color=#0000bb>&lt;?php<BR></FONT><FONT color=#007700>require_once </FONT><FONT color=#dd0000>'DB.php'</FONT><FONT color=#007700>;<BR></FONT><FONT color=#ff8000>// Set the default action to take on error<BR></FONT><FONT color=#0000bb>PEAR</FONT><FONT color=#007700>::</FONT><FONT color=#0000bb>setErrorHandling</FONT><FONT color=#007700>(</FONT><FONT color=#0000bb>PEAR_ERROR_DIE</FONT><FONT color=#007700>);<BR></FONT><FONT color=#ff8000>// From here you don't need to check errors any more<BR></FONT><FONT color=#0000bb>$db </FONT><FONT color=#007700>= </FONT><FONT color=#0000bb>DB</FONT><FONT color=#007700>::</FONT><FONT color=#0000bb>connect</FONT><FONT color=#007700>(</FONT><FONT color=#dd0000>'pgsql://postgres@localhost/my_database'</FONT><FONT color=#007700>);<BR></FONT><FONT color=#0000bb>$res </FONT><FONT color=#007700>= </FONT><FONT color=#0000bb>$db</FONT><FONT color=#007700>-&gt;</FONT><FONT color=#0000bb>query</FONT><FONT color=#007700>(</FONT><FONT color=#dd0000>'select id from no_table'</FONT><FONT color=#007700>);<BR></FONT><FONT color=#ff8000>// at this point the execution is aborted and the error message is raisen<BR></FONT><FONT color=#007700>...<BR></FONT><FONT color=#0000bb>?&gt;</FONT>
+</FONT>
+</CODE></PRE></TD></TR></TBODY></TABLE>
+<P>A more advanced example:</P>
+<TABLE cellSpacing=0 cellPadding=5 width="100%" bgColor=#dddddd border=1>
+  <TBODY>
+  <TR>
+    <TD><PRE><CODE><FONT color=#000000>
+<FONT color=#0000bb>&lt;?php<BR></FONT><FONT color=#ff8000>// Define the app environment (this is: what errors you want to output)<BR></FONT><FONT color=#0000bb>define </FONT><FONT color=#007700>(</FONT><FONT color=#dd0000>'DEBUG_ENV'</FONT><FONT color=#007700>, </FONT><FONT color=#0000bb>true</FONT><FONT color=#007700>);<BR></FONT><FONT color=#ff8000>// This function will handle all errors<BR></FONT><FONT color=#007700>function </FONT><FONT color=#0000bb>handle_pear_error </FONT><FONT color=#007700>(</FONT><FONT color=#0000bb>$error_obj</FONT><FONT color=#007700>) {<BR>&nbsp;&nbsp;&nbsp;&nbsp;</FONT><FONT color=#ff8000>// Be verbose while developing the application<BR>&nbsp;&nbsp;&nbsp;&nbsp;</FONT><FONT color=#007700>if (</FONT><FONT color=#0000bb>DEBUG_ENV</FONT><FONT color=#007700>) {<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;die (</FONT><FONT color=#0000bb>$error_obj</FONT><FONT color=#007700>-&gt;</FONT><FONT color=#0000bb>getMessage</FONT><FONT color=#007700>().</FONT><FONT color=#dd0000>"\n"</FONT><FONT color=#007700>.</FONT><FONT color=#0000bb>$error_obj</FONT><FONT color=#007700>-&gt;</FONT><FONT color=#0000bb>getDebugInfo</FONT><FONT color=#007700>());<BR>&nbsp;&nbsp;&nbsp;&nbsp;</FONT><FONT color=#ff8000>// Dump a silly message if the site is in production<BR>&nbsp;&nbsp;&nbsp;&nbsp;</FONT><FONT color=#007700>} else {<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;die (</FONT><FONT color=#dd0000>'Sorry you request can not be processed now. Try again later'</FONT><FONT color=#007700>);<BR>&nbsp;&nbsp;&nbsp;&nbsp;}<BR>}<BR><BR>require_once </FONT><FONT color=#dd0000>'DB.php'</FONT><FONT color=#007700>;<BR></FONT><FONT color=#ff8000>// On error, call the "handle_pear_error" function back<BR>// You can also use an object as pear error handler so:<BR>// setErrorHandling(PEAR_ERROR_CALLBACK, array($object,'method_name');<BR></FONT><FONT color=#0000bb>PEAR</FONT><FONT color=#007700>::</FONT><FONT color=#0000bb>setErrorHandling</FONT><FONT color=#007700>(</FONT><FONT color=#0000bb>PEAR_ERROR_CALLBACK</FONT><FONT color=#007700>, </FONT><FONT color=#dd0000>'handle_pear_error'</FONT><FONT color=#007700>);<BR></FONT><FONT color=#0000bb>$db </FONT><FONT color=#007700>= </FONT><FONT color=#0000bb>DB</FONT><FONT color=#007700>::</FONT><FONT color=#0000bb>connect</FONT><FONT color=#007700>(</FONT><FONT color=#dd0000>'pgsql://postgres@localhost/site_db'</FONT><FONT color=#007700>);<BR></FONT><FONT color=#0000bb>$res </FONT><FONT color=#007700>= </FONT><FONT color=#0000bb>$db</FONT><FONT color=#007700>-&gt;</FONT><FONT color=#0000bb>query</FONT><FONT color=#007700>(</FONT><FONT color=#dd0000>'select id from no_table'</FONT><FONT color=#007700>);<BR></FONT><FONT color=#ff8000>// at this point the execution is aborted and the "handle_pear_error"<BR>// function is called with the error object as its first argument<BR></FONT><FONT color=#007700>while (</FONT><FONT color=#0000bb>$row </FONT><FONT color=#007700>= </FONT><FONT color=#0000bb>$res</FONT><FONT color=#007700>-&gt;</FONT><FONT color=#0000bb>fetchRow</FONT><FONT color=#007700>()) {<BR>&nbsp;&nbsp;&nbsp;&nbsp;...<BR>}<BR>...<BR></FONT><FONT color=#0000bb>?&gt;</FONT>
+</FONT>
+</CODE></PRE></TD></TR></TBODY></TABLE>
+<P>Please refer to the <A href="http://www.php.net/manual/en/pear.php">Pear 
+Reference Manual</A>, to get the detailed description of the different possible 
+actions.</P>
+<P>Here is an idea on how to build an extended error handling system:</P>
+<TABLE cellSpacing=0 cellPadding=5 width="100%" bgColor=#dddddd border=1>
+  <TBODY>
+  <TR>
+    <TD><PRE><CODE><FONT color=#000000>
+<FONT color=#0000bb>&lt;?php<BR>error_reporting </FONT><FONT color=#007700>(</FONT><FONT color=#0000bb>E_ALL </FONT><FONT color=#007700>^ </FONT><FONT color=#0000bb>E_NOTICE</FONT><FONT color=#007700>);<BR></FONT><FONT color=#ff8000>// this function will handle all errors reported by PHP<BR></FONT><FONT color=#007700>function </FONT><FONT color=#0000bb>php_error_handler </FONT><FONT color=#007700>(</FONT><FONT color=#0000bb>$errno</FONT><FONT color=#007700>, </FONT><FONT color=#0000bb>$errstr</FONT><FONT color=#007700>, </FONT><FONT color=#0000bb>$errfile</FONT><FONT color=#007700>, </FONT><FONT color=#0000bb>$errline</FONT><FONT color=#007700>) {<BR>&nbsp;&nbsp;&nbsp;&nbsp;die (</FONT><FONT color=#dd0000>"In $errfile, line: $errline\n&lt;br&gt;$errstr"</FONT><FONT color=#007700>);<BR>}<BR></FONT><FONT color=#0000bb>set_error_handler </FONT><FONT color=#007700>(</FONT><FONT color=#dd0000>'php_error_handler'</FONT><FONT color=#007700>);<BR></FONT><FONT color=#ff8000>// this function will catch errors generated by Pear,<BR>// transform it to PHP errors and trigger them to the php_error_handler<BR></FONT><FONT color=#007700>function </FONT><FONT color=#0000bb>pear_error_handler </FONT><FONT color=#007700>(</FONT><FONT color=#0000bb>$err_obj</FONT><FONT color=#007700>) {<BR>&nbsp;&nbsp;&nbsp;&nbsp;</FONT><FONT color=#0000bb>$error_string </FONT><FONT color=#007700>= </FONT><FONT color=#0000bb>$err_obj</FONT><FONT color=#007700>-&gt;</FONT><FONT color=#0000bb>getMessage</FONT><FONT color=#007700>() . </FONT><FONT color=#dd0000>'&lt;br&gt;' </FONT><FONT color=#007700>. </FONT><FONT color=#0000bb>$error_obj</FONT><FONT color=#007700>-&gt;</FONT><FONT color=#0000bb>getDebugInfo</FONT><FONT color=#007700>();<BR>&nbsp;&nbsp;&nbsp;&nbsp;</FONT><FONT color=#0000bb>trigger_error </FONT><FONT color=#007700>(</FONT><FONT color=#0000bb>$error_string</FONT><FONT color=#007700>, </FONT><FONT color=#0000bb>E_USER_ERROR</FONT><FONT color=#007700>);<BR>}<BR>require </FONT><FONT color=#dd0000>'DB.php'</FONT><FONT color=#007700>;<BR></FONT><FONT color=#0000bb>PEAR</FONT><FONT color=#007700>::</FONT><FONT color=#0000bb>setErrorHandling </FONT><FONT color=#007700>(</FONT><FONT color=#0000bb>PEAR_ERROR_CALLBACK</FONT><FONT color=#007700>, </FONT><FONT color=#dd0000>'pear_error_handler'</FONT><FONT color=#007700>);<BR></FONT><FONT color=#ff8000>// force an error<BR></FONT><FONT color=#0000bb>$db </FONT><FONT color=#007700>= </FONT><FONT color=#0000bb>DB</FONT><FONT color=#007700>::</FONT><FONT color=#0000bb>connect</FONT><FONT color=#007700>(</FONT><FONT color=#dd0000>'pgsql://postgres@localhost/no_db'</FONT><FONT color=#007700>);<BR>...<BR></FONT><FONT color=#0000bb>?&gt;</FONT>
+</FONT>
+</CODE></PRE></TD></TR></TBODY></TABLE><BR>
+<HR>
+
+<H2><A name=ss6>6. Thanks</A></H2>
+<P>Special thanks to Stig for creating the wonderful Pear World, the people who 
+are helping me on maintaining this document and of course also to the other Pear 
+Team for their continuous work on it.</P>
+<HR>
+
+<P>Please send corrections, updates or additions to me:<BR><A 
+href="mailto:cox@idecnet.com?subject=Pear_Tut">Tomas V.V.Cox</A></P>
+<P>If you want to contribute to this document, please save the <A 
+href="http://vulcanonet.com/soft/index.php?pack=pear_tut&amp;showsource=1">source 
+template</A>, make the modifications to it and send it back to me, with a brief 
+summary of changes.</P><PRE>To Write:
+- Pear DB introduction
+- Other features like: prepare/execute, commit
+- How to help or report bugs
+</PRE><PRE>Changelog:
+#2003-02-27
+- Added translation to Thai by Narisa N.
+#2002-02-14
+- Added Japanese translation by "Naoki Shima" <MURAHACHIBU@PHP.NET>
+#2001-10-12
+- Added links to the tutorial translations
+- Couple of corrections reported by Nicolas Hoizey
+#2001-08-23
+- Added Table of contents (Thanks Natanael Copa!)
+</PRE></BODY></HTML>

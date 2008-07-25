@@ -1,0 +1,284 @@
+-- --------------------------------------------------------
+
+-- 
+-- Table structure for table `countries`
+-- 
+
+CREATE TABLE `countries` (
+  `id` tinyint(3) unsigned NOT NULL auto_increment,
+  `region_id` tinyint(3) unsigned NOT NULL default '0',
+  `name` varchar(50) NOT NULL default '',
+  `description` varchar(255) NOT NULL default '',
+  `population` double unsigned NOT NULL default '0',
+  `picture_url` varchar(100) NOT NULL default '',
+  `is_democracy` int(10) unsigned NOT NULL default '0',
+  `independent_date` datetime default '0000-00-00 00:00:00',
+  `independent_time` time NOT NULL default '00:00:00',
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=237 ;
+
+-- 
+-- Dumping data for table `countries`
+-- 
+
+INSERT INTO `countries` VALUES (2, 1, 'Angola', '', 0, '', 0, NULL, '00:00:00');
+INSERT INTO `countries` VALUES (3, 1, 'Benin', '', 0, '', 0, NULL, '00:00:00');
+INSERT INTO `countries` VALUES (4, 1, 'Botswana', '', 0, '', 0, NULL, '00:00:00');
+INSERT INTO `countries` VALUES (5, 1, 'Burkina Faso', '', 0, '', 0, NULL, '00:00:00');
+INSERT INTO `countries` VALUES (6, 1, 'Burundi', '', 0, '', 0, NULL, '00:00:00');
+INSERT INTO `countries` VALUES (7, 1, 'Cameroon', '', 0, '', 0, NULL, '00:00:00');
+INSERT INTO `countries` VALUES (8, 1, 'Cape Verde', '', 0, '', 0, NULL, '00:00:00');
+INSERT INTO `countries` VALUES (9, 1, 'Central African Republic', '', 0, '', 0, NULL, '00:00:00');
+INSERT INTO `countries` VALUES (10, 1, 'Chad', '', 0, '', 0, NULL, '00:00:00');
+INSERT INTO `countries` VALUES (11, 1, 'Comoros', '', 10000, '', 0, '2007-10-26 00:00:00', '00:00:00');
+INSERT INTO `countries` VALUES (12, 1, 'Cote d-Ivoire', '', 0, '', 0, NULL, '00:00:00');
+INSERT INTO `countries` VALUES (13, 1, 'Democratic Republic of the Congo', '', 0, '', 0, NULL, '00:00:00');
+INSERT INTO `countries` VALUES (14, 1, 'Djibouti', '', 0, '', 0, NULL, '00:00:00');
+INSERT INTO `countries` VALUES (16, 1, 'Equatorial Guinea', '', 0, '', 0, NULL, '00:00:00');
+INSERT INTO `countries` VALUES (17, 1, 'Eritrea', '', 0, '', 0, NULL, '00:00:00');
+INSERT INTO `countries` VALUES (18, 1, 'Ethiopia', '', 0, '', 0, NULL, '00:00:00');
+INSERT INTO `countries` VALUES (19, 1, 'Gabon', '', 0, '', 0, NULL, '00:00:00');
+INSERT INTO `countries` VALUES (20, 1, 'Gambia', '', 0, '', 0, NULL, '00:00:00');
+INSERT INTO `countries` VALUES (21, 1, 'Ghana', '', 0, '', 0, NULL, '00:00:00');
+INSERT INTO `countries` VALUES (22, 1, 'Guinea', '', 0, '', 0, NULL, '00:00:00');
+INSERT INTO `countries` VALUES (23, 1, 'Guinea-Bissau', '', 0, '', 0, NULL, '00:00:00');
+INSERT INTO `countries` VALUES (24, 1, 'Kenya', '', 0, '', 0, NULL, '00:00:00');
+INSERT INTO `countries` VALUES (25, 1, 'Lesotho', '', 0, '', 0, NULL, '00:00:00');
+INSERT INTO `countries` VALUES (26, 1, 'Liberia', '', 0, '', 0, NULL, '00:00:00');
+INSERT INTO `countries` VALUES (27, 1, 'Libya', '', 0, '', 0, NULL, '00:00:00');
+INSERT INTO `countries` VALUES (28, 1, 'Madagascar', '', 0, '', 0, NULL, '00:00:00');
+INSERT INTO `countries` VALUES (29, 1, 'Malawi', '', 0, '', 0, NULL, '00:00:00');
+INSERT INTO `countries` VALUES (54, 1, 'Mali', '', 0, '', 0, NULL, '00:00:00');
+INSERT INTO `countries` VALUES (67, 1, 'Sierra Leone', '', 0, '', 0, NULL, '00:00:00');
+INSERT INTO `countries` VALUES (68, 1, 'Somalia', '', 0, '', 0, NULL, '00:00:00');
+INSERT INTO `countries` VALUES (66, 1, 'Seychelles', '', 0, '', 0, NULL, '00:00:00');
+INSERT INTO `countries` VALUES (65, 1, 'Senegal', '', 0, '', 0, NULL, '00:00:00');
+INSERT INTO `countries` VALUES (55, 1, 'Mauritania', '', 0, '', 0, NULL, '00:00:00');
+INSERT INTO `countries` VALUES (56, 1, 'Mauritius', '', 0, '', 0, NULL, '00:00:00');
+INSERT INTO `countries` VALUES (57, 1, 'Morocco', '', 0, '', 0, NULL, '00:00:00');
+INSERT INTO `countries` VALUES (58, 1, 'Mozambique', '', 0, '', 0, NULL, '00:00:00');
+INSERT INTO `countries` VALUES (59, 1, 'Namibia', '', 0, '', 0, NULL, '00:00:00');
+INSERT INTO `countries` VALUES (60, 1, 'Niger', '', 0, '', 0, NULL, '00:00:00');
+INSERT INTO `countries` VALUES (61, 1, 'Nigeria', '', 0, '', 0, NULL, '00:00:00');
+INSERT INTO `countries` VALUES (62, 1, 'Republic of the Congo', '', 0, '', 0, NULL, '00:00:00');
+INSERT INTO `countries` VALUES (63, 1, 'Rwanda', '', 0, '', 0, NULL, '00:00:00');
+INSERT INTO `countries` VALUES (64, 1, 'Sao Tome and Principe', '', 0, '', 0, NULL, '00:00:00');
+INSERT INTO `countries` VALUES (69, 1, 'South Africa', '', 0, '', 0, NULL, '00:00:00');
+INSERT INTO `countries` VALUES (70, 1, 'Sudan', '', 0, '', 0, NULL, '00:00:00');
+INSERT INTO `countries` VALUES (71, 1, 'Swaziland', '', 0, '', 0, NULL, '00:00:00');
+INSERT INTO `countries` VALUES (72, 1, 'Tanzania', '', 0, '', 0, NULL, '00:00:00');
+INSERT INTO `countries` VALUES (73, 1, 'Togo', '', 0, '', 0, NULL, '00:00:00');
+INSERT INTO `countries` VALUES (74, 1, 'Tunisia', '', 0, '', 0, NULL, '00:00:00');
+INSERT INTO `countries` VALUES (75, 1, 'Uganda', '', 0, '', 0, NULL, '00:00:00');
+INSERT INTO `countries` VALUES (76, 1, 'Western Sahara', '', 0, '', 0, NULL, '00:00:00');
+INSERT INTO `countries` VALUES (77, 1, 'Zambia', '', 0, '', 0, NULL, '00:00:00');
+INSERT INTO `countries` VALUES (78, 1, 'Zimbabwe', '', 0, '', 0, NULL, '00:00:00');
+INSERT INTO `countries` VALUES (80, 2, 'Bangladesh', '', 0, '', 0, NULL, '00:00:00');
+INSERT INTO `countries` VALUES (81, 2, 'Bhutan', '', 0, '', 0, NULL, '00:00:00');
+INSERT INTO `countries` VALUES (82, 2, 'Brunei', '', 0, '', 0, NULL, '00:00:00');
+INSERT INTO `countries` VALUES (83, 2, 'Cambodia', '', 0, '', 0, NULL, '00:00:00');
+INSERT INTO `countries` VALUES (84, 2, 'China', '', 0, '', 0, NULL, '00:00:00');
+INSERT INTO `countries` VALUES (85, 2, 'Hong Kong', '', 0, '', 0, NULL, '00:00:00');
+INSERT INTO `countries` VALUES (86, 2, 'India', '', 0, '', 0, NULL, '00:00:00');
+INSERT INTO `countries` VALUES (87, 2, 'Indonesia', '', 0, '', 0, NULL, '00:00:00');
+INSERT INTO `countries` VALUES (88, 2, 'Japan', '', 0, '', 0, NULL, '00:00:00');
+INSERT INTO `countries` VALUES (89, 2, 'Kazakhstan', '', 0, '', 0, NULL, '00:00:00');
+INSERT INTO `countries` VALUES (90, 2, 'Laos', '', 0, '', 0, NULL, '00:00:00');
+INSERT INTO `countries` VALUES (91, 2, 'Macao', '', 0, '', 0, NULL, '00:00:00');
+INSERT INTO `countries` VALUES (92, 2, 'Malaysia', '', 0, '', 0, NULL, '00:00:00');
+INSERT INTO `countries` VALUES (93, 2, 'Maldives', '', 0, '', 0, NULL, '00:00:00');
+INSERT INTO `countries` VALUES (94, 2, 'Mongolia', '', 0, '', 0, NULL, '00:00:00');
+INSERT INTO `countries` VALUES (95, 2, 'Myanmar', '', 0, '', 0, NULL, '00:00:00');
+INSERT INTO `countries` VALUES (96, 2, 'Nepal', '', 0, '', 0, NULL, '00:00:00');
+INSERT INTO `countries` VALUES (97, 2, 'North Korea', '', 0, '', 0, NULL, '00:00:00');
+INSERT INTO `countries` VALUES (98, 2, 'Pakistan', '', 0, '', 0, NULL, '00:00:00');
+INSERT INTO `countries` VALUES (99, 2, 'Philippines', '', 0, '', 0, NULL, '00:00:00');
+INSERT INTO `countries` VALUES (100, 2, 'Singapore', '', 0, '', 0, NULL, '00:00:00');
+INSERT INTO `countries` VALUES (101, 2, 'South Korea', '', 0, '', 0, NULL, '00:00:00');
+INSERT INTO `countries` VALUES (102, 2, 'Sri Lanka', '', 0, '', 0, NULL, '00:00:00');
+INSERT INTO `countries` VALUES (103, 2, 'Taiwan', '', 0, '', 0, NULL, '00:00:00');
+INSERT INTO `countries` VALUES (104, 2, 'Tajikistan', '', 0, '', 0, NULL, '00:00:00');
+INSERT INTO `countries` VALUES (105, 2, 'Thailand', '', 0, '', 0, NULL, '00:00:00');
+INSERT INTO `countries` VALUES (106, 2, 'Vietnam', '', 0, '', 0, NULL, '00:00:00');
+INSERT INTO `countries` VALUES (108, 3, 'Antigua', '', 0, '', 0, NULL, '00:00:00');
+INSERT INTO `countries` VALUES (109, 3, 'Bahamas', '', 0, '', 0, NULL, '00:00:00');
+INSERT INTO `countries` VALUES (110, 3, 'Barbados', '', 0, '', 0, NULL, '00:00:00');
+INSERT INTO `countries` VALUES (111, 3, 'Dominica', '', 0, '', 0, NULL, '00:00:00');
+INSERT INTO `countries` VALUES (112, 3, 'Grenada', '', 0, '', 0, NULL, '00:00:00');
+INSERT INTO `countries` VALUES (113, 3, 'St.Kitts & Nevis', '', 0, '', 0, NULL, '00:00:00');
+INSERT INTO `countries` VALUES (114, 3, 'St.Lucia', '', 0, '', 0, NULL, '00:00:00');
+INSERT INTO `countries` VALUES (115, 3, 'St.Vincent & the Grenadines', '', 0, '', 0, NULL, '00:00:00');
+INSERT INTO `countries` VALUES (116, 3, 'Trinidad & Tobago', '', 0, '', 0, NULL, '00:00:00');
+INSERT INTO `countries` VALUES (118, 4, 'Andorra', 'test', 0, '', 0, '2007-09-21 16:34:54', '00:00:00');
+INSERT INTO `countries` VALUES (119, 4, 'Armenia', '', 0, '', 0, NULL, '00:00:00');
+INSERT INTO `countries` VALUES (120, 4, 'Austria', '', 0, '', 0, NULL, '00:00:00');
+INSERT INTO `countries` VALUES (121, 4, 'Azerbaijan', '', 0, '', 0, NULL, '00:00:00');
+INSERT INTO `countries` VALUES (122, 4, 'Belarus', '', 0, '', 0, NULL, '00:00:00');
+INSERT INTO `countries` VALUES (123, 4, 'Belgium', '', 0, '', 0, NULL, '00:00:00');
+INSERT INTO `countries` VALUES (124, 4, 'Bosnia and Herzegovina', '', 0, '', 0, NULL, '00:00:00');
+INSERT INTO `countries` VALUES (125, 4, 'Bulgaria', '', 0, '', 0, NULL, '00:00:00');
+INSERT INTO `countries` VALUES (126, 4, 'Croatia', '', 0, '', 0, NULL, '00:00:00');
+INSERT INTO `countries` VALUES (127, 4, 'Czech Republic', '', 0, '', 0, NULL, '00:00:00');
+INSERT INTO `countries` VALUES (128, 4, 'Denmark', '', 0, '', 0, NULL, '00:00:00');
+INSERT INTO `countries` VALUES (129, 4, 'Estonia', '', 0, '', 0, NULL, '00:00:00');
+INSERT INTO `countries` VALUES (130, 4, 'Finland', '', 0, '', 0, NULL, '00:00:00');
+INSERT INTO `countries` VALUES (131, 4, 'France', '', 0, '', 0, NULL, '00:00:00');
+INSERT INTO `countries` VALUES (132, 4, 'Georgia', '', 0, '', 0, NULL, '00:00:00');
+INSERT INTO `countries` VALUES (133, 4, 'Germany', '', 0, '', 0, NULL, '00:00:00');
+INSERT INTO `countries` VALUES (134, 4, 'Greece', '', 0, '', 0, NULL, '00:00:00');
+INSERT INTO `countries` VALUES (135, 4, 'Hungary', '', 0, '', 0, NULL, '00:00:00');
+INSERT INTO `countries` VALUES (136, 4, 'Iceland', '', 0, '', 0, NULL, '00:00:00');
+INSERT INTO `countries` VALUES (137, 4, 'Ireland', '', 0, '', 0, NULL, '00:00:00');
+INSERT INTO `countries` VALUES (138, 4, 'Italy', '', 0, '', 0, NULL, '00:00:00');
+INSERT INTO `countries` VALUES (139, 4, 'Latvia', '', 0, '', 0, NULL, '00:00:00');
+INSERT INTO `countries` VALUES (140, 4, 'Liechtenstein', '', 0, '', 0, NULL, '00:00:00');
+INSERT INTO `countries` VALUES (141, 4, 'Lithuania', '', 0, '', 0, NULL, '00:00:00');
+INSERT INTO `countries` VALUES (142, 4, 'Luxembourg', '', 0, '', 0, NULL, '00:00:00');
+INSERT INTO `countries` VALUES (143, 4, 'Macedonia', '', 0, '', 0, NULL, '00:00:00');
+INSERT INTO `countries` VALUES (144, 4, 'Malta', '', 0, '', 0, NULL, '00:00:00');
+INSERT INTO `countries` VALUES (145, 4, 'Moldova', '', 0, '', 0, NULL, '00:00:00');
+INSERT INTO `countries` VALUES (146, 4, 'Monaco', '', 0, '', 0, NULL, '00:00:00');
+INSERT INTO `countries` VALUES (147, 4, 'Netherlands', '', 0, '', 0, NULL, '00:00:00');
+INSERT INTO `countries` VALUES (148, 4, 'Norway', '', 0, '', 0, NULL, '00:00:00');
+INSERT INTO `countries` VALUES (149, 4, 'Poland', '', 0, '', 0, NULL, '00:00:00');
+INSERT INTO `countries` VALUES (150, 4, 'Portugal', '', 0, '', 0, NULL, '00:00:00');
+INSERT INTO `countries` VALUES (151, 4, 'Romania', '', 0, '', 0, NULL, '00:00:00');
+INSERT INTO `countries` VALUES (152, 4, 'Russian Federation', '', 0, '', 0, NULL, '00:00:00');
+INSERT INTO `countries` VALUES (153, 4, 'San Marino', '', 0, '', 0, NULL, '00:00:00');
+INSERT INTO `countries` VALUES (154, 4, 'Slovakia', '', 0, '', 0, NULL, '00:00:00');
+INSERT INTO `countries` VALUES (155, 4, 'Slovenia', '', 0, '', 0, NULL, '00:00:00');
+INSERT INTO `countries` VALUES (156, 4, 'Spain', '', 0, '', 0, NULL, '00:00:00');
+INSERT INTO `countries` VALUES (157, 4, 'Sweden', '', 0, '', 0, NULL, '00:00:00');
+INSERT INTO `countries` VALUES (158, 4, 'Switzerland', '', 0, '', 0, NULL, '00:00:00');
+INSERT INTO `countries` VALUES (159, 4, 'Turkey', '', 0, '', 0, NULL, '00:00:00');
+INSERT INTO `countries` VALUES (160, 4, 'Ukraine', '', 0, '', 0, NULL, '00:00:00');
+INSERT INTO `countries` VALUES (161, 4, 'United Kingdom', '', 0, '', 0, NULL, '00:00:00');
+INSERT INTO `countries` VALUES (162, 4, 'Yugoslavia', '', 0, '', 0, NULL, '00:00:00');
+INSERT INTO `countries` VALUES (163, 5, 'Bahrain', '', 0, '', 0, NULL, '00:00:00');
+INSERT INTO `countries` VALUES (164, 5, 'Cyprus', '', 0, '', 0, NULL, '00:00:00');
+INSERT INTO `countries` VALUES (165, 5, 'Egypt', '', 0, '', 0, NULL, '00:00:00');
+INSERT INTO `countries` VALUES (166, 5, 'Iran', '', 0, '', 0, NULL, '00:00:00');
+INSERT INTO `countries` VALUES (167, 5, 'Iraq', '', 0, '', 0, NULL, '00:00:00');
+INSERT INTO `countries` VALUES (168, 5, 'Israel', '', 0, '', 0, NULL, '00:00:00');
+INSERT INTO `countries` VALUES (169, 5, 'Jordan', '', 0, '', 0, NULL, '00:00:00');
+INSERT INTO `countries` VALUES (170, 5, 'Kuwait', '', 0, '', 0, NULL, '00:00:00');
+INSERT INTO `countries` VALUES (171, 5, 'Lebanon', '', 0, '', 0, NULL, '00:00:00');
+INSERT INTO `countries` VALUES (172, 5, 'Oman', '', 0, '', 0, NULL, '00:00:00');
+INSERT INTO `countries` VALUES (173, 5, 'Qatar', 'test test test', 0, '', 0, '2007-02-02 00:00:00', '00:00:00');
+INSERT INTO `countries` VALUES (174, 5, 'Saudi Arabia', '', 0, '', 0, NULL, '00:00:00');
+INSERT INTO `countries` VALUES (175, 5, 'Syria', '', 0, '', 0, NULL, '00:00:00');
+INSERT INTO `countries` VALUES (176, 5, 'Turkey', '', 0, '', 0, NULL, '00:00:00');
+INSERT INTO `countries` VALUES (177, 5, 'United Arab Emirates', '', 0, '', 0, NULL, '00:00:00');
+INSERT INTO `countries` VALUES (178, 5, 'Yemen', '', 0, '', 0, NULL, '00:00:00');
+INSERT INTO `countries` VALUES (179, 6, 'Belize', '', 0, '', 0, NULL, '00:00:00');
+INSERT INTO `countries` VALUES (180, 6, 'Canada', '', 0, '', 0, NULL, '00:00:00');
+INSERT INTO `countries` VALUES (181, 6, 'Costa Rica', '', 0, '', 0, NULL, '00:00:00');
+INSERT INTO `countries` VALUES (182, 6, 'Cuba', '', 0, '', 0, NULL, '00:00:00');
+INSERT INTO `countries` VALUES (183, 6, 'Dominican Republic', '', 0, '', 0, NULL, '00:00:00');
+INSERT INTO `countries` VALUES (184, 6, 'El Salvador', '', 0, '', 0, NULL, '00:00:00');
+INSERT INTO `countries` VALUES (185, 6, 'Guatemala', '', 0, '', 0, NULL, '00:00:00');
+INSERT INTO `countries` VALUES (186, 6, 'Haiti', '', 0, '', 0, NULL, '00:00:00');
+INSERT INTO `countries` VALUES (195, 6, 'Nicaragua', '', 0, '', 0, NULL, '00:00:00');
+INSERT INTO `countries` VALUES (192, 6, 'Honduras', '', 0, '', 0, NULL, '00:00:00');
+INSERT INTO `countries` VALUES (193, 6, 'Jamaica', '', 0, '', 0, NULL, '00:00:00');
+INSERT INTO `countries` VALUES (194, 6, 'Mexico', '', 0, '', 0, NULL, '00:00:00');
+INSERT INTO `countries` VALUES (196, 6, 'Panama', '', 0, '', 0, NULL, '00:00:00');
+INSERT INTO `countries` VALUES (197, 6, 'United States of America', '', 0, '', 0, NULL, '00:00:00');
+INSERT INTO `countries` VALUES (198, 7, 'Australia', '', 0, '', 0, NULL, '00:00:00');
+INSERT INTO `countries` VALUES (199, 7, 'Federated States of Micronesia', '', 0, '', 0, NULL, '00:00:00');
+INSERT INTO `countries` VALUES (200, 7, 'Fiji', '', 0, '', 0, NULL, '00:00:00');
+INSERT INTO `countries` VALUES (201, 7, 'Kiribati', '', 0, '', 0, NULL, '00:00:00');
+INSERT INTO `countries` VALUES (202, 7, 'Marshall Islands', '', 0, '', 0, NULL, '00:00:00');
+INSERT INTO `countries` VALUES (203, 7, 'Nauru', '', 0, '', 0, NULL, '00:00:00');
+INSERT INTO `countries` VALUES (204, 7, 'New Zealand', '', 0, '', 0, NULL, '00:00:00');
+INSERT INTO `countries` VALUES (205, 7, 'Palau', '', 0, '', 0, NULL, '00:00:00');
+INSERT INTO `countries` VALUES (206, 7, 'Papua New Guinea', '', 0, '', 0, NULL, '00:00:00');
+INSERT INTO `countries` VALUES (207, 7, 'Samoa', '', 0, '', 0, NULL, '00:00:00');
+INSERT INTO `countries` VALUES (208, 7, 'Solomon Islands', '', 0, '', 0, NULL, '00:00:00');
+INSERT INTO `countries` VALUES (209, 7, 'Tonga', '', 0, '', 0, NULL, '00:00:00');
+INSERT INTO `countries` VALUES (210, 7, 'Tuvalu', '', 0, '', 0, NULL, '00:00:00');
+INSERT INTO `countries` VALUES (211, 7, 'Vanuatu', '', 0, '', 0, NULL, '00:00:00');
+INSERT INTO `countries` VALUES (212, 8, 'Argentina', '', 0, '', 0, NULL, '00:00:00');
+INSERT INTO `countries` VALUES (213, 8, 'Bolivia', '', 0, '', 0, NULL, '00:00:00');
+INSERT INTO `countries` VALUES (214, 8, 'Brazil', '', 0, '', 0, NULL, '00:00:00');
+INSERT INTO `countries` VALUES (215, 8, 'Chile', '', 0, '', 0, NULL, '00:00:00');
+INSERT INTO `countries` VALUES (216, 8, 'Colombia', '', 0, '', 0, NULL, '00:00:00');
+INSERT INTO `countries` VALUES (217, 8, 'Ecuador', '', 0, '', 0, NULL, '00:00:00');
+INSERT INTO `countries` VALUES (218, 8, 'French Guiana', '', 0, '', 0, NULL, '00:00:00');
+INSERT INTO `countries` VALUES (219, 8, 'Guyana', 'ryry', 10000, '', 0, '2007-09-21 00:00:00', '00:00:00');
+INSERT INTO `countries` VALUES (220, 8, 'Paraguay', '', 10000, '', 0, '2007-09-21 00:00:00', '00:00:00');
+INSERT INTO `countries` VALUES (222, 8, 'Suriname', '', 10000, '', 0, '2007-09-21 00:00:00', '00:00:00');
+INSERT INTO `countries` VALUES (223, 8, 'Urugvay', '', 250000, '', 1, '2007-09-21 00:00:00', '00:00:00');
+INSERT INTO `countries` VALUES (226, 9, 'Antarctica', '<P>Donec neque mauris, ornare lacinia, gravida vitae, ullamcorper sit amet, enim. Praesent eget sem vel nibh euismod interdum. Etiam suscipit tortor. Maecenas aliquet nisi nec eros. Nunc sit amet magna. In massa. Vivamus porta dui nec nisl. In luctus tris', 10000, 'Architect Skype.png', 0, '2007-02-21 00:00:00', '00:00:00');
+INSERT INTO `countries` VALUES (227, 9, 'Arctic', 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit.', 10000, 'Angel_Skype.png', 0, '2007-10-02 00:00:00', '12:13:00');
+
+-- --------------------------------------------------------
+
+-- 
+-- Table structure for table `democracy`
+-- 
+
+CREATE TABLE `democracy` (
+  `id` int(10) unsigned NOT NULL auto_increment,
+  `description` varchar(20) NOT NULL default '',
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=3 ;
+
+-- 
+-- Dumping data for table `democracy`
+-- 
+
+INSERT INTO `democracy` VALUES (1, 'Yes');
+INSERT INTO `democracy` VALUES (2, 'No');
+
+-- --------------------------------------------------------
+
+-- 
+-- Table structure for table `presidents`
+-- 
+
+CREATE TABLE `presidents` (
+  `id` int(11) NOT NULL auto_increment,
+  `country_id` int(11) unsigned NOT NULL default '0',
+  `name` varchar(50) default NULL,
+  `birth_date` date default NULL,
+  `status` enum('Candidate','Vice','Current') default 'Candidate',
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=8 ;
+
+-- 
+-- Dumping data for table `presidents`
+-- 
+
+INSERT INTO `presidents` VALUES (1, 1, 'Mombo', '1995-02-14', 'Candidate');
+INSERT INTO `presidents` VALUES (2, 2, 'Rombo', '1965-11-08', 'Candidate');
+INSERT INTO `presidents` VALUES (3, 173, 'mr. Portos', '2007-02-23', 'Candidate');
+INSERT INTO `presidents` VALUES (5, 160, 'Kuchma', '2007-02-06', 'Vice');
+INSERT INTO `presidents` VALUES (6, 227, 'Rondo', '1952-02-14', 'Candidate');
+INSERT INTO `presidents` VALUES (7, 225, 'Poro', '2007-02-19', 'Candidate');
+
+-- --------------------------------------------------------
+
+-- 
+-- Table structure for table `regions`
+-- 
+
+CREATE TABLE `regions` (
+  `id` tinyint(3) unsigned NOT NULL auto_increment,
+  `name` varchar(20) NOT NULL default '',
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=10 ;
+
+-- 
+-- Dumping data for table `regions`
+-- 
+
+INSERT INTO `regions` VALUES (1, 'Africa');
+INSERT INTO `regions` VALUES (2, 'Asia');
+INSERT INTO `regions` VALUES (3, 'Caribbean');
+INSERT INTO `regions` VALUES (4, 'Europe');
+INSERT INTO `regions` VALUES (5, 'Middle East');
+INSERT INTO `regions` VALUES (6, 'North America');
+INSERT INTO `regions` VALUES (7, 'Oceania');
+INSERT INTO `regions` VALUES (8, 'South America');
+INSERT INTO `regions` VALUES (9, 'North & South Poles');

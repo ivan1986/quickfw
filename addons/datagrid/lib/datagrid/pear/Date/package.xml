@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE package SYSTEM "http://pear.php.net/dtd/package-1.0">
+<package version="1.0">
+  <name>Date</name>
+  <summary>Date and Time Zone Classes</summary>
+  <description>Generic classes for representation and manipulation of
+dates, times and time zones without the need of timestamps,
+which is a huge limitation for php programs.  Includes time zone data,
+time zone conversions and many date/time conversions.
+It does not rely on 32-bit system date stamps, so
+you can display calendars and compare dates that date
+pre 1970 and post 2038. This package also provides a class
+to convert date strings between Gregorian and Human calendar formats.</description>
+  <maintainers>
+    <maintainer>
+      <user>baba</user>
+      <name>Baba Buehler</name>
+      <email>baba@babaz.com</email>
+      <role>lead</role>
+    </maintainer>
+    <maintainer>
+      <user>mohrt</user>
+      <name>Monte Ohrt</name>
+      <email>mohrt@php.net</email>
+      <role>lead</role>
+    </maintainer>
+    <maintainer>
+      <user>pajoye</user>
+      <name>Pierre-Alain Joye</name>
+      <email>pajoye@pearfr.org</email>
+      <role>lead</role>
+    </maintainer>
+    <maintainer>
+      <user>alan_k</user>
+      <name>Alan Knowles</name>
+      <email>alan@akbkhome.com</email>
+      <role>developer</role>
+    </maintainer>
+  </maintainers>
+  <release>
+    <version>1.4.2</version>
+    <date>2004-03-14</date>
+    <license>PHP License</license>
+    <state>stable</state>
+    <notes>- Fix #976 TimeZone default bad global usage
+   only _DATE_TIMEZONE_DEFAULT is used now
+- Fix #683, add optional length argumet to getDayName()
+- Fix PHP5 problems with get_class functions</notes>
+    <deps>
+      <dep type="php" rel="ge" version="4.2"/>
+    </deps>
+    <filelist>
+      <file role="php" baseinstalldir="/" name="Date.php"/>
+      <file role="php" name="Date/Calc.php"/>
+      <file role="php" name="Date/Human.php"/>
+      <file role="php" name="Date/TimeZone.php"/>
+      <file role="php" name="Date/Span.php"/>
+      <file role="test" name="tests/test_calc.php"/>
+      <file role="test" name="tests/test_date_methods_span.php"/>
+      <file role="test" name="tests/testunit_date.php"/>
+      <file role="test" name="tests/testunit_date_span.php"/>
+      <file role="test" name="tests/testunit.php"/>
+      <file role="test" name="tests/bug674.php"/>
+      <file role="test" name="tests/bug967.php"/>
+      <file role="test" name="tests/bug727_1.php"/>
+      <file role="test" name="tests/bug727_2.php"/>
+      <file role="test" name="tests/bug727_3.php"/>
+      <file role="test" name="tests/bug727_4.php"/>
+      <file role="test" name="tests/wknotest.txt"/>
+      <file role="test" name="tests/weeksinmonth_4_monday.txt"/>
+      <file role="test" name="tests/weeksinmonth_4_sunday.txt"/>
+      <file role="test" name="tests/weeksinmonth_rdm_monday.txt"/>
+      <file role="test" name="tests/weeksinmonth_rdm_sunday.txt"/>
+      <file role="doc" name="TODO"/>
+    </filelist>
+  </release>
+  <changelog>
+    <release>
+      <version>1.4.1</version>
+      <state>stable</state>
+      <notes>- Fix #674 endOfWeek() beginOfWeek()
+- Fix #727, weeksInMonth (wrong result with some dates)
+- Fix #674 (and old system #22549), check arguments in Date_Span
+</notes>
+    </release>
+    <release>
+      <version>1.4</version>
+      <date>2003-12-21</date>
+      <state>stable</state>
+      <notes>- improvements in input date parsing
+- add Date methods addSpan() and subtractSpan()
+- added two more ISO8601 date/time output formats DATE_FORMAT_ISO_BASIC and DATE_FORMAT_ISO_EXTENDED
+- improve Date_Calc isLeapYear() and daysInMonth() for year 1582
+- add gregorianToISO() method to Date_Calc
+- add dateSeason() method to Date_Calc
+- add Date_Span class 
+- bugfix in Date_Calc when century ends in 00, only define DATE_CALC_BEGIN_WEEKDAY if not already defined
+- bugfix in beginOfNextWeek(), beginOfPreviousWeek() (thx to andreas dot kossmeier at bergfex dot at)
+- bugfix in nextDayOfWeek and prevDayOfWeek (thx to koan at gmx dot at)
+- bugfix for bug 62: getDate(DATE_FORMAT_UNIXTIME) off because of DST
+- bugfix for bug 65: format(e) returns zero-padded day
+- bugfix for bug 195: Suppress a notice in setDate()
+- bugfix for bug 271: Date_Calc weeksInMonth() returns wrong number
+- fix abstraction bug, Date constructor accepts now object that extends Date
+- add tests to release package 
+- Fix notices and mins calc in to toUTCbyOffset()
+</notes>
+    </release>
+  </changelog>
+</package>

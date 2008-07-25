@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE package SYSTEM "http://pear.php.net/dtd/package-1.0">
+<package version="1.0">
+  <name>Mail</name>
+  <summary>Class that provides multiple interfaces for sending emails</summary>
+  <description>PEAR's Mail package defines an interface for implementing mailers under the PEAR hierarchy.  It also provides supporting functions useful to multiple mailer backends.  Currently supported backends include: PHP's native mail() function, sendmail, and SMTP.  This package also provides a RFC822 email address list validation utility class.</description>
+  <maintainers>
+    <maintainer>
+      <user>chagenbu</user>
+      <name>Chuck Hagenbuch</name>
+      <email>chuck@horde.org</email>
+      <role>lead</role>
+    </maintainer>
+    <maintainer>
+      <user>richard</user>
+      <name>Richard Heyes</name>
+      <email>richard@phpguru.org</email>
+      <role>developer</role>
+    </maintainer>
+    <maintainer>
+      <user>jon</user>
+      <name>Jon Parise</name>
+      <email>jon@php.net</email>
+      <role>lead</role>
+    </maintainer>
+  </maintainers>
+  <release>
+    <version>1.1.9</version>
+    <date>2005-09-13</date>
+    <license>PHP/BSD</license>
+    <state>stable</state>
+    <notes>- SMTP connections are now reset (RSET) when an error occurs. (Bug 5212)
+- The SMTP driver now exposes a disconnect() method which forcibly destroys the SMTP connection. (Bug 5372)</notes>
+    <deps>
+      <dep type="pkg" rel="ge" version="1.1.0" optional="yes">Net_SMTP</dep>
+    </deps>
+    <filelist>
+      <file role="php" md5sum="ddc846588c7f9fdce8362d7eba3a1ddf" name="Mail.php"/>
+      <file role="php" md5sum="9d9b02b021838beb86465e18bd95c557" name="Mail/mail.php"/>
+      <file role="php" md5sum="4a1ed7ae8036862b24fa0ea84f8bbe0e" name="Mail/null.php"/>
+      <file role="php" md5sum="3df583acb4debe265ba7e4c7c69ce6a8" name="Mail/sendmail.php"/>
+      <file role="php" md5sum="d79aff099a3222192b241b4e1d8af9cd" name="Mail/smtp.php"/>
+      <file role="php" md5sum="737720099000c03066195df1bf1c573c" name="Mail/RFC822.php"/>
+      <file role="test" md5sum="415a187e606d547c3e852ab83e2ab4e8" name="tests/rfc822.phpt"/>
+      <file role="test" md5sum="b8d84fc2b30f3c7a3a04a16c5883a577" name="tests/smtp_error.phpt"/>
+    </filelist>
+  </release>
+  <changelog>
+    <release>
+      <version>1.1.8</version>
+      <date>2005-08-23</date>
+      <state>stable</state>
+      <notes>- Removing a stray debugging line that snuck into the 1.1.7 release. (Bug 5190)
+      
+</notes>
+    </release>
+    <release>
+      <version>1.1.7</version>
+      <date>2005-08-21</date>
+      <state>stable</state>
+      <notes>- Mail_RFC822::isValidInetAddress() now accepts the '+' character in strict local-parts. (Bug 4943)
+- The SMTP backend now returns standardized error messages which now include additional error details from the Net_SMTP package. (Bug 4241)
+- Mail::factory() now returns object references without generating PHP warnings.
+- The SMTP backend now supports a 'persist' parameter which allows the internal SMTP connection object to be reused over multiple calls to the send() method. (Bug 4122)
+      
+</notes>
+    </release>
+    <release>
+      <version>1.1.6</version>
+      <date>2005-07-12</date>
+      <state>stable</state>
+      <notes>- Don't emit warnings with PHP 4.4/5.1.
+      
+</notes>
+    </release>
+    <release>
+      <version>1.1.5</version>
+      <date>2005-06-26</date>
+      <state>stable</state>
+      <notes>- Unfold long lines before parsing addresses in Mail_RFC822.
+- The SMTP driver now supports a 'timeout' value. (Request #3776)
+- An array of Received: headers can now be provided. (Bug #4636)
+      
+</notes>
+    </release>
+    <release>
+      <version>1.1.4</version>
+      <date>2004-09-08</date>
+      <state>stable</state>
+      <notes>- Header key comparisons are now case-insensitive. (Colin Viebrock)
+- Header fields (e.g., 'Cc', 'Bcc') may now be specified as arrays of addresses. (Colin Viebrock)
+- PHP5 compatibility fix (Bug #1563).
+- PHP4 / Win32 compatibility fix for the 'sendmail' driver (Bug 1881).
+- Stricter &quot;local part&quot; parsing for Mail_RFC822 (in accordance with Section 6.2.4 of RFC 822) (Bug 1869).
+- The various send() implementations now properly escalate the PEAR_Error object returned by Mail::prepareHeaders() in the event of an invalid header.
+      
+</notes>
+    </release>
+    <release>
+      <version>1.1.3</version>
+      <date>2004-04-08</date>
+      <state>stable</state>
+      <notes>- The 'mail' driver now returns a PEAR_Error object on failure.
+- The individual drivers no longer include the 'Mail.php' file.  If you want to instantiate a driver directly, you'll need to explicitly include the 'Mail.php' file yourself.
+      
+</notes>
+    </release>
+    <release>
+      <version>1.1.2</version>
+      <date>2003-09-04</date>
+      <state>stable</state>
+      <notes>The 'localhost' value can now be set in the SMTP driver.
+</notes>
+    </release>
+    <release>
+      <version>1.1.1</version>
+      <date>2003-06-26</date>
+      <state>stable</state>
+      <notes>Minor fixes with newlines in headers.
+</notes>
+    </release>
+    <release>
+      <version>1.1.0</version>
+      <date>2003-06-21</date>
+      <state>stable</state>
+      <notes>The Mail package now depends on Net_SMTP 1.1.0 or greater for its SMTP authentication capabilities.
+</notes>
+    </release>
+    <release>
+      <version>1.0.2</version>
+      <date>2002-07-27</date>
+      <state>stable</state>
+      <notes>Minor additions and changes to RFC822.php. Fixed line terminator issue for smtp.php and set smtp.php to use Return-Path header in place of From header for MAIL FROM: (if supplied)
+</notes>
+    </release>
+    <release>
+      <version>1.0.1</version>
+      <date>2002-07-27</date>
+      <state>stable</state>
+      <notes>License change for RFC822.php
+</notes>
+    </release>
+    <release>
+      <version>1.0</version>
+      <date>2002-06-06</date>
+      <state>stable</state>
+      <notes>Initial release as PEAR package
+</notes>
+    </release>
+  </changelog>
+</package>

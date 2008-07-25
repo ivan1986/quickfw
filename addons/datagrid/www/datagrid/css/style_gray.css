@@ -1,0 +1,51 @@
+/* common classes */
+pre { PADDING: 0px; MARGIN: 0px; }
+
+.class_left { TEXT-ALIGN: left; }
+.class_center { TEXT-ALIGN: center; }
+.class_right { TEXT-ALIGN: right; }
+.class_nowrap { WHITE-SPACE: nowrap; }
+.resizable-textarea .grippie { BORDER-RIGHT: #ddd 1px solid; BORDER-TOP: #ddd 0px solid;  OVERFLOW: hidden; BORDER-LEFT: #ddd 1px solid; CURSOR: s-resize; BORDER-BOTTOM: #ddd 1px solid; HEIGHT:6px; }
+
+a.gray_class_a { BACKGROUND: transparent; FONT-SIZE:11px; COLOR: #808080; TEXT-DECORATION: none; }
+a.gray_class_a:link { BACKGROUND: transparent; FONT-SIZE:11px; COLOR: #808080; TEXT-DECORATION: none; }
+a.gray_class_a:hover { BACKGROUND: transparent; FONT-SIZE:11px; COLOR: #808080; TEXT-DECORATION: underline; }
+a.gray_class_a:visited { }
+a.gray_class_a2 { BACKGROUND: transparent; FONT-SIZE:11px; COLOR: #808080; TEXT-DECORATION: none; }
+a.gray_class_a2:link { BACKGROUND: transparent; FONT-SIZE:11px; COLOR: #808080; TEXT-DECORATION: underline; }
+a.gray_class_a2:hover { BACKGROUND: transparent; FONT-SIZE:11px; COLOR: #808080; TEXT-DECORATION: none; }
+a.gray_class_a2:visited {  }
+/* columns header links */
+a.gray_class_a_header {       BACKGROUND: transparent; FONT-SIZE:12px; COLOR: #fafafa; TEXT-DECORATION: none; }
+a.gray_class_a_header:link {  BACKGROUND: transparent; FONT-SIZE:12px; COLOR: #fafafa; TEXT-DECORATION: none; }
+a.gray_class_a_header:hover { BACKGROUND: transparent; FONT-SIZE:12px; COLOR: #fafafa; TEXT-DECORATION: none; }
+a.gray_class_a_header:visited { }
+
+.gray_class_fieldset { MARGIN: 0px; BORDER: 1px solid #cecece;}
+.gray_class_filter_table { font-family: Arial, Helvetica, sans-serif, Verdana; BORDER:0px solid #000000; FONT-SIZE: 11px;BORDER-COLLAPSE:collapse;MARGIN:0;PADDING:0;}
+.gray_class_legend { }
+.gray_class_paging_table { BORDER: #d0d0d0 0px solid; font-family: Arial, Helvetica, sans-serif, Verdana; FONT-SIZE: 11px;}
+.gray_class_table { BORDER-COLLAPSE: collapse; FONT-SIZE: 11px; BORDER: #d0d0d0 1px solid; BORDER-COLLAPSE:collapse; font-family: Arial, Helvetica, sans-serif, Verdana;}
+
+.gray_class_th {          BACKGROUND: url(../images/gray/header_background.gif) repeat-x right bottom; FONT: bold 13px; COLOR: #fefefe; TEXT-INDENT: 7px; VERTICAL-ALIGN:center;BORDER:1px solid #d0d0d0; PADDING: 2px; PADDING-TOP: 4px; BORDER-TOP:0px; PADDING-BOTTOM: 4px;}
+.gray_class_th_normal {   BACKGROUND: url(../images/gray/header_background.gif) repeat-x right bottom; FONT: bold 13px; COLOR: #fefefe; BACKGROUND-COLOR: #dedede;TEXT-INDENT: 7px; VERTICAL-ALIGN:center;BORDER:1px solid #d0d0d0; BORDER-TOP:0px; PADDING: 2px; PADDING-TOP: 4px; PADDING-BOTTOM: 4px;}
+.gray_class_th_selected { BACKGROUND: url(../images/gray/header_background.gif) repeat-x right bottom; FONT: bold 13px; COLOR: #fefefe; BACKGROUND-COLOR: #dedede;TEXT-INDENT: 7px; VERTICAL-ALIGN:center;BORDER:1px solid #d0d0d0; BORDER-TOP:0px; PADDING: 2px; PADDING-TOP: 4px; PADDING-BOTTOM: 4px;}
+
+.gray_class_td {          font-family: Arial, Helvetica, sans-serif, Verdana; FONT-SIZE:12px; VERTICAL-ALIGN:center;LINE-HEIGHT: 17px;TEXT-INDENT: 7px; BORDER:1px solid #e0e0e0;PADDING-LEFT: 6px;PADDING-RIGHT: 6px;}
+.gray_class_td_main {     font-family: Arial, Helvetica, sans-serif, Verdana; FONT-SIZE:12px; LINE-HEIGHT: 17px;FONT-WEIGHT: bold;COLOR: #000000;TEXT-INDENT: 7px; VERTICAL-ALIGN:center;BORDER:1px solid #e0e0e0;PADDING-LEFT: 6px;PADDING-RIGHT: 6px;}
+.gray_class_td_selected { font-family: Arial, Helvetica, sans-serif, Verdana; FONT-SIZE:12px; BACKGROUND-COLOR: #f0f0f0; VERTICAL-ALIGN:center;LINE-HEIGHT: 17px;TEXT-INDENT: 7px; BORDER:1px solid #e0e0e0;PADDING-LEFT: 6px;PADDING-RIGHT: 6px;}
+
+.gray_class_button { FONT-SIZE:11px;  }
+.gray_class_select { FONT-SIZE:11px; }
+.gray_class_label { }
+.gray_class_textbox { font-family: Arial, Helvetica, sans-serif, Verdana; FONT-SIZE:12px;  border:1px #cccccc solid; margin:0px; padding:2px;padding-left:4px; COLOR: #505050;}
+.gray_class_checkbox { }
+.gray_class_radiobutton { }
+.gray_class_caption {FONT-SIZE: 14px; font-family: Arial, Helvetica, sans-serif, Verdana; FONT-WEIGHT: bold; TEXT-ALIGN:center; PADDING-BOTTOM: 0;}
+.gray_class_error_message { FONT: normal 12px; COLOR: #ff8822; }
+.gray_class_ok_message { FONT: normal 12px; COLOR: #449944; }
+
+
+
+
+

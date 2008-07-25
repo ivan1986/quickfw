@@ -1,0 +1,275 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!-- saved from url=(0042)http://odbtp.sourceforge.net/DB_odbtp.html -->
+<HTML><HEAD><TITLE>DB_odbtp</TITLE>
+<META http-equiv=Content-Type content="text/html; charset=koi8-u">
+<META content="MSHTML 6.00.2800.1561" name=GENERATOR></HEAD>
+<BODY>
+
+<b>See <a href="http://odbtp.sourceforge.net/DB_odbtp.html">last updated version</a></b>
+
+
+<H2>DB_odbtp</H2><A 
+href="http://odbtp.sourceforge.net/DB_odbtp.html#overview">Overview</A><BR><A 
+href="http://odbtp.sourceforge.net/DB_odbtp.html#require">Requirements</A><BR><A 
+href="http://odbtp.sourceforge.net/DB_odbtp.html#dsn">DSN 
+specification</A><BR><A 
+href="http://odbtp.sourceforge.net/DB_odbtp.html#odbtp">ODBTP options</A><BR><A 
+href="http://odbtp.sourceforge.net/DB_odbtp.html#odbc">ODBC options</A><BR><A 
+href="http://odbtp.sourceforge.net/DB_odbtp.html#dbsyntax">Databases supported 
+by dbsyntax</A><BR><A 
+href="http://odbtp.sourceforge.net/DB_odbtp.html#exampledsn">Example DSN 
+specifications</A><BR><BR>&nbsp;<BR><A name=overview>
+<H3>Overview</H3></A>DB_odbtp is a <A href="http://pear.php.net/package/DB">PEAR 
+DB</A> driver that connects to a database using ODBTP (Open Database Transport 
+Protocol). ODBTP allows any platform to remotely access the ODBC facilities on a 
+Win32 host to connect to a database. A PHP application on a Linux, UNIX or 
+Novell platform will be able to access a Microsoft SQL Server, Microsoft Access, 
+Visual FoxPro, or any other database residing on a Win32 platform. 
+<P>PHP developers on Windows can use the odbtp driver instead of the odbc, ado 
+and mssql drivers. The odbtp extension provides better performance and more 
+capabities than the extensions used by the other drivers. For example, Microsoft 
+Access and Microsoft SQL Server can store UNICODE text data. However, the odbtp 
+driver is the only one that provides full support for UNICODE text data and 
+queries. The odbtp driver also has the exact behaviour on both Win32 and 
+non-Win32 installations. <BR>&nbsp;<BR><A name=require>
+<H3>Requirements</H3></A>The DB_odbtp package requires the prior installation of 
+the ODBTP PHP extension and Win32 service. These components can be obtained at 
+<A href="http://odbtp.sourceforge.net/">http://odbtp.sourceforge.net/</A>. The 
+ODBTP service must be installed on a WinNT, WinXP or Win2K host whose ODBC 
+facilities can access the desired database. The ODBTP extension and DB_odbtp 
+package can be installed on any computer that can connect to the ODBTP service. 
+<BR>&nbsp;<BR><A name=dsn>
+<H3>DSN specification</H3></A>Full specification: <PRE>    odbtp(dbsyntax)://username:password@hostspec:port/database?opt1=val1&amp;opt2=val2...&amp;optN=valN</PRE>Minimal 
+specification: <PRE>    odbtp://hostspec</PRE>The <CODE>dbsyntax</CODE> option can be any one 
+of the following values:
+<P>&nbsp;&nbsp;&nbsp;&nbsp;<CODE>access</CODE> -- Microsoft 
+Access<BR>&nbsp;&nbsp;&nbsp;&nbsp;<CODE>db2</CODE> -- IBM 
+DB2<BR>&nbsp;&nbsp;&nbsp;&nbsp;<CODE>dsn</CODE> -- General ODBC 
+DSN<BR>&nbsp;&nbsp;&nbsp;&nbsp;<CODE>excel</CODE> -- Microsoft 
+Excel<BR>&nbsp;&nbsp;&nbsp;&nbsp;<CODE>mssql</CODE> -- Microsoft SQL 
+Server<BR>&nbsp;&nbsp;&nbsp;&nbsp;<CODE>mysql</CODE> -- 
+MySQL<BR>&nbsp;&nbsp;&nbsp;&nbsp;<CODE>oracle</CODE> -- 
+Oracle<BR>&nbsp;&nbsp;&nbsp;&nbsp;<CODE>sybase</CODE> -- 
+Sybase<BR>&nbsp;&nbsp;&nbsp;&nbsp;<CODE>text</CODE> -- Text 
+Files<BR>&nbsp;&nbsp;&nbsp;&nbsp;<CODE>vfp</CODE> -- Visual FoxPro 
+<P>The <CODE>hostspec</CODE> option can either be the hostname or IP address of 
+an ODBTP service, or it can be the name of an <A 
+href="http://odbtp.sourceforge.net/interface.html">ODBTP interface</A>. In the 
+case of the minimal specification, <CODE>hostspec</CODE> must be the name of an 
+interface. The default value for <CODE>hostspec</CODE> is 
+<CODE>127.0.0.1</CODE>. 
+<P>For more details about PEAR DB's DSN specification, see <A 
+href="http://pear.php.net/manual/en/package.database.db.intro-dsn.php">Introduction 
+- DSN</A> from the PEAR Manual. <BR>&nbsp;<BR><A name=odbtp>
+<H3>ODBTP options</H3></A>
+<TABLE cellSpacing=0 cellPadding=0 border=0>
+  <TBODY>
+  <TR>
+    <TD><B>Name</B></TD>
+    <TD><B>Description</B></TD></TR>
+  <TR>
+    <TD>&nbsp;</TD>
+    <TD>&nbsp;</TD></TR>
+  <TR>
+    <TD vAlign=top><NOBR><CODE>connid&nbsp;&nbsp;</CODE></NOBR></TD>
+    <TD vAlign=top>ODBTP connection Id. This is only required when 
+      reconnecting to a reserved connection. </TD></TR>
+  <TR>
+    <TD>&nbsp;</TD>
+    <TD>&nbsp;</TD></TR>
+  <TR>
+    <TD vAlign=top><NOBR><CODE>conntimeout&nbsp;&nbsp;</CODE></NOBR></TD>
+    <TD vAlign=top>ODBTP TCP/IP connection timeout in seconds. </TD></TR>
+  <TR>
+    <TD>&nbsp;</TD>
+    <TD>&nbsp;</TD></TR>
+  <TR>
+    <TD vAlign=top><NOBR><CODE>conntype&nbsp;&nbsp;</CODE></NOBR></TD>
+    <TD vAlign=top>ODBTP connection type. it can either be 
+      <CODE>single</CODE>, <CODE>reserved</CODE> or <CODE>normal</CODE>. The 
+      default is <CODE>normal</CODE>. </TD></TR>
+  <TR>
+    <TD>&nbsp;</TD>
+    <TD>&nbsp;</TD></TR>
+  <TR>
+    <TD vAlign=top><NOBR><CODE>dbparam&nbsp;&nbsp;</CODE></NOBR></TD>
+    <TD vAlign=top>The name of the ODBC connect string parameter for 
+      specifying the database. The value is ODBC driver dependent. Examples are 
+      <CODE>DATABASE</CODE>, <CODE>DBQ</CODE>, <CODE>SOURCEDB</CODE> and 
+      <CODE>DSN</CODE>. The default is <CODE>DATABASE</CODE>. </TD></TR>
+  <TR>
+    <TD>&nbsp;</TD>
+    <TD>&nbsp;</TD></TR>
+  <TR>
+    <TD vAlign=top><NOBR><CODE>odbcport&nbsp;&nbsp;</CODE></NOBR></TD>
+    <TD vAlign=top>The ODBC connect string <CODE>PORT</CODE> parameter value. 
+      This option is included to eliminate ambiguity with the PEAR DB DSN's 
+      <CODE>port</CODE> option. </TD></TR>
+  <TR>
+    <TD>&nbsp;</TD>
+    <TD>&nbsp;</TD></TR>
+  <TR>
+    <TD vAlign=top><NOBR><CODE>odbcprotocol&nbsp;&nbsp;</CODE></NOBR></TD>
+    <TD vAlign=top>The ODBC connect string <CODE>PROTOCOL</CODE> parameter 
+      value. This option is included to eliminate ambiguity with the PEAR DB 
+      DSN's <CODE>protocol</CODE> option. </TD></TR>
+  <TR>
+    <TD>&nbsp;</TD>
+    <TD>&nbsp;</TD></TR>
+  <TR>
+    <TD vAlign=top><NOBR><CODE>readtimeout&nbsp;&nbsp;</CODE></NOBR></TD>
+    <TD vAlign=top>ODBTP TCP/IP read timeout in seconds. </TD></TR>
+  <TR>
+    <TD>&nbsp;</TD>
+    <TD>&nbsp;</TD></TR>
+  <TR>
+    <TD vAlign=top><NOBR><CODE>rowcache&nbsp;&nbsp;</CODE></NOBR></TD>
+    <TD vAlign=top>Enable row caching. If set to <CODE>yes</CODE>, then all 
+      row data will be placed in memory immediately after quere execution. This 
+      allows predetermination of row counts, and backward fetches without having 
+      to use a cursor. </TD></TR>
+  <TR>
+    <TD>&nbsp;</TD>
+    <TD>&nbsp;</TD></TR>
+  <TR>
+    <TD vAlign=top><NOBR><CODE>txnisol&nbsp;&nbsp;</CODE></NOBR></TD>
+    <TD vAlign=top>Transaction isolation level to use when auto commit has 
+      been disabled. Valid values are <CODE>ReadUncommitted</CODE>, 
+      <CODE>ReadCommitted</CODE>, <CODE>RepeatableRead</CODE>, 
+      <CODE>Serializable</CODE> and <CODE>Default</CODE>. </TD></TR>
+  <TR>
+    <TD>&nbsp;</TD>
+    <TD>&nbsp;</TD></TR>
+  <TR>
+    <TD vAlign=top><NOBR><CODE>unicode&nbsp;&nbsp;</CODE></NOBR></TD>
+    <TD vAlign=top>Enable UNICODE query text processing. If set to 
+      <CODE>yes</CODE>, then all query text will be read as UTF-8 encoded 
+      UNICODE text. And, if the underlying database is Microsoft Access, all 
+      text data will be returned as UTF-8 encoded UNICODE text. </TD></TR>
+  <TR>
+    <TD vAlign=top><NOBR><CODE>vardatasize&nbsp;&nbsp;</CODE></NOBR></TD>
+    <TD vAlign=top>Sets the maximum allowed byte size for variable length 
+      data, i.e., CLOBs (text) and BLOBs (image). The default is 64KB. </TD></TR>
+  <TR>
+    <TD>&nbsp;</TD>
+    <TD>&nbsp;</TD></TR></TBODY></TABLE><BR>&nbsp;<BR><A name=odbc>
+<H3>ODBC options</H3></A>If an option is not recognized as a PEAR DB DSN or 
+ODBTP option, then it is assumed to be an ODBC connect string option. Thus, 
+unrecognized options are added to the ODBC connect string that will be sent to 
+the ODBTP server. <BR>&nbsp;<BR><A name=dbsyntax>
+<H3>Databases supported by dbsyntax</H3></A>
+<TABLE cellSpacing=0 cellPadding=0 border=0>
+  <TBODY>
+  <TR>
+    <TD><B>Database</B></TD>
+    <TD><NOBR><B>dbsyntax&nbsp;&nbsp;</B></NOBR></TD>
+    <TD><B>Additionally defined options and their defaults</B></TD></TR>
+  <TR>
+    <TD>&nbsp;</TD>
+    <TD>&nbsp;</TD>
+    <TD>&nbsp;</TD></TR>
+  <TR>
+    <TD vAlign=top><NOBR>Microsoft Access&nbsp;&nbsp;</NOBR></TD>
+    <TD vAlign=top><NOBR>access&nbsp;&nbsp;</NOBR></TD>
+    <TD vAlign=top><PRE>'dbparam' =&gt; 'DBQ'
+'driver' =&gt; '{Microsoft Access Driver (*.mdb)}'
+'username' =&gt; 'admin'
+'password' =&gt; ''
+</PRE></TD></TR>
+  <TR>
+    <TD vAlign=top><NOBR>IBM DB2&nbsp;&nbsp;</NOBR></TD>
+    <TD vAlign=top><NOBR>db2&nbsp;&nbsp;</NOBR></TD>
+    <TD vAlign=top><PRE>'dbparam' =&gt; 'DATABASE'
+'driver' =&gt; '{IBM DB2 ODBC Driver}'
+'hostname' =&gt; 'localhost'
+'odbcport' =&gt; '50000'
+'odbcprotocol' =&gt; 'TCPIP'
+</PRE></TD></TR>
+  <TR>
+    <TD vAlign=top><NOBR>General ODBC DSN&nbsp;&nbsp;</NOBR></TD>
+    <TD vAlign=top><NOBR>dsn&nbsp;&nbsp;</NOBR></TD>
+    <TD vAlign=top><PRE>'dbparam' =&gt; 'DSN'
+</PRE></TD></TR>
+  <TR>
+    <TD vAlign=top><NOBR>Microsoft Excel&nbsp;&nbsp;</NOBR></TD>
+    <TD vAlign=top><NOBR>excel&nbsp;&nbsp;</NOBR></TD>
+    <TD vAlign=top><PRE>'dbparam' =&gt; 'DBQ'
+'driver' =&gt; '{Microsoft Excel Driver (*.xls)}'
+'driverid' =&gt; '790'
+</PRE></TD></TR>
+  <TR>
+    <TD vAlign=top><NOBR>Microsoft SQL Server&nbsp;&nbsp;</NOBR></TD>
+    <TD vAlign=top><NOBR>mssql&nbsp;&nbsp;</NOBR></TD>
+    <TD vAlign=top><PRE>'dbparam' =&gt; 'DATABASE'
+'driver' =&gt; '{SQL Server}'
+'server' =&gt; '(local)'
+</PRE></TD></TR>
+  <TR>
+    <TD vAlign=top><NOBR>MySQL&nbsp;&nbsp;</NOBR></TD>
+    <TD vAlign=top><NOBR>mysql&nbsp;&nbsp;</NOBR></TD>
+    <TD vAlign=top><PRE>'dbparam' =&gt; 'DATABASE'
+'driver' =&gt; '{mySQL}'
+'server' =&gt; 'localhost'
+'odbcport' =&gt; '3306'
+'option' =&gt; '131072'
+'stmt' =&gt; ''
+</PRE></TD></TR>
+  <TR>
+    <TD vAlign=top><NOBR>Oracle&nbsp;&nbsp;</NOBR></TD>
+    <TD vAlign=top><NOBR>oracle&nbsp;&nbsp;</NOBR></TD>
+    <TD vAlign=top><PRE>'dbparam' =&gt; 'DBQ'
+'driver' =&gt; '{Oracle ODBC Driver}'
+</PRE></TD></TR>
+  <TR>
+    <TD vAlign=top><NOBR>Sybase&nbsp;&nbsp;</NOBR></TD>
+    <TD vAlign=top><NOBR>sybase&nbsp;&nbsp;</NOBR></TD>
+    <TD vAlign=top><PRE>'dbparam' =&gt; 'DATABASE'
+'driver' =&gt; '{Sybase ASE ODBC Driver}'
+'srvr' =&gt; 'localhost'
+</PRE></TD></TR>
+  <TR>
+    <TD vAlign=top><NOBR>Text Files&nbsp;&nbsp;</NOBR></TD>
+    <TD vAlign=top><NOBR>text&nbsp;&nbsp;</NOBR></TD>
+    <TD vAlign=top><PRE>'dbparam' =&gt; 'DBQ'
+'driver' =&gt; '{Microsoft Text Driver (*.txt; *.csv)}'
+'extensions' =&gt; 'asc,csv,tab,txt'
+</PRE></TD></TR>
+  <TR>
+    <TD vAlign=top><NOBR>Visual FoxPro&nbsp;&nbsp;</NOBR></TD>
+    <TD vAlign=top><NOBR>vfp&nbsp;&nbsp;</NOBR></TD>
+    <TD vAlign=top><PRE>'dbparam' =&gt; 'SOURCEDB'
+'driver' =&gt; '{Microsoft Visual FoxPro Driver}'
+'sourcetype' =&gt; 'DBF'
+'exclusivee' =&gt; 'NO'
+</PRE></TD></TR></TBODY></TABLE><BR>&nbsp;<BR><A name=#exampledsn>
+<H3>Example DSN specifications</H3></A><B>A. &nbsp; MS SQL Server and ODBTP 
+server on different hosts.</B> <PRE>$dsn = 'odbtp(mssql)://myuid:mypwd@odbtp.someehere.com/mydb?server=myserver';</PRE><B>B. 
+&nbsp; MS SQL Server and ODBTP server on same host.</B> <PRE>$dsn = 'odbtp(mssql)://myuid:mypwd@myserver/mydb';</PRE><B>C. &nbsp; PHP 
+not on same host as MS Access database and ODBTP server.</B> <PRE>$dsn = 'odbtp(access)://207.66.121.4/c:\somepath\mydb.mdb';</PRE><B>D. 
+&nbsp; PHP, MS Access database and ODBTP server on same host. UNICODE support 
+enabled.</B> <PRE>$dsn = 'odbtp(access):///c:\somepath\mydb.mdb?unicode=yes';</PRE><B>E. 
+&nbsp; An ODBTP server that does not listen on port 2799, the default.</B> <PRE>$dsn = 'odbtp(access)://207.66.121.4:7255/c:\somepath\mydb.mdb';</PRE><B>F. 
+&nbsp; MS Excel spreadsheet on remote ODBTP server.</B> <PRE>$dsn = 'odbtp(excel)://odbtp.somewhere.com/c:\somepath\mysheet.xls';</PRE><B>G. 
+&nbsp; Text files on local ODBTP server. Row cache enabled.</B> <PRE>$dsn = 'odbtp(text):///c:\PathToTextFiles?rowcache=yes';</PRE><B>H. &nbsp; 
+Visual FoxPro database on remote ODBTP server.</B> <PRE>$dsn = 'odbtp(vfp)://207.66.121.4/c:\PathToDBFs';</PRE><B>I. &nbsp; Visual 
+FoxPro DBC on local ODBTP server.</B> <PRE>$dsn = 'odbtp(vfp):///c:\somepath\mydb.dbc?sourcetype=DBC';</PRE><B>J. 
+&nbsp; DSN array for Sybase. Connection type set to single.</B> <PRE>$dsn = array( 'phptype' =&gt; 'odbtp',
+              'dbsyntax' =&gt; 'sybase',
+              'hostspec' =&gt; 'odbtp.somewhere.com',
+              'username' =&gt; 'myuid',
+              'password' =&gt; 'mypwd',
+              'database' =&gt; 'mydb',
+              'srvr' =&gt; 'mysrvr',
+              'conntype' =&gt; 'single' );</PRE><B>K. &nbsp; IBM DB2 not 
+listening on port 50000, the default.</B> <PRE>$dsn = 'odbtp(db2)://myuid:mypwd@207.66.121.4/mydb?odbcport=51000';</PRE><B>L. 
+&nbsp; Connection to Oracle. ODBTP read timeout set to 300 seconds</B> <PRE>$dsn = 'odbtp(oracle)://myuid:mypwd@odbtp.someehere.com/mydb?readtimeout=300';</PRE><B>M. 
+&nbsp; General ODBC DSN on locat ODBTP server.</B> <PRE>$dsn = 'odbtp(dsn):///mydsn';</PRE><B>N. &nbsp; Connecting with an ODBTP 
+interface.</B> <PRE>$dsn = 'odbtp://myinterface';</PRE><B>O. &nbsp; Database for which a 
+dbsyntax value has not been defined.</B> <PRE>$dsn = array( 'phptype' =&gt; 'odbtp',
+              'driver' =&gt; '{INTERSOLV InterBase ODBC Driver (*.gdb)}',
+              'hostspec' =&gt; '207.66.121.4',
+              'server' =&gt; 'localhost',
+              'username' =&gt; 'myuid',
+              'password' =&gt; 'mypwd',
+              'database' =&gt; 'localhost:C:\Home\Data\Mydb.gdb',
+              'dbparam' =&gt; 'DATABASE' );</PRE></BODY></HTML>

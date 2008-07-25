@@ -1,0 +1,47 @@
+/* common classes */
+pre { PADDING: 0px; MARGIN: 0px; }
+
+.class_left { TEXT-ALIGN: left; }
+.class_center { TEXT-ALIGN: center; }
+.class_right { TEXT-ALIGN: right; }
+.class_nowrap { WHITE-SPACE: nowrap; }
+.resizable-textarea .grippie { BORDER-RIGHT: #ddd 1px solid; BORDER-TOP: #ddd 0px solid; OVERFLOW: hidden; BORDER-LEFT: #ddd 1px solid; CURSOR: s-resize; BORDER-BOTTOM: #ddd 1px solid; HEIGHT:6px; }
+
+a.blue_class_a { BACKGROUND: transparent; COLOR: #225588; TEXT-DECORATION: none; FONT-SIZE: 12px; FONT-FAMILY: Tahoma; }
+a.blue_class_a:link { BACKGROUND: transparent; COLOR: #225588; TEXT-DECORATION: none; FONT-SIZE: 12px; FONT-FAMILY: Tahoma; }
+a.blue_class_a:hover { BACKGROUND: transparent; COLOR: #6699bb; TEXT-DECORATION: none; FONT-SIZE: 12px; FONT-FAMILY: Tahoma; }
+a.blue_class_a:visited { }
+a.blue_class_a2 { BACKGROUND: transparent; COLOR: #225588; TEXT-DECORATION: none; FONT-SIZE: 12px; FONT-FAMILY: Tahoma; }
+a.blue_class_a2:link { BACKGROUND: transparent; COLOR: #225588; TEXT-DECORATION: none; FONT-SIZE: 12px; FONT-FAMILY: Tahoma; }
+a.blue_class_a2:hover { BACKGROUND: transparent; COLOR: #6699bb; TEXT-DECORATION: none; FONT-SIZE: 12px; FONT-FAMILY: Tahoma; }
+a.blue_class_a2:visited { BACKGROUND: transparent; COLOR: #225588; TEXT-DECORATION: none; FONT-SIZE: 12px; FONT-FAMILY: Tahoma; }
+/* columns header links */
+a.blue_class_a_header { BACKGROUND: transparent; COLOR: #225588; TEXT-DECORATION: none; FONT-SIZE: 12px; FONT-FAMILY: Tahoma; }
+a.blue_class_a_header:link { BACKGROUND: transparent; COLOR: #225588; TEXT-DECORATION: none; FONT-SIZE: 12px; FONT-FAMILY: Tahoma; }
+a.blue_class_a_header:hover { BACKGROUND: transparent; COLOR: #6699bb; TEXT-DECORATION: none; FONT-SIZE: 12px; FONT-FAMILY: Tahoma; }
+a.blue_class_a_header:visited { }
+
+.blue_class_fieldset { MARGIN: 0px;BORDER: #bfcde1 1px solid;}
+.blue_class_filter_table { BORDER: #bfcde1 0px solid; FONT: normal 12px Tahoma;}
+.blue_class_legend {FONT: normal 12px Tahoma;}
+.blue_class_paging_table { BORDER: #bfcde1 0px solid; FONT: normal 12px Tahoma;}
+.blue_class_table { BORDER: #bfcde1 1px solid; FONT: normal 12px Tahoma;}
+
+.blue_class_th { BORDER-RIGHT: #688caf 1px solid; PADDING-RIGHT: 2px; BORDER-TOP: #ffffff 2px solid; PADDING-LEFT: 5px; PADDING-BOTTOM: 2px; FONT: bold 13px Tahoma; BORDER-LEFT: #ffffff 1px solid; COLOR: #333333; PADDING-TOP: 2px; BORDER-BOTTOM: #688caf 1px solid; }
+.blue_class_th_normal   { BORDER-RIGHT: #688caf 1px solid; PADDING-RIGHT: 2px; BORDER-TOP: #ffffff 2px solid; PADDING-LEFT: 5px; PADDING-BOTTOM: 2px; FONT: bold 13px Tahoma; BORDER-LEFT: #ffffff 1px solid; COLOR: #333333; PADDING-TOP: 2px; BORDER-BOTTOM: #688caf 1px solid; BACKGROUND-COLOR: #cdd9ea}
+.blue_class_th_selected { BORDER-RIGHT: #688caf 1px solid; PADDING-RIGHT: 2px; BORDER-TOP: #ffffff 2px solid; PADDING-LEFT: 5px; PADDING-BOTTOM: 2px; FONT: bold 13px Tahoma; BORDER-LEFT: #ffffff 1px solid; COLOR: #333333; PADDING-TOP: 2px; BORDER-BOTTOM: #688caf 1px solid; BACKGROUND-COLOR: #cdd9ea}
+.blue_class_td {          BORDER-RIGHT: #d0d7e5 1px solid; PADDING-RIGHT: 6px; PADDING-LEFT: 6px; PADDING-BOTTOM: 1px; PADDING-TOP: 1px; FONT: Tahoma; BORDER-LEFT: #ffffff 1px solid; BORDER-BOTTOM: #d0d7e5 1px solid; }
+.blue_class_td_main {     BORDER-RIGHT: #d0d7e5 1px solid; PADDING-RIGHT: 6px; PADDING-LEFT: 6px; PADDING-BOTTOM: 2px; FONT: Tahoma; BORDER-LEFT: #ffffff 1px solid; PADDING-TOP: 2px; BORDER-BOTTOM: #d0d7e5 1px solid; }
+.blue_class_td_selected { BORDER-RIGHT: #d0d7e5 1px solid; PADDING-RIGHT: 6px; PADDING-LEFT: 5px; PADDING-BOTTOM: 2px; FONT: Tahoma; BORDER-LEFT: #ffffff 1px solid; PADDING-TOP: 2px; BORDER-BOTTOM: #d0d7e5 1px solid; }
+
+.blue_class_button { BORDER-RIGHT: #688caf 1px solid; PADDING-RIGHT: 2px; BORDER-TOP: #ffffff 2px solid; PADDING-LEFT: 5px; PADDING-BOTTOM: 2px; FONT: bold 12px Tahoma; BORDER-LEFT: #ffffff 1px solid; COLOR: #333333; PADDING-TOP: 2px; BORDER-BOTTOM: #688caf 1px solid; BACKGROUND-COLOR: #cdd9ea}
+.blue_class_select { BORDER: #bfcde1 1px solid; FONT: normal 12px Tahoma;BACKGROUND-COLOR: #f7f9fb;}
+.blue_class_label { FONT-SIZE: 12px; FONT-FAMILY: Tahoma; }
+.blue_class_textbox { BORDER: #bfcde1 1px solid; FONT: normal 12px Tahoma;WIDTH:210px;PADDING-LEFT:3px;}
+.blue_class_checkbox { BORDER:0px; FONT: normal 12px Tahoma;WIDTH:20px;}
+.blue_class_radiobutton { BORDER:0px; FONT: normal 12px Tahoma;WIDTH:20px;}
+.blue_class_caption { FONT: normal 14px Tahoma; FONT-WEIGHT: bold; TEXT-ALIGN:center; PADDING-BOTTOM: 0;}
+.blue_class_error_message { FONT: normal 12px Tahoma; COLOR: #ff3300; }
+.blue_class_ok_message { FONT: normal 12px Tahoma; COLOR: #009a00; }
+
+
