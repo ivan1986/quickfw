@@ -306,6 +306,7 @@
 //  --//--  : getCurrentId();
 //  --//--  : setHeadersInColumnarLayout("Field Name", "Field Value");
 //  --//--  : setDgMessages("add", "update", "delete");
+//  --//--  : setPreDelete($function) - call function before delere rows
 //
 // Feature  : onSubmitMyCheck
 //      	<script type='text/javascript'>
@@ -511,6 +512,9 @@ Class DataGrid
     // javascript errors display style -----------------------------------------
     public $js_validation_errors;
 
+    // call functions
+    public $preDelete;
+
     //==========================================================================
     // Member Functions
     //==========================================================================
@@ -712,8 +716,8 @@ Class DataGrid
     // class destructor
     //--------------------------------------------------------------------------
     function __destruct()
-	{
-		// echo 'this object has been destroyed';
+    {
+        // echo 'this object has been destroyed';
     }
 
     //--------------------------------------------------------------------------
@@ -970,7 +974,7 @@ Class DataGrid
     }
 
     //--------------------------------------------------------------------------
-    // ger ORDER BY fields list
+    // get ORDER BY fields list
     //--------------------------------------------------------------------------
     function getOrderByList(){
         $orderByList = "";
@@ -1216,6 +1220,14 @@ Class DataGrid
         }
     }
 
+    //--------------------------------------------------------------------------
+    // set preDelete
+    //--------------------------------------------------------------------------
+    function setPreDelete($function){
+        $this->preDelete = $function;
+    }
+
+    
     //--------------------------------------------------------------------------
     // set encoding
     //--------------------------------------------------------------------------
@@ -3591,6 +3603,8 @@ Class DataGrid
         }
 
         $this->rids = explode("-", $rid);
+        if (is_callable($this->preDelete))
+        	call_user_func($this->preDelete,$this->rids);
         $sql = "DELETE FROM $this->tbl_name WHERE $this->primary_key IN ('-1' ";
         foreach ($this->rids as $key){
             $sql .= ", '".$key."' ";

@@ -117,6 +117,7 @@
 ##  *** set DataGrid caption
 /// $dg_caption = "My Favorite Lovely PHP DataGrid";
 /// $dgrid->setCaption($dg_caption);
+/// $dgrid->setPreDelete('func');
 ##
 ##
 ## +---------------------------------------------------------------------------+
@@ -296,6 +297,7 @@
 //  --//--  : getCurrentId();
 //  --//--  : setHeadersInColumnarLayout("Field Name", "Field Value");
 //  --//--  : setDgMessages("add", "update", "delete");
+//  --//--  : setPreDelete($function) - call function before delere rows
 //
 // Feature  : onSubmitMyCheck
 //      	<script type='text/javascript'>
