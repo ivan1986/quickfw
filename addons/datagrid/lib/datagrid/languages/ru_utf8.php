@@ -23,11 +23,11 @@ function setLanguage(){
     $lang['create_new_record'] = "Create new record";
     $lang['current'] = "current";
     $lang['delete'] = "Удалить";
-    $lang['delete_record'] = "Delete record";
+    $lang['delete_record'] = "Удалить запись";
     $lang['delete_record_blocked'] = "Security check: attempt of deleting a record! Check your settings, the operation is not allowed!";
-    $lang['delete_selected'] = "Delete selected";
-    $lang['delete_selected_records'] = "Are you sure you want to delete the selected records?";
-    $lang['delete_this_record'] = "Are you sure you want to delete this record?";
+    $lang['delete_selected'] = "Удалить отмеченные";
+    $lang['delete_selected_records'] = "Вы уверены, что хотите удалить отмеченные записи?";
+    $lang['delete_this_record'] = "Вы уверены, что хотите удалить эту запись?";
     $lang['deleting_operation_completed'] = "The deleting operation completed successfully!";
     $lang['deleting_operation_uncompleted'] = "The deleting operation uncompleted!";
     $lang['descending'] = "По убыванию";
@@ -42,8 +42,8 @@ function setLanguage(){
     $lang['export_to_pdf'] = "Export to PDF";
     $lang['export_to_xml'] = "Export to XML";
     $lang['export_message'] = "<label class=\"class_label\">The file _FILE_ is ready. After you finish downloading,</label> <a class=\"class_error_message\" href=\"javascript: window.close();\">close this window</a>.";
-    $lang['field'] = "Field";
-    $lang['field_value'] = "Field Value";
+    $lang['field'] = "Поле";
+    $lang['field_value'] = "Значение";
     $lang['file_find_error'] = "Cannot find file: <b>_FILE_</b>. <br>Check if this file exists and you use a correct path!";
     $lang['file_opening_error'] = "Cannot open a file. Check your permissions.";
     $lang['file_writing_error'] = "Cannot write to file. Check writing permissions!";

@@ -5875,7 +5875,7 @@ Class DataGrid
     //--------------------------------------------------------------------------
     function setInterfaceLang($lang_name = ""){
         $default_language = false;
-        if(($lang_name != "") && (strlen($lang_name) == 2)){ $this->lang_name = $lang_name; }
+        if(($lang_name == "ru_utf8") || ($lang_name != "") && (strlen($lang_name) == 2)){ $this->lang_name = $lang_name; }
         if (file_exists($this->inc_dir.'languages/'.$this->lang_name.'.php')) {
             include_once($this->inc_dir.'languages/'.$this->lang_name.'.php');
             if(function_exists('setLanguage')){
