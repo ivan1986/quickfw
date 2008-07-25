@@ -19,7 +19,7 @@
   $DB_USER='root';            /* usually like this: prefix_name             */
   $DB_PASS='';                /* must be already enscrypted (recommended)   */
   $DB_HOST='localhost';       /* usually localhost                          */
-  $DB_NAME='mblogi';          /* usually like this: prefix_dbName           */
+  $DB_NAME='pochta';          /* usually like this: prefix_dbName           */
 //
   ob_start();
 ##  *** (example of ODBC connection string)
@@ -33,7 +33,7 @@
   $result_conn = $db_conn->connect(DB::parseDSN('mysql://'.$DB_USER.':'.$DB_PASS.'@'.$DB_HOST.'/'.$DB_NAME));
   if(DB::isError($result_conn)){ die($result_conn->getDebugInfo()); }
 ##  *** put a primary key on the first place
-  $sql = "SELECT id, login, name FROM  users ;";
+  $sql = "SELECT id, login, podrazd FROM  users ;";
 ##  *** set needed options and create a new class instance
   $debug_mode = false;        /* display SQL statements while processing */
   $messaging = true;          /* display system messages on a screen */
@@ -44,7 +44,7 @@ $dg_encoding = "utf8";
 $dg_collation = "utf8_unicode_ci";
 $dgrid->setEncoding($dg_encoding, $dg_collation);
 ##  *** set data source with needed options
-  $default_order_field = "name";
+  $default_order_field = "podrazd";
   $default_order_type = "ASC";
   $dgrid->dataSource($db_conn, $sql, $default_order_field, $default_order_type);
 ##
@@ -120,11 +120,11 @@ $dgrid->setEncoding($dg_encoding, $dg_collation);
 ##  *** set exporting option: true(default) or false and relative (virtual) path
 ##  *** to export directory (relatively to datagrid.class.php file).
 ##  *** Ex.: "" - if we use current datagrid folder
-/// $exporting_option = true;
-/// $exporting_directory = "";
-/// $dgrid->allowExporting($exporting_option, $exporting_directory);
-/// $exporting_types = array("excel"=>"true", "pdf"=>"true", "xml"=>"true");
-/// $dgrid->allowExportingTypes($exporting_types);
+ $exporting_option = true;
+ $exporting_directory = "";
+ $dgrid->allowExporting($exporting_option, $exporting_directory);
+ $exporting_types = array("excel"=>"true", "pdf"=>"true", "xml"=>"true");
+ $dgrid->allowExportingTypes($exporting_types);
 ##
 ##
 ## +---------------------------------------------------------------------------+
