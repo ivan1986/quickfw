@@ -1065,8 +1065,15 @@ Class DataGrid
                     if($req_new != 1){
                         $this->updateRow($this->rid);
                     }else{
-                        $this->addRow();
+                        $id=$this->addRow();
                         $this->mode_after_update = "";
+                        // переход при вставке - а то получается многократная
+                        ob_end_clean();
+                        $url=$_SERVER['REQUEST_URI'];
+                        $url=str_replace('rid=-1','rid='.$id,$url);
+                        $url=str_replace('mode=update','mode=view',$url);
+                        header('Location: '.$url);
+                        exit;
                     }
                 }
                 if(($req_new != 1) && ($this->mode_after_update == "edit")){
@@ -3838,8 +3845,9 @@ Class DataGrid
                 }
             $sql .= ") ";
             $dSet = $this->db_handler->query($sql);
+            $id = mysql_insert_id($this->db_handler->connection);
             if (is_callable($this->triggers['post_insert']))
-                call_user_func($this->triggers['post_insert'],mysql_insert_id($this->db_handler->connection));
+                call_user_func($this->triggers['post_insert'],$id);
 
             $affectedRows = $this->db_handler->affectedRows();
             if($this->debug) echo "<table width='".$this->tblWidth[$this->mode]."'><tr><td align='left'><b>insert sql (".$this->strToLower($this->lang['total']).": ".$affectedRows.") </b>".$sql."</td></tr></table><br />";
@@ -3869,6 +3877,7 @@ Class DataGrid
         $this->sql = "SELECT * FROM $this->tbl_name ";
         $fsort = " ORDER BY " . $this->primary_key . " DESC";
         $this->getDataSet($fsort);
+        return isset($id)?intval($id):false;
     }
 
     //--------------------------------------------------------------------------
