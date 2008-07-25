@@ -52,7 +52,7 @@ function setLanguage(){
     $lang['file_deleting_error'] = "There was an error while deleting!";
     $lang['first'] = "first";
     $lang['handle_selected_records'] = "Are you sure you want to handle the selected records?";
-    $lang['hide_search'] = "Hide Search";
+    $lang['hide_search'] = "Скрыть поиск";
     $lang['last'] = "last";
     $lang['like'] = "like";
     $lang['like%'] = "like%";  // "begins with";
@@ -75,7 +75,7 @@ function setLanguage(){
     $lang['print_now'] = "Print Now";
     $lang['print_now_title'] = "Click here to print this page";
     $lang['record_n'] = "Record #";
-    $lang['refresh_page'] = "Refresh page";
+    $lang['refresh_page'] = "Обновить страницу";
     $lang['remove'] = "Remove";
     $lang['reset'] = "Reset";
     $lang['results'] = "Results";
@@ -89,7 +89,7 @@ function setLanguage(){
     $lang['total'] = "Всего";
     $lang['turn_on_debug_mode'] = "For more information, turn on debug mode.";
     $lang['uncheck_all'] = "Uncheck All";
-    $lang['unhide_search'] = "Unhide Search";
+    $lang['unhide_search'] = "Показать поиск";
     $lang['unique_field_error'] = "The field _FIELD_ allows only unique values - please reenter!";
     $lang['update'] = "Сохранить";
     $lang['update_record'] = "Update record";
