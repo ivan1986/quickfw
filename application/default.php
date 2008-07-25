@@ -8,11 +8,11 @@ $config['host']=array(
 
 /* Настройки коннекта к базе данных */
 $config['database']=array(
-	'type'     => 'mypdo',
+	'type'     => 'mysql',
 	'host'     => 'localhost',
 	'username' => 'root',
 	'password' => '',
-	'dbname'   => 'base',
+	'dbname'   => 'mblogi',
 	'prefix'   => '',
 	'encoding' => 'utf8',
 );
