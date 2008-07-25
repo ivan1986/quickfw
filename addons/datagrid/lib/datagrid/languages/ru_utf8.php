@@ -80,8 +80,8 @@ function setLanguage(){
     $lang['reset'] = "Reset";
     $lang['results'] = "Results";
     $lang['required_fields_msg'] = "<font color='#cd0000'>*</font> Items marked with an asterisk are required";
-    $lang['search'] = "Search";
-    $lang['search_d'] = "Search"; // (description)
+    $lang['search'] = "Найти";
+    $lang['search_d'] = "Поиск"; // (description)
     $lang['search_type'] = "Search type";
     $lang['select'] = "select";
     $lang['set_date'] = "Set date";
