@@ -4,6 +4,8 @@ class IndexController
 {
 	public function indexAction()
 	{
+		require(APPPATH.'/default/code_template.php');
+		return $table;
 		//echo '<pre>'.QFW::$view->P->siteUrl('test').'</pre>';
 		//$c=getCache('File');
 		//$c->setDirectives(array());
