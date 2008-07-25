@@ -130,7 +130,7 @@ class Templater_Proxy
 	public function fetch($name)
 	{
 		global $config;
-		$key=substr($name,strrpos($name,'.'.$k)+1);
+		$key=substr($name,strrpos($name,'.')+1);
 		if (!array_key_exists($key,$config['templater']['exts']))
 			return '';
 		$T = $config['templater']['exts'][$key];
