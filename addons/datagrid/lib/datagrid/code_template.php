@@ -52,7 +52,7 @@
 ##  *** (nl) - Netherlands/"Vlaams"(Flemish) (it) - Italiano  (pl) - Polish
 ##  *** (ch) - Chinese     (sr) - Serbian    (bg) - Bulgarian (pb) - Brazilian Portuguese
 ##  *** (ar) - Arabic      (tr) - Turkish    (cz) - Czech     (ro/ro_utf8) - Romanian
- $dgrid->setInterfaceLang("ru");
+ $dgrid->setInterfaceLang("ru_utf8");
 ##  *** set direction: "ltr" or "rtr" (default - "ltr")
  $dgrid->setDirection("ltr");
 

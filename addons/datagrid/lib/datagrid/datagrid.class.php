@@ -306,7 +306,13 @@
 //  --//--  : getCurrentId();
 //  --//--  : setHeadersInColumnarLayout("Field Name", "Field Value");
 //  --//--  : setDgMessages("add", "update", "delete");
-//  --//--  : setPreDelete($function) - call function before delere rows
+//  --//--  : setTriggers($pre_insert,$pre_update,$pre_delete,$post_insert,$post_update,$post_delete) - call function add|before change rows
+//            pre_* возвращают true|false и если false, то удаление отменяется post_* просто вызываются
+//            функциям передается:
+//                INSERT - pre_ - ничего, post_ - id новой записи
+//                UPDATE - ключ выбранных записей
+//                DELETE - массив ключей выбранных записей
+//            если функция не нужна - указыть null или "" (проверяется is_callable)
 //
 // Feature  : onSubmitMyCheck
 //      	<script type='text/javascript'>
@@ -513,7 +519,7 @@ Class DataGrid
     public $js_validation_errors;
 
     // call functions
-    public $preDelete;
+    protected $triggers;
 
     //==========================================================================
     // Member Functions
@@ -700,10 +706,20 @@ Class DataGrid
         $this->errors = array();
         $this->is_warning = false;
         $this->warnings = array();
-        $this->dg_messages = array();
-            $this->dg_messages['add'] = "";
-            $this->dg_messages['update'] = "";
-            $this->dg_messages['delete'] = "";
+        $this->dg_messages = array(
+            'add' => "",
+            'update' => "",
+            'delete' => "",
+        );
+
+        $this->triggers = array(
+            'pre_insert' => "",
+            'pre_update' => "",
+            'pre_delete' => "",
+            'post_insert' => "",
+            'post_update' => "",
+            'post_delete' => "",
+        );
 
         // javascript errors display style -------------------------------------
         $this->js_validation_errors = "true";
@@ -1221,10 +1237,16 @@ Class DataGrid
     }
 
     //--------------------------------------------------------------------------
-    // set preDelete
+    // set Triggers
     //--------------------------------------------------------------------------
-    function setPreDelete($function){
-        $this->preDelete = $function;
+    function setTriggers($pre_insert=null,$pre_update=null,$pre_delete=null,$post_insert=null,$post_update=null,$post_delete=null)
+    {
+        if (is_callable($pre_insert)) $this->triggers['pre_insert'] = $pre_insert;
+        if (is_callable($pre_update)) $this->triggers['pre_update'] = $pre_update;
+        if (is_callable($pre_delete)) $this->triggers['pre_delete'] = $pre_delete;
+        if (is_callable($post_insert)) $this->triggers['post_insert'] = $post_insert;
+        if (is_callable($post_update)) $this->triggers['post_update'] = $post_update;
+        if (is_callable($post_delete)) $this->triggers['post_delete'] = $post_delete;
     }
 
     
@@ -3603,8 +3625,11 @@ Class DataGrid
         }
 
         $this->rids = explode("-", $rid);
-        if (is_callable($this->preDelete))
-        	call_user_func($this->preDelete,$this->rids);
+        if (is_callable($this->triggers['pre_delete']))
+        {
+            if (call_user_func($this->triggers['pre_delete'],$this->rids)===false)
+                return false;
+        }
         $sql = "DELETE FROM $this->tbl_name WHERE $this->primary_key IN ('-1' ";
         foreach ($this->rids as $key){
             $sql .= ", '".$key."' ";
@@ -3618,6 +3643,8 @@ Class DataGrid
             $this->is_warning = true;
             $this->act_msg = $this->lang['deleting_operation_uncompleted'];
         }
+        if (is_callable($this->triggers['post_delete']))
+            call_user_func($this->triggers['post_delete'],$this->rids);
         if($this->debug) echo "<table width='".$this->tblWidth[$this->mode]."'><tr><td align='left' class='".$this->css_class."_class_error_message no_print' style='COLOR: #333333;'><b>delete sql (".$this->strToLower($this->lang['total']).": ".$affectedRows.") </b>".$sql."</td></tr></table><br />";
         if($this->debug) $this->act_msg .= " ".$this->lang['record_n']." ".$this->rid;
     }
@@ -3689,6 +3716,11 @@ Class DataGrid
                     }
                 }
             $sql .= " WHERE $this->primary_key = '$rid' ";
+            if (is_callable($this->triggers['pre_update']))
+            {
+                if (call_user_func($this->triggers['pre_update'],$rid)===false)
+                    return false;
+            }
             $this->db_handler->query($sql);
             $affectedRows = $this->db_handler->affectedRows();
             if($affectedRows >= 0){
@@ -3698,6 +3730,8 @@ Class DataGrid
                 $this->act_msg = $this->lang['updating_operation_uncompleted'];
             }
             if($this->debug) echo "<table width='".$this->tblWidth[$this->mode]."'><tr><td align='left' class='".$this->css_class."_class_error_message no_print' style='COLOR: #333333;'><b>update sql (".$this->strToLower($this->lang['total']).": ".$affectedRows.") </b>".$sql."</td></tr></table><br />";
+            if (is_callable($this->triggers['post_update']))
+                call_user_func($this->triggers['post_update'],$rid);
         }else{
             $this->is_warning = true;
             $this->act_msg = str_replace("_FIELD_", $field_header, $this->lang['unique_field_error']);
@@ -3725,6 +3759,11 @@ Class DataGrid
         $field_header = "";
         $field_count = "0";
 
+        if (is_callable($this->triggers['pre_insert']))
+        {
+            if (call_user_func($this->triggers['pre_insert'])===false)
+                return false;
+        }
         // check for unique fields
         foreach($this->columns_edit_mode as $fldName => $fldValue){
             if(($fldName != "") && ($this->getFieldProperty($fldName, "unique") == true)){
@@ -3799,6 +3838,8 @@ Class DataGrid
                 }
             $sql .= ") ";
             $dSet = $this->db_handler->query($sql);
+            if (is_callable($this->triggers['post_insert']))
+                call_user_func($this->triggers['post_insert'],mysql_insert_id($this->db_handler->connection));
 
             $affectedRows = $this->db_handler->affectedRows();
             if($this->debug) echo "<table width='".$this->tblWidth[$this->mode]."'><tr><td align='left'><b>insert sql (".$this->strToLower($this->lang['total']).": ".$affectedRows.") </b>".$sql."</td></tr></table><br />";
