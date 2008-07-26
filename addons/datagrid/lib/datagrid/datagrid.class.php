@@ -61,7 +61,7 @@
 //  $debug_mode = false;        /* display SQL statements while processing */
 //  $messaging = true;          /* display system messages on a screen */
 //  $unique_prefix = "abc_";    /* prevent overlays - must be started with a letter */
-//  $dgrid = new DataGrid($debug_mode, $messaging, $unique_prefix, DATAGRID_DIR);
+//  $dgrid = new DataGrid($debug_mode, $messaging, $unique_prefix, 'datagrid/', DATAGRID_DIR);
 ##  *** set data source with needed options
 //  $default_order_field = "field_name_1 [, field_name_2...]";
 //  $default_order_type = "ASC|DESC [, ASC|DESC...]";
