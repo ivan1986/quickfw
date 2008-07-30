@@ -90,21 +90,6 @@ class QuickFW_Module
 		return true;
 	}
 	
-	function getTimestamp($tpl_name, &$tpl_timestamp, &$smarty)
-	{
-		$tpl_timestamp = microtime(true);
-		return true;
-	}
-
-	function isSecure($tpl_name, &$smarty)
-	{
-		return true;
-	}
-	
-	function isTrusted($tpl_name, &$smarty)
-	{
-		return false;
-	}
 }
 
 ?>

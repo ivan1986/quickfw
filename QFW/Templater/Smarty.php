@@ -40,7 +40,7 @@ class Templater_Smarty
 		}
 
 		$module = QuickFW_Module::getInstance();
-		$this->_smarty->register_resource('module', array($module,
+		$this->_smarty->register_resource('module', array(&$this,
 													"getTemplate",
 													"getTimestamp",
 													"isSecure",
@@ -192,6 +192,31 @@ class Templater_Smarty
 			$this->Init();
 		}
 		return $this->_smarty;
+	}
+	
+	//Module Wrapper
+	public static function getTemplate($tpl_name, &$tpl_source, &$smarty)
+	{
+		$result = '';
+		QuickFW_Module::getTemplate($tpl_name, $result, $this);
+		$tpl_source = $result;
+		return true;
+	}
+	
+	public function getTimestamp($tpl_name, &$tpl_timestamp, &$smarty)
+	{
+		$tpl_timestamp = microtime(true);
+		return true;
+	}
+
+	public function isSecure($tpl_name, &$smarty)
+	{
+		return true;
+	}
+	
+	public function isTrusted($tpl_name, &$smarty)
+	{
+		return false;
 	}
 
 	//Plugins Wrapper
