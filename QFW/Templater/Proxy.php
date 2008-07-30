@@ -111,9 +111,7 @@ class Templater_Proxy
 
 	public function module($module)
 	{
-		$result = '';
-		QuickFW_Module::getTemplate($module, $result, $this);
-		return $result;
+		return QuickFW_Module::getTemplate($module);
 	}
 
 	/**

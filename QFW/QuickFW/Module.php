@@ -28,16 +28,13 @@ class QuickFW_Module
 			QuickFW_Module::$classes[$name] = $class;
 	}
 	
-	public static function getTemplate($tpl_name, &$tpl_source, &$smarty)
+	public static function getTemplate($tpl_name)
 	{
 		global $router;
 		$MCA=$router->moduleRoute($tpl_name);
 		if (isset($MCA['Error']))
-		{
-			$tpl_source = "Ошибка подключения модуля ".$tpl_name." адрес был разобран в\t\t ".
+			return "Ошибка подключения модуля ".$tpl_name." адрес был разобран в\t\t ".
 				$MCA['Path']."\n".$MCA['Error'];
-			return true;
-		}
 		
 		if (!isset(QuickFW_Module::$classes[$MCA['Class']]))
 		{
@@ -52,10 +49,7 @@ class QuickFW_Module
 			if (array_key_exists('Cacher',$CacheInfo) && array_key_exists('id',$CacheInfo))
 			$data = $CacheInfo['Cacher']->load($CacheInfo['id']);
 			if ($data)
-			{
-				$tpl_source = $data;
-				return true;
-			}
+				return $data;
 		}
 		
 		list($lpPath, $router->ParentPath, $router->CurPath) = 
@@ -66,28 +60,23 @@ class QuickFW_Module
 		list($router->CurPath, $router->ParentPath) = 
 			array($router->ParentPath, $lpPath);
 		
-		if ($result === false)
-			return true;
-		
-		$tpl_source = $result;
-		
 		if ($CacheInfo)
 		{
 			if (array_key_exists('Cacher',$CacheInfo) && array_key_exists('id',$CacheInfo))
 			{
 		 		if (array_key_exists('time',$CacheInfo))
-				 	$CacheInfo['Cacher']->save($tpl_source,$CacheInfo['id'],
+				 	$CacheInfo['Cacher']->save($result,$CacheInfo['id'],
 				 		array_key_exists('tags',$CacheInfo)?$CacheInfo['tags']:array(),
 				 		$CacheInfo['time']
 			 		);
 			 	else 
-				 	$CacheInfo['Cacher']->save($tpl_source,$CacheInfo['id'],
+				 	$CacheInfo['Cacher']->save($result,$CacheInfo['id'],
 				 		array_key_exists('tags',$CacheInfo)?$CacheInfo['tags']:array()
 			 		);
 			}
 		}
 		
-		return true;
+		return $result;
 	}
 	
 }

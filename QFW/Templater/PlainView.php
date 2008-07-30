@@ -93,9 +93,7 @@ class Templater_PlainView
 
 	public function module($module)
 	{
-		$result = '';
-		QuickFW_Module::getTemplate($module, $result, $this);
-		return $result;
+		return QuickFW_Module::getTemplate($module);
 	}
 
 	public function render($tmpl)

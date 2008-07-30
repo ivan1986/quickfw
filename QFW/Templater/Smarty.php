@@ -148,9 +148,7 @@ class Templater_Smarty
 
 	public function module($module)
 	{
-		$result = '';
-		QuickFW_Module::getTemplate($module, $result, $this);
-		return $result;
+		return QuickFW_Module::getTemplate($module);
 	}
 
 	/**
@@ -198,7 +196,7 @@ class Templater_Smarty
 	public static function getTemplate($tpl_name, &$tpl_source, &$smarty)
 	{
 		$result = '';
-		QuickFW_Module::getTemplate($tpl_name, $result, $this);
+		$result = QuickFW_Module::getTemplate($tpl_name);
 		$tpl_source = $result;
 		return true;
 	}
