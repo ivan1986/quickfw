@@ -16,7 +16,7 @@
 {addJS file='file2.js'}
 {addJS file='file1.js'}
 {addCSS file='file.css'}
-{addCSS file='file.css'}
+{addCSS file='file1.css'}
 
 {include file="module:test"}<br />
 {*include file="module:test/index//a/1/b/2"}<br />
