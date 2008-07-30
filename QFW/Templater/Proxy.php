@@ -142,7 +142,7 @@ class Templater_Proxy
 			require (QFWPATH.'/Templater/'.$templ.'.php');
 			//Подключить класс шаблонизатора
 			$this->templates[$T] = array(
-				'c' => new $class(ROOTPATH .'/application',''),
+				'c' => new $class(APPPATH,''),
 				's' => true,
 			);
 			$this->syncronize($this->templates[$T]['c']);
