@@ -17,9 +17,9 @@ class QuickFW_Router
 	
 	public $UriPath, $CurPath, $ParentPath;
 	
-	function __construct($baseDir='../application')
+	function __construct($baseDir)
 	{
-		$this->baseDir = rtrim($baseDir, '/\\');		
+		$this->baseDir = rtrim($baseDir, '/\\');
 		$this->module = '';
 		$this->controller = NULL;
 		$this->action = '';
@@ -100,7 +100,6 @@ class QuickFW_Router
 			if (array_key_exists('time',$CacheInfo))
 				$par[3]=$CacheInfo['time'];
 			
-			
 			if ($full)
 			{
 				echo $result=$view->displayMain($result);
@@ -115,7 +114,7 @@ class QuickFW_Router
 			$par[1]=$CacheInfo['id'];
 			call_user_func_array(array($CacheInfo['Cacher'],'save'),$par);
 		}
-		else 
+		else
 			echo $view->displayMain($result);
 		
 	}
@@ -136,7 +135,7 @@ class QuickFW_Router
 			$MCA=$this->loadMCA(array_slice($patt,1,3),'Module');
 			$MCA['Params']=$this->parseScobParams($patt[4]);
 		}
-		else 
+		else
 		{
 			// module/controller/action/p1/p2/p3/...
 			$data = split(self::URI_DELIMITER, $Uri);
@@ -281,7 +280,7 @@ class QuickFW_Router
 		//Determine Module
 		if (isset($data[0]) && (is_dir($this->baseDir . '/' . $data[0])))
 			$MCA['Module'] = array_shift($data);
-		else 
+		else
 			$MCA['Module'] = $type=='Module' ? $this->cModule : self::DEFAULT_MODULE;
 		$path = $this->baseDir.'/'.$MCA['Module'];
 		
