@@ -8,10 +8,5 @@
 	
 	require (QFWPATH.'/Init.php');
 
-	require (QFWPATH.'/QuickFW/Router.php');
-	$router = new QuickFW_Router(APPPATH);
-
-	QFW::Init();
-	
-	$router->route();
+	QFW::$router->route();
 ?>

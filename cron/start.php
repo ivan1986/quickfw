@@ -8,13 +8,8 @@
 	
 	require (QFWPATH.'/Init.php');
 
-	require (QFWPATH.'/QuickFW/Router.php');
-	$router = new QuickFW_Router(APPPATH);
-
-	QFW::Init();
-	
 	array_shift($argv);
 	$argv=join('/',$argv);
 	
-	$router->route($argv,'Cli');
+	QFW::$router->route($argv,'Cli');
 ?>

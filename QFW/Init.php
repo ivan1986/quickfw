@@ -106,6 +106,9 @@
 	$globalData = array();
 	$libs = array();
 
+	require (QFWPATH.'/QuickFW/Router.php');
+	$router = new QuickFW_Router(APPPATH);
+
 	class QFW
 	{
 		static public $globalData;
@@ -126,5 +129,7 @@
 			self::$db=$db;
 		}
 	}
+
+	QFW::Init();
 
 ?>
