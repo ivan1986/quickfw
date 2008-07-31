@@ -5,7 +5,7 @@
 	define ('TMPPATH', ROOTPATH . '/tmp');
 	define ('QFWPATH', ROOTPATH . '/QFW');
 	define ('LIBPATH', ROOTPATH . '/lib');
-	
+
 	require (QFWPATH.'/Init.php');
 
 	QFW::$router->route();

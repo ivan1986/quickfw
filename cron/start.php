@@ -5,11 +5,11 @@
 	define ('TMPPATH', ROOTPATH . '/tmp');
 	define ('QFWPATH', ROOTPATH . '/QFW');
 	define ('LIBPATH', ROOTPATH . '/lib');
-	
+
 	require (QFWPATH.'/Init.php');
 
 	array_shift($argv);
 	$argv=join('/',$argv);
-	
+
 	QFW::$router->route($argv,'Cli');
 ?>
