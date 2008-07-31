@@ -195,9 +195,7 @@ class Templater_Smarty
 	//Module Wrapper
 	public static function getTemplate($tpl_name, &$tpl_source, &$smarty)
 	{
-		$result = '';
-		$result = QuickFW_Module::getTemplate($tpl_name);
-		$tpl_source = $result;
+		$tpl_source = QuickFW_Module::getTemplate($tpl_name);
 		return true;
 	}
 	
