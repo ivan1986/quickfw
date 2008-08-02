@@ -26,7 +26,7 @@ class Templater_Smarty
 	protected function Init()
 	{
 		global $config;
-		require QFWPATH.'/Smarty'.($config['release']?'':'.debug').'/Smarty.class.php';
+		require LIBPATH.'/Smarty/'.($config['release']?'Release':'Debug').'/Smarty.class.php';
 		$this->_smarty = new Smarty;
 
 		$this->_smarty->force_compile = !$config['release'];
