@@ -43,8 +43,8 @@ class QuickFW_Plugs
 		return $this->base.$this->index.$url.($url!==''?$this->defext:'');
 	}
 
-	protected $HeaderArr = array();
-	protected $HeaderOut = array();
+	protected $Head = array();
+	protected $HeadData = array();
 
 	protected $IncFiles = array();
 
@@ -60,13 +60,16 @@ class QuickFW_Plugs
 		return "";
 	}
 
-	public function outHead($name='default')
+	public function outHead($name='default', $pre='',$post='')
 	{
 		$key = '<!--HEAD'.$name.'-->';
-		if (!isset($this->HeaderOut[$key]))
-			$this->HeaderOut[$key]=-1;
-		$this->HeaderOut[$key]++;
-		return $this->HeaderOut[$key]==0?$key:'';
+		if (array_key_exists($key,$this->Head))
+			return '';
+		$this->Head[$key]=array(
+			'pre'=>$pre,
+			'post'=>$post,
+		);
+		return $key;
 	}
 
 	public function getHead($content, $name='default', $join=false)
@@ -85,12 +88,12 @@ class QuickFW_Plugs
 
 		$k = '<!--HEAD'.$name.'-->';
 
-		if (!isset($this->HeaderArr[$k]))
-			$this->HeaderArr[$k]='';
+		if (!isset($this->HeadData[$k]))
+			$this->HeadData[$k]='';
 		if ($join)
-			$this->HeaderArr[$k].=$content;
+			$this->HeadData[$k].=$content;
 		else
-			$this->HeaderArr[$k]=$content;
+			$this->HeadData[$k]=$content;
 	}
 
 	public function pluralForm($n, $form1, $form2, $form5)
@@ -123,18 +126,23 @@ class QuickFW_Plugs
 				'" type="text/javascript"></script>'."\n";
 		}
 
-		foreach ($this->HeaderArr as $k=>$v)
+		foreach ($this->HeadData as $k=>$v)
 		{
-			if (!isset($this->HeaderOut[$k]))
-			{
+			if (!array_key_exists($k,$this->Head))
+			{	//если нету ключа, то добавляем вверх
 				$head.=$v;
-				unset($this->HeaderArr[$k]);
+				unset($this->HeadData[$k]);
+			}
+			else
+			{	//если есть, то обрамляем pre и post и вставляем
+				if ($v!='')
+					$this->HeadData[$k]=$this->Head[$k]['pre'].$v.$this->Head[$k]['post'];
 			}
 		}
 		$head.="</head>\n";
 
 		$text = str_replace('</head>',$head,$text);
-		$text = str_replace(array_keys($this->HeaderArr),array_values($this->HeaderArr),$text);
+		$text = str_replace(array_keys($this->Head),array_values($this->HeadData),$text);
 		$text = preg_replace('|<!--HEAD.*?-->|','',$text);
 		return $text;
 	}

@@ -191,14 +191,14 @@ class Templater_Smarty
 		}
 		return $this->_smarty;
 	}
-	
+
 	//Module Wrapper
 	public static function getTemplate($tpl_name, &$tpl_source, &$smarty)
 	{
 		$tpl_source = QuickFW_Module::getTemplate($tpl_name);
 		return true;
 	}
-	
+
 	public function getTimestamp($tpl_name, &$tpl_timestamp, &$smarty)
 	{
 		$tpl_timestamp = microtime(true);
@@ -209,7 +209,7 @@ class Templater_Smarty
 	{
 		return true;
 	}
-	
+
 	public function isTrusted($tpl_name, &$smarty)
 	{
 		return false;
@@ -258,7 +258,11 @@ class Templater_Smarty
 	}
 	public function s_outHead($params, &$smarty)
 	{
-		return $this->P->outHead(isset($params['name'])?$params['name']:'default');
+		return $this->P->outHead(
+			isset($params['name'])?$params['name']:'default',
+			isset($params['pre'])?$params['pre']:'',
+			isset($params['post'])?$params['post']:''
+		);
 	}
 	public function s_getHead($params, $content, &$smarty)
 	{

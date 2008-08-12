@@ -43,7 +43,7 @@ class QuickFW_AutoDbSimple
 	{
 		if ($this->DbSimple === null)
 		{
-			require QFWPATH.'/DbSimple/'.ucfirst($this->_driver).'.php';
+			require_once QFWPATH.'/DbSimple/'.ucfirst($this->_driver).'.php';
 			$this->connect();
 		}
 		$result = call_user_func_array(array(&$this->DbSimple, $method), $params);
