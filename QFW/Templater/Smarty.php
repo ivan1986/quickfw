@@ -196,6 +196,7 @@ class Templater_Smarty
 	public static function getTemplate($tpl_name, &$tpl_source, &$smarty)
 	{
 		$tpl_source = QuickFW_Module::getTemplate($tpl_name);
+		$tpl_source = '{literal}'.$tpl_source.'{/literal}';
 		return true;
 	}
 
