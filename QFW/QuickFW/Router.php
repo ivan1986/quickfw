@@ -291,7 +291,7 @@ class QuickFW_Router
 		$class=ucfirst($cname).'Controller';
 		$fullname = $path . '/controllers/' . strtr($class,'_','/') . '.php';
 		
-		if  (is_file($fullname))
+		if (is_file($fullname))
 		{
 			array_shift($data);
 		}
@@ -300,6 +300,12 @@ class QuickFW_Router
 			$cname=self::DEFAULT_CONTROLLER;
 			$class=ucfirst($cname).'Controller';
 			$fullname = $path . '/controllers/' . $class . '.php';
+			if (!is_file($fullname))
+			{
+				$MCA['Error']="не найден файл \t\t\t".$fullname."\nФайл не найден, твою дивизию...";
+				$MCA['Path']=$MCA['Module'].'/...';
+				return $MCA;
+			}
 		}
 		
 		require_once($fullname);
