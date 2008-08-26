@@ -1,5 +1,7 @@
 <?php
 
+mb_internal_encoding("UTF-8");
+
 /* настройки хоста - установка Content-Type: text/html; charset=encoding */
 $config['host']=array(
 	'encoding' => 'utf-8',

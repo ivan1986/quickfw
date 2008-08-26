@@ -70,15 +70,14 @@
 	}
 
 
-	require (QFWPATH.'/config.php');
+	require QFWPATH.'/config.php';
+	require APPPATH.'/default.php';
 
 	if (isset($_SERVER['HTTP_HOST']))
 	{
 		$file=APPPATH.'/'.$_SERVER['HTTP_HOST'].'.php';
 		if (is_file($file))
 			require ($file);
-		elseif (is_file(APPPATH.'/default.php'))
-			require APPPATH.'/default.php';
 	}
 
 	if (isset($config['host']['encoding']))

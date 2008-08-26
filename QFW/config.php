@@ -4,39 +4,37 @@ $config=array();
 
 $config['host']=array(
 	'encoding' => 'utf-8',
-	'lang' => 'ru_RU',
+	'lang' => '',
 );
 
 
 $config['database']=array(
-	'type'     => 'mysql',
-	'host'     => 'localhost',
-	'username' => 'root',
+	'type'     => '',
+	'host'     => '',
+	'username' => '',
 	'password' => '',
-	'dbname'   => 'base',
+	'dbname'   => '',
 	'prefix'   => '',
-	'encoding' => 'utf8',
+	'encoding' => '',
 );
 
 $config['redirection']=array(
 	'baseUrl'          => '/',
 	'useIndex'         => false,
-	'defExt'           => '',	//или пусто или .html например
+	'defExt'           => '',
 	'useRewrite'       => true,
 	'useModuleRewrite' => false,
 );
 
-$config['release']=true;
+$config['release']=false;
 
 $config['cacher']=array(
 	'module' => 'File',
 );
 
 $config['templater']= array(
-	'name'       =>'Smarty',
-	'def_tpl'    => 'main.tpl',
+	'name'       => 'PlainView',
+	'def_tpl'    => 'main.html',
 );
-
-mb_internal_encoding("UTF-8");
 
 ?>
