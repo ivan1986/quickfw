@@ -1,14 +1,5 @@
 <?php
 
-	if (!isset($_SERVER['REQUEST_URI'])) $_SERVER['REQUEST_URI']='/';
-
-	/*function __autoload($classname)
-	{
-		$file=strtr($classname,'_','/');
-		require (APPPATH.'/'.$file.'.php');
-	}*/
-	//Так как нафиг нужно
-
 	//нужна для того, что сессии используют кешер и они записывают данные
 	//после уничтожения всех обьектов, кешер пересоздается заново
 	//для записи сессий
@@ -68,7 +59,6 @@
 	{
 		return new Cache_Thru($Cacher, $obj, $id, $tags, $lifeTime);
 	}
-
 
 	require QFWPATH.'/config.php';
 	require APPPATH.'/default.php';

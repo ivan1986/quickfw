@@ -26,5 +26,4 @@ class QuickFW_Rewrite
 	
 }
 
-
 ?>

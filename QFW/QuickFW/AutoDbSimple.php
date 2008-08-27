@@ -59,9 +59,12 @@ class QuickFW_AutoDbSimple
 	
 	public function errorHandler($msg, $info)
 	{
+		global $config,$router;
 		// Если использовалась @, ничего не делать.
 		if (!error_reporting()) return;
-		// Выводим подробную информацию об ошибке. 
+		if ($config['release'])
+			$router->show404();
+		// Выводим подробную информацию об ошибке.
 		echo "SQL Error: $msg<br><pre>"; 
 		print_r($info);
 		echo "</pre>";

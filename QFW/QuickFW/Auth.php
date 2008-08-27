@@ -93,7 +93,7 @@ class QuickFW_Auth
 		//Check if this admin
 		if
 		(
-			(strcasecmp($config['admin']['login'],   trim($username)) == 0)
+			(strcasecmp($config['admin']['login'],    trim($username)) == 0)
 		and
 			(strcasecmp($config['admin']['password'], trim($password)) == 0)
 		)

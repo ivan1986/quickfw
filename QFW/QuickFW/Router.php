@@ -30,11 +30,9 @@ class QuickFW_Router
 
 	function route($requestUri = null, $type='Action')
 	{
-		global $view;
+		global $view, $config;
 		if ($requestUri === null)
-		{
 			$requestUri = $_SERVER['REQUEST_URI'];
-		}
 		$requestUri = $this->filterUri($requestUri);
 		$requestUri = $this->rewrite($requestUri);
 		
@@ -44,7 +42,7 @@ class QuickFW_Router
 		$MCA = $this->loadMCA($data,$type);
 		if (isset($MCA['Error']))
 		{
-			if ($GLOBALS['config']['release'])
+			if ($config['release'])
 				$this->show404();
 			else
 				die("Был выполнен запрос \t\t".$requestUri."\nадрес был разобран в\t\t ".
@@ -119,7 +117,6 @@ class QuickFW_Router
 		}
 		else
 			echo $view->displayMain($result);
-		
 	}
 	
 	function moduleRoute($Uri)

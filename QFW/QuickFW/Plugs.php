@@ -164,5 +164,4 @@ class QuickFW_Plugs
 	}
 }
 
-
 ?>
