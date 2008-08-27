@@ -73,12 +73,11 @@
 	require QFWPATH.'/config.php';
 	require APPPATH.'/default.php';
 
-	if (isset($_SERVER['HTTP_HOST']))
-	{
-		$file=APPPATH.'/'.$_SERVER['HTTP_HOST'].'.php';
-		if (is_file($file))
-			require ($file);
-	}
+	if (!isset($_SERVER['HTTP_HOST']))
+		die('$_SERVER[\'HTTP_HOST\'] NOT SET');
+	$file=APPPATH.'/'.$_SERVER['HTTP_HOST'].'.php';
+	if (is_file($file))
+		require ($file);
 
 	if (isset($config['host']['encoding']))
 		header("Content-Type: text/html; charset=".$config['host']['encoding']);

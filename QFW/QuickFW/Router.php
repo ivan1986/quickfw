@@ -3,12 +3,11 @@
 class QuickFW_Router
 {
 	const URI_DELIMITER = '/';
-	const DEFAULT_MODULE = 'default';
-	const DEFAULT_CONTROLLER = 'index';
-	const DEFAULT_ACTION = 'index';
 	
 	protected $baseDir;
 	protected $rewriter;
+	
+	protected $defM,$defC,$defA;
 
 	//модуль и контроллер в контексте которого выполняется,
 	//небходимо для роутинга компонентов
@@ -19,10 +18,14 @@ class QuickFW_Router
 	
 	function __construct($baseDir)
 	{
+		global $config;
 		$this->baseDir = rtrim($baseDir, '/\\');
 		$this->module = '';
 		$this->controller = NULL;
 		$this->action = '';
+		$this->defM = $config['default']['module'];
+		$this->defC = $config['default']['controller'];
+		$this->defA = $config['default']['action'];
 	}
 
 	function route($requestUri = null, $type='Action')
@@ -58,7 +61,7 @@ class QuickFW_Router
 		$this->action = $MCA['Action'];
 		$this->cClass = $MCA['Class'];
 		
-		$view->setScriptPath($this->baseDir.'/'.$this->module.'/templates');
+		$view->setScriptPath($this->baseDir.'/'.$this->cModule.'/templates');
 		
 		$this->cController = new $this->cClass();
 		
@@ -78,7 +81,7 @@ class QuickFW_Router
 					else
 					{
 						$view->mainTemplate = $CacheInfo['Cacher']->load($CacheInfo['id'].'_MTPL');
-						$view->setScriptPath($this->baseDir.'/'.$this->module.'/templates');
+						$view->setScriptPath($this->baseDir.'/'.$this->cModule.'/templates');
 						echo $view->displayMain($data);
 					}
 					return;
@@ -158,12 +161,12 @@ class QuickFW_Router
 	function delDef($url)
 	{
 		$url = explode('/',$url);
-		if (isset($url[0]) && $url[0]==self::DEFAULT_MODULE)
+		if (isset($url[0]) && $url[0]==$this->defM)
 			array_shift($url);
-		if (count($url)==2 && $url[1]==self::DEFAULT_ACTION)
+		if (count($url)==2 && $url[1]==$this->defA)
 		{
 			$url[0]=array_shift($url);
-			if (isset($url[0]) && $url[0]==self::DEFAULT_CONTROLLER)
+			if (isset($url[0]) && $url[0]==$this->defC)
 				array_shift($url);
 		}
 		return join('/',$url);
@@ -281,12 +284,12 @@ class QuickFW_Router
 		if (isset($data[0]) && (is_dir($this->baseDir . '/' . $data[0])))
 			$MCA['Module'] = array_shift($data);
 		else
-			$MCA['Module'] = $type=='Module' ? $this->cModule : self::DEFAULT_MODULE;
+			$MCA['Module'] = $type=='Module' ? $this->cModule : $this->defM;
 		$path = $this->baseDir.'/'.$MCA['Module'];
 		
 		$c=count($data);	// Количество элементов URI исключая модуль
 		//Determine Controller
-		$cname = isset($data[0])?$data[0]: ($type=='Module' ? $this->cController : self::DEFAULT_CONTROLLER);
+		$cname = isset($data[0])?$data[0]: ($type=='Module' ? $this->cController : $this->defC);
 
 		$class=ucfirst($cname).'Controller';
 		$fullname = $path . '/controllers/' . strtr($class,'_','/') . '.php';
@@ -297,7 +300,7 @@ class QuickFW_Router
 		}
 		else
 		{
-			$cname=self::DEFAULT_CONTROLLER;
+			$cname=$this->defC;
 			$class=ucfirst($cname).'Controller';
 			$fullname = $path . '/controllers/' . $class . '.php';
 			if (!is_file($fullname))
@@ -319,7 +322,7 @@ class QuickFW_Router
 			return $MCA;
 		}
 
-		$aname = isset($data[0])?$data[0]:self::DEFAULT_ACTION;
+		$aname = isset($data[0])?$data[0]:$this->defA;
 		$MCA['Action'] = strtr($aname,'.','_').$type;
 		
 		$actions=get_class_methods($class);
@@ -330,7 +333,7 @@ class QuickFW_Router
 		}
 		else
 		{
-			$aname=self::DEFAULT_ACTION;
+			$aname=$this->defA;
 			$MCA['Action'] = $aname.$type;
 			if (!in_array($MCA['Action'],$actions))
 			{

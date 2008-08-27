@@ -8,6 +8,13 @@ $config['host']=array(
 	'lang' => 'ru_RU',
 );
 
+/* Настройки дефолтового MCA */
+$config['default']=array(
+	'module'    => 'default',
+	'controller' => 'index',
+	'action'    => 'index',
+);
+
 /* Настройки коннекта к базе данных */
 $config['database']=array(
 	'type'     => 'mysql',

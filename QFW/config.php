@@ -7,6 +7,11 @@ $config['host']=array(
 	'lang' => '',
 );
 
+$config['default']=array(
+	'module'     => 'default',
+	'controller' => 'index',
+	'action'     => 'index',
+);
 
 $config['database']=array(
 	'type'     => '',
