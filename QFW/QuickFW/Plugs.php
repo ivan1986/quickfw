@@ -60,6 +60,11 @@ class QuickFW_Plugs
 		return "";
 	}
 
+	//сокращения для JavaScript
+	public function sJS() {return $this->getHead(false,'JavaScript',true);}
+	public function eJS() {return $this->getHead(true ,'JavaScript',true);}
+	public function oJS() {return $this->outHead('JavaScript',"<script type=\"text/javascript\"><!--\n","\n--></script>");}
+
 	public function outHead($name='default', $pre='',$post='')
 	{
 		$key = '<!--HEAD'.$name.'-->';

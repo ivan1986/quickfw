@@ -228,6 +228,8 @@ class Templater_Smarty
 
 		$this->_smarty->register_function('outHead',array($this,'s_outHead'));
 		$this->_smarty->register_block('getHead',array($this,'s_getHead'));
+		$this->_smarty->register_function('oJS',array($this,'s_oJS'));
+		$this->_smarty->register_block('gJS',array($this,'s_gJS'));
 
 		$this->_smarty->register_function('pluralForm',array($this,'s_pluralForm'));
 	}
@@ -257,6 +259,9 @@ class Templater_Smarty
 			$this->P->addCSS($params['file'],isset($params['noBase']));
 		return "";
 	}
+	
+	public function s_gJS($params, $content, &$smarty) {return $this->P->getHead($content,'JavaScript',true);}
+	public function s_oJS($params, $content, &$smarty) {return $this->P->outHead('JavaScript',"<script type=\"text/javascript\"><!--\n","\n--></script>");}
 	public function s_outHead($params, &$smarty)
 	{
 		return $this->P->outHead(
