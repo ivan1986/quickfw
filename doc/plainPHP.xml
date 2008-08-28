@@ -167,7 +167,7 @@
   </context>
 
   <context name="JS content" attribute="Normal Text" lineEndContext="#stay">
-<RegExpr attribute="Element" context="#pop" String="&lt;\?(?:=|php)?.*\$P-\&gt;eJS\(\).*\?&gt;" insensitive="TRUE" endRegion="script" lookAhead="true"/> <!-- lookAhead="true"-->
+<RegExpr attribute="Element" context="#pop" String="&lt;\?(?:=|php)?.*\$P-\&gt;eJS\(\).*\?&gt;" insensitive="TRUE" endRegion="script" lookAhead="true"/>
 <IncludeRules context="FindPHP" />
     <RegExpr attribute="Element" context="El Close 2" String="&lt;/script\b" insensitive="TRUE" endRegion="script" />
     <RegExpr attribute="Comment" context="JS comment close" String="//(?=.*&lt;/script\b)" insensitive="TRUE" />
