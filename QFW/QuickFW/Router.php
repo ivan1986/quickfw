@@ -119,31 +119,31 @@ class QuickFW_Router
 			echo $view->displayMain($result);
 	}
 	
-	function moduleRoute($Uri)
+	function blockRoute($Uri)
 	{
 		global $config;
 		$patt=array();
 		$MCA=array();
 
-		if ($config['redirection']['useModuleRewrite'])
+		if ($config['redirection']['useBlockRewrite'])
 			$Uri = $this->rewrite($Uri);
 		
 		//два варианта записи вызова
 		// module.controller.action(p1,p2,p3,...)
 		if (preg_match('|(?:(.*?)\.)?(.*?)(?:\.(.*))?\((.*)\)|',$Uri,$patt))
 		{
-			$MCA=$this->loadMCA(array_slice($patt,1,3),'Module');
+			$MCA=$this->loadMCA(array_slice($patt,1,3),'Block');
 			$MCA['Params']=$this->parseScobParams($patt[4]);
 		}
 		else
 		{
 			// module/controller/action/p1/p2/p3/...
 			$data = split(self::URI_DELIMITER, $Uri);
-			$MCA = $this->loadMCA($data,'Module');
+			$MCA = $this->loadMCA($data,'Block');
 			$MCA['Params']=$this->parseParams($data);
 		}
 
-		QuickFW_Module::addStartControllerClass($this->cClass,$this->cController);
+		QuickFW_Block::addStartControllerClass($this->cClass,$this->cController);
 		return $MCA;
 	}
 
@@ -281,12 +281,12 @@ class QuickFW_Router
 		if (isset($data[0]) && (is_dir($this->baseDir . '/' . $data[0])))
 			$MCA['Module'] = array_shift($data);
 		else
-			$MCA['Module'] = $type=='Module' ? $this->cModule : $this->defM;
+			$MCA['Module'] = $type=='Block' ? $this->cModule : $this->defM;
 		$path = $this->baseDir.'/'.$MCA['Module'];
 		
 		$c=count($data);	// Количество элементов URI исключая модуль
 		//Determine Controller
-		$cname = isset($data[0])?$data[0]: ($type=='Module' ? $this->cController : $this->defC);
+		$cname = isset($data[0])?$data[0]: ($type=='Block' ? $this->cController : $this->defC);
 
 		$class=ucfirst($cname).'Controller';
 		$fullname = $path . '/controllers/' . strtr($class,'_','/') . '.php';

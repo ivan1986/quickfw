@@ -109,9 +109,9 @@ class Templater_Proxy
 			return null;
 	}
 
-	public function module($module)
+	public function block($block)
 	{
-		return QuickFW_Module::getTemplate($module);
+		return QuickFW_Block::getTemplate($block);
 	}
 
 	/**

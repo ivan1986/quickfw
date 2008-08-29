@@ -91,9 +91,9 @@ class Templater_PlainView
 		return true;
 	}
 
-	public function module($module)
+	public function block($block)
 	{
-		return QuickFW_Module::getTemplate($module);
+		return QuickFW_Block::getTemplate($block);
 	}
 
 	public function render($tmpl)

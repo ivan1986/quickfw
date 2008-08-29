@@ -28,7 +28,7 @@ $config['redirection']=array(
 	'useIndex'         => false,
 	'defExt'           => '',
 	'useRewrite'       => true,
-	'useModuleRewrite' => false,
+	'useBlockRewrite' => false,
 );
 
 $config['release']=false;

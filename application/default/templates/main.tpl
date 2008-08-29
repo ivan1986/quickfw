@@ -8,7 +8,6 @@
 {$content}
 <br />
 {getHead name='h'}HEAD{/getHead}
-А сюда у нас подключен модуль test</br>
 {outHead name='h'}
 
 {addJS file='file.js'}
@@ -18,10 +17,11 @@
 {addCSS file='file.css'}
 {addCSS file='file1.css'}
 
-{include file="module:test"}<br />
-{*include file="module:test/index//a/1/b/2"}<br />
-{include file="module:test(123,55,'1\'1','1,1','$ttt')"}<br />
-{include file="module:test.index()"*}<br />
+А сюда у нас подключен блок test</br>
+{include file="block:test"}<br />
+{*include file="block:test/index//a/1/b/2"}<br />
+{include file="block:test(123,55,'1\'1','1,1','$ttt')"}<br />
+{include file="block:test.index()"*}<br />
 А вот тут он закончился
 {getHead name='123'}<script></script>{/getHead}
 </body>

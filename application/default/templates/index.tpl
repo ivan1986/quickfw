@@ -1,1 +1,1 @@
-{include file="module:test.a()"}
+{include file="block:test.a()"}

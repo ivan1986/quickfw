@@ -24,7 +24,7 @@ $config['redirection']['baseUrl']='/';
 $config['redirection']['useIndex']=false;
 $config['redirection']['defExt']='';
 $config['redirection']['useRewrite']=true;
-$config['redirection']['useModuleRewrite']=false;
+$config['redirection']['useBlockRewrite']=false;
 */
 
 /* Настройки кешера (класс бекенда и дополнительные параметры, если есть) */

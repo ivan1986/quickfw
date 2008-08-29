@@ -3,7 +3,7 @@
 class NavController
 {
 
-	public function pagerModule($url='$',$all=0,$cur=1)
+	public function pagerBlock($url='$',$all=0,$cur=1)
 	{
 		if ($all<2) return "";
 		QFW::$view->assign('pager',array(

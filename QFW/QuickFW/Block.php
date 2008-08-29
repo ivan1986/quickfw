@@ -1,6 +1,6 @@
 <?php
 
-class QuickFW_Module
+class QuickFW_Block
 {
 	protected static $_thisInst = null;
 	protected static $classes;
@@ -12,7 +12,7 @@ class QuickFW_Module
 	public static function getInstance()
 	{
 		if (self::$_thisInst === null)
-			self::$_thisInst = new QuickFW_Module();
+			self::$_thisInst = new QuickFW_Block();
 		return self::$_thisInst;
 	}
 	
@@ -25,19 +25,19 @@ class QuickFW_Module
 	public static function getTemplate($tpl_name)
 	{
 		global $router;
-		$MCA=$router->moduleRoute($tpl_name);
+		$MCA=$router->blockRoute($tpl_name);
 		if (isset($MCA['Error']))
-			return "Ошибка подключения модуля ".$tpl_name." адрес был разобран в\t\t ".
+			return "Ошибка подключения блока ".$tpl_name." адрес был разобран в\t\t ".
 				$MCA['Path']."\n".$MCA['Error'];
 
 		if (!isset(self::$classes[$MCA['Class']]))
 			self::$classes[$MCA['Class']] = new $MCA['Class']();
-		$module = &self::$classes[$MCA['Class']];
+		$class = &self::$classes[$MCA['Class']];
 
 		$CacheInfo=false;
 		if ($MCA['cache'])
 		{
-			$CacheInfo=$module->CacheInfo($MCA['Action'],$MCA['Params']);
+			$CacheInfo=$class->CacheInfo($MCA['Action'],$MCA['Params']);
 			if (array_key_exists('Cacher',$CacheInfo) && array_key_exists('id',$CacheInfo))
 			$data = $CacheInfo['Cacher']->load($CacheInfo['id']);
 			if ($data)
@@ -47,7 +47,7 @@ class QuickFW_Module
 		list($lpPath, $router->ParentPath, $router->CurPath) = 
 			array($router->ParentPath, $router->CurPath, $MCA['Path']);
 
-		$result = call_user_func_array(array($module, $MCA['Action']), $MCA['Params']);
+		$result = call_user_func_array(array($class, $MCA['Action']), $MCA['Params']);
 
 		list($router->CurPath, $router->ParentPath) = 
 			array($router->ParentPath, $lpPath);

@@ -39,8 +39,8 @@ class Templater_Smarty
 			$this->setScriptPath($this->_tmplPath);
 		}
 
-		$module = QuickFW_Module::getInstance();
-		$this->_smarty->register_resource('module', array(&$this,
+		$block = QuickFW_Block::getInstance();
+		$this->_smarty->register_resource('block', array(&$this,
 													"getTemplate",
 													"getTimestamp",
 													"isSecure",
@@ -146,9 +146,9 @@ class Templater_Smarty
 		return $this->getEngine()->get_template_vars($var);
 	}
 
-	public function module($module)
+	public function block($block)
 	{
-		return QuickFW_Module::getTemplate($module);
+		return QuickFW_Block::getTemplate($block);
 	}
 
 	/**
@@ -192,10 +192,10 @@ class Templater_Smarty
 		return $this->_smarty;
 	}
 
-	//Module Wrapper
+	//Block Wrapper
 	public static function getTemplate($tpl_name, &$tpl_source, &$smarty)
 	{
-		$tpl_source = QuickFW_Module::getTemplate($tpl_name);
+		$tpl_source = QuickFW_Block::getTemplate($tpl_name);
 		$tpl_source = '{literal}'.$tpl_source.'{/literal}';
 		return true;
 	}

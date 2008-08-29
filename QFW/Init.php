@@ -72,7 +72,7 @@
 	if (isset($config['host']['encoding']))
 		header("Content-Type: text/html; charset=".$config['host']['encoding']);
 
-	require QFWPATH.'/QuickFW/Module.php';
+	require QFWPATH.'/QuickFW/Block.php';
 	require QFWPATH.'/QuickFW/Plugs.php';
 
 	$templ = ucfirst($config['templater']['name']);

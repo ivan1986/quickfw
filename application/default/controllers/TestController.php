@@ -2,25 +2,25 @@
 
 class TestController
 {
-	public function indexModule()
+	public function indexBlock()
 	{
 		global $router,$view;
 		return "<pre>".$view->render('b.html')
-		."\nМодуль index - ".$router->UriPath.' '.$router->CurPath.' '.$router->ParentPath
-		."\nЭто результат работы модуля Test с параметрами ". var_export(func_get_args(),true)."</pre>";
+		."\nБлок index - ".$router->UriPath.' '.$router->CurPath.' '.$router->ParentPath
+		."\nЭто результат работы блока index с параметрами ". var_export(func_get_args(),true)."</pre>";
 	}
 
-	public function aModule()
+	public function aBlock()
 	{
 		global $router,$view;
 		return $view->render('b.html')
-		."\nМодуль A - ".$router->UriPath.' '.$router->CurPath.' '.$router->ParentPath;
+		."\nБлок A - ".$router->UriPath.' '.$router->CurPath.' '.$router->ParentPath;
 	}
 
-	public function bModule()
+	public function bBlock()
 	{
 		global $router,$view;
-		return $view->render('b.html')."\nМодуль B - ".$router->UriPath.' '.$router->CurPath.' '.$router->ParentPath;
+		return $view->render('b.html')."\nБлок B - ".$router->UriPath.' '.$router->CurPath.' '.$router->ParentPath;
 	}
 
 	/*public function CacheInfo($action,$params)
