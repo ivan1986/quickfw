@@ -147,7 +147,7 @@ class QuickFW_Plugs
 		$head.="</head>\n";
 
 		$text = str_replace('</head>',$head,$text);
-		$text = str_replace(array_keys($this->Head),array_values($this->HeadData),$text);
+		$text = str_replace(array_keys($this->HeadData),array_values($this->HeadData),$text);
 		$text = preg_replace('|<!--HEAD.*?-->|','',$text);
 		return $text;
 	}
