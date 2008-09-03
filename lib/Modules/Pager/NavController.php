@@ -11,7 +11,7 @@ class NavController
 			'c'=>$cur,
 			'url'=>$url,
 		));
-		return QFW::$view->fetch('pager.tpl');
+		return QFW::$view->fetch('pager.html');
 	}
 	
 }
