@@ -260,8 +260,8 @@ class Templater_Smarty
 		return "";
 	}
 	
-	public function s_gJS($params, $content, &$smarty) {return $this->P->getHead($content,'JavaScript',true);}
-	public function s_oJS($params, $content, &$smarty) {return $this->P->outHead('JavaScript',"<script type=\"text/javascript\"><!--\n","\n--></script>");}
+	public function s_gJS($params, $content, &$smarty){return $this->P->getHead($content,'JavaScript'.isset($params['name'])?$params['name']:'default',true);}
+	public function s_oJS($params, $content, &$smarty) {return $this->P->outHead('JavaScript'.isset($params['name'])?$params['name']:'default',"<script type=\"text/javascript\"><!--\n","\n--></script>");}
 	public function s_outHead($params, &$smarty)
 	{
 		return $this->P->outHead(

@@ -67,9 +67,9 @@ class QuickFW_Plugs
 	}
 
 	//сокращения для JavaScript
-	public function sJS() {return $this->getHead(false,'JavaScript',true);}
-	public function eJS() {return $this->getHead(true ,'JavaScript',true);}
-	public function oJS() {return $this->outHead('JavaScript',"<script type=\"text/javascript\"><!--\n","\n--></script>");}
+	public function sJS($name='') {return $this->getHead(false,'JavaScript'.$name,true);}
+	public function eJS($name='') {return $this->getHead(true ,'JavaScript'.$name,true);}
+	public function oJS($name='') {return $this->outHead('JavaScript'.$name,"<script type=\"text/javascript\"><!--\n","\n--></script>");}
 
 	public function outHead($name='default', $pre='',$post='')
 	{
@@ -153,7 +153,7 @@ class QuickFW_Plugs
 		$head.="</head>\n";
 
 		$text = str_replace('</head>',$head,$text);
-		$text = str_replace(array_keys($this->Head),array_values($this->HeadData),$text);
+		$text = str_replace(array_keys($this->HeadData),array_values($this->HeadData),$text);
 		$text = preg_replace('|<!--HEAD.*?-->|','',$text);
 		return $text;
 	}
