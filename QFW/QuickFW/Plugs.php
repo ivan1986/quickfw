@@ -36,11 +36,17 @@ class QuickFW_Plugs
 		return $this->base;
 	}
 
-	public function siteUrl($url)
+	public function siteUrl($url,$get='')
 	{
 		global $router;
 		$url = $router->backrewrite($url);
-		return $this->base.$this->index.$url.($url!==''?$this->defext:'');
+		if (is_array($get))
+		{
+			foreach($get as $k=>$v)
+				$get[$k]=$k.'='.$v;
+			$get='?'.implode('&',$get);
+		}
+		return $this->base.$this->index.$url.($url!==''?$this->defext:'').$get;
 	}
 
 	protected $Head = array();
@@ -147,7 +153,7 @@ class QuickFW_Plugs
 		$head.="</head>\n";
 
 		$text = str_replace('</head>',$head,$text);
-		$text = str_replace(array_keys($this->HeadData),array_values($this->HeadData),$text);
+		$text = str_replace(array_keys($this->Head),array_values($this->HeadData),$text);
 		$text = preg_replace('|<!--HEAD.*?-->|','',$text);
 		return $text;
 	}
