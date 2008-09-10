@@ -127,8 +127,7 @@ class Templater_PlainView
 			$this->assign('content',$content);
 			$content = $this->render($this->mainTemplate);
 		}
-		$content = $this->P->HeaderFilter($content);
-		return $content;
+		return $this->P->HeaderFilter($content);
 	}
 
 }

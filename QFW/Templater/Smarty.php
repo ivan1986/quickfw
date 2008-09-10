@@ -174,8 +174,7 @@ class Templater_Smarty
 			$this->getEngine()->assign('content',$content);
 			$content = $this->getEngine()->fetch($this->mainTemplate);
 		}
-		$content = $this->P->HeaderFilter($content);
-		return $content;
+		return $this->P->HeaderFilter($content);
 	}
 
 	/**

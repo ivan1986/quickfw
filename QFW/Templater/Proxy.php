@@ -180,8 +180,7 @@ class Templater_Proxy
 			$this->assign('content',$content);
 			$content = $this->fetch($this->mainTemplate);
 		}
-		$content = $this->P->HeaderFilter($content);
-		return $content;
+		return $this->P->HeaderFilter($content);
 	}
 
 }
