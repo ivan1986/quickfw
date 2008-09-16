@@ -24,17 +24,12 @@ class QuickFW_Auth
 			return true;
 		}
 		$this->checkPostData();
-		if (!$this->authorized)
-		{
-			if ($redir!==false)
-			{
-				QFW::$router->route($redir);
-				die();
-			}
-			else
-				return false;
-		}
-		return true;
+		if ($this->authorized)
+			return true;
+		if ($redir===false)
+			return false;
+		QFW::$router->route($redir);
+		die();
 	}
 	
 	function isAuthorized()
@@ -44,18 +39,15 @@ class QuickFW_Auth
 	
 	function getUser()
 	{
-		if ($this->authorized)
-			return $this->userdata;
-		return false;
+		return $this->authorized?$this->userdata:false;
 	}
 	
 	function session()
 	{
 		if (QuickFW_Auth::$session==null)
-		{
-			require (QFWPATH.'/QuickFW/Session.php');
-			QuickFW_Auth::$session = new QuickFW_Session();
-		}
+			return;
+		require (QFWPATH.'/QuickFW/Session.php');
+		QuickFW_Auth::$session = new QuickFW_Session();
 	}
 	
 	/**
@@ -67,7 +59,7 @@ class QuickFW_Auth
 	{
 		$data = $this->checkUser();
 		if ($data === false)
-			return;	//неудачный логин
+			return; //неудачный логин
 		
 		$this->session();
 		
