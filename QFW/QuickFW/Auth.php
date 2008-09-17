@@ -44,7 +44,7 @@ class QuickFW_Auth
 	
 	function session()
 	{
-		if (QuickFW_Auth::$session==null)
+		if (QuickFW_Auth::$session!=null)
 			return;
 		require (QFWPATH.'/QuickFW/Session.php');
 		QuickFW_Auth::$session = new QuickFW_Session();
