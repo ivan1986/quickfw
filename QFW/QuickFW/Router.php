@@ -3,19 +3,19 @@
 class QuickFW_Router
 {
 	const URI_DELIMITER = '/';
-	
+
 	protected $baseDir;
 	protected $rewriter;
-	
+
 	protected $defM,$defC,$defA;
 
 	//модуль и контроллер в контексте которого выполняется,
 	//небходимо для роутинга компонентов
 	protected $cModule, $cControllerName, $cController, $cClass;
 	public $module, $controller, $action;
-	
+
 	public $UriPath, $CurPath, $ParentPath;
-	
+
 	function __construct($baseDir)
 	{
 		global $config;
@@ -35,7 +35,7 @@ class QuickFW_Router
 			$requestUri = $_SERVER['REQUEST_URI'];
 		$requestUri = $this->filterUri($requestUri);
 		$requestUri = $this->rewrite($requestUri);
-		
+
 		$data = split(self::URI_DELIMITER, $requestUri);
 		$data = array_map('urldecode', $data);
 
@@ -50,19 +50,19 @@ class QuickFW_Router
 					$MCA['Error']);
 		}
 		$params = $this->parseParams($data);
-		
+
 		$this->cModule = $this->module = $MCA['Module'];
 		$this->cControllerName = $this->controller = $MCA['Controller'];
 		$this->CurPath = $this->UriPath = $MCA['Path'];
 		$this->ParentPath = null;
-		
+
 		$this->action = $MCA['Action'];
 		$this->cClass = $MCA['Class'];
-		
+
 		$view->setScriptPath($this->baseDir.'/'.$this->cModule.'/templates');
-		
+
 		$this->cController = new $this->cClass();
-		
+
 		$CacheInfo=false;
 		if ($MCA['cache'])
 		{
@@ -86,11 +86,13 @@ class QuickFW_Router
 				}
 			}
 		}
-		
+
 		if (!empty($params))
 			$result = call_user_func_array(array($this->cController, $this->action), $params);
 		else
 			$result = call_user_func(array($this->cController, $this->action));
+
+		QuickFW_Block::Destroy();
 
 		if ($CacheInfo && array_key_exists('Cacher',$CacheInfo) && array_key_exists('id',$CacheInfo))
 		{
@@ -100,7 +102,7 @@ class QuickFW_Router
 			$par[2]=array_key_exists('tags',$CacheInfo)?$CacheInfo['tags']:array();
 			if (array_key_exists('time',$CacheInfo))
 				$par[3]=$CacheInfo['time'];
-			
+
 			if ($full)
 			{
 				echo $result=$view->displayMain($result);
@@ -118,7 +120,7 @@ class QuickFW_Router
 		else
 			echo $view->displayMain($result);
 	}
-	
+
 	function blockRoute($Uri)
 	{
 		global $config;
@@ -127,7 +129,7 @@ class QuickFW_Router
 
 		if ($config['redirection']['useBlockRewrite'])
 			$Uri = $this->rewrite($Uri);
-		
+
 		//два варианта записи вызова
 		// module.controller.action(p1,p2,p3,...)
 		if (preg_match('|(?:(.*?)\.)?(.*?)(?:\.(.*))?\((.*)\)|',$Uri,$patt))
@@ -154,7 +156,7 @@ class QuickFW_Router
 		$view->setScriptPath(APPPATH.'/default/templates/');
 		die($view->render('404.html'));
 	}
-	
+
 	function delDef($url)
 	{
 		$url = explode('/',$url);
@@ -168,7 +170,7 @@ class QuickFW_Router
 		}
 		return join('/',$url);
 	}
-	
+
 	function redirectMCA($MCA,$tail='')
 	{
 		global $config;
@@ -199,7 +201,7 @@ class QuickFW_Router
 		}
 		return $this->rewriter->back($uri);
 	}
-	
+
 	protected function rewrite($uri)
 	{
 		global $config;
@@ -212,7 +214,7 @@ class QuickFW_Router
 		}
 		return $this->rewriter->forward($uri);
 	}
-	
+
 	protected function parseParams(&$data)
 	{
 		if (empty($data))
@@ -229,7 +231,7 @@ class QuickFW_Router
 		}
 		return array('params' => $params);
 	}
-	
+
 	protected function parseScobParams($par)
 	{
 		$instr  = false;
@@ -271,26 +273,26 @@ class QuickFW_Router
 		}
 		return $params;
 	}
-	
+
 	protected function loadMCA(&$data,$type)
 	{
 		$MCA = array();
 		while (isset($data[0]) AND $data[0] === '') array_shift($data);
-		
+
 		//Determine Module
 		if (isset($data[0]) && (is_dir($this->baseDir . '/' . $data[0])))
 			$MCA['Module'] = array_shift($data);
 		else
 			$MCA['Module'] = $type=='Block' ? $this->cModule : $this->defM;
 		$path = $this->baseDir.'/'.$MCA['Module'];
-		
+
 		$c=count($data);	// Количество элементов URI исключая модуль
 		//Determine Controller
 		$cname = isset($data[0])?$data[0]: ($type=='Block' ? $this->cController : $this->defC);
 
 		$class=ucfirst($cname).'Controller';
 		$fullname = $path . '/controllers/' . strtr($class,'_','/') . '.php';
-		
+
 		if (is_file($fullname))
 		{
 			array_shift($data);
@@ -307,7 +309,7 @@ class QuickFW_Router
 				return $MCA;
 			}
 		}
-		
+
 		require_once($fullname);
 		$MCA['Controller'] = $cname;
 		$MCA['Class'] = $class;
@@ -321,7 +323,7 @@ class QuickFW_Router
 
 		$aname = isset($data[0])?$data[0]:$this->defA;
 		$MCA['Action'] = strtr($aname,'.','_').$type;
-		
+
 		$actions=get_class_methods($class);
 		$MCA['cache']= in_array('CacheInfo',$actions);
 		if (in_array($MCA['Action'],$actions))
@@ -340,7 +342,7 @@ class QuickFW_Router
 				return $MCA;
 			}
 		}
-		
+
 		if (count($data)==$c && $c>0)	// если из URI после модуля ничего не забрали и что-то осталось
 		{
 			$MCA['Error']="Указаны параметры у дефолтового CA \n".
@@ -348,7 +350,7 @@ class QuickFW_Router
 				"Не работает, мать его за ногу";
 		}
 		$MCA['Path']=$MCA['Module'].'/'.$MCA['Controller'].'/'.$aname;
-		
+
 		return $MCA;
 	}
 
@@ -380,6 +382,6 @@ class QuickFW_Router
 		$uri = trim($uri, self::URI_DELIMITER);
 		return $uri;
 	}
-	
+
 }
 ?>
