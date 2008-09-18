@@ -1,0 +1,15 @@
+span.select_color {
+	display: block;
+	float: left;
+	width: 18px;
+	height: 18px;
+	margin-right: 6px;
+	font-size: 1px;
+	border: 1px solid black;
+}
+input.bad-color {
+	background-color: #ffd0ce;
+}
+img {
+	behavior:	 url("/colorpicker/pngbehavior.htc");
+}

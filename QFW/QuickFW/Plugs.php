@@ -66,10 +66,21 @@ class QuickFW_Plugs
 		return "";
 	}
 
+	//Cтандартные вставки - JS в начало и в конец документа и CSS в начало
+	public function JSh($data) {return $this->getHead($data,'_JavaScript2HEAD',true);}
+	public function JSe($data) {return $this->getHead($data,'_JavaScript2END',true);}
+	public function CSS($data) {return $this->getHead($data,'_CSS2HEAD',true);}
+	public function sJSh() {return $this->getHead(false,'_JavaScript2HEAD',true);}
+	public function eJSh() {return $this->getHead(true ,'_JavaScript2HEAD',true);}
+	public function sJSe() {return $this->getHead(false,'_JavaScript2END',true);}
+	public function eJSe() {return $this->getHead(true ,'_JavaScript2END',true);}
+	public function sCSS() {return $this->getHead(false,'_CSS2HEAD',true);}
+	public function eCSS() {return $this->getHead(true ,'_CSS2HEAD',true);}
+
 	//сокращения для JavaScript
-	public function sJS($name='') {return $this->getHead(false,'JavaScript'.$name,true);}
-	public function eJS($name='') {return $this->getHead(true ,'JavaScript'.$name,true);}
-	public function oJS($name='') {return $this->outHead('JavaScript'.$name,"<script type=\"text/javascript\"><!--\n","\n--></script>");}
+	public function sJS($name='') {return $this->getHead(false,'_JavaScript_'.$name,true);}
+	public function eJS($name='') {return $this->getHead(true ,'_JavaScript_'.$name,true);}
+	public function oJS($name='') {return $this->outHead('_JavaScript_'.$name,"<script type=\"text/javascript\"><!--\n","\n--></script>\n");}
 
 	public function outHead($name='default', $pre='',$post='')
 	{
@@ -139,6 +150,24 @@ class QuickFW_Plugs
 
 		foreach ($this->HeadData as $k=>$v)
 		{
+			if ($k=='<!--HEAD_JavaScript2HEAD-->')
+			{
+				$head.="<script type=\"text/javascript\"><!--\n".$v."\n--></script>\n";
+				unset($this->HeadData[$k]);
+				continue;
+			}
+			if ($k=='<!--HEAD_JavaScript2END-->')
+			{
+				$text = str_replace('</body>',"<script type=\"text/javascript\"><!--\n".$v."\n--></script>\n</body>",$text);
+				unset($this->HeadData[$k]);
+				continue;
+			}
+			if ($k=='<!--HEAD_CSS2HEAD-->')
+			{
+				$head.="<style type=\"text/css\">\n".$v."\n</style>\n";
+				unset($this->HeadData[$k]);
+				continue;
+			}
 			if (!array_key_exists($k,$this->Head))
 			{	//если нету ключа, то добавляем вверх
 				$head.=$v;

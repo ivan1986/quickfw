@@ -229,6 +229,9 @@ class Templater_Smarty
 		$this->_smarty->register_block('getHead',array($this,'s_getHead'));
 		$this->_smarty->register_function('oJS',array($this,'s_oJS'));
 		$this->_smarty->register_block('gJS',array($this,'s_gJS'));
+		$this->_smarty->register_block('gJSh',array($this,'s_gJSh'));
+		$this->_smarty->register_block('gJSe',array($this,'s_gJSe'));
+		$this->_smarty->register_block('gCSS',array($this,'s_gCSS'));
 
 		$this->_smarty->register_function('pluralForm',array($this,'s_pluralForm'));
 	}
@@ -258,9 +261,16 @@ class Templater_Smarty
 			$this->P->addCSS($params['file'],isset($params['noBase']));
 		return "";
 	}
-	
-	public function s_gJS($params, $content, &$smarty){return $this->P->getHead($content,'JavaScript'.isset($params['name'])?$params['name']:'default',true);}
-	public function s_oJS($params, $content, &$smarty) {return $this->P->outHead('JavaScript'.isset($params['name'])?$params['name']:'default',"<script type=\"text/javascript\"><!--\n","\n--></script>");}
+
+	public function s_gJSh($params, $content, &$smarty) {return $this->P->JSh($content);}
+	public function s_gJSe($params, $content, &$smarty) {return $this->P->JSe($content);}
+	public function s_gCSS($params, $content, &$smarty) {return $this->P->CSS($content);}
+
+	public function s_gJS($params, $content, &$smarty)
+		{return $this->P->getHead($content,'JavaScript'.isset($params['name'])?$params['name']:'default',true);}
+	public function s_oJS($params, $content, &$smarty)
+		{return $this->P->outHead('JavaScript'.isset($params['name'])?$params['name']:'default',"<script type=\"text/javascript\"><!--\n","\n--></script>");}
+
 	public function s_outHead($params, &$smarty)
 	{
 		return $this->P->outHead(
