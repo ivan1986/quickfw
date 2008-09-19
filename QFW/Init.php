@@ -21,7 +21,7 @@
 		if ($namespace!='')
 		{
 			require_once(QFWPATH.'/QuickFW/Cacher/Namespace.php');
-			$c=new Dklab_Cache_Backend_NamespaceWrapper($c);
+			$c=new Dklab_Cache_Backend_NamespaceWrapper($c,$namespace);
 		}
 		if ($tags)
 		{
@@ -35,7 +35,7 @@
 	class Cache_Thru
 	{
 		private $_cacher, $_obj, $_id, $_tags, $_lt;
-	
+
 		public function __construct($Cacher, $obj, $id, $tags, $lifeTime)
 		{
 			$this->_cacher = $Cacher;
@@ -44,7 +44,7 @@
 			$this->_tags = $tags;
 			$this->_lt = $lifeTime;
 		}
-	
+
 		public function __call($method, $args)
 		{
 			if (false === ($result = $this->_cacher->load($this->_id))) {

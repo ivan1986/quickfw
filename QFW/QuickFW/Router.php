@@ -308,14 +308,8 @@ class QuickFW_Router
 			}
 		}
 		$MCA['Controller'] = $cname;
-		$class_key=$MCA['Module'].'|'.$MCA['Controller'];
 
 		require_once($fullname);
-		if (!array_key_exists($class_key,$this->classes))
-		{
-			$this->classes[$class_key]=new $class;
-		}
-		$MCA['Class'] = $this->classes[$class_key];
 
 		if (!class_exists($class))
 		{
@@ -323,6 +317,11 @@ class QuickFW_Router
 			$MCA['Path']=$MCA['Module'].'/'.$MCA['Controller'].'/...';
 			return $MCA;
 		}
+
+		$class_key=$MCA['Module'].'|'.$MCA['Controller'];
+		if (!array_key_exists($class_key,$this->classes))
+			$this->classes[$class_key]=new $class;
+		$MCA['Class'] = $this->classes[$class_key];
 
 		$vars=get_class_vars($class);
 		$actions=get_class_methods($class);
