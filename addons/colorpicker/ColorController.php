@@ -16,8 +16,8 @@ class ColorController
 		if (isset($this->blocks[$name]))
 			return "ОШИБКА - ПОВТОР БЛОКА";
 		$this->blocks[$name]=1;
-		return "<label for='SC_".$name."_input'>".$label."</label> ".
-		"<span class='select_color' id='SC_".$name."' style='background-color:".$value."'></span>".
+		return "<span class='select_color' id='SC_".$name."' style='background-color:".$value."'></span>".
+		"<label class='select_color' for='SC_".$name."_input'>".$label."</label>".
 		"<input id='SC_".$name."_input' name='".$name."' value='".$value."' size='10' maxlength='7' />";
 	}
 

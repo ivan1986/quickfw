@@ -1,5 +1,9 @@
+label.select_color {
+	display: inline-block;
+	width: 100px;
+}
 span.select_color {
-	display: block;
+	display: inline-block;
 	float: left;
 	width: 18px;
 	height: 18px;
@@ -9,7 +13,4 @@ span.select_color {
 }
 input.bad-color {
 	background-color: #ffd0ce;
-}
-img {
-	behavior:	 url("/colorpicker/pngbehavior.htc");
 }
