@@ -59,8 +59,6 @@ class QuickFW_Router
 		$this->CurPath = $this->UriPath = $MCA['Path'];
 		$this->ParentPath = null;
 
-		$view->setScriptPath($this->baseDir.'/'.$this->cModule.'/templates');
-
 		$CacheInfo=false;
 		if ($MCA['cache'])
 		{
@@ -77,7 +75,6 @@ class QuickFW_Router
 					else
 					{
 						$view->mainTemplate = $CacheInfo['Cacher']->load($CacheInfo['id'].'_MTPL');
-						$view->setScriptPath($this->baseDir.'/'.$this->cModule.'/templates');
 						echo $view->displayMain($data);
 					}
 					return;
@@ -283,6 +280,7 @@ class QuickFW_Router
 		else
 			$MCA['Module'] = $type=='Block' ? $this->cModule : $this->defM;
 		$path = $this->baseDir.'/'.$MCA['Module'];
+		QFW::$view->setScriptPath($path.'/templates');
 
 		$c=count($data);	// Количество элементов URI исключая модуль
 		//Determine Controller
@@ -308,8 +306,14 @@ class QuickFW_Router
 			}
 		}
 		$MCA['Controller'] = $cname;
+		$class_key=$MCA['Module'].'|'.$MCA['Controller'];
 
 		require_once($fullname);
+		if (!array_key_exists($class_key,$this->classes))
+		{
+			$this->classes[$class_key]=new $class;
+		}
+		$MCA['Class'] = $this->classes[$class_key];
 
 		if (!class_exists($class))
 		{
@@ -317,11 +321,6 @@ class QuickFW_Router
 			$MCA['Path']=$MCA['Module'].'/'.$MCA['Controller'].'/...';
 			return $MCA;
 		}
-
-		$class_key=$MCA['Module'].'|'.$MCA['Controller'];
-		if (!array_key_exists($class_key,$this->classes))
-			$this->classes[$class_key]=new $class;
-		$MCA['Class'] = $this->classes[$class_key];
 
 		$vars=get_class_vars($class);
 		$actions=get_class_methods($class);
