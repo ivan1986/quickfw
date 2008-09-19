@@ -3,6 +3,8 @@
 class QuickFW_Router
 {
 	const URI_DELIMITER = '/';
+	protected $classes=array();
+	protected $load_info=array();
 
 	protected $baseDir;
 	protected $rewriter;
@@ -11,7 +13,7 @@ class QuickFW_Router
 
 	//модуль и контроллер в контексте которого выполняется,
 	//небходимо для роутинга компонентов
-	protected $cModule, $cControllerName, $cController, $cClass;
+	protected $cModule, $cController;
 	public $module, $controller, $action;
 
 	public $UriPath, $CurPath, $ParentPath;
@@ -52,21 +54,17 @@ class QuickFW_Router
 		$params = $this->parseParams($data);
 
 		$this->cModule = $this->module = $MCA['Module'];
-		$this->cControllerName = $this->controller = $MCA['Controller'];
+		$this->cController = $this->controller = $MCA['Controller'];
+		$this->action = $MCA['Action'];
 		$this->CurPath = $this->UriPath = $MCA['Path'];
 		$this->ParentPath = null;
 
-		$this->action = $MCA['Action'];
-		$this->cClass = $MCA['Class'];
-
 		$view->setScriptPath($this->baseDir.'/'.$this->cModule.'/templates');
-
-		$this->cController = new $this->cClass();
 
 		$CacheInfo=false;
 		if ($MCA['cache'])
 		{
-			$CacheInfo=$this->cController->CacheInfo($this->action,$params);
+			$CacheInfo=$MCA['Class']->CacheInfo($this->action,$params);
 			if (is_array($CacheInfo))
 			{
 				if (array_key_exists('Cacher',$CacheInfo) && array_key_exists('id',$CacheInfo))
@@ -88,11 +86,12 @@ class QuickFW_Router
 		}
 
 		if (!empty($params))
-			$result = call_user_func_array(array($this->cController, $this->action), $params);
+			$result = call_user_func_array(array($MCA['Class'], $this->action), $params);
 		else
-			$result = call_user_func(array($this->cController, $this->action));
+			$result = call_user_func(array($MCA['Class'], $this->action));
 
-		QuickFW_Block::Destroy();
+		//Необходимо для вызовов всех деструкторов
+		$this->classes=array();
 
 		if ($CacheInfo && array_key_exists('Cacher',$CacheInfo) && array_key_exists('id',$CacheInfo))
 		{
@@ -145,7 +144,6 @@ class QuickFW_Router
 			$MCA['Params']=$this->parseParams($data);
 		}
 
-		QuickFW_Block::addStartControllerClass($this->cClass,$this->cController);
 		return $MCA;
 	}
 
@@ -309,10 +307,15 @@ class QuickFW_Router
 				return $MCA;
 			}
 		}
+		$MCA['Controller'] = $cname;
+		$class_key=$MCA['Module'].'|'.$MCA['Controller'];
 
 		require_once($fullname);
-		$MCA['Controller'] = $cname;
-		$MCA['Class'] = $class;
+		if (!array_key_exists($class_key,$this->classes))
+		{
+			$this->classes[$class_key]=new $class;
+		}
+		$MCA['Class'] = $this->classes[$class_key];
 
 		if (!class_exists($class))
 		{
@@ -321,10 +324,13 @@ class QuickFW_Router
 			return $MCA;
 		}
 
-		$aname = isset($data[0])?$data[0]:$this->defA;
+		$vars=get_class_vars($class);
+		$actions=get_class_methods($class);
+		$defA=array_key_exists('defA',$vars)?$vars['defA']:$this->defA;
+
+		$aname = isset($data[0])?$data[0]:$defA;
 		$MCA['Action'] = strtr($aname,'.','_').$type;
 
-		$actions=get_class_methods($class);
 		$MCA['cache']= in_array('CacheInfo',$actions);
 		if (in_array($MCA['Action'],$actions))
 		{
@@ -332,7 +338,7 @@ class QuickFW_Router
 		}
 		else
 		{
-			$aname=$this->defA;
+			$aname=$defA;
 			$MCA['Action'] = $aname.$type;
 			if (!in_array($MCA['Action'],$actions))
 			{

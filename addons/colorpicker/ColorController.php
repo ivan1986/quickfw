@@ -18,7 +18,7 @@ class ColorController
 		$this->blocks[$name]=1;
 		return "<span class='select_color' id='SC_".$name."' style='background-color:".$value."'></span>".
 		"<label class='select_color' for='SC_".$name."_input'>".$label."</label>".
-		"<input id='SC_".$name."_input' name='".$name."' value='".$value."' size='10' maxlength='7' />";
+		"<input type='text' id='SC_".$name."_input' name='".$name."' value='".$value."' size='10' maxlength='7' />";
 	}
 
 	public function __destruct()

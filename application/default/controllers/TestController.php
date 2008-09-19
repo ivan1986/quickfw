@@ -2,6 +2,11 @@
 
 class TestController
 {
+	public function __construct()
+	{
+		echo 1;
+	}
+
 	public function indexBlock()
 	{
 		global $router,$view;
