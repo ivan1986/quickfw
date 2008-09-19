@@ -279,12 +279,16 @@ class QuickFW_Router
 			$MCA['Module'] = array_shift($data);
 		else
 			$MCA['Module'] = $type=='Block' ? $this->cModule : $this->defM;
+		if ($type!='Block')
+			$this->cModule=$MCA['Module'];
 		$path = $this->baseDir.'/'.$MCA['Module'];
 		QFW::$view->setScriptPath($path.'/templates');
 
 		$c=count($data);	// Количество элементов URI исключая модуль
 		//Determine Controller
 		$cname = isset($data[0])?$data[0]: ($type=='Block' ? $this->cController : $this->defC);
+		if ($type!='Block')
+			$this->cController=$cname;
 
 		$class=ucfirst($cname).'Controller';
 		$fullname = $path . '/controllers/' . strtr($class,'_','/') . '.php';
