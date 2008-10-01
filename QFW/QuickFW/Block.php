@@ -27,10 +27,13 @@ class QuickFW_Block
 		if ($MCA['cache'])
 		{
 			$CacheInfo=$MCA['Class']->CacheInfo($MCA['Action'],$MCA['Params']);
-			if (array_key_exists('Cacher',$CacheInfo) && array_key_exists('id',$CacheInfo))
-			$data = $CacheInfo['Cacher']->load($CacheInfo['id']);
-			if ($data)
-				return $data;
+			if (is_array($CacheInfo))
+			{
+				if (array_key_exists('Cacher',$CacheInfo) && array_key_exists('id',$CacheInfo))
+				$data = $CacheInfo['Cacher']->load($CacheInfo['id']);
+				if ($data)
+					return $data;
+			}
 		}
 
 		list($lpPath, $router->ParentPath, $router->CurPath) =
@@ -41,7 +44,7 @@ class QuickFW_Block
 		list($router->CurPath, $router->ParentPath) =
 			array($router->ParentPath, $lpPath);
 
-		if ($CacheInfo)
+		if (is_array($CacheInfo))
 		{
 			if (array_key_exists('Cacher',$CacheInfo) && array_key_exists('id',$CacheInfo))
 			{
