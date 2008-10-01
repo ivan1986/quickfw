@@ -3,22 +3,11 @@
 class QuickFW_Plugs
 {
 	protected static $_thisInst = null;
-	protected $base, $defext, $index;
 
 	protected $displayErrorsParams;
 
 	protected function __construct()
 	{
-		global $config;
-		$this->base=$config['redirection']['baseUrl'];
-
-		$this->defext=$config['redirection']['defExt'];
-
-		$this->index=$config['redirection']['useIndex'];
-		$this->index=$this->index?'index.php/':'';
-
-		$this->rewriter = $config['redirection']['useRewrite'];
-
 		$this->setDisplayErrorsParams();
 	}
 
@@ -33,20 +22,24 @@ class QuickFW_Plugs
 
 	public function baseUrl()
 	{
-		return $this->base;
+		return QFW::$config['redirection']['baseUrl'];
 	}
 
 	public function siteUrl($url,$get='')
 	{
 		global $router;
-		$url = $router->backrewrite($url);
+		if (QFW::$config['redirection']['useRewrite'])
+			$url = $router->backrewrite($url);
 		if (is_array($get))
 		{
 			foreach($get as $k=>$v)
 				$get[$k]=$k.'='.$v;
 			$get='?'.implode('&',$get);
 		}
-		return $this->base.$this->index.$url.($url!==''?$this->defext:'').$get;
+		return QFW::$config['redirection']['baseUrl'].
+				(QFW::$config['redirection']['useIndex']?'index.php/':'').
+				$url.
+				($url!==''?QFW::$config['redirection']['defExt']:'').$get;
 	}
 
 	protected $Head = array();
@@ -56,13 +49,13 @@ class QuickFW_Plugs
 
 	public function addJS($file, $noBase=false)
 	{
-		$this->IncFiles['js'][]=($noBase?'':$this->base).$file;
+		$this->IncFiles['js'][]=($noBase?'':QFW::$config['redirection']['baseUrl']).$file;
 		return "";
 	}
 
 	public function addCSS($file, $noBase=false)
 	{
-		$this->IncFiles['css'][]=($noBase?'':$this->base).$file;
+		$this->IncFiles['css'][]=($noBase?'':QFW::$config['redirection']['baseUrl']).$file;
 		return "";
 	}
 
