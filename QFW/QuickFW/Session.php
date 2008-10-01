@@ -11,7 +11,7 @@ class QuickFW_Session
 	{
 		return(true);
 	}
-	
+
 	static function open()
 	{
 		return(true);
@@ -19,26 +19,22 @@ class QuickFW_Session
 
 	static function read($id)
 	{
-		//$this->debug_data=getCache()->get('sess_'.$id);
-		//$this->debug_sess=serialize($_SESSION);
-		$_SESSION=unserialize(getCache()->load('sess_'.$id));
-		//$this->debug_id=session_id();
-
-		return getCache()->load('sess_'.$id);
+		$data = getCache()->load('sess_'.$id);
+		if (!$data)
+			return false;
+		$_SESSION=unserialize($data);
+		return $data;
 	}
 
 	static function write($id,$data)
 	{
-		//echo "<br>\n";
-		//echo session_id().':'.$id.':'.$data.":".serialize($_SESSION)."\n<br>";
-		//echo session_id().':'.$this->debug_id.':'.$this->debug_data.":".$this->debug_sess."\n<br>";
 		getCache()->save(serialize($_SESSION),'sess_'.$id);
 	}
 
 	static function destroy()
 	{
 	}
-	
+
 	static function gc()
 	{
 	}
