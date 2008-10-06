@@ -40,9 +40,7 @@ function getURLContent($url, $userAgent = 'SeriousDron Utilities Pack, getURLCon
 /**
  * 	Вывод сообщения с разбивкой длинных слов без повреждения тегов
  */
-function msg2html($s) {
-
-	$s=make_urls(htmlspecialchars($s, ENT_QUOTES, 'utf-8'));
+function msg2html($s,$n=50) {
 
 	$marker = " <> ";
 
@@ -52,13 +50,28 @@ function msg2html($s) {
 	# Заменяем все тэги на маркеры
 	$s =  preg_replace("/(<.*?>)/si", $marker, $s);
 
-	$s = preg_replace('|\S{40}|u','\0 ',$s);
+	$s = preg_replace('|\S{'.$n.'}|u','\0 ',$s);
 
 	# Восстанавливаем тэги в места которых были отмечены маркерами
 	for ($i=0; $i<count($tags[0]);  $i++)
 		$s = preg_replace("/$marker/si", $tags[1][$i], $s, 1);
 
 	return $s;
+}
+
+/**
+ * 	Преобразование URL в ссылки
+ */
+function make_urls($string, $nofollow=false) {
+    $p = '/((?:(?:ht|f)tps?:\/\/|www\.)[^<\s\n]+)(?<![]\.,:;!\})<-])/msiu';
+    $r = '<a href="$1">$1</a>$2';
+
+    $string = preg_replace($p, $r, $string);
+
+    $p = '/ href="www\./msiu';
+    $r = ' href="http://www.';
+
+    return preg_replace($p, $r, $string);
 }
 
 /**

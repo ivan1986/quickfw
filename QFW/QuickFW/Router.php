@@ -181,7 +181,7 @@ class QuickFW_Router
 	function redirect($url=null)
 	{
 		//если не указан - редирект откуда пришли
-		$url=$url?$url:isset($_SERVER['HTTP_REFERER'])?$_SERVER['HTTP_REFERER']:'';
+		$url=$url?$url:(isset($_SERVER['HTTP_REFERER'])?$_SERVER['HTTP_REFERER']:'');
 		header('Location: '.$url);
 		exit();
 	}
