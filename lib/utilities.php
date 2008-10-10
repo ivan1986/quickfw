@@ -94,5 +94,96 @@ function my_trim($srt,$size)
 	return $srt;
 }
 
+/**
+ * Прообразование xml в массив
+ */
+function xml2array($xml,$attrName='attr',$arrFlar='array')
+{
+	$xmlary = array();
+
+	$reels = '/<(\w+)\s*([^>]*)\s*(?:\/>|>(.*?)<\/\s*\\1\s*>)/s';
+	$reattrs = '/(\w+)=(?:"|\')([^"\']*)(?:"|\')/';
+
+	preg_match_all($reels, $xml, $elements);
+
+	foreach ($elements[1] as $ie => $xx)
+	{
+		$name=$elements[1][$ie];
+
+		//для получения блока текста
+		$cdend = strpos($elements[3][$ie], "<");
+		if ($cdend > 0)
+			$xmlary[$name][$ie]["text"] = substr($elements[3][$ie], 0, $cdend);
+
+		if (preg_match($reels, $elements[3][$ie]))
+			$xmlary[$name][$ie] = xml2array($elements[3][$ie]);
+		else if ($elements[3][$ie])
+			$xmlary[$name][$ie] = $elements[3][$ie];
+		else
+			$xmlary[$name][$ie] = nil;
+
+		if ($attributes = trim($elements[2][$ie]))
+		{
+			preg_match_all($reattrs, $attributes, $att);
+			foreach ($att[1] as $ia => $xx)
+				$xmlary[$name][$ie][$attrName][$att[1][$ia]] = $att[2][$ia];
+		}
+
+	}
+	foreach ($xmlary as $k => $v)
+	{
+		if (count($v)==1)
+			$xmlary[$k]=current($v);
+		else
+		{
+			$xmlary[$k]=array_values($v);
+			$xmlary[$k][$arrFlar]=$k;
+		}
+	}
+
+	return $xmlary;
+}
+
+/**
+ * Прообразование массива в xml
+ */
+function array2xml($array,$attrName='attr',$arrFlar='array')
+{
+	$xml=array();
+	$subattr='';
+	$arr=array_key_exists($arrFlar,$array)?$array[$arrFlar]:false;
+	foreach ($array as $k => $v)
+	{
+		if ($k===$arrFlar)
+			continue;
+		if ($k===$attrName)
+		{
+			foreach ($v as $an => $av)
+				$v[$an]=$an.'="'.$av.'"';
+			$subattr=' '.join($v,' ');
+			continue;
+		}
+		$k=$arr?$arr:$k;
+		if (is_array($v))
+		{
+			$carr=array_key_exists($arrFlar,$v);
+			$child=array2xml($v,$attrName);
+			if (is_array($child) && !$carr)
+				$xml[]='<'.$k.$child['attr'].'>'.$child['xml'].'</'.$k.'>';
+			elseif ($carr)
+				$xml[]=$child;
+			else
+				$xml[]='<'.$k.'>'.$child.'</'.$k.'>';
+		}
+		elseif ($v!=nil)
+			$xml[]='<'.$k.'>'.$v.'</'.$k.'>';
+		else
+			$xml[]='<'.$k.'/>';
+	}
+	$xml=join("\n",$xml);
+	if ($subattr!='')
+		return array('xml'=>$xml,'attr'=>$subattr);
+	return $xml;
+}
 
 ?>
