@@ -120,7 +120,7 @@ function xml2array($xml,$attrName='attr',$arrFlar='array')
 		else if ($elements[3][$ie])
 			$xmlary[$name][$ie] = $elements[3][$ie];
 		else
-			$xmlary[$name][$ie] = nil;
+			$xmlary[$name][$ie] = null;
 
 		if ($attributes = trim($elements[2][$ie]))
 		{
@@ -175,7 +175,7 @@ function array2xml($array,$attrName='attr',$arrFlar='array')
 			else
 				$xml[]='<'.$k.'>'.$child.'</'.$k.'>';
 		}
-		elseif ($v!=nil)
+		elseif ($v!=null)
 			$xml[]='<'.$k.'>'.$v.'</'.$k.'>';
 		else
 			$xml[]='<'.$k.'/>';
