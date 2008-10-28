@@ -130,6 +130,10 @@ class Templater_PlainView
 		return $this->P->HeaderFilter($content);
 	}
 
+	//Функции ескейпинга с учетом utf8
+	public function esc($s) { return htmlspecialchars($s,ENT_QUOTES,'UTF-8');}
+
+
 }
 
 ?>

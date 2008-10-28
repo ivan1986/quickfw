@@ -14,9 +14,9 @@ class True_Validation {
 	}
 
 	function init() {
-		$_rules = array();
-		$_data = array();
-		$_fields = array();
+		$this->_rules = array();
+		$this->_data = array();
+		$this->_fields = array();
 	}
 
 	function set_data($data = '') {
