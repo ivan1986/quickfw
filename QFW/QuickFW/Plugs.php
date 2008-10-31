@@ -30,14 +30,18 @@ class QuickFW_Plugs
 		global $router;
 		if (QFW::$config['redirection']['useRewrite'])
 			$url = $router->backrewrite($url);
-		if (is_array($get) && count($get)>0)
+		if (is_array($get))
 		{
 			foreach($get as $k=>$v)
-				$get[$k]=$k.'='.$v;
-			$get='?'.implode('&',$get);
+				if (strlen($v)>0)
+					$get[$k]=$k.'='.$v;
+				else
+					unset($get[$k]);
+			if (count($get)>0)
+				$get='?'.implode('&',$get);
+			else
+				$get='';
 		}
-		else
-			$get='';
 		return QFW::$config['redirection']['baseUrl'].
 				(QFW::$config['redirection']['useIndex']?'index.php/':'').
 				$url.
