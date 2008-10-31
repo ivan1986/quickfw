@@ -224,6 +224,18 @@ class True_Validation {
 		}
 	}
 
+	function reqpwd($str, $val)
+	{
+		if ( ! is_array($str))
+		{
+			return ($str == '') ? FALSE : TRUE;
+		}
+		else
+		{
+			return ( ! empty($str));
+		}
+	}
+
 	// --------------------------------------------------------------------
 
 	/**
@@ -243,6 +255,15 @@ class True_Validation {
 		return ($str !== $this->_data[$field]) ? FALSE : TRUE;
 	}
 
+	function noeq($str, $val)
+	{
+		return ($str=== $val) ? FALSE : TRUE;
+	}
+
+	function pwd($str, $val)
+	{
+		return ($str!== $val) ? FALSE : TRUE;
+	}
 	// --------------------------------------------------------------------
 
 	/**
@@ -259,7 +280,7 @@ class True_Validation {
 			return FALSE;
 		}
 
-		return (strlen($str) < $val) ? FALSE : TRUE;
+		return (mb_strlen($str,QFW::$config['host']['encoding']) < $val) ? FALSE : TRUE;
 	}
 
 	// --------------------------------------------------------------------
@@ -278,7 +299,7 @@ class True_Validation {
 			return FALSE;
 		}
 
-		return (strlen($str) > $val) ? FALSE : TRUE;
+		return (mb_strlen($str,QFW::$config['host']['encoding']) > $val) ? FALSE : TRUE;
 	}
 
 	// --------------------------------------------------------------------
@@ -297,7 +318,7 @@ class True_Validation {
 			return FALSE;
 		}
 
-		return (strlen($str) != $val) ? FALSE : TRUE;
+		return (mb_strlen($str,QFW::$config['host']['encoding']) != $val) ? FALSE : TRUE;
 	}
 
 	// --------------------------------------------------------------------
@@ -311,6 +332,10 @@ class True_Validation {
 	 */
 	function valid_email($str)
 	{
+		if (strlen($str)>255)
+			return FALSE;
+		if (strpos($str,'@')>64)
+			return FALSE;
 		return ( ! preg_match("/^([a-z0-9\+_\-]+)(\.[a-z0-9\+_\-]+)*@([a-z0-9\-]+\.)+[a-z]{2,6}$/ix", $str)) ? FALSE : TRUE;
 	}
 
@@ -381,7 +406,8 @@ class True_Validation {
 	 */
 	function numeric($str)
 	{
-		return ( ! ereg("^[0-9\.]+$", $str)) ? FALSE : TRUE;
+		//return ( ! ereg("^[0-9\.]+$", $str)) ? FALSE : TRUE;
+		return ( ! preg_match("/^[0-9\.]+$/", $str)) ? FALSE : TRUE;
 	}
 
 	// --------------------------------------------------------------------
@@ -409,7 +435,7 @@ class True_Validation {
 	 */
 	function login($str)
 	{
-		return ( ! ereg("^[a-z][0-9a-z_]+[0-9a-z]$", $str)) ? FALSE : TRUE;
+		return ( ! preg_match("/^[a-z][0-9a-z_]*$/", $str)) ? FALSE : TRUE;
 	}
 
 
