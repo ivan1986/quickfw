@@ -14,18 +14,14 @@ class Log
 
 	public function l($str)
 	{
-		fwrite($this->file, date('r').': '.$str."\n");
+		file_put_contents($this->file, date('r').': '.$str."\n",FILE_APPEND);
 	}
 
 	public function __construct($filename)
 	{
-		$this->file = fopen(TMPPATH.'/'.$filename, 'a+');
+		$this->file = $filename;
 	}
 
-	private function __destruct()
-	{
-		fclose($this->file);
-	}
 }
 
 ?>
