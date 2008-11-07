@@ -49,6 +49,8 @@ class QuickFW_Session
 		//echo session_name().':'.session_id().serialize($_SESSION)."\n<br>";
 			return;
 		}*/
+		if (array_key_exists('cookie_domain',QFW::$config))
+			ini_set('session.cookie_domain',QFW::$config['cookie_domain']);
 		session_set_save_handler(
 				array('QuickFW_Session',"open"),
 				array('QuickFW_Session',"close"),

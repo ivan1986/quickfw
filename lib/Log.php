@@ -14,12 +14,12 @@ class Log
 
 	public function l($str)
 	{
-		file_put_contents($this->file, date('r').': '.$str."\n",FILE_APPEND);
+		file_put_contents($this->file, date("d.m.Y H:i:s").': '.$str."\n", FILE_APPEND|LOCK_EX);
 	}
 
 	public function __construct($filename)
 	{
-		$this->file = $filename;
+		$this->file = TMPPATH.'/'.$filename;
 	}
 
 }
