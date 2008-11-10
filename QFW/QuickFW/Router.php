@@ -90,6 +90,8 @@ class QuickFW_Router
 		//Необходимо для вызовов всех деструкторов
 		$this->classes=array();
 
+		QFW::$view->setScriptPath($this->baseDir.'/'.$MCA['Module'].'/templates');
+
 		if ($CacheInfo && array_key_exists('Cacher',$CacheInfo) && array_key_exists('id',$CacheInfo))
 		{
 			$par=array();
