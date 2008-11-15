@@ -177,6 +177,7 @@ class Templater_Proxy
 	{
 		if (isset($this->mainTemplate) && $this->mainTemplate!="")
 		{
+			$this->P->startDisplayMain();
 			$this->assign('content',$content);
 			$content = $this->fetch($this->mainTemplate);
 		}

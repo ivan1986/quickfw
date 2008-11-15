@@ -124,6 +124,7 @@ class Templater_PlainView
 	{
 		if (isset($this->mainTemplate) && $this->mainTemplate!="")
 		{
+			$this->P->startDisplayMain();
 			$this->assign('content',$content);
 			$content = $this->render($this->mainTemplate);
 		}

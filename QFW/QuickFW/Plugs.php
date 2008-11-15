@@ -51,7 +51,14 @@ class QuickFW_Plugs
 	protected $Head = array();
 	protected $HeadData = array();
 
-	protected $IncFiles = array();
+	protected $IncFiles = array(
+		'js'=>array(),
+		'css_main'=>array(),
+		'css'=>array(),
+	);
+	protected $isMain = false;
+	
+	public function startDisplayMain() { $this->isMain = true; }
 
 	public function addJS($file, $noBase=false)
 	{
@@ -61,7 +68,7 @@ class QuickFW_Plugs
 
 	public function addCSS($file, $noBase=false)
 	{
-		$this->IncFiles['css'][]=($noBase?'':QFW::$config['redirection']['baseUrl']).$file;
+		$this->IncFiles['css'.($this->isMain?'_main':'')][]=($noBase?'':QFW::$config['redirection']['baseUrl']).$file;
 		return "";
 	}
 
@@ -130,22 +137,17 @@ class QuickFW_Plugs
 	public function HeaderFilter($text)
 	{
 		$head='';
-		if (isset($this->IncFiles['css']))
-		{
-			sort($this->IncFiles['css']);
-			$this->IncFiles['css'] = array_unique($this->IncFiles['css']);
-			$head.='<link rel="stylesheet" href="'.
-				join('" type="text/css" />'."\n".'<link rel="stylesheet" href="', $this->IncFiles['css']).
-				'" type="text/css" />'."\n";
-		}
-		if (isset($this->IncFiles['js']))
-		{
-			sort($this->IncFiles['js']);
-			$this->IncFiles['js'] = array_unique($this->IncFiles['js']);
-			$head.='<script src="'.
-				join('" type="text/javascript"></script>'."\n".'<script src="', $this->IncFiles['js']).
-				'" type="text/javascript"></script>'."\n";
-		}
+		$this->IncFiles['css'] = array_merge($this->IncFiles['css_main'], $this->IncFiles['css']);
+		
+		$this->IncFiles['css'] = array_unique($this->IncFiles['css']);
+		$head.='<link rel="stylesheet" href="'.
+			join('" type="text/css" />'."\n".'<link rel="stylesheet" href="', $this->IncFiles['css']).
+			'" type="text/css" />'."\n";
+		
+		$this->IncFiles['js'] = array_unique($this->IncFiles['js']);
+		$head.='<script src="'.
+			join('" type="text/javascript"></script>'."\n".'<script src="', $this->IncFiles['js']).
+			'" type="text/javascript"></script>'."\n";
 
 		foreach ($this->HeadData as $k=>$v)
 		{

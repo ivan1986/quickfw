@@ -171,6 +171,7 @@ class Templater_Smarty
 	{
 		if (isset($this->mainTemplate) && $this->mainTemplate!="")
 		{
+			$this->P->startDisplayMain();
 			$this->getEngine()->assign('content',$content);
 			$content = $this->getEngine()->fetch($this->mainTemplate);
 		}

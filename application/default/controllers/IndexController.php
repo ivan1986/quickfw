@@ -20,6 +20,7 @@ class IndexController
 		);
 		echo QFW::$db->query('update hb_chat_rooms set name=? where id>?','112121',20451);
 		echo '</pre>';*/
+		return QFW::$view->fetch('b.html');
 
 		return 'Корневое действие сайта, показывается на /, на /default, на /index и т.п.<br/>';
 	}
