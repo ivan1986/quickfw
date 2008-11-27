@@ -3,13 +3,14 @@
 class Log
 {
 	private $file;
-	protected static $_thisInst = null;
+	protected static $_thisInst = array();
 
-	public static function log($str)
+	public static function log($str,$file='general')
 	{
-		if (self::$_thisInst === null)
-			self::$_thisInst = new Log('general.log');
-		self::$_thisInst->l($str);
+		if (!array_key_exists($file,self::$_thisInst))
+			self::$_thisInst[$file] = new Log($file.'.log');
+		self::$_thisInst[$file]->l($str);
+		print_r(self::$_thisInst);
 	}
 
 	public function l($str)
