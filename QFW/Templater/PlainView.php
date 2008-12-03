@@ -40,6 +40,7 @@ class Templater_PlainView
 			$this->_vars = array_merge($this->_vars, $spec);
 		else
 			$this->_vars[$spec] = $value;
+		return $this;
 	}
 
 	/**

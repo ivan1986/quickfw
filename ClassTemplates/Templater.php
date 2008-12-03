@@ -64,6 +64,7 @@ class Templater_Templater
 	*/
 	public function assign($spec, $value = null)
 	{
+		return $this;
 	}
 
 	/**

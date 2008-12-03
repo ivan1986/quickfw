@@ -110,12 +110,10 @@ class Templater_Smarty
 	public function assign($spec, $value = null)
 	{
 		if (is_array($spec))
-		{
 			$this->getEngine()->assign($spec);
-			return;
-		}
-
-		$this->getEngine()->assign($spec, $value);
+		else
+			$this->getEngine()->assign($spec, $value);
+		return $this;
 	}
 
 	/**

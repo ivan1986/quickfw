@@ -69,6 +69,7 @@ class Templater_Proxy
 			$this->_vars = array_merge($this->_vars, $spec);
 		else
 			$this->_vars[$spec] = $value;
+		return $this;
 	}
 
 	/**
