@@ -2,6 +2,7 @@
 
 class QuickFW_Session
 {
+	private static $cache;
 
 	public $debig_sess;
 	public $debig_data;
@@ -19,7 +20,7 @@ class QuickFW_Session
 
 	static function read($id)
 	{
-		$data = getCache()->load('sess_'.$id);
+		$data = self::$cache->load('sess_'.$id);
 		if (!$data)
 			return false;
 		$_SESSION=unserialize($data);
@@ -28,43 +29,35 @@ class QuickFW_Session
 
 	static function write($id,$data)
 	{
-		getCache()->save(serialize($_SESSION),'sess_'.$id);
+		if (!empty($_SESSION))
+			self::$cache->save(serialize($_SESSION),'sess_'.$id);
 	}
 
-	static function destroy()
+	static function destroy($id)
 	{
+		self::$cache->remove('sess_'.$id);
 	}
 
 	static function gc()
 	{
+		self::$cache->clean(CACHE_CLR_OLD);
 	}
 
 	public function __construct()
 	{
 		global $config;
-		/*if (!$config['release'])
-		{
-			//session_save_path(TMPPATH);
-			//session_start();
-		//echo session_name().':'.session_id().serialize($_SESSION)."\n<br>";
-			return;
-		}*/
+		self::$cache = getCache();
 		if (array_key_exists('cookie_domain',QFW::$config))
 			ini_set('session.cookie_domain',QFW::$config['cookie_domain']);
 		session_set_save_handler(
-				array('QuickFW_Session',"open"),
-				array('QuickFW_Session',"close"),
-				array('QuickFW_Session',"read"),
-				array('QuickFW_Session',"write"),
-				array('QuickFW_Session',"destroy"),
-				array('QuickFW_Session',"gc")
-			);
+			array('QuickFW_Session',"open"),
+			array('QuickFW_Session',"close"),
+			array('QuickFW_Session',"read"),
+			array('QuickFW_Session',"write"),
+			array('QuickFW_Session',"destroy"),
+			array('QuickFW_Session',"gc")
+		);
 		session_start();
-	}
-
-	public function __destruct()
-	{
-		//echo session_name().':'.session_id().":".serialize($_SESSION)."\n<br>";
 	}
 
 }
