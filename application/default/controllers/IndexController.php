@@ -12,11 +12,17 @@ class IndexController extends QuickFW_Auth
 //		require(APPPATH.'/default/code_template.php');
 //		return $table;
 		//echo '<pre>'.QFW::$view->P->siteUrl('test').'</pre>';
-		$c=getCache('File');
-		//$c->setDirectives(array());
-		/*$c->save('qwerty','1');
-		echo $c->load('1');*/
-		//$c->remove('1');
+		$c=getCache('Bdb',array('file'=>'test'));
+		//$c=getCache('File');
+		$c=getCache('Memcache');
+		$x=microtime(true);
+/*		for($i=0;$i<10000;$i++)
+			$c->save('qwerty','_'.$i);*/
+		for($i=0;$i<10000;$i++)
+			$c->load('_'.$i);
+		//$c->save('test','tttt');
+		//$c->clean();
+		echo microtime(true)-$x;
 		//print_r(thru($c,QFW::$db,'data')->select('select * from users where id=1'));
 		/*echo '<pre>';
 		print_r(QFW::$db->select('select * from hb_chat_rooms WHERE afftar_id IN (?a) OR afftar_id=?',array('123','3'),'0'));

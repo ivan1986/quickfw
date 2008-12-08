@@ -1,98 +1,71 @@
 <?php
 
-/**
- * Memcached server interface
- *
- * @package RELAX
- * @author Petrenko Andrey
- * @version 0.1
- * @copyright RosBusinessConsulting
- */
-
 require_once(QFWPATH.'/QuickFW/Cacher/Interface.php');
 
 class Cacher_Bdb implements Zend_Cache_Backend_Interface
 {
-	protected static $connection = NULL;
+	protected static $file = NULL;
 
-    public function __construct()
-    {
-        //$this->addServer($host, $port);
-    }
+	public function __construct()
+	{
+	}
 
-    public function setDirectives($directives)
-    {
-    	$host = isset($directives['host'])?$directives['host']:'localhost';
-    	$port = isset($directives['port'])?$directives['port']:'11211';
-    	$this->addServer($host,$port);
-    }
-    /**
-     * Connect to memcached server or add server in pool
-     *
-     * @param string $host
-     * @param int $port
-     */
-    public function addServer($host='localhost', $port=11211)
-    {
-        if (self::$connection === NULL)
-            self::$connection = memcache_pconnect($host, $port);
-        else
-            memcache_add_server(self::$connection, $host, $port);
-    }
+	public function setDirectives($directives)
+	{
+		$this->file=dba_open(TMPPATH.'/'.$directives['file'].'.db4','cd','db4');
+		/*$host = isset($directives['host'])?$directives['host']:'localhost';
+		$port = isset($directives['port'])?$directives['port']:'11211';
+		$this->addServer($host,$port);*/
+	}
 
-    /**
-     * Set (add) value on server
-     *
-     * @param string $key
-     * @param mixed $value
-     * @param int $ttl Time after which server will delete value
-     */
-    public function save($data, $id, $tags = array(), $specificLifetime = 3600)
-    {
-        if (self::$connection === NULL) return ;
-        memcache_set(self::$connection, $id, $data, 0, $specificLifetime);
-    }
+	public function save($data, $id, $tags = array(), $specificLifetime = 3600)
+	{
+		dba_replace($id,serialize(array(time()+$specificLifetime,$data)),$this->file);
+	}
 
-    /**
-     * Get value from server
-     *
-     * @param string $key
-     * @return mixed
-     */
-    public function load($id, $doNotTest = false)
-    {
-        if (self::$connection === NULL) return false;
-        return @memcache_get(self::$connection, $id);
-    }
+	public function load($id, $doNotTest = false)
+	{
+		$data=dba_fetch($id,$this->file);
+		if (!$data)
+			return false;
+		$data=unserialize($data);
+		if ($data[0]<time())
+		{
+			dba_delete($id,$this->file);
+			return false;
+		}
+		return $data[1];
+	}
 
-    /**
-     * Check if variable with this key is set on server
-     *
-     * @param string $key
-     * @return bool
-     */
-    public function test($id)
-    {
-        return ($this->load($id)!==false);
-    }
+	public function test($id)
+	{
+		return ($this->load($id)!==false);
+	}
 
-    /**
-     * Deletes variable from server
-     *
-     * @param string $key
-     * @param int $timeout Timeout after which it will be deleted
-     */
-    public function remove($id)
-    {
-        if (self::$connection === NULL) return ;
-        memcache_delete(self::$connection, $id, 0);
-    }
+	public function remove($id)
+	{
+		dba_delete($id,$this->file);
+	}
 
-    public function clean($mode = CACHE_CLR_ALL, $tags = array())
-    {
-        if (self::$connection === NULL) return ;
-        memcache_flush(self::$connection);
-    }
+	public function clean($mode = CACHE_CLR_ALL, $tags = array())
+	{
+		$key=dba_firstkey($this->file);
+		if (!$key)
+			return;
+		do {
+			if ($mode == CACHE_CLR_ALL)
+				dba_delete($key,$this->file);
+			elseif($mode == CACHE_CLR_OLD)
+			{
+				$data=dba_fetch($key,$this->file);
+				$data=unserialize($data);
+				if ($data[0]<time())
+					dba_delete($key,$this->file);
+			}
+		} while($key=dba_nextkey($this->file));
+		dba_optimize($this->file);
+		dba_sync($this->file);
+	}
 
 }
 ?>
