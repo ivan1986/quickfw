@@ -6,6 +6,7 @@ mb_internal_encoding("UTF-8");
 $config['host']=array(
 	'encoding' => 'utf-8',
 	'lang' => 'ru_RU',
+	'logpath' => ROOTPATH.'/log',
 );
 
 /* Настройки дефолтового MCA */
@@ -76,18 +77,18 @@ $config['templater']= array(
 /* деквотатор, включите если нужно на хостинге */
 /*
 function strips(&$el) {
-  if (is_array($el))
-    foreach($el as $k=>$v)
-      strips($el[$k]);
-  else $el = stripslashes($el);
+	if (is_array($el))
+		foreach($el as $k=>$v)
+			strips($el[$k]);
+	else $el = stripslashes($el);
 }
 if (get_magic_quotes_gpc()) {
-  strips($_GET);
-  strips($_POST);
-  strips($_COOKIE);
-  strips($_REQUEST);
-  if (isset($_SERVER['PHP_AUTH_USER'])) strips($_SERVER['PHP_AUTH_USER']);
-  if (isset($_SERVER['PHP_AUTH_PW']))   strips($_SERVER['PHP_AUTH_PW']);
+	strips($_GET);
+	strips($_POST);
+	strips($_COOKIE);
+	strips($_REQUEST);
+	if (isset($_SERVER['PHP_AUTH_USER'])) strips($_SERVER['PHP_AUTH_USER']);
+	if (isset($_SERVER['PHP_AUTH_PW']))   strips($_SERVER['PHP_AUTH_PW']);
 }
 /**/
 

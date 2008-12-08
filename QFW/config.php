@@ -5,6 +5,7 @@ $config=array();
 $config['host']=array(
 	'encoding' => 'utf-8',
 	'lang' => '',
+	'logpath' => ROOTPATH.'/log',
 );
 
 $config['default']=array(
