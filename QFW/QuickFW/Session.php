@@ -4,10 +4,6 @@ class QuickFW_Session
 {
 	private static $cache;
 
-	public $debig_sess;
-	public $debig_data;
-	public $debig_id;
-
 	static function close()
 	{
 		return(true);
@@ -31,11 +27,14 @@ class QuickFW_Session
 	{
 		if (!empty($_SESSION))
 			self::$cache->save(serialize($_SESSION),'sess_'.$id);
+		else
+			self::$cache->remove('sess_'.$id);
 	}
 
 	static function destroy($id)
 	{
 		self::$cache->remove('sess_'.$id);
+		$_SESSION=array();
 	}
 
 	static function gc()
