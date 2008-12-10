@@ -23,14 +23,7 @@
 		isset($config['templater']['def_tpl'])?$config['templater']['def_tpl']:"");
 
 	require (QFWPATH.'/QuickFW/AutoDbSimple.php');
-	$db = new QuickFW_AutoDbSimple( $config['database']['username'],
-	                                $config['database']['password'],
-	                                $config['database']['dbname'],
-	                                $config['database']['prefix'],
-	                                $config['database']['type'],
-	                                $config['database']['host'],
-	                                $config['database']['encoding']
-	                              );
+	$db = new QuickFW_AutoDbSimple($config['database']);
 
 	$globalData = array();
 	$libs = array();

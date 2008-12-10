@@ -7,69 +7,71 @@ define('DBSIMPLE_SKIP', log(0));
 
 class QuickFW_AutoDbSimple
 {
-	protected $DbSimple;
-	
-	protected $_driver, $_user, $_pass, $_host, $_database, $_prefix, $_encoding;
-	
-	function __construct($user = '', $pass = '', $database = '', $prefix = '', $driver = 'mysql', $host = 'localhost', $encoding = 'utf-8')
+	protected $DbSimple, $DSN;
+
+	function __construct($dsn)
 	{
 		$this->DbSimple  = null;
-		$this->_user 	 = $user;
-		$this->_pass 	 = $pass;
-		$this->_database = $database;
-		$this->_prefix	 = $prefix;
-		$this->_driver	 = $driver;
-		$this->_host	 = $host;
-		$this->_encoding = $encoding;
+		$this->DSN       = $dsn;
 	}
-	
-	function __get($varname)
-	{
-		$varname = '_' . $varname;
-		if (isset($this->$varname))
-			return $this->$varname;
-		else 
-			return null;
-	}
-	
-	function __set($varname, $value)
-	{
-		$varname = '_' . $varname;
-		if (isset($this->$varname))
-			$this->$varname = $value;
-	}
-	
+
 	function __call($method, $params)
 	{
 		if ($this->DbSimple === null)
-		{
-			require_once QFWPATH.'/DbSimple/'.ucfirst($this->_driver).'.php';
-			$this->connect();
-		}
+			$this->connect($this->DSN);
 		$result = call_user_func_array(array(&$this->DbSimple, $method), $params);
 		return $result;
 	}
-	
-	protected function connect()
+
+	protected function connect($dsn)
 	{
-		$this->DbSimple = DbSimple_Generic::connect("{$this->_driver}://{$this->_user}:{$this->_pass}@{$this->_host}/{$this->_database}?ident_prefix={$this->_prefix}");
+		$parsed = $this->parseDSN($dsn);
+		if (!$parsed) {
+			$dummy = null;
+			return $dummy;
+		}
+		require_once QFWPATH.'/DbSimple/'.ucfirst($parsed['scheme']).'.php';
+		$class = 'DbSimple_'.ucfirst($parsed['scheme']);
+		$this->DbSimple = new $class($parsed);
+		if (isset($parsed['ident_prefix'])) {
+			$this->DbSimple->setIdentPrefix($parsed['ident_prefix']);
+		}
+		$this->DbSimple->setCachePrefix(md5(serialize($parsed['dsn'])));
 		$this->DbSimple->setErrorHandler(array(&$this, 'errorHandler'));
-		$this->query("SET NAMES ".$this->_encoding);
+		$this->DbSimple->query("SET NAMES ".$parsed['enc']);
 	}
-	
+
 	public function errorHandler($msg, $info)
 	{
-		global $config,$router;
 		// Если использовалась @, ничего не делать.
 		if (!error_reporting()) return;
-		if ($config['release'])
-			$router->show404();
+		if (QFW::$config['release'])
+			QFW::$router->show404();
 		// Выводим подробную информацию об ошибке.
-		echo "SQL Error: $msg<br><pre>"; 
+		echo "SQL Error: $msg<br><pre>";
 		print_r($info);
 		echo "</pre>";
 		exit();
 	}
 
+	/**
+	 * array parseDSN(mixed $dsn)
+	 * Parse a data source name.
+	 * See parse_url() for details.
+	 */
+	function parseDSN($dsn)
+	{
+		if (is_array($dsn)) return $dsn;
+		$parsed = parse_url($dsn);
+		if (!$parsed) return null;
+		$params = null;
+		if (!empty($parsed['query'])) {
+			parse_str($parsed['query'], $params);
+			$parsed += $params;
+		}
+		$parsed['dsn'] = $dsn;
+		return $parsed;
+	}
 }
+
 ?>
