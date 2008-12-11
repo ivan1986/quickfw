@@ -57,7 +57,7 @@ class QuickFW_Plugs
 		'css'=>array(),
 	);
 	protected $isMain = false;
-	
+
 	public function startDisplayMain() { $this->isMain = true; }
 
 	public function addJS($file, $noBase=false)
@@ -138,16 +138,18 @@ class QuickFW_Plugs
 	{
 		$head='';
 		$this->IncFiles['css'] = array_merge($this->IncFiles['css_main'], $this->IncFiles['css']);
-		
+
 		$this->IncFiles['css'] = array_unique($this->IncFiles['css']);
-		$head.='<link rel="stylesheet" href="'.
-			join('" type="text/css" />'."\n".'<link rel="stylesheet" href="', $this->IncFiles['css']).
-			'" type="text/css" />'."\n";
-		
+		if (count($this->IncFiles['css'])>0)
+			$head.='<link rel="stylesheet" href="'.
+				join('" type="text/css" />'."\n".'<link rel="stylesheet" href="', $this->IncFiles['css']).
+				'" type="text/css" />'."\n";
+
 		$this->IncFiles['js'] = array_unique($this->IncFiles['js']);
-		$head.='<script src="'.
-			join('" type="text/javascript"></script>'."\n".'<script src="', $this->IncFiles['js']).
-			'" type="text/javascript"></script>'."\n";
+		if (count($this->IncFiles['js'])>0)
+			$head.='<script src="'.
+				join('" type="text/javascript"></script>'."\n".'<script src="', $this->IncFiles['js']).
+					'" type="text/javascript"></script>'."\n";
 
 		foreach ($this->HeadData as $k=>$v)
 		{
