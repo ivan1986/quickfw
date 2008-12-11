@@ -26,6 +26,7 @@ $config['database']=array(
 	'prefix'   => '',
 	'encoding' => 'utf8',
 );
+$config['database']='mypdo://root@localhost/smspr?enc=utf8';
 
 /* Настройки перенаправления */
 $config['redirection']=array(
@@ -50,7 +51,7 @@ $config['cacher']=array(
 /**/
 
 /* статус проекта на данном хосте - отладка и всякие быстрые компиляции */
-$config['release']= true;
+$config['release']= false;
 
 /* Шаблонизатор - имя класса + дефолтовый шаблон */
 $config['templater']= array(

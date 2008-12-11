@@ -33,7 +33,7 @@ class DbSimple_Mypdo extends DbSimple_Generic_Database
 		}
 
 		try {
-			$this->PDO = new PDO('mysql:host='.$dsn['host'].';port='.$dsn['port'].';dbname='.$base, $dsn['user'], isset($dsn['pass'])?$dsn['pass']:'');
+			$this->PDO = new PDO('mysql:host='.$dsn['host'].(empty($dsn['port'])?'':';port='.$dsn['port']).';dbname='.$base, $dsn['user'], isset($dsn['pass'])?$dsn['pass']:'');
 		} catch (PDOException $e) {
 			$this->_setLastError($e->getCode() , $e->getMessage(), 'new PDO');
 		}
