@@ -46,6 +46,7 @@ $config['cacher']=array(
 $config['cacher']=array(
 	'module' => 'File',
 	'options' => array(
+		'file'=>'ttt',
 	),
 );
 /**/

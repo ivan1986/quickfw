@@ -1,13 +1,13 @@
 <?php
 /**
- * Cache_Lite с переписанным интерфейсом
- */
+* Cache_Lite с переписанным интерфейсом
+*/
 
 require_once(QFWPATH.'/QuickFW/Cacher/Interface.php');
 
-class Cacher_File implements Zend_Cache_Backend_Interface 
+class Cacher_File2 implements Zend_Cache_Backend_Interface
 {
-	
+
 	protected $_cacheDir;
 	protected $_caching = true;
 	protected $_lifeTime = 3600;//null;
@@ -22,6 +22,20 @@ class Cacher_File implements Zend_Cache_Backend_Interface
 	protected $_automaticCleaningFactor = 0;
 	protected $_hashedDirectoryLevel = 0;
 	protected $_hashedDirectoryUmask = 0777;
+
+	protected $options = array(
+		'cacheDir' => '',
+		'caching' => true,
+		'lifeTime' => 3600,
+		'fileLocking' => true,
+		'writeControl' => false,
+		'readControl' => false,
+		'fileNameProtection' => true,
+		'automaticSerialization' => true,
+		'automaticCleaningFactor' => 0,
+		'hashedDirectoryLevel' => 0,
+		'hashedDirectoryUmask' => 0777,
+	);
 
 /**
 * Constructor
@@ -46,60 +60,55 @@ class Cacher_File implements Zend_Cache_Backend_Interface
 * @access public
 */
 
-	function Cacher_File($options = array(NULL)){
+	function __construct($options = array(NULL)){
+		$this->options['cacheDir']=TMPPATH.'/cache/';
 		$this->_cacheDir=TMPPATH.'/cache/';
-		foreach($options as $key => $value) {
+		$this->options=array_merge($this->options, $options);
+	}
+
+	public function setDirectives($directives)
+	{
+		$this->options=array_merge($this->options, $directives);
+		foreach($this->options as $key => $value) {//пока оставляем так
 			$this->setOption($key, $value);
 		}
 	}
 
-    public function setDirectives($directives)
-    {
-		foreach($directives as $key => $value) {
-			$this->setOption($key, $value);
-		}
-    }
-	
 	function setOption($name, $value) {
-    $availableOptions = ';hashedDirectoryUmask;hashedDirectoryLevel;automaticCleaningFactor;automaticSerialization;fileNameProtection;cacheDir;caching;lifeTime;fileLocking;writeControl;readControl;';
+	$availableOptions = ';hashedDirectoryUmask;hashedDirectoryLevel;automaticCleaningFactor;automaticSerialization;fileNameProtection;cacheDir;caching;lifeTime;fileLocking;writeControl;readControl;';
 		if (strpos($availableOptions, ';'.$name.';') !== false) {
 			$property = '_'.$name;
 			$this->$property = $value;
 		}
 	}
 
-	public function load($id, $doNotTest = false){
-		if (!$this->_caching) return false;
-		$data = false;
-		$this->_setRefreshTime();
-		$this->_setFileName($id);
-		if (($doNotTest) || (is_null($this->_refreshTime))) {
-			if (file_exists($this->_file)) {
-				$data = $this->_read();
-			}
-		} else {
-			if ((file_exists($this->_file)) && (filemtime($this->_file) > $this->_refreshTime)) {
-				$data = $this->_read();
-			}
-		}
-		if (($this->_automaticSerialization) and (is_string($data))) {
+	public function load($id, $doNotTest = false)
+	{
+		if (!$this->options['caching'])
+			return false;
+		$time = $this->refreshTime();
+		$file = $this->fileName($id);
+		if (!file_exists($file))
+			return false;
+		if ($doNotTest || is_null($time) || filemtime($file) > $time)
+				$data = $this->_read($file);
+		if ($this->options['automaticSerialization'] && is_string($data))
 			$data = unserialize($data);
-		}
 		return $data;
 	}
 
 	public function save($data, $id, $tags = array(), $specificLifetime = false){
-		if (!$this->_caching) return false;
-		if ($this->_automaticSerialization) {
+		if (!$this->options['caching'])
+			return false;
+		if ($this->options['automaticSerialization'])
 			$data = serialize($data);
-		}
+		$file = $this->fileName($id);
 		$this->_setFileName($id);
-		if ($this->_automaticCleaningFactor>0) {
-			$rand = rand(1, $this->_automaticCleaningFactor);
-			if ($rand==1) {
+
+		if ($this->options['automaticCleaningFactor']>0)
+			if (rand(1, $this->options['automaticCleaningFactor'])==1)
 				$this->_cleanDir($this->_cacheDir, 'old');
-			}
-		}
+
 		if ($this->_writeControl) {
 			if (!$this->_writeAndControl($data)) {
 				$this->_unlink($this->_file);
@@ -111,32 +120,28 @@ class Cacher_File implements Zend_Cache_Backend_Interface
 		return $this->_write($data);
 	}
 
-    public function remove($id){
-		$this->_setFileName($id);
-		return $this->_unlink($this->_file);
+	public function remove($id)
+	{
+		return $this->_unlink($this->fileName($id));
 	}
 
-    public function clean($mode = CACHE_CLR_ALL, $tags = array()){
-		return $this->_cleanDir($this->_cacheDir);
+	public function clean($mode = CACHE_CLR_ALL, $tags = array())
+	{
+		return $this->_cleanDir($this->options['cacheDir']);
 	}
 
-	public function setLifeTime($newLifeTime){
-		$this->_lifeTime = $newLifeTime;
-		$this->_setRefreshTime();
+	public function test($id)
+	{
+		$file = $this->_setFileName($id);
+		return is_file($file) && filemtime($file);
 	}
-
-    public function test($id){
-		$this->_setFileName($id);
-		return @filemtime($this->_file);
-	}
-
-	function extendLife() {
-	  @touch($this->_file);
-	}
-
 
 	protected function _setRefreshTime() {
 		$this->_refreshTime = ($this->_lifeTime === null) ? null : time() - $this->_lifeTime;
+	}
+	protected function refreshTime()
+	{
+		return ($this->_lifeTime === null) ? null : time() - $this->options['lifeTime'];
 	}
 
 	protected function _unlink($file){
@@ -151,24 +156,24 @@ class Cacher_File implements Zend_Cache_Backend_Interface
 		$result = true;
 		while ($file = readdir($dh)) {
 			if (($file != '.') && ($file != '..') && (substr($file, 0, 6)=='cache_')) {
- 				$file2 = $dir . $file;
- 				if (is_file($file2)) {
- 					switch (substr($mode, 0, 9)) {
- 						case 'old':
- 							if (!is_null($this->_lifeTime) && (mktime() - filemtime($file2) > $this->_lifeTime)) {
+				$file2 = $dir . $file;
+				if (is_file($file2)) {
+					switch (substr($mode, 0, 9)) {
+						case 'old':
+							if (!is_null($this->_lifeTime) && (mktime() - filemtime($file2) > $this->_lifeTime)) {
 								$result = ($result && $this->_unlink($file2));
- 							}
- 							break;
- 						case 'ingroup':
- 						default:
- 							if (strpos($file2, $motif) !== false) {
- 								$result = ($result && $this->_unlink($file2));
- 							}
- 						break;
- 					}
- 				} elseif (is_dir($file2) && ($this->_hashedDirectoryLevel>0)) {
- 					$result = ($result && ($this->_cleanDir($file2 . '/', $group, $mode)));
- 				}
+							}
+							break;
+						case 'ingroup':
+						default:
+							if (strpos($file2, $motif) !== false) {
+								$result = ($result && $this->_unlink($file2));
+							}
+						break;
+					}
+				} elseif (is_dir($file2) && ($this->_hashedDirectoryLevel>0)) {
+					$result = ($result && ($this->_cleanDir($file2 . '/', $group, $mode)));
+				}
 			}
 		}
 		return $result;
@@ -185,16 +190,29 @@ class Cacher_File implements Zend_Cache_Backend_Interface
 			$hash = md5($suffix);
 			for ($i=0 ; $i<$this->_hashedDirectoryLevel ; $i++) {
 				$root = $root . 'cache_' . substr($hash, 0, $i + 1) . '/';
-			}   
+			}
 		}
 		$this->_fileName = $suffix;
 		$this->_file = $root.$suffix;
 	}
 
-	protected function _read(){
+	protected function fileName($id)
+	{
+		$suffix = 'cache_'.($this->options['fileNameProtection']?md5($id):$id);
+		$root = $this->options['cacheDir'];
+		if ($this->options['hashedDirectoryLevel']>0)
+		{
+			$hash = md5($suffix);
+			for ($i=0 ; $i<$this->options['hashedDirectoryLevel'] ; $i++)
+				$root = $root . 'cache_' . substr($hash, 0, $i + 1) . '/';
+		}
+		return $root.$suffix;
+	}
+
+	protected function _read($file=''){
 		$mqr = get_magic_quotes_runtime();
 		set_magic_quotes_runtime(0);
-		$data = file_get_contents($this->_file);
+		$data = file_get_contents($file==''?$this->_file:$file);
 		set_magic_quotes_runtime($mqr);
 		if ($data === false){
 			return false;
@@ -204,7 +222,7 @@ class Cacher_File implements Zend_Cache_Backend_Interface
 			$data = substr($data, 32);
 			$hashData = $this->_hash($data);
 			if ($hashData != $hashControl) {
-				$this->_unlink($this->_file);
+				$this->_unlink($file==''?$this->_file:$file);
 				return false;
 			}
 		}
@@ -212,14 +230,14 @@ class Cacher_File implements Zend_Cache_Backend_Interface
 	}
 
 	protected function _write($data){
-	    if ($this->_hashedDirectoryLevel > 0) {
-	      $hash = md5($this->_fileName);
-	      $root = $this->_cacheDir;
-	      for ($i=0 ; $i<$this->_hashedDirectoryLevel ; $i++) {
-	        $root = $root . 'cache_' . substr($hash, 0, $i + 1) . '/';
-	        is_dir($root) || mkdir($root, $this->_hashedDirectoryUmask);
-	      }
-	    }
+		if ($this->_hashedDirectoryLevel > 0) {
+		$hash = md5($this->_fileName);
+		$root = $this->_cacheDir;
+		for ($i=0 ; $i<$this->_hashedDirectoryLevel ; $i++) {
+			$root = $root . 'cache_' . substr($hash, 0, $i + 1) . '/';
+			is_dir($root) || mkdir($root, $this->_hashedDirectoryUmask);
+		}
+		}
 		$control = $this->_readControl ? $this->_hash($data) : '';
 		return file_put_contents($this->_file, $control.$data, ($this->_fileLocking ? LOCK_EX : NULL)) !== false;
 	}
@@ -233,7 +251,7 @@ class Cacher_File implements Zend_Cache_Backend_Interface
 	protected function _hash(&$data){
 		return sprintf('% 32d', crc32($data));
 	}
-} 
+}
 
 
 ?>

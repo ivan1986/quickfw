@@ -6,8 +6,9 @@ class IndexController extends QuickFW_Auth
 {
 	public function indexAction()
 	{
-		print_r(QFW::$db->select('select * from genre WHERE 1=1
-		{AND 1=? AND 2=?}',DBSIMPLE_SKIP,1));
+		getCache()->setDirectives(array('fileNameProtection'=>false));
+		getCache()->save('data','1');
+		echo getCache()->load('1');
 		die();
 		//return QFW::$view->fetch('b.html');
 
