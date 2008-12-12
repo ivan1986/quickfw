@@ -94,6 +94,6 @@ class Cacher_Memcache implements Zend_Cache_Backend_Interface
 		if ($mode == CACHE_CLR_ALL)
 			memcache_flush(self::$connection);
 	}
-
 }
+
 ?>

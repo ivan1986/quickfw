@@ -4,7 +4,7 @@ require_once(QFWPATH.'/QuickFW/Cacher/Interface.php');
 
 class Cacher_Bdb implements Zend_Cache_Backend_Interface
 {
-	protected static $file = NULL;
+	protected $file = NULL;
 
 	public function __construct()
 	{
@@ -12,12 +12,12 @@ class Cacher_Bdb implements Zend_Cache_Backend_Interface
 
 	public function setDirectives($directives)
 	{
-		$this->file=dba_open(TMPPATH.'/'.$directives['file'].'.db4','cd','db4');
+		$this->file=dba_open(TMPPATH.'/'.(isset($directives['file'])?$directives['file']:'cache').'.db4','cd','db4');
 	}
 
 	public function save($data, $id, $tags = array(), $specificLifetime = 3600)
 	{
-		dba_replace($id,serialize(array(time()+$specificLifetime,$data)),$this->file);
+		return dba_replace($id,serialize(array(time()+$specificLifetime,$data)),$this->file);
 	}
 
 	public function load($id, $doNotTest = false)
@@ -41,7 +41,7 @@ class Cacher_Bdb implements Zend_Cache_Backend_Interface
 
 	public function remove($id)
 	{
-		dba_delete($id,$this->file);
+		return dba_delete($id,$this->file);
 	}
 
 	public function clean($mode = CACHE_CLR_ALL, $tags = array())
