@@ -6,7 +6,6 @@ class IndexController extends QuickFW_Auth
 {
 	public function indexAction()
 	{
-		getCache()->setDirectives(array('fileNameProtection'=>false));
 		getCache()->save('data','1');
 		echo getCache()->load('1');
 		die();
