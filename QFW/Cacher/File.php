@@ -1,6 +1,6 @@
 <?php
 /**
-* Cache_Lite с переписанным интерфейсом
+* Аццки порезанный и переписанный Cache_Lite
 */
 
 require_once(QFWPATH.'/QuickFW/Cacher/Interface.php');
@@ -8,24 +8,10 @@ require_once(QFWPATH.'/QuickFW/Cacher/Interface.php');
 class Cacher_File implements Zend_Cache_Backend_Interface
 {
 
-	protected $_cacheDir;
-	protected $_caching = true;
-	protected $_lifeTime = 3600;//null;
-	protected $_fileLocking = true;
-	protected $_refreshTime;
-	protected $_file;
-	protected $_fileName;
-	protected $_writeControl = false;
-	protected $_readControl = false;
-	protected $_fileNameProtection = true;
-	protected $_automaticSerialization = true;
-	protected $_automaticCleaningFactor = 0;
-	protected $_hashedDirectoryLevel = 0;
-	protected $_hashedDirectoryUmask = 0777;
-
 	protected $options = array(
 		'cacheDir' => '',
 		'caching' => true,
+		'prefix' => 'cache_',
 		'lifeTime' => 3600,
 		'fileLocking' => true,
 		'writeControl' => false,
@@ -38,27 +24,27 @@ class Cacher_File implements Zend_Cache_Backend_Interface
 	);
 
 /**
-* Constructor
-*
-* $options is an assoc. Available options are :
-* $options = array(
-*     'cacheDir' => directory where to put the cache files (string),
-*     'caching' => enable / disable caching (boolean),
-*     'lifeTime' => cache lifetime in seconds (int),
-*     'fileLocking' => enable / disable fileLocking (boolean),
-*     'writeControl' => enable / disable write control (boolean),
-*     'readControl' => enable / disable read control (boolean),
-*     'fileNameProtection' => enable / disable automatic file name protection (boolean),
-*     'automaticSerialization' => enable / disable automatic serialization (boolean),
-*     'automaticCleaningFactor' => distable / tune automatic cleaning process (int),
-*     'hashedDirectoryLevel' => level of the hashed directory system (int),
-*     'hashedDirectoryUmask' => umask for hashed directory structure (int),
-*     'errorHandlingAPIBreak' => API break for better error handling ? (boolean)
-* );
-*
-* @param array $options options
-* @access public
-*/
+ * Constructor
+ *
+ * $options is an assoc. Available options are :
+ * $options = array(
+ *     'cacheDir' => directory where to put the cache files (string),
+ *     'caching' => enable / disable caching (boolean),
+ *     'lifeTime' => cache lifetime in seconds (int),
+ *     'fileLocking' => enable / disable fileLocking (boolean),
+ *     'writeControl' => enable / disable write control (boolean),
+ *     'readControl' => enable / disable read control (boolean),
+ *     'fileNameProtection' => enable / disable automatic file name protection (boolean),
+ *     'automaticSerialization' => enable / disable automatic serialization (boolean),
+ *     'automaticCleaningFactor' => distable / tune automatic cleaning process (int),
+ *     'hashedDirectoryLevel' => level of the hashed directory system (int),
+ *     'hashedDirectoryUmask' => umask for hashed directory structure (int),
+ *     'errorHandlingAPIBreak' => API break for better error handling ? (boolean)
+ * );
+ *
+ * @param array $options options
+ * @access public
+ */
 
 	function __construct($options = array(NULL))
 	{
@@ -96,7 +82,7 @@ class Cacher_File implements Zend_Cache_Backend_Interface
 
 		if ($this->options['automaticCleaningFactor']>0)
 			if (rand(1, $this->options['automaticCleaningFactor'])==1)
-				$this->_cleanDir($this->options['cacheDir'], 'old');
+				$this->_cleanDir($this->options['cacheDir'], CACHE_CLR_OLD);
 
 		$res = $this->_write($data,$file);
 		if (!$res)
@@ -138,14 +124,13 @@ class Cacher_File implements Zend_Cache_Backend_Interface
 		if (!($dh = opendir($dir)))
 			return false;
 
-		$motif = 'cache_';
 		$result = true;
 		while ($file = readdir($dh))
 		{
-			if (($file == '.') || ($file == '..') || (substr($file, 0, 6)=='cache_'))
+			if (($file == '.') || ($file == '..') || (substr($file, 0, 6)==$this->options['prefix']))
 				continue;
 			$file2 = $dir . $file;
-			if (strpos($file2, $motif) === false)
+			if (strpos($file2, $this->options['prefix']) === false)
 				continue;
 
 			if (is_dir($file2) && $this->options['hashedDirectoryLevel']>0)
@@ -165,13 +150,13 @@ class Cacher_File implements Zend_Cache_Backend_Interface
 
 	protected function fileName($id)
 	{
-		$suffix = 'cache_'.($this->options['fileNameProtection']?md5($id):$id);
+		$suffix = $this->options['prefix'].($this->options['fileNameProtection']?md5($id):$id);
 		$root = $this->options['cacheDir'];
 		if ($this->options['hashedDirectoryLevel']>0)
 		{
 			$hash = md5($suffix);
 			for ($i=0 ; $i<$this->options['hashedDirectoryLevel'] ; $i++)
-				$root .= 'cache_' . substr($hash, 0, $i + 1) . '/';
+				$root .= $this->options['prefix'] . substr($hash, 0, $i + 1) . '/';
 		}
 		return $root.$suffix;
 	}
@@ -202,7 +187,7 @@ class Cacher_File implements Zend_Cache_Backend_Interface
 			$hash = md5(basename($file));
 			$root = $this->options['cacheDir'];
 			for ($i=0 ; $i<$this->options['hashedDirectoryLevel'] ; $i++)
-				$root .= 'cache_' . substr($hash, 0, $i + 1) . '/';
+				$root .= $this->options['prefix'] . substr($hash, 0, $i + 1) . '/';
 			is_dir($root) || mkdir($root, $this->options['hashedDirectoryUmask'] , true);
 		}
 		$control = $this->options['readControl'] ? $this->hash($data) : '';
