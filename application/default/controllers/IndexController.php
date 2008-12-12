@@ -6,8 +6,8 @@ class IndexController extends QuickFW_Auth
 {
 	public function indexAction()
 	{
-		getCache()->save('data','1');
-		echo getCache()->load('1');
+		if (getCache()->save('data','1'))
+			echo getCache()->load('1');
 		die();
 		//return QFW::$view->fetch('b.html');
 

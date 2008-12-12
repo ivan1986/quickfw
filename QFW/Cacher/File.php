@@ -60,7 +60,8 @@ class Cacher_File implements Zend_Cache_Backend_Interface
 * @access public
 */
 
-	function __construct($options = array(NULL)){
+	function __construct($options = array(NULL))
+	{
 		$this->options['cacheDir']=TMPPATH.'/cache/';
 		$this->options=array_merge($this->options, $options);
 	}
@@ -98,9 +99,9 @@ class Cacher_File implements Zend_Cache_Backend_Interface
 				$this->_cleanDir($this->options['cacheDir'], 'old');
 
 		$res = $this->_write($data,$file);
-		if (!$res || !$this->options['writeControl'])
-			return true;
-		if ($data == $this->_read($file))
+		if (!$res)
+			return false;
+		if (!$this->options['writeControl'] || $data == $this->_read($file))
 			return true;
 		$this->unlink($file);
 		return false;
@@ -113,7 +114,7 @@ class Cacher_File implements Zend_Cache_Backend_Interface
 
 	public function clean($mode = CACHE_CLR_ALL, $tags = array())
 	{
-		return $this->_cleanDir($this->options['cacheDir']);
+		return $this->_cleanDir($this->options['cacheDir'],$mode);
 	}
 
 	public function test($id)
@@ -132,34 +133,32 @@ class Cacher_File implements Zend_Cache_Backend_Interface
 		return is_file($file) && unlink($file);
 	}
 
-	protected function _cleanDir($dir,$mode='ingroup')
+	protected function _cleanDir($dir,$mode=CACHE_CLR_ALL)
 	{
 		if (!($dh = opendir($dir)))
 			return false;
 
 		$motif = 'cache_';
 		$result = true;
-		while ($file = readdir($dh)) {
-			if (($file != '.') && ($file != '..') && (substr($file, 0, 6)=='cache_')) {
-				$file2 = $dir . $file;
-				if (is_file($file2)) {
-					switch (substr($mode, 0, 9)) {
-						case 'old':
-							if (!is_null($this->options['lifeTime']) && (mktime() - filemtime($file2) > $this->options['lifeTime'])) {
-								$result = ($result && $this->unlink($file2));
-							}
-							break;
-						case 'ingroup':
-						default:
-							if (strpos($file2, $motif) !== false) {
-								$result = ($result && $this->unlink($file2));
-							}
-						break;
-					}
-				} elseif (is_dir($file2) && ($this->options['hashedDirectoryLevel']>0)) {
-					$result = ($result && ($this->_cleanDir($file2 . '/', $group, $mode)));
-				}
-			}
+		while ($file = readdir($dh))
+		{
+			if (($file == '.') || ($file == '..') || (substr($file, 0, 6)=='cache_'))
+				continue;
+			$file2 = $dir . $file;
+			if (strpos($file2, $motif) === false)
+				continue;
+
+			if (is_dir($file2) && $this->options['hashedDirectoryLevel']>0)
+				$result = $result && $this->_cleanDir($file2 . '/', $mode);
+
+			if (!is_file($file2))
+				continue;
+			if ($mode == CACHE_CLR_OLD &&
+				is_null($this->options['lifeTime']) ||
+				filemtime($file2) > time() - $this->options['lifeTime']
+				)
+				continue;
+			$result = $result && $this->unlink($file2);
 		}
 		return $result;
 	}
