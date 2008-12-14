@@ -6,6 +6,8 @@ class IndexController extends QuickFW_Auth
 {
 	public function indexAction()
 	{
+		$db = new QuickFW_AutoDbSimple('mysql://root@localhost/amarok');
+		$db->query('set names utf8');
 		if (getCache('Bdb')->save('data','1'))
 			echo getCache('Bdb')->load('1');
 		die();

@@ -13,7 +13,6 @@
  *
  * @author Dmitry Koterov, http://forum.dklab.ru/users/DmitryKoterov/
  * @author Konstantin Zhinko, http://forum.dklab.ru/users/KonstantinGinkoTit/
- * @author Ivan Borzenkov, http://forum.dklab.ru/users/Ivan1986/
  *
  * @version 2.x $Id: Ibase.php 221 2007-07-27 23:24:35Z dk $
  */
