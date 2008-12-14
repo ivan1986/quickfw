@@ -4,19 +4,14 @@ class QuickFW_Plugs
 {
 	protected static $_thisInst = null;
 
-	protected $displayErrorsParams;
-
 	protected function __construct()
 	{
-		$this->setDisplayErrorsParams();
 	}
 
 	public static function getInstance()
 	{
 		if (self::$_thisInst === null)
-		{
 			self:: $_thisInst = new QuickFW_Plugs();
-		}
 		return self::$_thisInst;
 	}
 
@@ -43,9 +38,9 @@ class QuickFW_Plugs
 				$get='';
 		}
 		return QFW::$config['redirection']['baseUrl'].
-				(QFW::$config['redirection']['useIndex']?'index.php/':'').
-				$url.
-				($url!==''?QFW::$config['redirection']['defExt']:'').$get;
+			(QFW::$config['redirection']['useIndex']?'index.php/':'').
+			$url.
+			($url!==''?QFW::$config['redirection']['defExt']:'').$get;
 	}
 
 	protected $Head = array();
@@ -124,16 +119,6 @@ class QuickFW_Plugs
 			$this->HeadData[$k]=$content;
 	}
 
-	public function pluralForm($n, $form1, $form2, $form5)
-	{
-		$n = abs($n) % 100;
-		$n1 = $n % 10;
-		if ($n > 10 && $n < 20) return $form5;
-		if ($n1 > 1 && $n1 < 5) return $form2;
-		if ($n1 == 1) return $form1;
-		return $form5;
-	}
-
 	public function HeaderFilter($text)
 	{
 		$head='';
@@ -154,33 +139,19 @@ class QuickFW_Plugs
 		foreach ($this->HeadData as $k=>$v)
 		{
 			if ($k=='<!--HEAD_JavaScript2HEAD-->')
-			{
 				$head.="<script type=\"text/javascript\"><!--\n".$v."\n--></script>\n";
-				unset($this->HeadData[$k]);
-				continue;
-			}
-			if ($k=='<!--HEAD_JavaScript2END-->')
-			{
+			elseif ($k=='<!--HEAD_JavaScript2END-->')
 				$text = str_replace('</body>',"<script type=\"text/javascript\"><!--\n".$v."\n--></script>\n</body>",$text);
-				unset($this->HeadData[$k]);
-				continue;
-			}
-			if ($k=='<!--HEAD_CSS2HEAD-->')
-			{
+			elseif ($k=='<!--HEAD_CSS2HEAD-->')
 				$head.="<style type=\"text/css\">\n".$v."\n</style>\n";
-				unset($this->HeadData[$k]);
-				continue;
-			}
-			if (!array_key_exists($k,$this->Head))
-			{	//если нету ключа, то добавляем вверх
+			elseif (!array_key_exists($k,$this->Head)) //если нету ключа, то добавляем вверх
 				$head.=$v;
-				unset($this->HeadData[$k]);
+			elseif ($v!='') //если есть, то обрамляем pre и post и вставляем
+			{
+				$this->HeadData[$k]=$this->Head[$k]['pre'].$v.$this->Head[$k]['post'];
+				continue; //оставляем элемент в массиве
 			}
-			else
-			{	//если есть, то обрамляем pre и post и вставляем
-				if ($v!='')
-					$this->HeadData[$k]=$this->Head[$k]['pre'].$v.$this->Head[$k]['post'];
-			}
+			unset($this->HeadData[$k]);
 		}
 		$head.="</head>\n";
 
@@ -190,21 +161,48 @@ class QuickFW_Plugs
 		return $text;
 	}
 
-	public function displayErrors($errors)
+	/**
+	 * Вывод окончаний русских слов с учетом числительных (например сообщение сообщения сообщений)
+	 */
+	public function pluralForm($n, $form1, $form2, $form5)
+	{
+		$n = abs($n) % 100;
+		$n1 = $n % 10;
+		if ($n > 10 && $n < 20) return $form5;
+		if ($n1 > 1 && $n1 < 5) return $form2;
+		if ($n1 == 1) return $form1;
+		return $form5;
+	}
+
+	/**
+	 * Отображение сообщений об ошибках
+	 */
+	public function displayErrors($errors=array())
 	{
 		$res = '';
-		if (isset($errors)) {
-			foreach($errors as $error){
-				$res .= $this->displayErrorsParams['pre'].$error.$this->displayErrorsParams['post'];
-			 }
-		}
+		foreach($errors as $error)
+			$res .= $this->displayErrorsParams['pre'].$error.$this->displayErrorsParams['post'];
 		return $res;
 	}
 
+	protected $displayErrorsParams = array('pre'=>'', 'post'=>'');
+
+	/**
+	 * Установка обрамления сообщений об ошибках
+	 */
 	public function setDisplayErrorsParams($pre='', $post='')
 	{
 		$this->displayErrorsParams = array('pre'=>$pre, 'post'=>$post);
 	}
+
+	/**
+	 * Функции ескейпинга с учетом utf8
+	 */
+	public function esc($s)
+	{
+		return htmlspecialchars($s,ENT_QUOTES,'UTF-8');
+	}
+
 }
 
 ?>
