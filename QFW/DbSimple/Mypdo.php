@@ -58,6 +58,21 @@ class DbSimple_Mypdo extends DbSimple_Generic_Database
 		}
 	}
 
+	function _performTransaction($parameters=null)
+	{
+		return $this->PDO->beginTransaction();
+	}
+
+	function _performCommit()
+	{
+		return $this->PDO->commit();
+	}
+
+	function _performRollback()
+	{
+		return $this->PDO->rollBack();
+	}
+
 	function _performQuery($queryMain)
 	{
 		$this->_lastQuery = $queryMain;
