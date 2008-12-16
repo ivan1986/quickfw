@@ -2,9 +2,7 @@
 
 class QuickFW_Router
 {
-	const URI_DELIMITER = '/';
 	protected $classes=array();
-	protected $load_info=array();
 
 	protected $baseDir;
 	protected $rewriter;
@@ -38,7 +36,7 @@ class QuickFW_Router
 		$requestUri = $this->filterUri($requestUri);
 		$requestUri = $this->rewrite($requestUri);
 
-		$data = split(self::URI_DELIMITER, $requestUri);
+		$data = split('/', $requestUri);
 		$data = array_map('urldecode', $data);
 
 		$MCA = $this->loadMCA($data,$type);
@@ -138,7 +136,7 @@ class QuickFW_Router
 		else
 		{
 			// module/controller/action/p1/p2/p3/...
-			$data = split(self::URI_DELIMITER, $Uri);
+			$data = split('/', $Uri);
 			$MCA = $this->loadMCA($data,'Block');
 			$MCA['Params']=$this->parseParams($data);
 		}
@@ -190,8 +188,7 @@ class QuickFW_Router
 
 	function backrewrite($uri)
 	{
-		global $config;
-		if (!$config['redirection']['useRewrite'])
+		if (!QFW::$config['redirection']['useRewrite'])
 			return $uri;
 		if (!$this->rewriter)
 		{
@@ -203,8 +200,7 @@ class QuickFW_Router
 
 	protected function rewrite($uri)
 	{
-		global $config;
-		if (!$config['redirection']['useRewrite'])
+		if (!QFW::$config['redirection']['useRewrite'])
 			return $uri;
 		if (!$this->rewriter)
 		{
@@ -214,20 +210,16 @@ class QuickFW_Router
 		return $this->rewriter->forward($uri);
 	}
 
+	/**
+	 * Парсит параметры, переданные как //p1/v1/p2/v2/p3
+	 */
 	protected function parseParams(&$data)
 	{
-		if (empty($data))
-			return array();
-		if ($data[0]!='')
+		if (empty($data) || !empty($data[0]))
 			return $data;
-		array_shift($data);
-		//If array if not empty then its parameters
+		array_shift($data);	//Удаляем первый пустой параметр
 		while(!empty($data))
-		{
-			$params[$data[0]] = isset($data[1])?$data[1]:'';
-			array_shift($data);
-			if (isset($data[0])) array_shift($data);
-		}
+			$params[array_shift($data)] = array_shift($data);
 		return array('params' => $params);
 	}
 
@@ -243,18 +235,15 @@ class QuickFW_Router
 			{
 				$params[]=substr($par,$startpar,$i-$startpar);
 				$startpar=$i+1;
-				continue;
 			}
-			if (!$instr && ($par[$i]=="'" || $par[$i]=='"'))
+			elseif (!$instr && ($par[$i]=="'" || $par[$i]=='"'))
 			{
 				$instr=true;
 				$strbeg=$par[$i];
-				continue;
 			}
-			if ($instr && ($par[$i]==$strbeg))
+			elseif ($instr && ($par[$i]==$strbeg))
 			{
 				$instr=$par[$i-1]=='\\';
-				continue;
 			}
 		}
 		$params[]=substr($par,$startpar);
@@ -298,9 +287,7 @@ class QuickFW_Router
 		$fullname = $path . '/controllers/' . strtr($class,'_','/') . '.php';
 
 		if (is_file($fullname))
-		{
 			array_shift($data);
-		}
 		else
 		{
 			$cname=$this->defC;
@@ -318,9 +305,7 @@ class QuickFW_Router
 
 		require_once($fullname);
 		if (!array_key_exists($class_key,$this->classes))
-		{
 			$this->classes[$class_key]=new $class;
-		}
 		$MCA['Class'] = $this->classes[$class_key];
 
 		if (!class_exists($class))
@@ -339,9 +324,7 @@ class QuickFW_Router
 
 		$MCA['cache']= in_array('CacheInfo',$actions);
 		if (in_array($MCA['Action'],$actions))
-		{
 			array_shift($data);
-		}
 		else
 		{
 			$aname=$defA;
@@ -366,33 +349,27 @@ class QuickFW_Router
 		return $MCA;
 	}
 
+	/**
+	 * Проводит базовые преобразования Uri определенные в $config['redirection']
+	 */
 	protected function filterUri($uri)
 	{
 		global $config;
 		$pos = strpos($uri,'?');
 		if ($pos !== false)
-		{
 			$uri = substr($uri,0,$pos);
-		}
 		if (!substr_compare($uri,$config['redirection']['baseUrl'],0,strlen($config['redirection']['baseUrl'])))
-		{
 			$uri = substr($uri,strlen($config['redirection']['baseUrl']));
-		}
 		if ($config['redirection']['useIndex'] && strlen($uri)>=10 && !substr_compare($uri,'index.php/',0,10))
-		{
 			$uri = substr($uri,10);
-		}
-		if ($config['redirection']['defExt'] != '')
+		if (!empty($config['redirection']['defExt']))
 		{
 			$len_de=strlen($config['redirection']['defExt']);
 			$l=strlen($uri)-$len_de;
-			if ($l>0)
-			if (!substr_compare($uri,$config['redirection']['defExt'],
-				$l,$len_de))
+			if ($l>0 &&!substr_compare($uri,$config['redirection']['defExt'],$l,$len_de))
 				$uri = substr($uri,0,$l);
 		}
-		$uri = trim($uri, self::URI_DELIMITER);
-		return $uri;
+		return trim($uri, '/');
 	}
 
 }
