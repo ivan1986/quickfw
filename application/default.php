@@ -92,6 +92,7 @@ if (get_magic_quotes_gpc()) {
 	if (isset($_SERVER['PHP_AUTH_USER'])) strips($_SERVER['PHP_AUTH_USER']);
 	if (isset($_SERVER['PHP_AUTH_PW']))   strips($_SERVER['PHP_AUTH_PW']);
 }
+set_magic_quotes_runtime(0);
 /**/
 
 ?>

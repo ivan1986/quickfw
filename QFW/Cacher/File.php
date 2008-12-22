@@ -171,10 +171,7 @@ class Cacher_File implements Zend_Cache_Backend_Interface
 
 	protected function _read($file)
 	{
-		$mqr = get_magic_quotes_runtime();
-		set_magic_quotes_runtime(0);
 		$data = file_get_contents($file);
-		set_magic_quotes_runtime($mqr);
 		if ($data === false)
 			return false;
 		if (!$this->options['readControl'])
