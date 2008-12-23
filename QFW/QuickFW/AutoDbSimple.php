@@ -37,7 +37,7 @@ class QuickFW_AutoDbSimple
 			$this->DbSimple->setIdentPrefix($parsed['prefix']);
 		$this->DbSimple->setCachePrefix('db_'.crc32($parsed['dsn']).'_');
 		$this->DbSimple->setErrorHandler(array(&$this, 'errorHandler'));
-		$this->DbSimple->query('SET NAMES '.isset($parsed['enc'])?$parsed['enc']:'UTF8');
+		$this->DbSimple->query('SET NAMES '.(isset($parsed['enc'])?$parsed['enc']:'UTF8'));
 	}
 
 	/**
