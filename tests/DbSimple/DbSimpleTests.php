@@ -1,12 +1,7 @@
 <?php
 
-chdir(dirname(__FILE__));
-
 require_once 'PHPUnit/Framework.php';
-
 require_once QFWPATH.'/DbSimple/Generic.php';
-require_once 'lib.php';
-
 define('DSN','mysql://root@localhost/DbSimple');
 
 class DbSimpleTests
@@ -15,11 +10,14 @@ class DbSimpleTests
 	{
 		$suite = new PHPUnit_Framework_TestSuite();
 		
-		$suite->addTestFile('DbSimpleTest.php');
-		$suite->addTestFile('GenericTest.php');
-		$suite->addTestFile('MysqlTest.php');
-		$suite->addTestFile('MypdoTest.php');
-		$suite->addTestFile('PgsqlTest.php');
+		$base = dirname(__FILE__);
+		require_once $base.'/lib.php';
+		
+		$suite->addTestFile($base.'/DbSimpleTest.php');
+		$suite->addTestFile($base.'/GenericTest.php');
+		$suite->addTestFile($base.'/MysqlTest.php');
+		$suite->addTestFile($base.'/MypdoTest.php');
+		$suite->addTestFile($base.'/PgsqlTest.php');
 		
 		return $suite;
 	}
