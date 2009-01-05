@@ -489,14 +489,10 @@ abstract class DbSimple_Generic_Database extends DbSimple_Generic_LastError
 			$this->_logQueryStat($queryTime, $fetchTime, $firstFetchTime, $rows);
 
 			// Prepare BLOB objects if needed.
-			if (is_array($rows) && !empty($this->attributes['BLOB_OBJ'])) {
-				$blobFieldNames = $this->_performGetBlobFieldNames($result);
-				foreach ($blobFieldNames as $name) {
-					for ($r = count($rows)-1; $r>=0; $r--) {
-						$rows[$r][$name] = $this->_performNewBlob($rows[$r][$name]);
-					}
-				}
-			}
+			if (is_array($rows) && !empty($this->attributes['BLOB_OBJ'])) 
+				foreach ($this->_performGetBlobFieldNames($result) as $name)
+					foreach ($rows as $r=>$v)
+						$rows[$r][$name] = $this->_performNewBlob($v[$name]);
 
 			// Transform resulting rows.
 			$result = $this->_transformResult($rows);
@@ -568,12 +564,11 @@ abstract class DbSimple_Generic_Database extends DbSimple_Generic_LastError
 
 
 	/**
-	 * TODO: Пока для теста необходимо public - заменить на protected
 	 * void _expandPlaceholders(array &$queryAndArgs, bool $useNative=false)
 	 * Replace placeholders by quoted values.
 	 * Modify $queryAndArgs.
 	 */
-	public function _expandPlaceholders(&$queryAndArgs, $useNative=false)
+	protected function _expandPlaceholders(&$queryAndArgs, $useNative=false)
 	{
 		$cacheCode = null;
 		if ($this->_logger) {

@@ -47,24 +47,6 @@ class MypdoTest extends GenericTest
 
 	}
 
-	public function testMyBlob()
-	{
-		/*$this->my->query('DROP TABLE `test`');
-		$this->my->query('CREATE TABLE `test` (
-			`id` INT NOT NULL ,
-			`text` BLOB
-			) ENGINE = MYISAM');
-		$this->my->query("INSERT INTO test(id, text) VALUES (1,'1234567890')");
-		$d = $this->my->selectRow(' -- BLOB_OBJ: true
-		select * FROM test');
-		$this->assertEquals($d['text']->read(3),'123');
-		$this->assertEquals($d['text']->read(3),'456');
-		$this->assertEquals($d['text']->read(3),'789');
-		$this->assertEquals($d['text']->read(3),'0');
-		$this->assertEquals($d['text']->read(3),'');
-		$this->my->query('DROP TABLE `test`');*/
-	}
-
 }
 
 ?>

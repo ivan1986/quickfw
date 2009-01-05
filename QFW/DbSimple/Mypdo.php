@@ -128,6 +128,7 @@ class DbSimple_Mypdo extends DbSimple_Generic_Database
 
 	protected function _performGetBlobFieldNames($result)
 	{
+		return array();
 	}
 	
 	protected function _performFetch($result)

@@ -48,7 +48,7 @@ class MysqlTest extends PHPUnit_Framework_TestCase
 
 	public function testMyBlob()
 	{
-		/*$this->my->query('DROP TABLE `test`');
+		$this->my->query('DROP TABLE `test`');
 		$this->my->query('CREATE TABLE `test` (
 			`id` INT NOT NULL ,
 			`text` BLOB
@@ -61,7 +61,7 @@ class MysqlTest extends PHPUnit_Framework_TestCase
 		$this->assertEquals($d['text']->read(3),'789');
 		$this->assertEquals($d['text']->read(3),'0');
 		$this->assertEquals($d['text']->read(3),'');
-		$this->my->query('DROP TABLE `test`');*/
+		$this->my->query('DROP TABLE `test`');
 	}
 
 }
