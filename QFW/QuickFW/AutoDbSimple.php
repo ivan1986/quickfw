@@ -23,6 +23,19 @@ class QuickFW_AutoDbSimple
 		return $result;
 	}
 
+	/**
+	 * mixed selectPage(int &$total, string $query [, $arg1] [,$arg2] ...)
+	 * Функцию нужно вызвать отдельно из-за передачи по ссылке
+	 */
+	public function selectPage(&$total, $query)
+	{
+		if ($this->DbSimple === null)
+			$this->connect($this->DSN);
+		$args = func_get_args();
+		$args[0] = &$total;
+		return call_user_func_array(array(&$this->DbSimple, 'selectPage'), $args);
+	}
+
 	protected function connect($dsn)
 	{
 		$parsed = $this->parseDSN($dsn);

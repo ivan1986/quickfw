@@ -33,13 +33,16 @@ class DbSimple_Mypdo extends DbSimple_Generic_Database
 		}
 
 		try {
-			$this->PDO = new PDO('mysql:host='.$dsn['host'].(empty($dsn['port'])?'':';port='.$dsn['port']).';dbname='.$base, $dsn['user'], isset($dsn['pass'])?$dsn['pass']:'');
+			$this->PDO = new PDO('mysql:host='.$dsn['host'].(empty($dsn['port'])?'':';port='.$dsn['port']).';dbname='.$base, 
+				$dsn['user'], isset($dsn['pass'])?$dsn['pass']:'', array(
+					PDO::ATTR_ERRMODE => PDO::ERRMODE_SILENT,
+				));
 		} catch (PDOException $e) {
 			$this->_setLastError($e->getCode() , $e->getMessage(), 'new PDO');
 		}
 	}
 
-	function _performGetPlaceholderIgnoreRe()
+	protected function _performGetPlaceholderIgnoreRe()
 	{
 		return '
 			"   (?> [^"\\\\]+|\\\\"|\\\\)*    "   |
@@ -49,7 +52,7 @@ class DbSimple_Mypdo extends DbSimple_Generic_Database
 		';
 	}
 
-	function _performEscape($s, $isIdent=false)
+	protected function _performEscape($s, $isIdent=false)
 	{
 		if (!$isIdent) {
 			return $this->PDO->quote($s);
@@ -58,22 +61,22 @@ class DbSimple_Mypdo extends DbSimple_Generic_Database
 		}
 	}
 
-	function _performTransaction($parameters=null)
+	protected function _performTransaction($parameters=null)
 	{
 		return $this->PDO->beginTransaction();
 	}
 
-	function _performCommit()
+	protected function _performCommit()
 	{
 		return $this->PDO->commit();
 	}
 
-	function _performRollback()
+	protected function _performRollback()
 	{
 		return $this->PDO->rollBack();
 	}
 
-	function _performQuery($queryMain)
+	protected function _performQuery($queryMain)
 	{
 		$this->_lastQuery = $queryMain;
 		$this->_expandPlaceholders($queryMain, true);
@@ -83,74 +86,58 @@ class DbSimple_Mypdo extends DbSimple_Generic_Database
 			return $this->_setDbError($p,$queryMain[0]);
 		if (preg_match('/^\s* INSERT \s+/six', $queryMain[0]))
 			return $this->PDO->lastInsertId();
-		if (!preg_match('/^\s* SELECT \s+/six', $queryMain[0]))
+		if ($p->columnCount()==0)
 			return $p->rowCount();
-		//блин, тут конечно нужно еще подумать по части правильности определения
+		//Если у нас в запросе есть хотя-бы одна колонка - это по любому будет select
 		$p->setFetchMode(PDO::FETCH_ASSOC);
 		$res = $p->fetchAll();
 		return $res;
-/*
-
-		$result = @mysql_query($queryMain[0], $this->link);
-		if ($result === false) return $this->_setDbError($queryMain[0]);
-		if (!is_resource($result)) {
-			if (preg_match('/^\s* INSERT \s+/six', $queryMain[0])) {
-				// INSERT queries return generated ID.
-				return @mysql_insert_id($this->link);
-			}
-			// Non-SELECT queries return number of affected rows, SELECT - resource.
-			return @mysql_affected_rows($this->link);
-		}
-		return $result;*/
 	}
 
-	function _performTransformQuery(&$queryMain, $how)
+	protected function _performTransformQuery(&$queryMain, $how)
 	{
 		// If we also need to calculate total number of found rows...
-		switch ($how) {
+		switch ($how)
+		{
 			// Prepare total calculation (if possible)
 			case 'CALC_TOTAL':
 				$m = null;
-				if (preg_match('/^(\s* SELECT)(.*)/six', $queryMain[0], $m)) {
+				if (preg_match('/^(\s* SELECT)(.*)/six', $queryMain[0], $m))
 					$queryMain[0] = $m[1] . ' SQL_CALC_FOUND_ROWS' . $m[2];
-				}
 				return true;
 
 			// Perform total calculation.
 			case 'GET_TOTAL':
 				// Built-in calculation available?
 				$queryMain = array('SELECT FOUND_ROWS()');
-				// Else use manual calculation.
-				// TODO: GROUP BY ... -> COUNT(DISTINCT ...)
-				$re = '/^
-					(?> -- [^\r\n]* | \s+)*
-					(\s* SELECT \s+)                                      #1
-					(.*?)                                                 #2
-					(\s+ FROM \s+ .*?)                                    #3
-						((?:\s+ ORDER \s+ BY \s+ .*?)?)                   #4
-						((?:\s+ LIMIT \s+ \S+ \s* (?:, \s* \S+ \s*)? )?)  #5
-				$/six';
-				$m = null;
-				if (preg_match($re, $queryMain[0], $m)) {
-					$query[0] = $m[1] . $this->_fieldList2Count($m[2]) . " AS C" . $m[3];
-					$skipTail = substr_count($m[4] . $m[5], '?');
-					if ($skipTail) array_splice($query, -$skipTail);
-				}
 				return true;
 		}
-
+		
 		return false;
 	}
 
-	function _setDbError($obj,$q)
+	protected function _setDbError($obj,$q)
 	{
 		$info=$obj->errorInfo();
 		return $this->_setLastError($info[1], $info[2], $q);
 	}
 
+	protected function _performNewBlob($id=null)
+	{
+	}
+
+	protected function _performGetBlobFieldNames($result)
+	{
+	}
+	
+	protected function _performFetch($result)
+	{
+		return $result;
+	}
+	
 }
 
-class DbSimple_Mypdo_Blob extends DbSimple_Generic_Blob
+class DbSimple_Mypdo_Blob implements DbSimple_Generic_Blob
 {
 	// MySQL does not support separate BLOB fetching.
 	var $blobdata = null;

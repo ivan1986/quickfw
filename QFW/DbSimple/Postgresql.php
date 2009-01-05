@@ -16,7 +16,7 @@
  *
  * @version 2.x $Id: Postgresql.php 167 2007-01-22 10:12:09Z tit $
  */
-require_once QFWPATH.'/DbSimple/Generic.php';
+require_once dirname(__FILE__) . '/Generic.php';
 
 
 /**
@@ -69,10 +69,9 @@ class DbSimple_Postgresql extends DbSimple_Generic_Database
 	}
 
 
-	function& _performNewBlob($blobid=null)
+	function _performNewBlob($blobid=null)
 	{
-		$obj =& new DbSimple_Postgresql_Blob($this, $blobid);
-		return $obj;
+		return new DbSimple_Postgresql_Blob($this, $blobid);
 	}
 
 
@@ -81,7 +80,7 @@ class DbSimple_Postgresql extends DbSimple_Generic_Database
 		$blobFields = array();
 		for ($i=pg_num_fields($result)-1; $i>=0; $i--) {
 			$type = pg_field_type($result, $i);
-			if (strpos($type, "BLOB") !== false) $blobFields[] = pg_field_name($result, $i);
+			if (stripos($type, "BLOB") !== false) $blobFields[] = pg_field_name($result, $i);
 		}
 		return $blobFields;
 	}
@@ -210,7 +209,6 @@ class DbSimple_Postgresql extends DbSimple_Generic_Database
 	{
 		$row = @pg_fetch_assoc($result);
 		if (pg_last_error($this->link)) return $this->_setDbError($this->_lastQuery);
-		if ($row === false) return null;
 		return $row;
 	}
 
@@ -226,7 +224,7 @@ class DbSimple_Postgresql extends DbSimple_Generic_Database
 }
 
 
-class DbSimple_Postgresql_Blob extends DbSimple_Generic_Blob
+class DbSimple_Postgresql_Blob implements DbSimple_Generic_Blob
 {
 	var $blob; // resourse link
 	var $id;

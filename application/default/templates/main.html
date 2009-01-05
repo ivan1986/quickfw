@@ -2,7 +2,7 @@
 <head><title>Main.tpl</title></head>
 <body>
 <?=$P->outHead('h','1','2'); ?>
-Это файл Main.tpl</br>
+Это файл Main.tpl<br />
 Это урл <?=$P->siteUrl('test'); ?>
 
 <br />
@@ -15,7 +15,7 @@
 <?=$P->addCSS('file.css'); ?>
 
 <?=$P->getHead(false,'h');?>HEAD<?=$P->getHead(true,'h');?>
-А сюда у нас подключен блок test/index</br>
+А сюда у нас подключен блок test/index<br />
 <?=$this->block('test');?><br />
 <?=$this->block('test');?><br />
 <?=$this->block('test');?><br />
