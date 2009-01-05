@@ -255,7 +255,7 @@ abstract class DbSimple_Generic_Database extends DbSimple_Generic_LastError
 	 * Set cache mechanism called during each query if specified.
 	 * Returns previous handler.
 	 */
-	public function setCacher($cacher)
+	public function setCacher(Zend_Cache_Backend_Interface $cacher=null)
 	{
 		$prev = $this->_cacher;
 		$this->_cacher = $cacher;
@@ -398,19 +398,19 @@ abstract class DbSimple_Generic_Database extends DbSimple_Generic_LastError
 		if ($total)
 			$this->_transformQuery($query, 'CALC_TOTAL');
 
-		$is_cacher_callable = (is_callable($this->_cacher) || (method_exists($this->_cacher, 'get') && method_exists($this->_cacher, 'save')));
 		$rows = false;
 		$cache_it = false;
-		if (!empty($this->attributes['CACHE']) && $is_cacher_callable) {
+		// Кешер у нас либо null либо соответствует Zend интерфейсу
+		if (!empty($this->attributes['CACHE']) && $this->_cacher)
+		{
 
 			$hash = $this->_cachePrefix . md5(serialize($query));
 			// Getting data from cache if possible
 			$fetchTime = $firstFetchTime = 0;
 			$qStart    = microtime(true);
-			$cacheData = $this->_cache($hash);
+			$cacheData = unserialize($this->_cacher->load($hash));
 			$queryTime = microtime(true) - $qStart;
 
-			$storeTime  = isset($cacheData['storeTime'])  ? $cacheData['storeTime']  : null;
 			$invalCache = isset($cacheData['invalCache']) ? $cacheData['invalCache'] : null;
 			$result     = isset($cacheData['result'])     ? $cacheData['result']     : null;
 			$rows       = isset($cacheData['rows'])       ? $cacheData['rows']       : null;
@@ -448,10 +448,10 @@ abstract class DbSimple_Generic_Database extends DbSimple_Generic_LastError
 				$uniq_key = md5(serialize($uniq_key));
 			}
 			// Check TTL?
-			$ttl = empty($ttl) ? true : (int)$storeTime > (time() - $ttl);
+			$ok = empty($ttl) || $cacheData;
 
 			// Invalidate cache?
-			if ($ttl && $uniq_key == $invalCache) {
+			if ($ok && $uniq_key == $invalCache) {
 				$this->_logQuery($query);
 				$this->_logQueryStat($queryTime, $fetchTime, $firstFetchTime, $rows);
 
@@ -459,7 +459,8 @@ abstract class DbSimple_Generic_Database extends DbSimple_Generic_LastError
 			else $cache_it = true;
 		}
 
-		if (false === $rows || true === $cache_it) {
+		if (false === $rows || true === $cache_it) 
+		{
 			$this->_logQuery($query);
 
 			// Run the query (counting time).
@@ -501,15 +502,17 @@ abstract class DbSimple_Generic_Database extends DbSimple_Generic_LastError
 			$result = $this->_transformResult($rows);
 
 			// Storing data in cache
-			if ($cache_it && $is_cacher_callable) {
-				$this->_cache(
-					$hash,
-					array(
-						'storeTime'  => time(),
+			if ($cache_it && $this->_cacher)
+			{
+				$this->_cacher->save(
+					serialize(array(
 						'invalCache' => $uniq_key,
 						'result'     => $result,
 						'rows'       => $rows
-					)
+					)),
+					$hash,
+					array(),
+					$ttl==0?false:$ttl
 				);
 			}
 

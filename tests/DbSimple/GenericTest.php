@@ -490,6 +490,9 @@ class GenericTest extends PHPUnit_Framework_TestCase
 			$this->Qlog[]=$query;
 	}
 
+	/*
+	 * Тесты на работу с кешем
+	 */
 	public function testCache()
 	{
 		$Cache = new TstCacher;
@@ -508,7 +511,6 @@ class GenericTest extends PHPUnit_Framework_TestCase
 		$this->db->query("UPDATE test SET str='b' WHERE id=1");
 		$r = $this->db->selectRow($query);
 		$this->assertEquals($r,$R, 'Error after cache');
-		sleep(11);
 		$Cache->sleep(20);
 		$r = $this->db->selectRow($query);
 		$R = array (
@@ -518,7 +520,44 @@ class GenericTest extends PHPUnit_Framework_TestCase
 		$this->assertEquals($r,$R, 'Error after timeout of cache');
 		$this->db->query("DROP TABLE test");
 	}
+	
+	public function testCacheModif()
+	{
+		$Cache = new TstCacher;
+		$this->db->setCacher($Cache);
+		$query = "-- CACHE: test.id
+			SELECT * FROM test";
+		$this->db->query("DROP TABLE test");
+		$this->db->query("CREATE TABLE test(id INTEGER, str VARCHAR(1))");
+		$R = array (
+			'id' => '1',
+			'str' => 'a',
+		);
+		$this->db->query("INSERT INTO test(id, str) VALUES( 1, 'a')");
+		$r = $this->db->selectRow($query);
+		$this->assertEquals($r,$R, 'Error before cache');
+		$this->db->query("UPDATE test SET str='b' WHERE id=1");
+		$r = $this->db->selectRow($query);
+		$this->assertEquals($r,$R, 'Error after cache');
+		$this->db->query("UPDATE test SET id=2 WHERE id=1");
+		$R = array (
+			'id' => '2',
+			'str' => 'b',
+		);
+		$r = $this->db->selectRow($query);
+		$this->assertEquals($r,$R, 'Error after update');
+		$this->db->query("UPDATE test SET str='a', id=1");
+		$R = array (
+			'id' => '1',
+			'str' => 'a',
+		);
+		$r = $this->db->selectRow($query);
+		$this->assertEquals($r,$R, 'Error after update back');
+	}
 
+	/*
+	 * Тесты на условные блоки
+	 */
 	public function testNestedBlocksSql()
 	{
 		$this->db->setLogger(array(&$this,'queryLogger'));
