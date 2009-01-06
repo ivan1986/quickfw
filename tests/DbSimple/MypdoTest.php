@@ -2,9 +2,9 @@
 
 define('DSNMYPDO','mypdo://root@localhost/DbSimple');
 
-require_once 'GenericTest.php';
+require_once 'GenericTestClass.php';
 
-class MypdoTest extends GenericTest
+class MypdoTest extends GenericDbSimpleTestClass
 {
 	protected function setUp()
 	{

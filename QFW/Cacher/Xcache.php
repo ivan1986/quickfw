@@ -36,7 +36,7 @@ class Cacher_Xcache implements Zend_Cache_Backend_Interface
 	 * @param string $key
 	 * @return mixed
 	 */
-	public function load($id)
+	public function load($id, $doNotTest = false)
 	{
 		return xcache_get($id);
 	}

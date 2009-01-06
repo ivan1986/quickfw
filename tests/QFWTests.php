@@ -20,6 +20,7 @@ class QFWTests
 		$suite = new PHPUnit_Framework_TestSuite();
 		
 		$suite->addTestFile('DbSimple/DbSimpleTests.php');
+		$suite->addTestFile('Cache/CacheTest.php');
 		
 		return $suite;
 	}

@@ -1,11 +1,11 @@
 <?php
 
-class GenericTest extends PHPUnit_Framework_TestCase
+abstract class GenericDbSimpleTestClass extends PHPUnit_Framework_TestCase
 {
 	protected $db;
 	protected function setUp()
 	{
-		$this->db = new QuickFW_AutoDbSimple(DSN);
+		
 	}
 
 	public function testArrayKey()

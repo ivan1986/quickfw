@@ -2,12 +2,13 @@
 
 define('DSNMY','mysql://root@localhost/DbSimple');
 
-class MysqlTest extends PHPUnit_Framework_TestCase
+require_once 'GenericTestClass.php';
+
+class MysqlTest extends GenericDbSimpleTestClass
 {
-	protected $my;
 	protected function setUp()
 	{
-		$this->my = new QuickFW_AutoDbSimple(DSNMY);
+		$this->db = new QuickFW_AutoDbSimple(DSNMY);
 	}
 
 	protected $Qlog=array();
@@ -19,16 +20,16 @@ class MysqlTest extends PHPUnit_Framework_TestCase
 
 	public function testMyCellPlaceholder()
 	{
-		$this->my->setLogger(array(&$this,'queryLogger'));
+		$this->db->setLogger(array(&$this,'queryLogger'));
 		$row = array(
 			'id'  => 1,
 			'str' => 'test'
 		);
 
-		$this->my->query("DROP TABLE test");
-		$this->my->query("CREATE TABLE test(id INTEGER, str VARCHAR(10))");
-		$this->my->query("INSERT INTO test(?#) VALUES(?a)", array_keys($row), array_values($row));
-		$r = $this->my->selectCol("SELECT ?# FROM test", 'id');
+		$this->db->query("DROP TABLE test");
+		$this->db->query("CREATE TABLE test(id INTEGER, str VARCHAR(10))");
+		$this->db->query("INSERT INTO test(?#) VALUES(?a)", array_keys($row), array_values($row));
+		$r = $this->db->selectCol("SELECT ?# FROM test", 'id');
 
 		$R = array (
 			0 => '1',
@@ -48,20 +49,20 @@ class MysqlTest extends PHPUnit_Framework_TestCase
 
 	public function testMyBlob()
 	{
-		$this->my->query('DROP TABLE `test`');
-		$this->my->query('CREATE TABLE `test` (
+		$this->db->query('DROP TABLE `test`');
+		$this->db->query('CREATE TABLE `test` (
 			`id` INT NOT NULL ,
 			`text` BLOB
 			) ENGINE = MYISAM');
-		$this->my->query("INSERT INTO test(id, text) VALUES (1,'1234567890')");
-		$d = $this->my->selectRow(' -- BLOB_OBJ: true
+		$this->db->query("INSERT INTO test(id, text) VALUES (1,'1234567890')");
+		$d = $this->db->selectRow(' -- BLOB_OBJ: true
 		select * FROM test');
 		$this->assertEquals($d['text']->read(3),'123');
 		$this->assertEquals($d['text']->read(3),'456');
 		$this->assertEquals($d['text']->read(3),'789');
 		$this->assertEquals($d['text']->read(3),'0');
 		$this->assertEquals($d['text']->read(3),'');
-		$this->my->query('DROP TABLE `test`');
+		$this->db->query('DROP TABLE `test`');
 	}
 
 }

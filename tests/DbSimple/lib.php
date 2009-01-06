@@ -1,6 +1,6 @@
 <?php
 
-require_once 'Interface.php';
+require_once QFWPATH.'/QuickFW/Cacher/Interface.php';
 
 class TstCacher implements Zend_Cache_Backend_Interface
 {
