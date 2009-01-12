@@ -16,7 +16,7 @@
  *
  * @version 2.x $Id: Mysql.php 247 2008-08-18 21:17:08Z dk $
  */
-require_once QFWPATH.'/DbSimple/Generic.php';
+require_once dirname(__FILE__).'/Generic.php';
 
 
 /**
@@ -47,6 +47,7 @@ class DbSimple_Mysql extends DbSimple_Generic_Database
 		$ok = mysql_select_db(preg_replace('{^/}s', '', $dsn['path']), $this->link);
 		if (!$ok)
 			return $this->_setDbError('mysql_select_db()');
+		mysql_query('SET NAMES '.(isset($dsn['enc'])?$dsn['enc']:'UTF8'));
 	}
 
 

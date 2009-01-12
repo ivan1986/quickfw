@@ -16,7 +16,7 @@
  *
  * @version 2.x $Id: Ibase.php 221 2007-07-27 23:24:35Z dk $
  */
-require_once QFWPATH.'/DbSimple/Generic.php';
+require_once dirname(__FILE__).'/Generic.php';
 
 /**
  * Best transaction parameters for script queries.

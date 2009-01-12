@@ -41,16 +41,16 @@ class QuickFW_AutoDbSimple
 		$parsed = $this->parseDSN($dsn);
 		if (!$parsed)
 			$this->errorHandler('Ошибка разбора строки DSN',$dsn);
-		if (!isset($parsed['scheme']) || !is_file(QFWPATH.'/DbSimple/'.ucfirst($parsed['scheme']).'.php'))
+		if (!isset($parsed['scheme']) || !is_file(LIBPATH.'/DbSimple/'.ucfirst($parsed['scheme']).'.php'))
 			$this->errorHandler('Невозможно загрузить драйвер базы данных',$parsed);
-		require_once QFWPATH.'/DbSimple/'.ucfirst($parsed['scheme']).'.php';
+		require_once LIBPATH.'/DbSimple/'.ucfirst($parsed['scheme']).'.php';
 		$class = 'DbSimple_'.ucfirst($parsed['scheme']);
 		$this->DbSimple = new $class($parsed);
 		if (isset($parsed['prefix']))
 			$this->DbSimple->setIdentPrefix($parsed['prefix']);
-		$this->DbSimple->setCachePrefix('db_'.crc32($parsed['dsn']).'_');
+		$this->DbSimple->setCachePrefix('db_'.md5($parsed['dsn']).'_');
+		//$this->DbSimple->addIgnoreInTrace('QuickFW_AutoDbSimple::.*');
 		$this->DbSimple->setErrorHandler(array(&$this, 'errorHandler'));
-		$this->DbSimple->query('SET NAMES '.(isset($parsed['enc'])?$parsed['enc']:'UTF8'));
 	}
 
 	/**
@@ -58,7 +58,7 @@ class QuickFW_AutoDbSimple
 	 * на продакшене показывает 404 и пишит в sql.log
 	 * Все вызовы без @ прекращают выполнение скрипта
 	 */
-	protected function errorHandler($msg, $info)
+	public function errorHandler($msg, $info)
 	{
 		// Если использовалась @, ничего не делать.
 		if (!error_reporting()) return;

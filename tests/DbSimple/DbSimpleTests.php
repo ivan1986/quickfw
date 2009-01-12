@@ -1,7 +1,7 @@
 <?php
 
 require_once 'PHPUnit/Framework.php';
-require_once QFWPATH.'/DbSimple/Generic.php';
+require_once LIBPATH.'/DbSimple/Generic.php';
 define('DSN','mysql://root@localhost/DbSimple');
 
 class DbSimpleTests

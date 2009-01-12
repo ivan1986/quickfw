@@ -15,7 +15,7 @@
  *
  * @version 2.x $Id: Postgresql.php 167 2007-01-22 10:12:09Z tit $
  */
-require_once QFWPATH.'/DbSimple/Generic.php';
+require_once dirname(__FILE__).'/Generic.php';
 
 /**
  * Database class for MySQL.
@@ -40,6 +40,7 @@ class DbSimple_Mypdo extends DbSimple_Generic_Database
 		} catch (PDOException $e) {
 			$this->_setLastError($e->getCode() , $e->getMessage(), 'new PDO');
 		}
+		$this->PDO->exec('SET NAMES '.(isset($dsn['enc'])?$dsn['enc']:'UTF8'));
 	}
 
 	protected function _performGetPlaceholderIgnoreRe()
@@ -141,33 +142,33 @@ class DbSimple_Mypdo extends DbSimple_Generic_Database
 class DbSimple_Mypdo_Blob implements DbSimple_Generic_Blob
 {
 	// MySQL does not support separate BLOB fetching.
-	var $blobdata = null;
-	var $curSeek = 0;
+	private $blobdata = null;
+	private $curSeek = 0;
 
-	function DbSimple_Mypdo_Blob(&$database, $blobdata=null)
+	public function __construct(&$database, $blobdata=null)
 	{
 		$this->blobdata = $blobdata;
 		$this->curSeek = 0;
 	}
 
-	function read($len)
+	public function read($len)
 	{
 		$p = $this->curSeek;
 		$this->curSeek = min($this->curSeek + $len, strlen($this->blobdata));
 		return substr($this->blobdata, $this->curSeek, $len);
 	}
 
-	function write($data)
+	public function write($data)
 	{
 		$this->blobdata .= $data;
 	}
 
-	function close()
+	public function close()
 	{
 		return $this->blobdata;
 	}
 
-	function length()
+	public function length()
 	{
 		return strlen($this->blobdata);
 	}

@@ -7,6 +7,7 @@ class DbSimpleTest extends PHPUnit_Framework_TestCase
 	protected function setUp()
 	{
 		$this->db = new QuickFW_AutoDbSimple(DSN);
+		$this->db->setErrorHandler(false);
 	}
 
 	protected function tearDown()
@@ -21,7 +22,7 @@ class DbSimpleTest extends PHPUnit_Framework_TestCase
 
 	public function testCreate()
 	{
-		$this->db->query('DROP TABLE `test`');
+		$this->db->query('DROP TABLE IF EXISTS `test`');
 		$r = $this->db->query('CREATE TABLE `test` (
 			`id` INT NOT NULL ,
 			`text` VARCHAR( 20 ) NOT NULL ,
@@ -33,7 +34,7 @@ class DbSimpleTest extends PHPUnit_Framework_TestCase
 
 	public function testReturnEmpty()
 	{
-		$this->db->query('DROP TABLE `test`');
+		$this->db->query('DROP TABLE IF EXISTS `test`');
 		$this->db->query('CREATE TABLE `test` (
 			`id` INT NOT NULL ,
 			`text` VARCHAR( 20 ) NOT NULL ,
@@ -49,7 +50,6 @@ class DbSimpleTest extends PHPUnit_Framework_TestCase
 		$this->assertEquals($r, array(), 'Возврат пустого selectPage');
 		$r = $this->db->selectCell('SELECT * FROM `test`');
 		$this->assertEquals($r, null, 'Возврат пустого selectCell');
-		$r = $this->db->query('DROP TABLE `test`');
 		$this->db->query('DROP TABLE `test`');
 	}
 

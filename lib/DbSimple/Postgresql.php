@@ -16,7 +16,7 @@
  *
  * @version 2.x $Id: Postgresql.php 167 2007-01-22 10:12:09Z tit $
  */
-require_once dirname(__FILE__) . '/Generic.php';
+require_once dirname(__FILE__).'/Generic.php';
 
 
 /**
@@ -50,7 +50,8 @@ class DbSimple_Postgresql extends DbSimple_Generic_Database
 			(!empty($dsn['pass']) ? 'password='.$dsn['pass'].' ' : '')
 		);
 		$this->_resetLastError();
-		if (!$ok) return $this->_setDbError('pg_connect()');
+		if (!$ok)
+			return $this->_setLastError("-1", "Not connect to server", "pg_connect");
 	}
 
 
