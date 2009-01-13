@@ -33,7 +33,7 @@ class DbSimple_Mypdo extends DbSimple_Generic_Database
 		}
 
 		try {
-			$this->PDO = new PDO('mysql:host='.$dsn['host'].(empty($dsn['port'])?'':';port='.$dsn['port']).';dbname='.$base, 
+			$this->PDO = new PDO('mysql:host='.$dsn['host'].(empty($dsn['port'])?'':';port='.$dsn['port']).';dbname='.$base,
 				$dsn['user'], isset($dsn['pass'])?$dsn['pass']:'', array(
 					PDO::ATTR_ERRMODE => PDO::ERRMODE_SILENT,
 				));
@@ -80,9 +80,10 @@ class DbSimple_Mypdo extends DbSimple_Generic_Database
 	protected function _performQuery($queryMain)
 	{
 		$this->_lastQuery = $queryMain;
-		$this->_expandPlaceholders($queryMain, true);
-		$p = $this->PDO->prepare($queryMain[0]);
-		$p->execute(array_slice($queryMain,1));
+		$this->_expandPlaceholders($queryMain, false);
+		$p = $this->PDO->query($queryMain[0]);
+		if (!$p)
+			return $this->_setDbError($p,$queryMain[0]);
 		if ($p->errorCode()!=0)
 			return $this->_setDbError($p,$queryMain[0]);
 		if (preg_match('/^\s* INSERT \s+/six', $queryMain[0]))
@@ -113,13 +114,13 @@ class DbSimple_Mypdo extends DbSimple_Generic_Database
 				$queryMain = array('SELECT FOUND_ROWS()');
 				return true;
 		}
-		
+
 		return false;
 	}
 
 	protected function _setDbError($obj,$q)
 	{
-		$info=$obj->errorInfo();
+		$info=$obj?$obj->errorInfo():$this->PDO->errorInfo();
 		return $this->_setLastError($info[1], $info[2], $q);
 	}
 
@@ -131,12 +132,12 @@ class DbSimple_Mypdo extends DbSimple_Generic_Database
 	{
 		return array();
 	}
-	
+
 	protected function _performFetch($result)
 	{
 		return $result;
 	}
-	
+
 }
 
 class DbSimple_Mypdo_Blob implements DbSimple_Generic_Blob
