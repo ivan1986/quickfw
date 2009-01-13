@@ -93,6 +93,7 @@ class DbSimple_Mypdo extends DbSimple_Generic_Database
 		//Если у нас в запросе есть хотя-бы одна колонка - это по любому будет select
 		$p->setFetchMode(PDO::FETCH_ASSOC);
 		$res = $p->fetchAll();
+		$p->closeCursor();
 		return $res;
 	}
 
