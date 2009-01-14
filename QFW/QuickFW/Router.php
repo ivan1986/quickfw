@@ -85,9 +85,6 @@ class QuickFW_Router
 		else
 			$result = call_user_func(array($MCA['Class'], $this->action));
 
-		//Необходимо для вызовов всех деструкторов
-		$this->classes=array();
-
 		QFW::$view->setScriptPath($this->baseDir.'/'.$MCA['Module'].'/templates');
 
 		if ($CacheInfo && array_key_exists('Cacher',$CacheInfo) && array_key_exists('id',$CacheInfo))
@@ -144,6 +141,9 @@ class QuickFW_Router
 		return $MCA;
 	}
 
+	//Необходимо для вызовов всех деструкторов
+	public function startDisplayMain() { $this->classes = array(); }
+
 	function show404()
 	{
 		global $view;
@@ -181,7 +181,7 @@ class QuickFW_Router
 	function redirect($url=null)
 	{
 		//если не указан - редирект откуда пришли
-		$url=$url?$url:(isset($_SERVER['HTTP_REFERER'])?$_SERVER['HTTP_REFERER']:'');
+		$url = $url ? $url : (isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '');
 		header('Location: '.$url);
 		exit();
 	}
@@ -366,7 +366,7 @@ class QuickFW_Router
 		{
 			$len_de=strlen($config['redirection']['defExt']);
 			$l=strlen($uri)-$len_de;
-			if ($l>0 &&!substr_compare($uri,$config['redirection']['defExt'],$l,$len_de))
+			if ($l>0 && !substr_compare($uri,$config['redirection']['defExt'],$l,$len_de))
 				$uri = substr($uri,0,$l);
 		}
 		return trim($uri, '/');

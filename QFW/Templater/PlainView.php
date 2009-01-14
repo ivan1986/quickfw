@@ -125,10 +125,13 @@ class Templater_PlainView
 	{
 		if (isset($this->mainTemplate) && $this->mainTemplate!="")
 		{
+			//Необходимо для установки флага CSS
 			$this->P->startDisplayMain();
 			$this->assign('content',$content);
 			$content = $this->render($this->mainTemplate);
 		}
+		//Необходимо для вызовов всех деструкторов
+		QFW::$router->startDisplayMain();
 		return $this->P->HeaderFilter($content);
 	}
 

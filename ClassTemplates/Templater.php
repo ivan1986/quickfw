@@ -114,12 +114,14 @@ class Templater_Templater
 	{
 		if (isset($this->mainTemplate) && $this->mainTemplate!="")
 		{
+			//Необходимо для установки флага CSS
 			$this->P->startDisplayMain();
 			$this->assign('content',$content);
 			$content = $this->fetch($this->mainTemplate);
 		}
-		$content = $this->P->HeaderFilter($content);
-		return $content;
+		//Необходимо для вызовов всех деструкторов
+		QFW::$router->startDisplayMain();
+		return $this->P->HeaderFilter($content);
 	}
 
 }
