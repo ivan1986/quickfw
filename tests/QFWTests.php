@@ -8,23 +8,24 @@
 	define ('MODPATH',  APPPATH  . '/_common/models');
 
 	$_SERVER['HTTP_HOST'] = 'test';
-	
+
 	require (QFWPATH.'/Init.php');
-	
+
 	chdir(dirname(__FILE__));
-		
+
 	class QFWTests
 	{
 		public static function suite()
 		{
 			$suite = new PHPUnit_Framework_TestSuite();
-			
+
 			$suite->addTestFile('DbSimple/DbSimpleTests.php');
 			$suite->addTestFile('Cache/CacheTest.php');
-			
+			$suite->addTestFile('Smarty/SmartyTest.php');
+
 			return $suite;
 		}
-		
+
 	}
 
 ?>

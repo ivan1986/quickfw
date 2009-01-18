@@ -1,10 +1,19 @@
 <?php
 
+mb_internal_encoding("UTF-8");
+
 /* настройки хоста - установка Content-Type: text/html; charset=encoding */
 $config['host']=array(
 	'encoding' => 'utf-8',
 	'lang' => 'ru_RU',
 	'logpath' => ROOTPATH.'/log',
+);
+
+/* Настройки дефолтового MCA */
+$config['default']=array(
+	'module'    => 'default',
+	'controller' => 'index',
+	'action'    => 'index',
 );
 
 /* Настройки коннекта к базе данных */
@@ -17,6 +26,7 @@ $config['database']=array(
 	'prefix'   => '',
 	'encoding' => 'utf8',
 );
+$config['database']='mypdo://root@localhost/base?enc=utf8&persist=1';
 
 /* Настройки перенаправления */
 /*
@@ -45,12 +55,21 @@ $config['templater']= array(
 	'def_tpl'   => 'main.html',
 );
 
-/**/
+/*
 $config['templater']= array(
 	'name'      => 'Smarty',
 	'def_tpl'   => 'main.tpl',
 );
-/**/
+
+$config['templater']= array(
+	'name'      => 'Proxy',
+	'def_tpl'   => 'main.html',
+	'exts' => array(
+		'tpl' => 'Smarty',
+		'html' => 'PlainView',
+	),
+);
+*/
 
 /* деквотатор, включите если нужно на хостинге */
 /*
@@ -68,6 +87,7 @@ if (get_magic_quotes_gpc()) {
 	if (isset($_SERVER['PHP_AUTH_USER'])) strips($_SERVER['PHP_AUTH_USER']);
 	if (isset($_SERVER['PHP_AUTH_PW']))   strips($_SERVER['PHP_AUTH_PW']);
 }
+set_magic_quotes_runtime(0);
 /**/
 
 ?>
