@@ -20,17 +20,17 @@
  *
  * For questions, help, comments, discussion, etc., please join the
  * Smarty mailing list. Send a blank e-mail to
- * smarty-general-subscribe@lists.php.net
+ * smarty-discussion-subscribe@googlegroups.com 
  *
- * @link http://smarty.php.net/
+ * @link http://www.smarty.net/
  * @copyright 2001-2005 New Digital Group, Inc.
  * @author Monte Ohrt <monte at ohrt dot com>
  * @author Andrei Zmievski <andrei@php.net>
  * @package Smarty
- * @version 2.6.19
+ * @version 2.6.22
  */
 
-/* $Id: Smarty.class.php 2722 2007-06-18 14:29:00Z danilo $ */
+/* $Id: Smarty.class.php 2785 2008-09-18 21:04:12Z Uwe.Tews $ */
 
 /**
  * DIR_SEP isn't used anymore, but third party apps might
@@ -271,6 +271,16 @@ class Smarty
     var $request_vars_order    = 'EGPCS';
 
     /**
+     * Indicates wether $HTTP_*_VARS[] (request_use_auto_globals=false)
+     * are uses as request-vars or $_*[]-vars. note: if
+     * request_use_auto_globals is true, then $request_vars_order has
+     * no effect, but the php-ini-value "gpc_order"
+     *
+     * @var boolean
+     */
+    var $request_use_auto_globals      = true;
+
+    /**
      * Set this if you want different sets of compiled files for the same
      * templates. This is useful for things like different languages.
      * Instead of creating separate sets of templates per language, you
@@ -454,7 +464,7 @@ class Smarty
      *
      * @var string
      */
-    var $_version              = '2.6.19';
+    var $_version              = '2.6.22';
 
     /**
      * current template inclusion depth
@@ -557,7 +567,8 @@ class Smarty
      */
     function Smarty()
     {
-      $this->assign('SCRIPT_NAME', $_SERVER['SCRIPT_NAME']);
+      $this->assign('SCRIPT_NAME', isset($_SERVER['SCRIPT_NAME']) ? $_SERVER['SCRIPT_NAME']
+                    : @$GLOBALS['HTTP_SERVER_VARS']['SCRIPT_NAME']);
     }
 
     /**
@@ -574,8 +585,9 @@ class Smarty
                     $this->_tpl_vars[$key] = $val;
                 }
             }
-        } elseif ($tpl_var != '') {
-            $this->_tpl_vars[$tpl_var] = $value;
+        } else {
+            if ($tpl_var != '')
+                $this->_tpl_vars[$tpl_var] = $value;
         }
     }
 
@@ -603,7 +615,7 @@ class Smarty
             // $tpl_var is an array, ignore $value
             foreach ($tpl_var as $_key => $_val) {
                 if ($_key != '') {
-                    if(!is_array($this->_tpl_vars[$_key])) {
+                    if(!@is_array($this->_tpl_vars[$_key])) {
                         settype($this->_tpl_vars[$_key],'array');
                     }
                     if($merge && is_array($_val)) {
@@ -617,7 +629,7 @@ class Smarty
             }
         } else {
             if ($tpl_var != '' && isset($value)) {
-                if(!is_array($this->_tpl_vars[$tpl_var])) {
+                if(!@is_array($this->_tpl_vars[$tpl_var])) {
                     settype($this->_tpl_vars[$tpl_var],'array');
                 }
                 if($merge && is_array($value)) {
@@ -640,7 +652,7 @@ class Smarty
     function append_by_ref($tpl_var, &$value, $merge=false)
     {
         if ($tpl_var != '' && isset($value)) {
-            if(!is_array($this->_tpl_vars[$tpl_var])) {
+            if(!@is_array($this->_tpl_vars[$tpl_var])) {
              settype($this->_tpl_vars[$tpl_var],'array');
             }
             if ($merge && is_array($value)) {
@@ -1109,7 +1121,7 @@ class Smarty
                ? $this->error_reporting : error_reporting() & ~E_NOTICE);
 
         if (!$this->debugging && $this->debugging_ctrl == 'URL') {
-            $_query_string = $_SERVER['QUERY_STRING'];
+            $_query_string = $this->request_use_auto_globals ? $_SERVER['QUERY_STRING'] : $GLOBALS['HTTP_SERVER_VARS']['QUERY_STRING'];
             if (@strstr($_query_string, $this->_smarty_debug_id)) {
                 if (@strstr($_query_string, $this->_smarty_debug_id . '=on')) {
                     // enable debugging for this browser session
@@ -1124,13 +1136,15 @@ class Smarty
                     $this->debugging = true;
                 }
             } else {
-                $this->debugging = (bool)(isset($_COOKIE['SMARTY_DEBUG']) ? $_COOKIE['SMARTY_DEBUG'] : false);
+                $this->debugging = (bool)($this->request_use_auto_globals ? @$_COOKIE['SMARTY_DEBUG'] : @$GLOBALS['HTTP_COOKIE_VARS']['SMARTY_DEBUG']);
             }
         }
 
         if ($this->debugging) {
             // capture time for debugging info
-            $_debug_start_time = microtime(true);
+            $_params = array();
+            require_once(SMARTY_CORE_DIR . 'core.get_microtime.php');
+            $_debug_start_time = smarty_core_get_microtime($_params, $this);
             $this->_smarty_debug_info[] = array('type'      => 'template',
                                                 'filename'  => $resource_name,
                                                 'depth'     => 0);
@@ -1176,12 +1190,14 @@ class Smarty
                     if ($this->debugging)
                     {
                         // capture time for debugging info
-                        $this->_smarty_debug_info[$_included_tpls_idx]['exec_time'] = microtime(true) - $_debug_start_time;
+                        $_params = array();
+                        require_once(SMARTY_CORE_DIR . 'core.get_microtime.php');
+                        $this->_smarty_debug_info[$_included_tpls_idx]['exec_time'] = smarty_core_get_microtime($_params, $this) - $_debug_start_time;
                         require_once(SMARTY_CORE_DIR . 'core.display_debug_console.php');
                         $_smarty_results .= smarty_core_display_debug_console($_params, $this);
                     }
                     if ($this->cache_modified_check) {
-                        $_server_vars = $_SERVER;
+                        $_server_vars = ($this->request_use_auto_globals) ? $_SERVER : $GLOBALS['HTTP_SERVER_VARS'];
                         $_last_modified_date = @substr($_server_vars['HTTP_IF_MODIFIED_SINCE'], 0, strpos($_server_vars['HTTP_IF_MODIFIED_SINCE'], 'GMT') + 3);
                         $_gmt_mtime = gmdate('D, d M Y H:i:s', $this->_cache_info['timestamp']).' GMT';
                         if (@count($this->_cache_info['insert_tags']) == 0
@@ -1278,7 +1294,9 @@ class Smarty
             if (isset($_smarty_results)) { echo $_smarty_results; }
             if ($this->debugging) {
                 // capture time for debugging info
-                $this->_smarty_debug_info[$_included_tpls_idx]['exec_time'] = microtime(true) - $_debug_start_time;
+                $_params = array();
+                require_once(SMARTY_CORE_DIR . 'core.get_microtime.php');
+                $this->_smarty_debug_info[$_included_tpls_idx]['exec_time'] = (smarty_core_get_microtime($_params, $this) - $_debug_start_time);
                 require_once(SMARTY_CORE_DIR . 'core.display_debug_console.php');
                 echo smarty_core_display_debug_console($_params, $this);
             }
@@ -1344,8 +1362,9 @@ class Smarty
      */
     function _get_plugin_filepath($type, $name)
     {
+        $_params = array('type' => $type, 'name' => $name);
         require_once(SMARTY_CORE_DIR . 'core.assemble_plugin_filepath.php');
-        return smarty_core_assemble_plugin_filepath(array('type' => $type, 'name' => $name), $this);
+        return smarty_core_assemble_plugin_filepath($_params, $this);
     }
 
    /**
@@ -1457,7 +1476,8 @@ class Smarty
         $smarty_compiler->_tpl_vars         = &$this->_tpl_vars;
         $smarty_compiler->default_modifiers = $this->default_modifiers;
         $smarty_compiler->compile_id        = $this->_compile_id;
-        $smarty_compiler->_config           = $this->_config;
+        $smarty_compiler->_config            = $this->_config;
+        $smarty_compiler->request_use_auto_globals  = $this->request_use_auto_globals;
 
         if (isset($cache_include_path) && isset($this->_cache_serials[$cache_include_path])) {
             $smarty_compiler->_cache_serial = $this->_cache_serials[$cache_include_path];
@@ -1691,7 +1711,16 @@ class Smarty
      */
     function _read_file($filename)
     {
-        return file_exists($filename) ? file_get_contents($filename) : false;
+        if ( file_exists($filename) && ($fd = @fopen($filename, 'rb')) ) {
+            $contents = '';
+            while (!feof($fd)) {
+                $contents .= fread($fd, 8192);
+            }
+            fclose($fd);
+            return $contents;
+        } else {
+            return false;
+        }
     }
 
     /**
@@ -1815,7 +1844,9 @@ class Smarty
     function _smarty_include($params)
     {
         if ($this->debugging) {
-            $debug_start_time = microtime(true);
+            $_params = array();
+            require_once(SMARTY_CORE_DIR . 'core.get_microtime.php');
+            $debug_start_time = smarty_core_get_microtime($_params, $this);
             $this->_smarty_debug_info[] = array('type'      => 'template',
                                                   'filename'  => $params['smarty_include_tpl_file'],
                                                   'depth'     => ++$this->_inclusion_depth);
@@ -1844,7 +1875,9 @@ class Smarty
 
         if ($this->debugging) {
             // capture time for debugging info
-            $this->_smarty_debug_info[$included_tpls_idx]['exec_time'] = microtime(true) - $debug_start_time;
+            $_params = array();
+            require_once(SMARTY_CORE_DIR . 'core.get_microtime.php');
+            $this->_smarty_debug_info[$included_tpls_idx]['exec_time'] = smarty_core_get_microtime($_params, $this) - $debug_start_time;
         }
 
         if ($this->caching) {

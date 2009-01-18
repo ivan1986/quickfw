@@ -17,15 +17,19 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
- * @link http://smarty.php.net/
- * @version 2.6.19
+ * For questions, help, comments, discussion, etc., please join the
+ * Smarty mailing list. Send a blank e-mail to
+ * smarty-discussion-subscribe@googlegroups.com 
+ *
+ * @link http://www.smarty.net/
+ * @version 2.6.22
  * @copyright Copyright: 2001-2005 New Digital Group, Inc.
  * @author Andrei Zmievski <andrei@php.net>
  * @access public
  * @package Smarty
  */
 
-/* $Id: Config_File.class.php 2702 2007-03-08 19:11:22Z mohrt $ */
+/* $Id: Config_File.class.php 2786 2008-09-18 21:04:38Z Uwe.Tews $ */
 
 /**
  * Config file reading class
@@ -234,10 +238,14 @@ class Config_File {
             $config_file = $file_name;
 
         ini_set('track_errors', true);
-        if (($contents = file_get_contents($config_file)) === false) {
+        $fp = @fopen($config_file, "r");
+        if (!is_resource($fp)) {
             $this->_trigger_error_msg("Could not open config file '$config_file'");
             return false;
         }
+
+        $contents = ($size = filesize($config_file)) ? fread($fp, $size) : '';
+        fclose($fp);
 
         $this->_config_data[$config_file] = $this->parse_contents($contents);
         return true;

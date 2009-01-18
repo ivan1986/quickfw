@@ -25,11 +25,10 @@ class Templater_Smarty
 	 */
 	protected function Init()
 	{
-		global $config;
-		require LIBPATH.'/Smarty/'.($config['release']?'Release':'Debug').'/Smarty.class.php';
+		require LIBPATH.'/Smarty/Smarty.class.php';
 		$this->_smarty = new Smarty;
 
-		$this->_smarty->force_compile = !$config['release'];
+		$this->_smarty->force_compile = !QFW::$config['release'];
 
 		$this->_smarty->compile_dir = TMPPATH . '/templates_c';
 		$this->_smarty->config_dir  = TMPPATH . '/configs';
