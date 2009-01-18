@@ -10,21 +10,21 @@
 	$_SERVER['HTTP_HOST'] = 'test';
 	
 	require (QFWPATH.'/Init.php');
-
-chdir(dirname(__FILE__));
 	
-class QFWTests
-{
-	public static function suite()
+	chdir(dirname(__FILE__));
+		
+	class QFWTests
 	{
-		$suite = new PHPUnit_Framework_TestSuite();
+		public static function suite()
+		{
+			$suite = new PHPUnit_Framework_TestSuite();
+			
+			$suite->addTestFile('DbSimple/DbSimpleTests.php');
+			$suite->addTestFile('Cache/CacheTest.php');
+			
+			return $suite;
+		}
 		
-		$suite->addTestFile('DbSimple/DbSimpleTests.php');
-		$suite->addTestFile('Cache/CacheTest.php');
-		
-		return $suite;
 	}
-	
-}
 
 ?>
