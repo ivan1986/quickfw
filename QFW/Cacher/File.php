@@ -65,6 +65,7 @@ class Cacher_File implements Zend_Cache_Backend_Interface
 		$file = $this->fileName($id);
 		if (!file_exists($file))
 			return false;
+		$data = false;
 		if ($doNotTest || is_null($time) || filemtime($file) > $time)
 			$data = $this->_read($file);
 		if ($this->options['automaticSerialization'] && is_string($data))
