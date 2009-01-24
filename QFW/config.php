@@ -23,13 +23,14 @@ $config['database']=array(
 	'prefix'   => '',
 	'encoding' => '',
 );
+$config['database']='mypdo://root@localhost/base?enc=utf8';
 
 $config['redirection']=array(
 	'baseUrl'          => '/',
 	'useIndex'         => false,
 	'defExt'           => '',
 	'useRewrite'       => true,
-	'useBlockRewrite' => false,
+	'useBlockRewrite'  => false,
 );
 
 $config['release']=false;

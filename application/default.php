@@ -34,7 +34,7 @@ $config['redirection']=array(
 	'useIndex'         => false,
 //	'defExt'           => '',	//или пусто или .html например
 	'useRewrite'       => true,
-	'useBlockRewrite' => false,
+	'useBlockRewrite'  => false,
 );
 
 /* Настройки кешера (класс бекенда и дополнительные параметры, если есть) */

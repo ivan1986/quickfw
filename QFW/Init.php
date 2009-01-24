@@ -44,7 +44,7 @@
 
 		static public function Init()
 		{
-			global $router,$db,$view,$globalData,$libs,$config;
+			global $router, $db, $view, $globalData, $libs, $config;
 			self::$globalData=$globalData;
 			self::$router=$router;
 			self::$config=$config;

@@ -439,6 +439,10 @@ foo:foo:b', $this->smarty->fetch('parse_obj_meth.tpl'));
         $this->assertEquals( $this->errorlevel, E_USER_WARNING);
         $this->smarty->security = $security;
     }
+    
+    function test_clear_compiled_tpl() {
+        $this->smarty->clear_compiled_tpl();
+    }
 
 }
 
