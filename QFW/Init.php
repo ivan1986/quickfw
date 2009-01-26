@@ -1,5 +1,8 @@
 <?php
 
+	/**
+	 * Инициализация конфигов
+	 */
 	require QFWPATH.'/config.php';
 	require APPPATH.'/default.php';
 
@@ -8,9 +11,12 @@
 	$file=APPPATH.'/'.$_SERVER['HTTP_HOST'].'.php';
 	if (is_file($file))
 		require ($file);
+	//-------------------------------------------------------------------------
 
 	if (isset($config['host']['encoding']))
 		header("Content-Type: text/html; charset=".$config['host']['encoding']);
+	if (isset($config['catchFE']) && $config['catchFE'])
+		require_once QFWPATH.'/QuickFW/Error.php';
 
 	require QFWPATH.'/QuickFW/Cache.php';
 	require QFWPATH.'/QuickFW/Block.php';

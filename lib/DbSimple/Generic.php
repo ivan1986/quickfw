@@ -59,19 +59,6 @@
  */
 
 /**
- * Use this constant as placeholder value to skip optional SQL block [...].
- */
-//define('DBSIMPLE_SKIP', log(0));
-
-/**
- * Names of special columns in result-set which is used
- * as array key (or karent key in forest-based resultsets) in
- * resulting hash.
- */
-define('DBSIMPLE_ARRAY_KEY', 'ARRAY_KEY');   // hash-based resultset support
-define('DBSIMPLE_PARENT_KEY', 'PARENT_KEY'); // forrest-based resultset support
-
-/**
  * Base class for all databases.
  * Can create transactions and new BLOBs, parse DSNs.
  *
@@ -1144,7 +1131,7 @@ interface DbSimple_Generic_Blob
 }
 
 /**
- * Класс для хранения подзапроса - результата фыполнения функции
+ * Класс для хранения подзапроса - результата выполнения функции
  * DbSimple_Generic_Database::subquery
  *
  */

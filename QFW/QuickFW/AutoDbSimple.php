@@ -4,11 +4,23 @@
  * Используйте константу DBSIMPLE_SKIP в качестве подстановочного значения чтобы пропустить опцональный SQL блок.
  */
 define('DBSIMPLE_SKIP', log(0));
+/**
+ * Имена специализированных колонок в резальтате,
+ * которые используются как ключи в результирующем массиве
+ */
+define('DBSIMPLE_ARRAY_KEY', 'ARRAY_KEY');   // hash-based resultset support
+define('DBSIMPLE_PARENT_KEY', 'PARENT_KEY'); // forrest-based resultset support
 
 class QuickFW_AutoDbSimple
 {
 	protected $DbSimple, $DSN;
 
+	/**
+	 * Конструктор только запоминает переданный DSN 
+	 * создание класса и коннект происходит позже
+	 *
+	 * @param string $dsn - DSN строка БД
+	 */
 	public function __construct($dsn)
 	{
 		$this->DbSimple  = null;

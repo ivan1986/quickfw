@@ -34,6 +34,7 @@ $config['redirection']=array(
 );
 
 $config['release']=false;
+$config['catchFE']=false;
 
 $config['cacher']=array(
 	'module' => 'File',

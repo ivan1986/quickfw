@@ -32,7 +32,7 @@ $config['database']='mypdo://root@localhost/smspr?enc=utf8';
 $config['redirection']=array(
 	'baseUrl'          => '/',
 	'useIndex'         => false,
-//	'defExt'           => '',	//или пусто или .html например
+	'defExt'           => '',	//или пусто или .html например
 	'useRewrite'       => true,
 	'useBlockRewrite'  => false,
 );
