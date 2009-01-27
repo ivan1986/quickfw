@@ -32,7 +32,7 @@ class DbSimple_Mysql extends DbSimple_Generic_Database
 	 */
 	function DbSimple_Mysql($dsn)
 	{
-		$connect = 'mysql_'.(isset($dsn['persist'])?'p':'').'connect';
+		$connect = 'mysql_'.((isset($dsn['persist']) && $dsn['persist'])?'p':'').'connect';
 		if (!is_callable($connect))
 			return $this->_setLastError("-1", "MySQL extension is not loaded", $connect);
 		$ok = $this->link = call_user_func($connect,
@@ -72,7 +72,7 @@ class DbSimple_Mysql extends DbSimple_Generic_Database
 		for ($i=mysql_num_fields($result)-1; $i>=0; $i--)
 		{
 			$type = mysql_field_type($result, $i);
-			if (stripos($type, "BLOB") !== false) 
+			if (stripos($type, "BLOB") !== false)
 				$blobFields[] = mysql_field_name($result, $i);
 		}
 		return $blobFields;
