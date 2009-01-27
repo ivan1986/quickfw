@@ -146,10 +146,10 @@ class QuickFW_Router
 
 	function show404()
 	{
-		global $view;
+		$GLOBALS['DONE'] = 1;
 		header("HTTP/1.1 404 Not Found");
-		$view->setScriptPath(APPPATH.'/default/templates/');
-		die($view->render('404.html'));
+		QFW::$view->setScriptPath(APPPATH.'/default/templates/');
+		die(QFW::$view->render('404.html'));
 	}
 
 	function delDef($url)
