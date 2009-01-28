@@ -1,5 +1,42 @@
 <?php 
 
+	class Cache
+	{
+		static $cachers=array();
+		
+		public function __construct() {}
+		
+		public static function get($name='default', $namespace='')
+		{
+			if (isset(self::$cachers[$name.'_'.$namespace]))
+				return self::$cachers[$name.'_'.$namespace];
+			if (!isset(QFW::$config['cache'][$name]))
+				throw new Exception('Не найдены парамерты кеша '.$name);
+			$data = QFW::$config['cache'][$name];
+			$backend=ucfirst($data['module']);
+			$cl='Cacher_'.$backend;
+			require_once(QFWPATH.'/Cacher/'.$backend.'.php');
+			$c=new $cl;
+			$c->setDirectives($data['options']);
+			
+			if (isset($data['namespace']) || $namespace!='')
+			{
+				require_once(QFWPATH.'/QuickFW/Cacher/Namespace.php');
+				$ns = (isset($data['namespace'])?$data['namespace']:'').$namespace;
+				$c=new Dklab_Cache_Backend_NamespaceWrapper($c,$ns);
+			}
+			if (isset($data['tags']) && $data['tags'])
+			{
+				require_once(QFWPATH.'/QuickFW/Cacher/TagEmu.php');
+				$c=new Dklab_Cache_Backend_TagEmuWrapper($c);
+			}
+			self::$cachers[$name]=$c;
+			return self::$cachers[$name];
+			
+		}
+		
+	}
+
 	//нужна для того, что сессии используют кешер и они записывают данные
 	//после уничтожения всех обьектов, кешер пересоздается заново
 	//для записи сессий
