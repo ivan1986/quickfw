@@ -37,18 +37,29 @@ $config['redirection']=array(
 	'useBlockRewrite'  => false,
 );
 
-/* Настройки кешера (класс бекенда и дополнительные параметры, если есть) */
+/**
+ * Настройки кешера (класс бекенда и дополнительные параметры, если есть)
+ *
+ * @deprecated лучше юзайте новый кешер
+ */
 $config['cacher']=array(
-	'module' => 'Memcache',
-	'options' => array(
-	),
-);
-$config['cacher']=array(
-	'module' => 'File',
+	'module' => 'Bdb',
 	'options' => array(
 		'file'=>'ttt',
 	),
 );
+/**
+ * Настройки кешеров
+ * Массив из названий, обязателен default
+ */
+$config['cache'] = array(
+	'default' => array(
+		'module' => 'Bdb',
+		'namespace' => '',
+		'tags' => false,
+	),
+);
+
 /**/
 
 /* статус проекта на данном хосте - отладка и всякие быстрые компиляции */

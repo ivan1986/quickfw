@@ -44,8 +44,7 @@ class QuickFW_Session
 
 	public function __construct()
 	{
-		global $config;
-		self::$cache = getCache();
+		self::$cache = Cache::get();
 		if (array_key_exists('cookie_domain',QFW::$config))
 			ini_set('session.cookie_domain',QFW::$config['cookie_domain']);
 		session_set_save_handler(

@@ -33,16 +33,23 @@ $config['redirection']=array(
 	'useBlockRewrite'  => false,
 );
 
-$config['release']=false;
-$config['catchFE']=false;
+$config['release'] = false;
+$config['catchFE'] = false;
 
 $config['cacher']=array(
 	'module' => 'File',
 );
+$config['cache'] = array(
+	'default' => array(
+		'module' => 'File',
+		'namespace' => '',
+		'tags' => false,
+	),
+);
 
-$config['templater']= array(
-	'name'       => 'PlainView',
-	'def_tpl'    => 'main.html',
+$config['templater'] = array(
+	'name'    => 'PlainView',
+	'def_tpl' => 'main.html',
 );
 
 ?>

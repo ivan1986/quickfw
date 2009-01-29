@@ -74,8 +74,8 @@
 		QFW::Init();
 		require_once LIBPATH.'/Log.php';
 		//TODO: Выдирать лог ошибок и отправлять последние куда-то
-		$err = file_get_contents('/home/ivan/QuickFramework/error.log');
-		Log::log($err);
+		/*$err = file_get_contents('/home/ivan/QuickFramework/error.log');
+		Log::log($err);*/
 		//file_put_contents(TMPPATH.'/2',serialize($GLOBALS));
 		return $text.'CALL';
 	}

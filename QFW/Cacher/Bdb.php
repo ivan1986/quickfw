@@ -12,7 +12,7 @@ class Cacher_Bdb implements Zend_Cache_Backend_Interface
 
 	public function setDirectives($directives)
 	{
-		$this->file=dba_open(TMPPATH.'/'.(isset($directives['file'])?$directives['file']:'cache').'.db4','cd','db4');
+		$this->file=dba_popen(TMPPATH.'/'.(isset($directives['file'])?$directives['file']:'cache').'.db4','cd','db4');
 	}
 
 	public function save($data, $id, $tags = array(), $specificLifetime = 3600)

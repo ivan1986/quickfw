@@ -1,10 +1,14 @@
-<?php 
+<?php
 
+	/**
+	 * Класс со статическими функциями
+	 * фабрика объектов для работы с кешем
+	 */
 	class Cache
 	{
 		static $cachers=array();
 		
-		public function __construct() {}
+		private function __construct() {}
 		
 		public static function get($name='default', $namespace='')
 		{
@@ -17,12 +21,12 @@
 			$cl='Cacher_'.$backend;
 			require_once(QFWPATH.'/Cacher/'.$backend.'.php');
 			$c=new $cl;
-			$c->setDirectives($data['options']);
+			$c->setDirectives(is_array($data['options'])?$data['options']:array());
 			
-			if (isset($data['namespace']) || $namespace!='')
+			// если у нас не пустое пространство имен - юзаем проксирующий класс
+			if ($ns = (isset($data['namespace'])?$data['namespace']:'').$namespace)
 			{
 				require_once(QFWPATH.'/QuickFW/Cacher/Namespace.php');
-				$ns = (isset($data['namespace'])?$data['namespace']:'').$namespace;
 				$c=new Dklab_Cache_Backend_NamespaceWrapper($c,$ns);
 			}
 			if (isset($data['tags']) && $data['tags'])
@@ -30,16 +34,38 @@
 				require_once(QFWPATH.'/QuickFW/Cacher/TagEmu.php');
 				$c=new Dklab_Cache_Backend_TagEmuWrapper($c);
 			}
-			self::$cachers[$name]=$c;
-			return self::$cachers[$name];
-			
+			return self::$cachers[$name.'_'.$namespace]=$c;
+		}
+		
+		public static function slot($name)
+		{
+			require_once QFWPATH.'/QuickFW/Cacher/Slot.php';
+			require_once APPPATH.'/_common/slots/'.$name.'.php';
+			$args = func_get_args();
+			array_shift($args);
+			$reflectionObj = new ReflectionClass('Slot_'.$name);
+			return $reflectionObj->newInstanceArgs($args);
+		}
+		
+		public static function tag($name)
+		{
+			require_once QFWPATH.'/QuickFW/Cacher/Tag.php';
+			require_once APPPATH.'/_common/tags/'.$name.'.php';
+			$args = func_get_args();
+			array_shift($args);
+			$reflectionObj = new ReflectionClass('Tag_'.$name);
+			return $reflectionObj->newInstanceArgs($args);
 		}
 		
 	}
 
-	//нужна для того, что сессии используют кешер и они записывают данные
-	//после уничтожения всех обьектов, кешер пересоздается заново
-	//для записи сессий
+	/**
+	 * нужна для того, что сессии используют кешер и они записывают данные
+	 * после уничтожения всех обьектов, кешер пересоздается заново
+	 * для записи сессий
+	 *
+	 * @deprecated Используйте Cache::get()
+	 */
 	function &getCache($backend='',$opt=array(),$tags=false,$namespace='')
 	{
 		global $config;
