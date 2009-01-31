@@ -45,8 +45,7 @@ class QuickFW_Session
 	public function __construct()
 	{
 		self::$cache = Cache::get();
-		if (array_key_exists('cookie_domain',QFW::$config))
-			ini_set('session.cookie_domain',QFW::$config['cookie_domain']);
+		call_user_func_array('session_set_cookie_params',QFW::$config['session']);
 		session_set_save_handler(
 			array('QuickFW_Session',"open"),
 			array('QuickFW_Session',"close"),

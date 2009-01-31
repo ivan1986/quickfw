@@ -36,6 +36,16 @@ $config['redirection']=array(
 $config['release'] = false;
 $config['catchFE'] = false;
 
+/**
+ * С этими параметрами вызывается функция
+ * session_set_cookie_params
+ * Менять порядок нельзя - отломается, дописывать можно
+ */
+$config['session'] = array(
+	'lifetime' => 3600,
+	'path' => '/',
+);
+
 $config['cacher']=array(
 	'module' => 'File',
 );
