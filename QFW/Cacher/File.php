@@ -61,12 +61,11 @@ class Cacher_File implements Zend_Cache_Backend_Interface
 	{
 		if (!$this->options['caching'])
 			return false;
-		$time = $this->refreshTime();
 		$file = $this->fileName($id);
 		if (!file_exists($file))
 			return false;
 		$data = false;
-		if ($doNotTest || is_null($time) || filemtime($file) > $time)
+		if ($doNotTest || filemtime($file) > time())
 			$data = $this->_read($file);
 		if ($this->options['automaticSerialization'] && is_string($data))
 			$data = unserialize($data);
@@ -81,13 +80,13 @@ class Cacher_File implements Zend_Cache_Backend_Interface
 			$data = serialize($data);
 		$file = $this->fileName($id,true);
 
-		if ($this->options['automaticCleaningFactor']>0)
-			if (rand(1, $this->options['automaticCleaningFactor'])==1)
-				$this->cleanDir($this->options['cacheDir'], CACHE_CLR_OLD);
+		if ($this->options['automaticCleaningFactor']>0 && rand(1, $this->options['automaticCleaningFactor']) == 1)
+			$this->cleanDir($this->options['cacheDir'], CACHE_CLR_OLD);
 
 		$control = $this->options['readControl'] ? $this->hash($data) : '';
 		if (file_put_contents($file, $control.$data, ($this->options['fileLocking'] ? LOCK_EX : NULL)) === false)
 			return false;
+		touch($file, time() + ($specificLifetime?$specificLifetime:$this->options['lifeTime']));
 		if (!$this->options['writeControl'] || $data == $this->_read($file))
 			return true;
 		$this->unlink($file);
@@ -108,11 +107,6 @@ class Cacher_File implements Zend_Cache_Backend_Interface
 	{
 		$file = $this->fileName($id);
 		return is_file($file) && filemtime($file);
-	}
-
-	protected function refreshTime()
-	{
-		return ($this->options['lifeTime'] === null) ? null : time() - $this->options['lifeTime'];
 	}
 
 	protected function unlink($file)
@@ -164,8 +158,8 @@ class Cacher_File implements Zend_Cache_Backend_Interface
 			$hash = md5($suffix);
 			for ($i=0 ; $i<$this->options['hashedDirectoryLevel'] ; $i++)
 				$root .= $this->options['prefix'] . substr($hash, 0, $i + 1) . '/';
-			if ($createDirs)
-				is_dir($root) || mkdir($root, $this->options['hashedDirectoryUmask'] , true);
+			if ($createDirs && !is_dir($root))
+				mkdir($root, $this->options['hashedDirectoryUmask'] , true);
 		}
 		return $root.$suffix;
 	}
