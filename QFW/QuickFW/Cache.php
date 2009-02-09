@@ -37,6 +37,12 @@
 			return self::$cachers[$name.'_'.$namespace]=$c;
 		}
 		
+		public static function namespace(Zend_Cache_Backend_Interface $cacher, $namespace='')
+		{
+			require_once(QFWPATH.'/QuickFW/Cacher/Namespace.php');
+			return new Dklab_Cache_Backend_NamespaceWrapper($cacher,$namespace);
+		}
+		
 		public static function slot($name)
 		{
 			require_once QFWPATH.'/QuickFW/Cacher/Slot.php';
