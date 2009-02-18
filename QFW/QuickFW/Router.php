@@ -18,14 +18,13 @@ class QuickFW_Router
 
 	function __construct($baseDir)
 	{
-		global $config;
 		$this->baseDir = rtrim($baseDir, '/\\');
 		$this->module = '';
 		$this->controller = NULL;
 		$this->action = '';
-		$this->defM = $config['default']['module'];
-		$this->defC = $config['default']['controller'];
-		$this->defA = $config['default']['action'];
+		$this->defM = QFW::$config['default']['module'];
+		$this->defC = QFW::$config['default']['controller'];
+		$this->defA = QFW::$config['default']['action'];
 	}
 
 	function route($requestUri = null, $type='Action')
