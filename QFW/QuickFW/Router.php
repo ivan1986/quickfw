@@ -302,9 +302,11 @@ class QuickFW_Router
 		$MCA['Controller'] = $cname;
 		$class_key=$MCA['Module'].'|'.$MCA['Controller'];
 
-		require_once($fullname);
 		if (!array_key_exists($class_key,$this->classes))
+		{
+			require_once($fullname);
 			$this->classes[$class_key]=new $class;
+		}
 		$MCA['Class'] = $this->classes[$class_key];
 
 		if (!class_exists($class))
