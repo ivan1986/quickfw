@@ -1,44 +1,50 @@
 <?php
 
 /**
- * 	Выполняет HTTP-запрос по заданному URL,
- *	используя fopen-оболочки или CURL
+ * Выполняет HTTP-запрос по заданному URL,
+ *
  *@var string url адрес запроса
- *@var string userAgent кем представляться серверу
- *@return string|false Возвращает: ответ сервера (без заголовков)или false в случае неудачи
+ *@return string|false|null Возвращает: ответ сервера (без заголовков), false в случае неудачи или null в случае таймаута
  */
-function getURLContent($url, $userAgent = 'SeriousDron Utilities Pack, getURLContent function')
+function getUrl($url,$data=array())
 {
-	//Закоментил чтобы передавать ЖЖ данные бота, а это может только CURL
-		if (ini_get('safe_mode') == '0' AND ini_get('allow_url_fopen') == '1') return file_get_contents($url);
-		$curl = curl_init($url);
+	$c = curl_init();
+	curl_setopt_array($c, array(
+		CURLOPT_URL => $url,
+		CURLOPT_RETURNTRANSFER => 1,
+		CURLOPT_FOLLOWLOCATION => 1,
+	));
+	if (array_key_exists('post',$data))	//POST запрос
+		curl_setopt_array($c, array(
+			CURLOPT_POST => 1,
+			CURLOPT_POSTFIELDS => is_array($data['post'])?http_build_query($data['post']):$data['post'],
+		));
+	if (isset(QFW::$config['consts']['curlTimeOut']))
+		curl_setopt($c, CURLOPT_TIMEOUT, QFW::$config['consts']['curlTimeOut']),
+	if (array_key_exists('sid',$data))
+		curl_setopt($c, CURLOPT_COOKIE, 'PHPSESSID='.$data['sid']);
+	if (array_key_exists('user',$data) && array_key_exists('pass',$data))	//запрос авторизации
+		curl_setopt($c, CURLOPT_USERPWD, $data['user'] . ":" . $data['pass']);
+	if (isset(QFW::$config['host']['proxy']))
+		curl_setopt($c, CURLOPT_PROXY, QFW::$config['host']['proxy']);
 
-		$curlErr = curl_errno($curl);
-		if ($curlErr != CURLE_OK)
-		{
-			curl_close($curl);
-			return false;
-		}
-
-		curl_setopt($curl, CURLOPT_HEADER, false);			//заголовки не нужны
-		/*curl_setopt($curl, CURLOPT_FOLLOWLOCATION, true);	//переходить по 'Location:'*/
-
-		curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);	//Вернуть результат
-		curl_setopt($curl, CURLOPT_USERAGENT, $userAgent);	//Передать наш юзер-агент
-
-		$content = curl_exec($curl);
-		$curlErr = curl_errno($curl);
-
-		curl_close($curl);
-
-		if ($curlErr != CURLE_OK)
-			return false;
-
-		return $content;
+	$content = curl_exec($c);
+	$code = curl_getinfo($c, CURLINFO_HTTP_CODE);
+	if (curl_errno($c) == 28)	//CURLE_OPERATION_TIMEDOUT
+		return null;
+	if (array_key_exists('rcode',$data))
+		return array(
+			'code'=>$code,
+			'content'=>$content,
+		);
+	if ($code>=300)
+		return false;
+	return $content;
 }
 
+
 /**
- * 	Вывод сообщения с разбивкой длинных слов без повреждения тегов
+ * Вывод сообщения с разбивкой длинных слов без повреждения тегов
  */
 function msg2html($s,$n=50) {
 
