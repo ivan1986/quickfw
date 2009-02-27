@@ -7,9 +7,9 @@
 	class Cache
 	{
 		static $cachers=array();
-		
+
 		private function __construct() {}
-		
+
 		public static function get($name='default', $namespace='')
 		{
 			if (isset(self::$cachers[$name.'_'.$namespace]))
@@ -22,13 +22,10 @@
 			require_once(QFWPATH.'/Cacher/'.$backend.'.php');
 			$c=new $cl;
 			$c->setDirectives(is_array($data['options'])?$data['options']:array());
-			
+
 			// если у нас не пустое пространство имен - юзаем проксирующий класс
 			if ($ns = (isset($data['namespace'])?$data['namespace']:'').$namespace)
-			{
-				require_once(QFWPATH.'/QuickFW/Cacher/Namespace.php');
-				$c=new Dklab_Cache_Backend_NamespaceWrapper($c,$ns);
-			}
+				$c=self::namespace($c,$n);
 			if (isset($data['tags']) && $data['tags'])
 			{
 				require_once(QFWPATH.'/QuickFW/Cacher/TagEmu.php');
@@ -36,13 +33,13 @@
 			}
 			return self::$cachers[$name.'_'.$namespace]=$c;
 		}
-		
+
 		public static function namespace(Zend_Cache_Backend_Interface $cacher, $namespace='')
 		{
 			require_once(QFWPATH.'/QuickFW/Cacher/Namespace.php');
 			return new Dklab_Cache_Backend_NamespaceWrapper($cacher,$namespace);
 		}
-		
+
 		public static function slot($name)
 		{
 			require_once QFWPATH.'/QuickFW/Cacher/Slot.php';
@@ -52,7 +49,7 @@
 			$reflectionObj = new ReflectionClass('Slot_'.$name);
 			return $reflectionObj->newInstanceArgs($args);
 		}
-		
+
 		public static function tag($name)
 		{
 			require_once QFWPATH.'/QuickFW/Cacher/Tag.php';
@@ -62,7 +59,7 @@
 			$reflectionObj = new ReflectionClass('Tag_'.$name);
 			return $reflectionObj->newInstanceArgs($args);
 		}
-		
+
 	}
 
 	/**
@@ -85,9 +82,11 @@
 		$cl='Cacher_'.$backend;
 		require_once(QFWPATH.'/Cacher/'.$backend.'.php');
 		$c=new $cl;
-		if (count($opt)==0 && isset($config['cacher']['options']))
-			$opt=$config['cacher']['options'];
+
+		if (isset($config['cacher']['options']))
+			$opt = array_merge($config['cacher']['options'],$opt);
 		$c->setDirectives($opt);
+
 		if ($namespace!='')
 		{
 			require_once(QFWPATH.'/QuickFW/Cacher/Namespace.php');
