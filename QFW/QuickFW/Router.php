@@ -14,7 +14,7 @@ class QuickFW_Router
 	protected $cModule, $cController;
 	public $module, $controller, $action;
 
-	public $UriPath, $CurPath, $ParentPath;
+	public $UriPath, $CurPath, $ParentPath, $Uri, $RequestUri;
 
 	function __construct($baseDir)
 	{
@@ -55,6 +55,8 @@ class QuickFW_Router
 		$this->cController = $this->controller = $MCA['Controller'];
 		$this->action = $MCA['Action'];
 		$this->CurPath = $this->UriPath = $MCA['Path'];
+		$this->Uri = $MCA['Path'].'/'.join('/',$data);
+		$this->RequestUri = $requestUri;
 		$this->ParentPath = null;
 
 		$CacheInfo=false;
@@ -183,6 +185,12 @@ class QuickFW_Router
 		//если не указан - редирект откуда пришли
 		$url = $url ? $url : (isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '');
 		header('Location: '.$url);
+		exit();
+	}
+
+	function reload()
+	{
+		header('Location: '.$_SERVER['REQUEST_URI']);
 		exit();
 	}
 
