@@ -16,7 +16,7 @@ class QuickFW_Router
 
 	public $UriPath, $CurPath, $ParentPath, $Uri, $RequestUri;
 
-	function __construct($baseDir)
+	public function __construct($baseDir)
 	{
 		global $config;
 		$this->baseDir = rtrim($baseDir, '/\\');
@@ -28,7 +28,7 @@ class QuickFW_Router
 		$this->defA = $config['default']['action'];
 	}
 
-	function route($requestUri = null, $type='Action')
+	public function route($requestUri = null, $type='Action')
 	{
 		global $view, $config;
 		if ($requestUri === null)
@@ -116,7 +116,7 @@ class QuickFW_Router
 			echo $view->displayMain($result);
 	}
 
-	function blockRoute($Uri)
+	public function blockRoute($Uri)
 	{
 		global $config;
 		$patt=array();
@@ -146,29 +146,37 @@ class QuickFW_Router
 	//Необходимо для вызовов всех деструкторов
 	public function startDisplayMain() { $this->classes = array(); }
 
-	function show404()
+	public function show404()
 	{
 		$GLOBALS['DONE'] = 1;
-		header($_SERVER['SERVER_PROTOCOL'].' 404 Not Found');
+		header("HTTP/1.1 404 Not Found");
 		QFW::$view->setScriptPath(APPPATH.'/default/templates/');
 		die(QFW::$view->render('404.html'));
 	}
 
-	function delDef($url)
+	/**
+	 * Удаляет из адреса дефолтовые компоненты
+	 * (напр: default/other/index => other)
+	 */
+	public function delDef($url)
 	{
 		$url = explode('/',$url);
-		if (isset($url[0]) && $url[0]==$this->defM)
+		$n = min(3, count($url));
+		if (isset($url[0]) && $url[0]==$this->defM && $n--)
 			array_shift($url);
-		if (count($url)==2 && $url[1]==$this->defA)
+		if (count($url)>$n)
+			return join('/',$url);
+		$i = $n - 1;
+		if (count($url)<=$n && isset($url[$i]) && $url[$i]==$this->defA)
 		{
-			$url[0]=array_shift($url);
+			unset($url[$i]);
 			if (isset($url[0]) && $url[0]==$this->defC)
 				array_shift($url);
 		}
 		return join('/',$url);
 	}
 
-	function redirectMCA($MCA,$tail='')
+	public function redirectMCA($MCA,$tail='')
 	{
 		global $config;
 		$base   = $config['redirection']['baseUrl'];
@@ -180,7 +188,7 @@ class QuickFW_Router
 		exit();
 	}
 
-	function redirect($url=null)
+	public function redirect($url=null)
 	{
 		//если не указан - редирект откуда пришли
 		$url = $url ? $url : (isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '');
@@ -188,13 +196,13 @@ class QuickFW_Router
 		exit();
 	}
 
-	function reload()
+	public function reload()
 	{
 		header('Location: '.$_SERVER['REQUEST_URI']);
 		exit();
 	}
 
-	function backrewrite($uri)
+	public function backrewrite($uri)
 	{
 		if (!QFW::$config['redirection']['useRewrite'])
 			return $uri;
@@ -325,11 +333,11 @@ class QuickFW_Router
 			return $MCA;
 		}
 
-		$vars=get_class_vars($class);
-		$actions=get_class_methods($class);
-		$defA=array_key_exists('defA',$vars)?$vars['defA']:$this->defA;
+		$vars = get_class_vars($class);
+		$actions = get_class_methods($class);
+		$defA = array_key_exists('defA', $vars) ? $vars['defA'] : $this->defA;
 
-		$aname = isset($data[0])?$data[0]:$defA;
+		$aname = isset($data[0]) ? $data[0] : $defA;
 		$MCA['Action'] = strtr($aname,'.','_').$type;
 
 		$MCA['cache']= in_array('CacheInfo',$actions);

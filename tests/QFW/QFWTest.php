@@ -32,15 +32,15 @@ class QFWTest extends PHPUnit_Framework_TestCase
 			array('aaa/bbb/fff', 'bbb/fff'),
 			array('aaa/eee/ccc', 'eee'),
 			array('aaa/eee/fff', 'eee/fff'),
-			array('ddd/bbb/ccc', 'ddd/bbb/ccc'),
+			array('ddd/bbb/ccc', 'ddd/bbb'),
 			array('ddd/bbb/fff', 'ddd/bbb/fff'),
-			array('ddd/eee/ccc', 'ddd/eee/ccc'),
+			array('ddd/eee/ccc', 'ddd/eee'),
 			array('ddd/eee/fff', 'ddd/eee/fff'),
 			array('aaa/bbb', 'bbb'),
 			array('aaa/eee', 'eee'),
 			array('ddd/bbb', 'ddd/bbb'),
 			array('ddd/eee', 'ddd/eee'),
-			array('aaa/ccc', 'ccc'),
+			array('aaa/ccc', ''),
 			array('aaa/fff', 'fff'),
 			array('ddd/ccc', 'ddd'),
 			array('ddd/fff', 'ddd/fff'),
@@ -52,11 +52,11 @@ class QFWTest extends PHPUnit_Framework_TestCase
 			array('ddd', 'ddd'),
 			array('bbb', 'bbb'),
 			array('eee', 'eee'),
-			array('ccc', 'ccc'),
+			array('ccc', ''),
 			array('fff', 'fff'),
 		);
 	}
-	
+
 	/**
 	 * @dataProvider testDdefProvider
 	 *
@@ -64,14 +64,15 @@ class QFWTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testDdef($in,$out)
 	{
+		global $config;
+		$config['default']['module'] = 'aaa';
+		$config['default']['controller'] = 'bbb';
+		$config['default']['action'] = 'ccc';
 		QFW::Init();
-		QFW::$config['default']['module'] = 'aaa';
-		QFW::$config['default']['controller'] = 'bbb';
-		QFW::$config['default']['action'] = 'ccc';
 		QFW::$router->__construct(APPPATH);
 		$this->assertEquals(QFW::$router->delDef($in),$out);
 	}
-	
+
 }
 
 ?>
