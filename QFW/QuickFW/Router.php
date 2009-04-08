@@ -319,12 +319,19 @@ class QuickFW_Router
 		$MCA['Controller'] = $cname;
 		$class_key=$MCA['Module'].'|'.$MCA['Controller'];
 
-		if (!array_key_exists($class_key,$this->classes))
+		if (!isset($this->classes[$class_key]))
 		{
 			require_once($fullname);
-			$this->classes[$class_key]=new $class;
+			$vars = get_class_vars($class);
+			$acts = get_class_methods($class);
+			$this->classes[$class_key] = array(
+				'i'    => new $class,
+				'defA' => isset($vars['defA']) ? $vars['defA'] : $this->defA,
+				'a'    => $acts,
+				'c'    => in_array('CacheInfo',$acts),
+			);
 		}
-		$MCA['Class'] = $this->classes[$class_key];
+		$MCA['Class'] = $this->classes[$class_key]['i'];
 
 		if (!class_exists($class))
 		{
@@ -333,21 +340,17 @@ class QuickFW_Router
 			return $MCA;
 		}
 
-		$vars = get_class_vars($class);
-		$actions = get_class_methods($class);
-		$defA = array_key_exists('defA', $vars) ? $vars['defA'] : $this->defA;
-
-		$aname = isset($data[0]) ? $data[0] : $defA;
+		$aname = isset($data[0]) ? $data[0] : $this->classes[$class_key]['defA'];
 		$MCA['Action'] = strtr($aname,'.','_').$type;
 
-		$MCA['cache']= in_array('CacheInfo',$actions);
-		if (in_array($MCA['Action'],$actions))
+		$MCA['cache'] = $this->classes[$class_key]['c'];
+		if (in_array($MCA['Action'],$this->classes[$class_key]['a']))
 			array_shift($data);
 		else
 		{
-			$aname=$defA;
+			$aname = $this->classes[$class_key]['defA'];
 			$MCA['Action'] = $aname.$type;
-			if (!in_array($MCA['Action'],$actions))
+			if (!in_array($MCA['Action'],$this->classes[$class_key]['a']))
 			{
 				$MCA['Error']="в классе \t\t\t".$class." \nне найдена функция \t\t".
 				$MCA['Action']."\nМетод не найден шоб его";
