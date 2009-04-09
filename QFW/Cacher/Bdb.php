@@ -1,10 +1,9 @@
 <?php
 
-require_once(QFWPATH.'/QuickFW/Cacher/Interface.php');
-
 class Cacher_Bdb implements Zend_Cache_Backend_Interface
 {
 	protected $file = NULL;
+	protected $opt = array();
 
 	public function __construct()
 	{
@@ -12,16 +11,34 @@ class Cacher_Bdb implements Zend_Cache_Backend_Interface
 
 	public function setDirectives($directives)
 	{
-		$this->file=dba_popen(TMPPATH.'/'.(isset($directives['file'])?$directives['file']:'cache').'.db4','cd','db4');
+		$this->opt = array(
+			'file' => isset($directives['file']) ? $directives['file'] : 'cache',
+			'dba'  => isset($directives['dba'])  ? $directives['dba']  : 'db4',
+			'type' => isset($directives['type']) ? $directives['type'] : 'cd',
+		);
+	}
+	
+	private function conn()
+	{
+		$this->file=dba_open(TMPPATH.'/'.$this->opt['file'].'.'.$this->opt['dba'], $this->opt['type'], $this->opt['dba']);
 	}
 
 	public function save($data, $id, $tags = array(), $specificLifetime = 3600)
 	{
+		if (!$this->file) $this->conn();
 		return dba_replace($id,serialize(array(time()+$specificLifetime,$data)),$this->file);
 	}
 
 	public function load($id, $doNotTest = false)
 	{
+		if (!$this->file) $this->conn();
+		if (is_array($id))
+		{
+			$x = array();
+			foreach($id as $v)
+				$x[$v] = $this->load($v);
+			return $x;
+		}
 		$data=dba_fetch($id,$this->file);
 		if (!$data)
 			return false;
@@ -41,11 +58,13 @@ class Cacher_Bdb implements Zend_Cache_Backend_Interface
 
 	public function remove($id)
 	{
+		if (!$this->file) $this->conn();
 		return dba_delete($id,$this->file);
 	}
 
 	public function clean($mode = CACHE_CLR_ALL, $tags = array())
 	{
+		if (!$this->file) $this->conn();
 		$key=dba_firstkey($this->file);
 		if (!$key)
 			return;

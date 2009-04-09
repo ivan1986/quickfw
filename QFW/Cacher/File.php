@@ -1,10 +1,8 @@
 <?php
+
 /**
-* Аццки порезанный и переписанный Cache_Lite
-*/
-
-require_once(QFWPATH.'/QuickFW/Cacher/Interface.php');
-
+ * Аццки порезанный и переписанный Cache_Lite
+ */
 class Cacher_File implements Zend_Cache_Backend_Interface
 {
 
@@ -12,7 +10,7 @@ class Cacher_File implements Zend_Cache_Backend_Interface
 		'cacheDir' => '',
 		'caching' => true,
 		'prefix' => 'cache_',
-		'lifeTime' => 3600,
+		'lifeTime' => null,
 		'fileLocking' => true,
 		'writeControl' => false,
 		'readControl' => false,
@@ -61,11 +59,18 @@ class Cacher_File implements Zend_Cache_Backend_Interface
 	{
 		if (!$this->options['caching'])
 			return false;
+		if (is_array($id))
+		{
+			$x = array();
+			foreach($id as $v)
+				$x[$v] = $this->load($v);
+			return $x;
+		}
 		$file = $this->fileName($id);
 		if (!file_exists($file))
 			return false;
 		$data = false;
-		if ($doNotTest || filemtime($file) > time())
+		if ($doNotTest || is_null($time) || filemtime($file) > time())
 			$data = $this->_read($file);
 		if ($this->options['automaticSerialization'] && is_string($data))
 			$data = unserialize($data);

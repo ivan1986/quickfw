@@ -9,8 +9,6 @@
  * @copyright RosBusinessConsulting
  */
 
-require_once(QFWPATH.'/QuickFW/Cacher/Interface.php');
-
 class Cacher_Xcache implements Zend_Cache_Backend_Interface
 {
 	public function setDirectives($directives)

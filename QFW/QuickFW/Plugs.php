@@ -180,6 +180,8 @@ class QuickFW_Plugs
 	public function displayErrors($errors=array())
 	{
 		$res = '';
+		if (!is_array($errors))
+			return $res;
 		foreach($errors as $error)
 			$res .= $this->displayErrorsParams['pre'].$error.$this->displayErrorsParams['post'];
 		return $res;
