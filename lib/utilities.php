@@ -3,10 +3,11 @@
 /**
  * Выполняет HTTP-запрос по заданному URL,
  *
- *@var string url адрес запроса
- *@return string|false|null Возвращает: ответ сервера (без заголовков), false в случае неудачи или null в случае таймаута
+ * @var string url адрес запроса
+ * @var array data массив данных
+ * @return string|array|false|null Возвращает: ответ сервера (без заголовков), false в случае неудачи или null в случае таймаута
  */
-function getUrl($url,$data=array())
+function getUrl($url, $data=array())
 {
 	$c = curl_init();
 	curl_setopt_array($c, array(
@@ -14,30 +15,44 @@ function getUrl($url,$data=array())
 		CURLOPT_RETURNTRANSFER => 1,
 		CURLOPT_FOLLOWLOCATION => 1,
 	));
-	if (array_key_exists('post',$data))	//POST запрос
+	if (isset($data['post']))	//POST запрос
+	{
 		curl_setopt_array($c, array(
 			CURLOPT_POST => 1,
-			CURLOPT_POSTFIELDS => is_array($data['post'])?http_build_query($data['post']):$data['post'],
+			CURLOPT_POSTFIELDS => is_array($data['post']) ? http_build_query($data['post']) : $data['post'],
 		));
-	if (isset(QFW::$config['consts']['curlTimeOut']))
-		curl_setopt($c, CURLOPT_TIMEOUT, QFW::$config['consts']['curlTimeOut']),
-	if (array_key_exists('sid',$data))
+	}
+	if (empty($data['file']) && !empty(QFW::$config['consts']['curlTimeOut']))
+		curl_setopt($c, CURLOPT_TIMEOUT, QFW::$config['consts']['curlTimeOut']);
+	if (!empty($data['sid']))
 		curl_setopt($c, CURLOPT_COOKIE, 'PHPSESSID='.$data['sid']);
-	if (array_key_exists('user',$data) && array_key_exists('pass',$data))	//запрос авторизации
+	if (!empty($data['user']) && !empty($data['pass']))
 		curl_setopt($c, CURLOPT_USERPWD, $data['user'] . ":" . $data['pass']);
+	if (!empty($data['file']))
+		if (false === ($hFile = fopen($data['file'], 'w')))
+			return false;
+		else
+			curl_setopt_array($c, array(
+				CURLOPT_FILE => $hFile,
+				CURLOPT_HEADER => 0,
+			));
 	if (isset(QFW::$config['host']['proxy']))
 		curl_setopt($c, CURLOPT_PROXY, QFW::$config['host']['proxy']);
 
 	$content = curl_exec($c);
 	$code = curl_getinfo($c, CURLINFO_HTTP_CODE);
-	if (curl_errno($c) == 28)	//CURLE_OPERATION_TIMEDOUT
-		return null;
+	$errno = curl_errno($c);
+	curl_close($c);
+	if ($errno == 28)	//CURLE_OPERATION_TIMEDOUT
+		return false;
+	if (!empty($data['file']))
+		return fclose($hFile);
 	if (array_key_exists('rcode',$data))
 		return array(
 			'code'=>$code,
 			'content'=>$content,
 		);
-	if ($code>=300)
+	if ($code >= 300)
 		return false;
 	return $content;
 }
@@ -81,23 +96,39 @@ function make_urls($string, $nofollow=false) {
 }
 
 /**
- * 	Печать размера файла
+ * Печать размера файла в форматированном виде
  */
 function printSize($size)
 {
+	if ($size>1024*1024*2)
+		return round($size/1024/1024,2).' Мб';
 	if ($size>1024*10)
-		return (round($size/1024*100)/100).' Kb';
-	return $size.'b';
+		return round($size/1024,2).' Кб';
+	return $size.' байт';
 }
 
 /**
- * 	Усечение UTF8 строк
+ * Усечение UTF8 строк
  */
-function my_trim($srt,$size)
+function my_trim($str,$size)
 {
-	if ((mb_strlen($srt)-3)>$size)
-		$srt=mb_substr($srt,0,$size-3).'...';
-	return $srt;
+	if (mb_strlen($str)>$size)
+		$str=mb_substr($str,0,$size-3).'...';
+	return $str;
+}
+
+/**
+ * Выдает несколько неповторяющихся случайных значений
+ */
+function n_rand($min, $max, $count)
+{
+	if ($max - $min < $count)
+		return array();
+	$a = array();
+	while(count($a)<$count)
+		if (!in_array($x = mt_rand($min,$max),$a))
+			$a[] = $x;
+	return $a;
 }
 
 /**
@@ -155,6 +186,9 @@ function xml2array($xml,$attrName='attr',$arrFlar='array')
  */
 function array2xml($array,$attrName='attr',$arrFlar='array')
 {
+	if(empty($array))
+		return '';
+
 	$xml=array();
 	$subattr='';
 	$arr=array_key_exists($arrFlar,$array)?$array[$arrFlar]:false;

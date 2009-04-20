@@ -10,7 +10,7 @@ class QuickFW_Router
 	protected $defM,$defC,$defA;
 
 	//модуль и контроллер в контексте которого выполняется,
-	//небходимо для роутинга компонентов
+	//необходимо для роутинга компонентов
 	protected $cModule, $cController;
 	public $module, $controller, $action;
 

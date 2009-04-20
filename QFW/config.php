@@ -44,6 +44,9 @@ $config['catchFE'] = false;
 $config['session'] = array(
 	'lifetime' => 3600,
 	'path' => '/',
+	//'domain' => '.mydomain.ru',
+	//'secure' => false,
+	//'httponly' => false,
 );
 
 $config['cacher']=array(
