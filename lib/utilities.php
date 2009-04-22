@@ -122,7 +122,7 @@ function my_trim($str,$size)
  */
 function n_rand($min, $max, $count)
 {
-	if ($max - $min < $count)
+	if ($max - $min + 1 < $count)
 		return array();
 	$a = array();
 	while(count($a)<$count)
@@ -143,15 +143,14 @@ function xml2array($xml,$attrName='attr',$arrFlar='array')
 
 	preg_match_all($reels, $xml, $elements);
 
-	foreach ($elements[1] as $ie => $xx)
+	foreach ($elements[1] as $ie => $name)
 	{
-		$name=$elements[1][$ie];
-
 		//для получения блока текста
 		$cdend = strpos($elements[3][$ie], "<");
 		if ($cdend > 0)
 			$xmlary[$name][$ie]["text"] = substr($elements[3][$ie], 0, $cdend);
 
+		$elements[3][$ie] = trim($elements[3][$ie]);
 		if (preg_match($reels, $elements[3][$ie]))
 			$xmlary[$name][$ie] = xml2array($elements[3][$ie]);
 		else if ($elements[3][$ie])
