@@ -12,5 +12,7 @@
 	array_shift($argv);
 	$argv=join('/',$argv);
 
+	QFW::$view->mainTemplate='';
 	QFW::$router->route($argv,'Cli');
+
 ?>
