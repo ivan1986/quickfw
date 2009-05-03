@@ -216,7 +216,7 @@ abstract class DbSimple_Generic_Database extends DbSimple_Generic_LastError
 	/**
 	 * Выполняет разворачивание плейсхолдеров без коннекта к базе
 	 * Нужно для сложных запросов, состоящих из кусков, которые полезно сохранить
-	 * 
+	 *
 	 */
 	public function subquery()
 	{
@@ -446,7 +446,7 @@ abstract class DbSimple_Generic_Database extends DbSimple_Generic_LastError
 			else $cache_it = true;
 		}
 
-		if (false === $rows || true === $cache_it) 
+		if (false === $rows || true === $cache_it)
 		{
 			$this->_logQuery($query);
 
@@ -476,7 +476,7 @@ abstract class DbSimple_Generic_Database extends DbSimple_Generic_LastError
 			$this->_logQueryStat($queryTime, $fetchTime, $firstFetchTime, $rows);
 
 			// Prepare BLOB objects if needed.
-			if (is_array($rows) && !empty($this->attributes['BLOB_OBJ'])) 
+			if (is_array($rows) && !empty($this->attributes['BLOB_OBJ']))
 				foreach ($this->_performGetBlobFieldNames($result) as $name)
 					foreach ($rows as $r=>$v)
 						$rows[$r][$name] = $this->_performNewBlob($v[$name]);
@@ -624,7 +624,7 @@ abstract class DbSimple_Generic_Database extends DbSimple_Generic_LastError
 			|
 			(?>
 				# Placeholder
-				(\?) ( [_dsafn\#]? )                           #2 #3
+				(\?) ( [_dsafn&|\#]? )                           #2 #3
 			)
 		}sx';
 		$query = preg_replace_callback(
@@ -634,8 +634,13 @@ abstract class DbSimple_Generic_Database extends DbSimple_Generic_LastError
 		);
 		return $query;
 	}
-
-
+	
+	static $join = array(
+		'|' => array('inner' => ' AND ', 'outer' => ') OR (',),
+		'&' => array('inner' => ' OR ', 'outer' => ') AND (',),
+		'a' => array('inner' => ', ', 'outer' => '), (',),
+	);
+	
 	/**
 	 * string _expandPlaceholdersCallback(list $m)
 	 * Internal function to replace placeholders (see preg_replace_callback).
@@ -666,34 +671,38 @@ abstract class DbSimple_Generic_Database extends DbSimple_Generic_LastError
 				case 's':
 					if (!($value instanceof DbSimple_SubQuery))
 						return 'DBSIMPLE_ERROR_VALUE_NOT_SUBQUERY';
-					if ($this->_placeholderNativeArgs !== null)
-						$this->_placeholderNativeArgs = array_merge($this->_placeholderNativeArgs, $value->getPH());
-					return $value->getStr();
+					return $value->get($this->_placeholderNativeArgs);
+				case '|':
+				case '&':
 				case 'a':
 					if (!$value) $this->_placeholderNoValueFound = true;
 					if (!is_array($value)) return 'DBSIMPLE_ERROR_VALUE_NOT_ARRAY';
 					$parts = array();
+					$multi = array(); //массив для двойной вложенности
+					$mult = false;
 					foreach ($value as $prefix => $field) {
+						//в случае инсерта проверка на вложенность выполняется на верхнем уровне
+						//там должны быть нуменованные масиивы
+						//$mult |= $type=='a' && is_int($prefix) && is_array($field);
+						$mult |= $type!='a' || is_int($prefix) && is_array($field);
+						//превращаем $value в двумерный нуменованный массив
 						if (!is_array($field)) {
 							$field = array($prefix => $field);
 							$prefix = 0;
 						}
-						if (!is_int($prefix)) {
-							if (substr($prefix, 0, 2) == '?_')
-								$prefix = $this->_identPrefix . substr($prefix, 2);
-							$prefix = $this->escape($prefix, true) . '.';
-						}
-						else {
-							$prefix = '';
-						}
-						foreach ($field as $k => $v) 
+						//в случае условий проверка на вложенность выполняется на нижнем уровне
+						//там могут быть вложенные условия
+						//$mult |= $type!='a' ;//&& is_array($field);
+						$prefix = is_int($prefix) ? '' : $this->escape($prefix, true) . '.';
+						if (substr($prefix, 0, 2) == '?_')
+							$prefix = $this->_identPrefix . substr($prefix, 2);
+						//для мультиинсерта очищаем ключи - их быть не может по синтаксису
+						if ($mult && $type=='a')
+							$field = array_values($field);
+						foreach ($field as $k => $v)
 						{
 							if ($v instanceof DbSimple_SubQuery)
-							{
-								if ($this->_placeholderNativeArgs !== null)
-									$this->_placeholderNativeArgs = array_merge($this->_placeholderNativeArgs, $v->getPH());
-								$v = $v->getStr();
-							}
+								$v = $v->get($this->_placeholderNativeArgs);
 							else
 								$v = $v === null? 'NULL' : $this->escape($v);
 							if (!is_int($k)) {
@@ -703,8 +712,13 @@ abstract class DbSimple_Generic_Database extends DbSimple_Generic_LastError
 								$parts[] = $v;
 							}
 						}
+						if ($mult)
+						{
+							$multi[] = join(self::$join[$type]['inner'], $parts);
+							$parts = array();
+						}
 					}
-					return join(', ', $parts);
+					return $mult ? join(self::$join[$type]['outer'], $multi) : join(', ', $parts);
 				case "#":
 					// Identifier.
 					if (!is_array($value)) return $this->escape($value, true);
@@ -718,11 +732,7 @@ abstract class DbSimple_Generic_Database extends DbSimple_Generic_LastError
 						}
 						foreach ($identifiers as $identifier)
 							if ($identifier instanceof DbSimple_SubQuery)
-							{
-								if ($this->_placeholderNativeArgs !== null)
-									$this->_placeholderNativeArgs = array_merge($this->_placeholderNativeArgs, $identifier->getPH());
-								$parts[] = $identifier->getStr();
-							}
+								$parts[] = $identifier->get($this->_placeholderNativeArgs);
 							else
 							{
 								if (!is_string($identifier))
@@ -761,7 +771,7 @@ abstract class DbSimple_Generic_Database extends DbSimple_Generic_LastError
 		}
 
 		// Optional block.
-		if (isset($m[1]) && strlen($block=$m[1])) 
+		if (isset($m[1]) && strlen($block=$m[1]))
 		{
 			$prev  = $this->_placeholderNoValueFound;
 			if ($this->_placeholderNativeArgs !== null)
@@ -820,7 +830,7 @@ abstract class DbSimple_Generic_Database extends DbSimple_Generic_LastError
 		{
 			$this->_placeholderNoValueFound = false;
 			$block = $this->_expandPlaceholdersFlow($block);
-			// Необходимо пройти все блоки, так как если пропустить оставшиесь, 
+			// Необходимо пройти все блоки, так как если пропустить оставшиесь,
 			// то это нарушит порядок подставляемых значений
 			if ($this->_placeholderNoValueFound == false && $r=='')
 				$r = ' '.$block.' ';
@@ -1144,25 +1154,18 @@ class DbSimple_SubQuery
 	{
 		$this->query = $q;
 	}
-	
+
 	/**
-	 * Возвращает сам запрос без подставленных нативных плейсхолдеров
+	 * Возвращает сам запрос и добавляет плейсхолдеры в массив переданный по ссылке
 	 *
-	 * @return srting
+	 * @param &array|null - ссылка на массив плейсхолдеров
+	 * @return string
 	 */
-	public function getStr()
+	public function get(&$ph)
 	{
+		if ($ph !== null)
+			$ph = array_merge($ph, array_slice($this->query,1,null,true));
 		return $this->query[0];
-	}
-	
-	/**
-	 * Возвращает значения нативных плейсхолдеров
-	 *
-	 * @return array
-	 */
-	public function getPH()
-	{
-		return array_slice($this->query,1,null,true);
 	}
 	
 }

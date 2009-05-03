@@ -126,12 +126,33 @@ class DbSimpleTest extends PHPUnit_Framework_TestCase
 			't' => array('a' => 1, 'b' => 2),
 			't2' => array('a' => 3)
 		), array('1','2','3'));
+		$this->db->query('INSERT INTO t1(a,b,c) VALUES (?a)',array(
+			array('a'=>1,2,3),
+			array(4,'b'=>5,6),
+			array(7,8,'c'=>9),
+		));
+		$this->db->query('SELECT * FROM t1 WHERE (?&)',array(
+			array('a'=>1, 'b'=>2),
+			array('c'=>3, 'd'=>4),
+		));
+		$this->db->query('SELECT * FROM t1 WHERE (?|)',array(
+			'a'=>1,
+			array('a'=>1, 'b'=>2),
+			array('c'=>3, 'd'=>4),
+		));
+		$this->db->query('SELECT * FROM t1 WHERE (?|)', array('a'=>1, 'b'=>2));
+		$this->db->query('SELECT * FROM t1 WHERE (?&)', array('a'=>1, 'b'=>2));
 		$R = array (
 			'SELECT * FROM t1 WHERE 1=1',
 			'SELECT * FROM pre_t1 WHERE a IN (\'1\', \'2\', \'3\')',
 			'UPDATE pre_t1 SET `a`=\'1\' WHERE a IN (\'1\', \'2\', \'3\')',
 			'UPDATE pre_t1 SET `a`=\'1\', `b`=\'2\' WHERE a IN (\'1\', \'2\', \'3\')',
 			'UPDATE pre_t1 SET `t`.`a`=\'1\', `t`.`b`=\'2\', `t2`.`a`=\'3\' WHERE a IN (\'1\', \'2\', \'3\')',
+			'INSERT INTO t1(a,b,c) VALUES (\'1\', \'2\', \'3\'), (\'4\', \'5\', \'6\'), (\'7\', \'8\', \'9\')',
+			'SELECT * FROM t1 WHERE (`a`=\'1\' OR `b`=\'2\') AND (`c`=\'3\' OR `d`=\'4\')',
+			'SELECT * FROM t1 WHERE (`a`=\'1\') OR (`a`=\'1\' AND `b`=\'2\') OR (`c`=\'3\' AND `d`=\'4\')',
+			'SELECT * FROM t1 WHERE (`a`=\'1\') OR (`b`=\'2\')',
+			'SELECT * FROM t1 WHERE (`a`=\'1\') AND (`b`=\'2\')',
 		);
 
 		$this->assertEquals($this->Qlog, $R, 'Ошибка обработки ?a');
