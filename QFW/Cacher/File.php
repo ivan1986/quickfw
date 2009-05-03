@@ -10,7 +10,7 @@ class Cacher_File implements Zend_Cache_Backend_Interface
 		'cacheDir' => '',
 		'caching' => true,
 		'prefix' => 'cache_',
-		'lifeTime' => null,
+		'lifeTime' => 3600,
 		'fileLocking' => true,
 		'writeControl' => false,
 		'readControl' => false,
@@ -70,7 +70,7 @@ class Cacher_File implements Zend_Cache_Backend_Interface
 		if (!file_exists($file))
 			return false;
 		$data = false;
-		if ($doNotTest || is_null($time) || filemtime($file) > time())
+		if ($doNotTest || is_null($time = time()) || filemtime($file) > $time)
 			$data = $this->_read($file);
 		if ($this->options['automaticSerialization'] && is_string($data))
 			$data = unserialize($data);
@@ -91,7 +91,7 @@ class Cacher_File implements Zend_Cache_Backend_Interface
 		$control = $this->options['readControl'] ? $this->hash($data) : '';
 		if (file_put_contents($file, $control.$data, ($this->options['fileLocking'] ? LOCK_EX : NULL)) === false)
 			return false;
-		touch($file, time() + ($specificLifetime?$specificLifetime:$this->options['lifeTime']));
+		touch($file, time() + ($specificLifetime ? $specificLifetime : $this->options['lifeTime']));
 		if (!$this->options['writeControl'] || $data == $this->_read($file))
 			return true;
 		$this->unlink($file);

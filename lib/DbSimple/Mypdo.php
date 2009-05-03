@@ -37,7 +37,7 @@ class DbSimple_Mypdo extends DbSimple_Generic_Database
 				$dsn['user'], isset($dsn['pass'])?$dsn['pass']:'', array(
 					PDO::ATTR_ERRMODE => PDO::ERRMODE_SILENT,
 					PDO::ATTR_PERSISTENT => isset($dsn['persist']) && $dsn['persist'],
-					PDO::ATTR_TIMEOUT => isset($dsn['timeout']) && $dsn['timeout'] : 0,
+					PDO::ATTR_TIMEOUT => isset($dsn['timeout']) && $dsn['timeout'] ? $dsn['timeout'] : 0,
 				));
 		} catch (PDOException $e) {
 			$this->_setLastError($e->getCode() , $e->getMessage(), 'new PDO');

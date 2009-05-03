@@ -1,6 +1,6 @@
 <?php
 
-require_once QFWPATH.'/QuickFW/Cacher/Interface.php';
+require_once QFWPATH.'/QuickFW/Cache.php';
 
 class TstCacher implements Zend_Cache_Backend_Interface
 {
@@ -12,7 +12,7 @@ class TstCacher implements Zend_Cache_Backend_Interface
 	public function setDirectives($directives)
 	{
 	}
-	
+
 	/**
 	 * Test if a cache is available for the given id and (if yes) return it (false else)
 	 *
@@ -34,7 +34,7 @@ class TstCacher implements Zend_Cache_Backend_Interface
 		unset($this->c[$id]);
 		return false;
 	}
-	
+
 	/*
 	 * Функция для совместимости
 	 */
@@ -52,7 +52,7 @@ class TstCacher implements Zend_Cache_Backend_Interface
 		foreach (array_keys($this->t) as $v)
 			$this->t[$v]-=$sec;
 	}
-	
+
 	/**
 	 * Test if a cache is available or not (for the given id)
 	 *
@@ -63,7 +63,7 @@ class TstCacher implements Zend_Cache_Backend_Interface
 	{
 		return $this->load($id) === false;
 	}
-	
+
 	/**
 	 * Save some string datas into a cache record
 	 *
@@ -84,7 +84,7 @@ class TstCacher implements Zend_Cache_Backend_Interface
 		else
 			$this->t[$id] = $specificLifetime?$specificLifetime:self::defTime;
 	}
-	
+
 	/**
 	 * Remove a cache record
 	 *
@@ -96,7 +96,7 @@ class TstCacher implements Zend_Cache_Backend_Interface
 		unset($this->t[$id]);
 		unset($this->c[$id]);
 	}
-	
+
 	/**
 	 * Clean some cache records
 	 *
@@ -124,7 +124,7 @@ class TstCacher implements Zend_Cache_Backend_Interface
 					unset($this->c[$k]);
 				}
 	}
-	
+
 	protected $c=array();
 	protected $t=array();
 	const defTime=3600;
