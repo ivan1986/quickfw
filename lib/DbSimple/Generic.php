@@ -679,20 +679,13 @@ abstract class DbSimple_Generic_Database extends DbSimple_Generic_LastError
 					if (!is_array($value)) return 'DBSIMPLE_ERROR_VALUE_NOT_ARRAY';
 					$parts = array();
 					$multi = array(); //массив для двойной вложенности
-					$mult = false;
+					$mult = $type!='a' || is_int(key($value)) && is_array(current($value));
 					foreach ($value as $prefix => $field) {
-						//в случае инсерта проверка на вложенность выполняется на верхнем уровне
-						//там должны быть нуменованные масиивы
-						//$mult |= $type=='a' && is_int($prefix) && is_array($field);
-						$mult |= $type!='a' || is_int($prefix) && is_array($field);
 						//превращаем $value в двумерный нуменованный массив
 						if (!is_array($field)) {
 							$field = array($prefix => $field);
 							$prefix = 0;
 						}
-						//в случае условий проверка на вложенность выполняется на нижнем уровне
-						//там могут быть вложенные условия
-						//$mult |= $type!='a' ;//&& is_array($field);
 						$prefix = is_int($prefix) ? '' : $this->escape($prefix, true) . '.';
 						if (substr($prefix, 0, 2) == '?_')
 							$prefix = $this->_identPrefix . substr($prefix, 2);
