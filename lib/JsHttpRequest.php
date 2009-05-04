@@ -1,22 +1,22 @@
 <?php
 /**
-* JsHttpRequest: PHP backend for JavaScript DHTML loader.
-* (C) Dmitry Koterov, http://en.dklab.ru
-*
-* This library is free software; you can redistribute it and/or
-* modify it under the terms of the GNU Lesser General Public
-* License as published by the Free Software Foundation; either
-* version 2.1 of the License, or (at your option) any later version.
-* See http://www.gnu.org/copyleft/lesser.html
-*
-* Do not remove this comment if you want to use the script!
-* Не удаляйте данный комментарий, если вы хотите использовать скрипт!
-*
-* This backend library also supports POST requests additionally to GET.
-*
-* @author Dmitry Koterov
-* @version 5.x $Id$
-*/
+ * JsHttpRequest: PHP backend for JavaScript DHTML loader.
+ * (C) Dmitry Koterov, http://en.dklab.ru
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ * See http://www.gnu.org/copyleft/lesser.html
+ *
+ * Do not remove this comment if you want to use the script!
+ * Не удаляйте данный комментарий, если вы хотите использовать скрипт!
+ *
+ * This backend library also supports POST requests additionally to GET.
+ *
+ * @author Dmitry Koterov
+ * @version 5.x $Id$
+ */
 
 class JsHttpRequest
 {

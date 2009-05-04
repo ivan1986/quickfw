@@ -31,8 +31,7 @@ class QuickFW_AutoDbSimple
 	{
 		if ($this->DbSimple === null)
 			$this->connect($this->DSN);
-		$result = call_user_func_array(array(&$this->DbSimple, $method), $params);
-		return $result;
+		return call_user_func_array(array(&$this->DbSimple, $method), $params);
 	}
 
 	/**
