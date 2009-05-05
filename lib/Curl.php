@@ -11,14 +11,20 @@ class Curl
 	public $proxy = '';
 
 	protected $error = '';
+	protected $clear;
 
-	public function __construct($clear=false)
+	public function __construct($clear = true)
 	{
 		$this->user_agent  = 'Opera/10.00 (X11; Linux i686 ; U; ru) Presto/2.2.0';
-		$this->proxy       = '';
-		$this->cookie_file = TMPPATH.'/curl_cookie.txt';
-		if ($clear)
-			$this->clearCookeis();
+		$this->proxy       = QFW::$config['host']['proxy'];
+		$this->cookie_file = TMPPATH.'/curl_cookie_'.microtime(true).'.txt';
+		$this->clear       = $clear;
+	}
+
+	public function __destruct()
+	{
+		if ($this->clear)
+			unlink($this->cookie_file);
 	}
 
 	public function addCookie($name,$value)
@@ -67,6 +73,7 @@ class Curl
 			CURLOPT_FOLLOWLOCATION => true,
 			CURLOPT_HEADER => true,
 			CURLOPT_RETURNTRANSFER => true,
+			CURLOPT_PROXY => $this->proxy,
 
 			CURLOPT_USERAGENT => $this->user_agent,
 			CURLOPT_REFERER => $this->referer,
