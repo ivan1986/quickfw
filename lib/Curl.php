@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * Класс для обхода других сайтов как браузер
+ * Авторизация, корректная работа с куками, прочие навороты
+ */
 class Curl
 {
 	public $cookies = array();
@@ -13,18 +17,16 @@ class Curl
 	protected $error = '';
 	protected $clear;
 
-	public function __construct($clear = true)
+	public function __construct()
 	{
 		$this->user_agent  = 'Opera/10.00 (X11; Linux i686 ; U; ru) Presto/2.2.0';
 		$this->proxy       = QFW::$config['host']['proxy'];
-		$this->cookie_file = TMPPATH.'/curl_cookie_'.microtime(true).'.txt';
-		$this->clear       = $clear;
+		$this->cookie_file = tempnam(sys_get_temp_dir(), 'curl_cookie');
 	}
 
 	public function __destruct()
 	{
-		if ($this->clear)
-			unlink($this->cookie_file);
+		unlink($this->cookie_file);
 	}
 
 	public function addCookie($name,$value)
@@ -32,20 +34,27 @@ class Curl
 		$this->cookies[$name] = $name.'='.$value.'; path=/';
 	}
 
+	/**
+	 * POST запрос по адресу
+	 */
 	public function clearCookeis()
 	{
 		file_put_contents($this->cookie_file,'');
 		$this->cookies = array();
 	}
 
-	public function delete($url, $vars = array())
-	{
-		return $this->request('DELETE', $url, $vars);
-	}
 	public function error()
 	{
 		return $this->error;
 	}
+	
+	/**
+	 * GET запрос по адресу
+	 * 
+	 * @param string $url - адрес по которому делать запрос
+	 * @param array $vars - дополнительные переменные в get
+	 * @return CurlResponse - результат
+	 */
 	public function get($url, $vars = array())
 	{
 		if (!empty($vars))
@@ -56,14 +65,28 @@ class Curl
 		return $this->request('GET', $url);
 	}
 
+	/**
+	 * POST запрос по адресу
+	 *
+	 * @param string $url - адрес по которому делать запрос
+	 * @param array $vars - переменные в post
+	 * @return CurlResponse - результат
+	 */
 	public function post($url, $vars = array())
 	{
 		return $this->request('POST', $url, $vars);
 	}
+	
+	public function delete($url, $vars = array())
+	{
+		return $this->request('DELETE', $url, $vars);
+	}
+	
 	public function put($url, $vars = array())
 	{
 		return $this->request('PUT', $url, $vars);
 	}
+	
 	protected function request($method, $url, $vars = array())
 	{
 		$handle = curl_init();
@@ -136,6 +159,9 @@ class Curl
 	}
 }
 
+/**
+ * Класс ответа сервера - содержит хедеры и дополнительные навороты
+ */
 class CurlResponse
 {
 	public $body = '';
@@ -162,10 +188,56 @@ class CurlResponse
 		}
 	}
 
+	/**
+	 * Просто тело запроса
+	 * 
+	 * @return string
+	 */
 	public function __toString()
 	{
 		return $this->body;
 	}
+	
+	/**
+	 * Формы на странице
+	 * 
+	 * @param int $num - номер формы на странице
+	 * @return array - массив с формами в каждой поля со значениями
+	 */
+	public function forms($num=false)
+	{
+		$m = array();
+		preg_match_all('|<form(.*?)>.*?</form>|si',$this->body,$m, PREG_SET_ORDER);
+		if (count($m)==0)
+			return false;
+		$forms = array();
+		foreach($m as $k=>$f)
+		{
+			if ($num!==false && $num!=$k)
+				continue;
+			$forms[$k] = $this->parceTagParams($f[1]);
+			$fields = array();
+			preg_match_all('|<input.*?>|si',$f[0],$m);
+			foreach ($m[0] as $field)
+			{
+				$r = $this->parceTagParams($field);
+				if (isset($r['name']))
+					$fields[$r['name']] = isset($r['value'])?$r['value']:null;
+			}
+			$forms[$k]['fields'] = $fields;
+		}
+		return $num===false ? $forms : $forms[$num];
+	}
+
+	protected function parceTagParams($str)
+	{
+		$t = $x = array();
+		preg_match_all('|([a-z]+)=([\'"]?)(.*?)\2|si',$str,$t);
+		for($i=0;$i<count($t[1]);$i++)
+				$x[$t[1][$i]] = $t[3][$i];
+		return $x;
+	}
+
 }
 
 ?>
