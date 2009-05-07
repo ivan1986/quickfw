@@ -1,7 +1,6 @@
 <?php
 /**
- * DbSimple_Mypdo: PDO MySQL database.
- * (C) Dk Lab, http://en.dklab.ru
+ * DbSimple_Sqlite: Sqlite2 database.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -18,31 +17,32 @@
 require_once dirname(__FILE__).'/Generic.php';
 
 /**
- * Database class for MySQL.
+ * Database class for Sqlite.
  */
-class DbSimple_Mypdo extends DbSimple_Generic_Database
+class DbSimple_Sqlite extends DbSimple_Generic_Database
 {
-	private $PDO;
-
-	public function DbSimple_Mypdo($dsn)
+	private $db;
+	public function __construct($dsn)
 	{
-		$base = preg_replace('{^/}s', '', $dsn['path']);
-		if (!class_exists('PDO'))
-			return $this->_setLastError("-1", "PDO extension is not loaded", "PDO");
-
-		try {
-			$this->PDO = new PDO('mysql:host='.$dsn['host'].(empty($dsn['port'])?'':';port='.$dsn['port']).';dbname='.$base,
-				$dsn['user'], isset($dsn['pass'])?$dsn['pass']:'', array(
-					PDO::ATTR_ERRMODE => PDO::ERRMODE_SILENT,
-					PDO::ATTR_PERSISTENT => isset($dsn['persist']) && $dsn['persist'],
-					PDO::ATTR_TIMEOUT => isset($dsn['timeout']) && $dsn['timeout'] ? $dsn['timeout'] : 0,
-				));
-		} catch (PDOException $e) {
-			$this->_setLastError($e->getCode() , $e->getMessage(), 'new PDO');
+		$connect = 'sqlite_'.((isset($dsn['persist']) && $dsn['persist'])?'p':'').'open';
+		if (!is_callable($connect))
+			return $this->_setLastError("-1", "SQLite extension is not loaded", $connect);
+		$err = '';
+		try
+		{
+			$this->db = sqlite_factory($dsn['path'], 0666, &$err);
 		}
-		$this->PDO->exec('SET NAMES '.(isset($dsn['enc'])?$dsn['enc']:'UTF8'));
+		catch (Exception $e)
+		{
+			$this->_setLastError($e->getCode() , $e->getMessage(), 'sqlite_factory');
+		}
 	}
-
+	
+	public function CreateFunction($function_name, $callback, $num_args)
+	{	return $this->db->createFunction($function_name, $callback, $num_args); }
+	public function CreateAggregate($function_name, $step_func, $finalize_func, $num_args)
+	{	return $this->db->createAggregate($function_name, $step_func, $finalize_func, $num_args); }
+	
 	protected function _performGetPlaceholderIgnoreRe()
 	{
 		return '
@@ -50,13 +50,13 @@ class DbSimple_Mypdo extends DbSimple_Generic_Database
 			\'  (?> [^\'\\\\]+|\\\\\'|\\\\)* \'   |
 			`   (?> [^`]+ | ``)*              `   |   # backticks
 			/\* .*?                          \*/      # comments
-		';
+		/*';
 	}
 
 	protected function _performEscape($s, $isIdent=false)
 	{
 		if (!$isIdent) {
-			return $this->PDO->quote($s);
+			return '\''.sqlite_escape_string($s).'\'';
 		} else {
 			return "`" . str_replace('`', '``', $s) . "`";
 		}
@@ -64,37 +64,35 @@ class DbSimple_Mypdo extends DbSimple_Generic_Database
 
 	protected function _performTransaction($parameters=null)
 	{
-		return $this->PDO->beginTransaction();
+		return $this->db->query('BEGIN TRANSACTION');
 	}
 
 	protected function _performCommit()
 	{
-		return $this->PDO->commit();
+		return $this->db->query('COMMIT TRANSACTION');
 	}
 
 	protected function _performRollback()
 	{
-		return $this->PDO->rollBack();
+		return $this->db->query('ROLLBACK TRANSACTION');
 	}
 
 	protected function _performQuery($queryMain)
 	{
 		$this->_lastQuery = $queryMain;
 		$this->_expandPlaceholders($queryMain, false);
-		$p = $this->PDO->query($queryMain[0]);
+		$error_msg = '';
+		$p = $this->db->query($queryMain[0], SQLITE_ASSOC, $error_msg);
 		if (!$p)
-			return $this->_setDbError($p,$queryMain[0]);
-		if ($p->errorCode()!=0)
-			return $this->_setDbError($p,$queryMain[0]);
+			return $this->_setDbError($p->lastError(), $error_msg, $queryMain[0]);
+		if ($error_msg)
+			return $this->_setDbError($p->lastError(), $error_msg, $queryMain[0]);
 		if (preg_match('/^\s* INSERT \s+/six', $queryMain[0]))
-			return $this->PDO->lastInsertId();
-		if ($p->columnCount()==0)
-			return $p->rowCount();
+			return $this->db->lastInsertRowid();
+		if ($p->numFields()==0)
+			return $this->db->changes();
 		//Если у нас в запросе есть хотя-бы одна колонка - это по любому будет select
-		$p->setFetchMode(PDO::FETCH_ASSOC);
-		$res = $p->fetchAll();
-		$p->closeCursor();
-		return $res;
+		return $p->fetchAll(SQLITE_ASSOC);
 	}
 
 	protected function _performTransformQuery(&$queryMain, $how)
@@ -104,25 +102,30 @@ class DbSimple_Mypdo extends DbSimple_Generic_Database
 		{
 			// Prepare total calculation (if possible)
 			case 'CALC_TOTAL':
-				$m = null;
-				if (preg_match('/^(\s* SELECT)(.*)/six', $queryMain[0], $m))
-					$queryMain[0] = $m[1] . ' SQL_CALC_FOUND_ROWS' . $m[2];
+				// Not possible
 				return true;
 
 			// Perform total calculation.
 			case 'GET_TOTAL':
-				// Built-in calculation available?
-				$queryMain = array('SELECT FOUND_ROWS()');
+				// TODO: GROUP BY ... -> COUNT(DISTINCT ...)
+				$re = '/^
+					(?> -- [^\r\n]* | \s+)*
+					(\s* SELECT \s+)                                             #1
+					(.*?)                                                        #2
+					(\s+ FROM \s+ .*?)                                           #3
+						((?:\s+ ORDER \s+ BY \s+ .*?)?)                          #4
+						((?:\s+ LIMIT \s+ \S+ \s* (?: , \s* \S+ \s*)? )?)  #5
+				$/six';
+				$m = null;
+				if (preg_match($re, $queryMain[0], $m)) {
+					$queryMain[0] = $m[1] . $this->_fieldList2Count($m[2]) . " AS C" . $m[3];
+					$skipTail = substr_count($m[4] . $m[5], '?');
+					if ($skipTail) array_splice($queryMain, -$skipTail);
+				}
 				return true;
 		}
 
 		return false;
-	}
-
-	protected function _setDbError($obj,$q)
-	{
-		$info=$obj?$obj->errorInfo():$this->PDO->errorInfo();
-		return $this->_setLastError($info[1], $info[2], $q);
 	}
 
 	protected function _performNewBlob($id=null)
@@ -140,7 +143,7 @@ class DbSimple_Mypdo extends DbSimple_Generic_Database
 	}
 
 }
-
+/*
 class DbSimple_Mypdo_Blob implements DbSimple_Generic_Blob
 {
 	// MySQL does not support separate BLOB fetching.
@@ -175,5 +178,5 @@ class DbSimple_Mypdo_Blob implements DbSimple_Generic_Blob
 		return strlen($this->blobdata);
 	}
 }
-
+*/
 ?>
