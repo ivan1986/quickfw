@@ -11,8 +11,11 @@ class Cacher_Memcache implements Zend_Cache_Backend_Interface
 
 	public function setDirectives($directives)
 	{
-		if(!isset($directives['servers'])){
-			$this->mc->addServer('localhost','11211');
+		if(!isset($directives['servers']))
+		{
+			$this->mc->addServer(
+				isset($directives['host']) ? $directives['host'] : 'localhost',
+				isset($directives['port']) ? $directives['port'] : '11211');
 			return;
 		}
 
