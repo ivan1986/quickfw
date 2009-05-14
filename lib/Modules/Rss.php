@@ -7,7 +7,7 @@ class Rss
 	{
 		$dom = new DOMDocument('1.0');
 		$dom->preserveWhiteSpace = false;
-		$dom->loadXML($data,LIBXML_NOERROR);
+		$dom->loadXML($data,LIBXML_NOERROR | LIBXML_NOWARNING);
 
 		$result=array();
 		$xpath = new DOMXPath($dom);
