@@ -1171,6 +1171,7 @@ abstract class DbSimple_Generic_LastError
 {
 	public $error = null;
 	public $errmsg = null;
+	private $showStack = false;
 	private $errorHandler = null;
 	private $ignoresInTraceRe = 'DbSimple_.*::.* | call_user_func.*';
 
@@ -1197,20 +1198,28 @@ abstract class DbSimple_Generic_LastError
 	protected function _setLastError($code, $msg, $query)
 	{
 		$context = "unknown";
-		$stack = array();
-		if ($t = $this->findLibraryCaller(true)) {
-			$context = (isset($t[0]['file'])? $t[0]['file'] : '?') . ' line ' . (isset($t[0]['line'])? $t[0]['line'] : '?');
-			foreach($t as $f)
-				$stack[] = 'call '.(isset($f['class']) ? $f['class'].'::' : '').(isset($f['function']) ? $f['function'] : '?').' at '.
-					(isset($f['file'])? $f['file'] : '?') . ' line ' . (isset($f['line'])? $f['line'] : '?');
-		}
 		$this->error = array(
 			'code'    => $code,
 			'message' => rtrim($msg),
 			'query'   => $query,
-			'context' => $context,
-			'stack'   => $stack,
+			'context' => '',
 		);
+		if ($t = $this->findLibraryCaller($this->showStack)) 
+		{
+			if (!$this->showStack)
+				$this->error['context'] = (isset($t['file'])? $t['file'] : '?') . ' line ' . (isset($t['line'])? $t['line'] : '?');
+			else
+			{
+				$this->error['context'] =
+					(isset($t[0]['file'])? $t[0]['file'] : '?') . 
+					' line ' . (isset($t[0]['line'])? $t[0]['line'] : '?');
+				$this->error['stack'] = array();
+				foreach($t as $f)
+					$this->error['stack'][] = 'call '.(isset($f['class']) ? $f['class'].'::' : '').
+						(isset($f['function']) ? $f['function'] : '?').' at '.
+						(isset($f['file'])? $f['file'] : '?') . ' line ' . (isset($f['line'])? $f['line'] : '?');
+			}
+		}
 		$this->errmsg = rtrim($msg) . ($context? " at $context" : "");
 
 		$this->_logQuery("  -- error #".$code.": ".preg_replace('/(\r?\n)+/s', ' ', $this->errmsg));
@@ -1224,16 +1233,17 @@ abstract class DbSimple_Generic_LastError
 
 
 	/**
-	 * callback setErrorHandler(callback $handler)
+	 * callback setErrorHandler(callback $handler, bool $stack)
 	 * Set new error handler called on database errors.
 	 * Handler gets 3 arguments:
 	 * - error message
 	 * - full error context information (last query etc.)
 	 */
-	public function setErrorHandler($handler)
+	public function setErrorHandler($handler, $stack)
 	{
 		$prev = $this->errorHandler;
 		$this->errorHandler = $handler;
+		$this->showStack = $stack;
 		// In case of setting first error handler for already existed
 		// error - call the handler now (usual after connect()).
 		if (!$prev && $this->error)

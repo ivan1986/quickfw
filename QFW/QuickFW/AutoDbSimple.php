@@ -61,7 +61,7 @@ class QuickFW_AutoDbSimple
 			$this->DbSimple->setIdentPrefix($parsed['prefix']);
 		$this->DbSimple->setCachePrefix('db_'.md5($parsed['dsn']).'_');
 		//$this->DbSimple->addIgnoreInTrace('QuickFW_AutoDbSimple::.*');
-		$this->DbSimple->setErrorHandler(array(&$this, 'errorHandler'));
+		$this->DbSimple->setErrorHandler(array(&$this, 'errorHandler'), false);
 	}
 
 	/**
