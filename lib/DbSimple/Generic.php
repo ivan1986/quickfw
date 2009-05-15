@@ -1197,14 +1197,19 @@ abstract class DbSimple_Generic_LastError
 	protected function _setLastError($code, $msg, $query)
 	{
 		$context = "unknown";
-		if ($t = $this->findLibraryCaller()) {
-			$context = (isset($t['file'])? $t['file'] : '?') . ' line ' . (isset($t['line'])? $t['line'] : '?');
+		$stack = array();
+		if ($t = $this->findLibraryCaller(true)) {
+			$context = (isset($t[0]['file'])? $t[0]['file'] : '?') . ' line ' . (isset($t[0]['line'])? $t[0]['line'] : '?');
+			foreach($t as $f)
+				$stack[] = 'call '.(isset($f['class']) ? $f['class'].'::' : '').(isset($f['function']) ? $f['function'] : '?').' at '.
+					(isset($f['file'])? $f['file'] : '?') . ' line ' . (isset($f['line'])? $f['line'] : '?');
 		}
 		$this->error = array(
 			'code'    => $code,
 			'message' => rtrim($msg),
 			'query'   => $query,
 			'context' => $context,
+			'stack'   => $stack,
 		);
 		$this->errmsg = rtrim($msg) . ($context? " at $context" : "");
 
@@ -1251,12 +1256,12 @@ abstract class DbSimple_Generic_LastError
 	 * Return part of stacktrace before calling first library method.
 	 * Used in debug purposes (query logging etc.).
 	 */
-	protected function findLibraryCaller()
+	protected function findLibraryCaller($all = false)
 	{
 		$caller = call_user_func(
 			array(&$this, 'debug_backtrace_smart'),
 			$this->ignoresInTraceRe,
-			true
+			!$all
 		);
 		return $caller;
 	}
