@@ -61,7 +61,7 @@ class QuickFW_AutoDbSimple
 			$this->DbSimple->setIdentPrefix($parsed['prefix']);
 		$this->DbSimple->setCachePrefix('db_'.md5($parsed['dsn']).'_');
 		//$this->DbSimple->addIgnoreInTrace('QuickFW_AutoDbSimple::.*');
-		$this->DbSimple->setErrorHandler(array(&$this, 'errorHandler'), true);
+		$this->DbSimple->setErrorHandler(array(&$this, 'errorHandler'), QFW::$config['QFW']['ErrorStack']);
 	}
 
 	/**
@@ -73,7 +73,7 @@ class QuickFW_AutoDbSimple
 	{
 		// Если использовалась @, ничего не делать.
 		if (!error_reporting()) return;
-		if (QFW::$config['release'])
+		if (QFW::$config['QFW']['release'])
 		{
 			require_once LIBPATH.'/Log.php';
 			Log::log('SQL Error - '.$msg,'sql');

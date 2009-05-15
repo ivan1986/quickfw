@@ -7,7 +7,7 @@
 	 */
 	function exception_error_handler($errno, $errstr, $errfile, $errline )
 	{
-		if (QFW::$config['release'])
+		if (QFW::$config['QFW']['release'])
 		{
 			require_once LIBPATH.'/Log.php';
 			Log::log($errstr.' in '.$errfile.' on line '.$errline,'debug');
@@ -16,7 +16,7 @@
 		throw new ErrorException($errstr, 0, $errno, $errfile, $errline);
 	}
 	set_error_handler("exception_error_handler");
-	
+
 	/**
 	 * Обработка исключений
 	 * Обрабатывает исключение неавторизованности как нормальное - показом контента
@@ -31,7 +31,7 @@
 			echo $exception->getMessage();
 		elseif ($exception instanceof S404Exception)
 			QFW::$router->show404();
-		elseif (QFW::$config['release'])
+		elseif (QFW::$config['QFW']['release'])
 		{
 			require_once LIBPATH.'/Log.php';
 			Log::log("Uncaught exception: " , $exception->getMessage(),'debug');
@@ -41,14 +41,14 @@
 			echo "Uncaught exception: " , $exception->getMessage(), "\n";
 	}
 	set_exception_handler('exception_handler');
-	
+
 	/**
 	 * Классы исключений
 	 *
 	 */
 	class AuthException extends Exception {}
 	class S404Exception extends Exception {}
-	
+
 	/**
 	 * Перехватчик фатальных ошибок
 	 * В случае фатальной ошибки может что-то сделать

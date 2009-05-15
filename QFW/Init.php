@@ -15,7 +15,7 @@
 
 	if (isset($config['host']['encoding']))
 		header("Content-Type: text/html; charset=".$config['host']['encoding']);
-	if (isset($config['catchFE']) && $config['catchFE'])
+	if (isset($config['QFW']['catchFE']) && $config['QFW']['catchFE'])
 		require_once QFWPATH.'/QuickFW/Error.php';
 
 	require QFWPATH.'/QuickFW/Cache.php';

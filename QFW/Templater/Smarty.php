@@ -5,18 +5,18 @@ class Templater_Smarty
 	protected $_smarty;
 
 	/**
-	* Плагины фреймворка
-	*
-	* @var QuickFW_Plugs
-	*/
+	 * Плагины фреймворка
+	 *
+	 * @var QuickFW_Plugs
+	 */
 	public $P;
 
 	protected $_tmplPath;
 	/**
-	* Template file in which is all content
-	*
-	* @var string
-	*/
+	 * Template file in which is all content
+	 *
+	 * @var string
+	 */
 	public $mainTemplate;
 
 	/**
@@ -28,7 +28,7 @@ class Templater_Smarty
 		require LIBPATH.'/Smarty/Smarty.class.php';
 		$this->_smarty = new Smarty;
 
-		$this->_smarty->force_compile = !QFW::$config['release'];
+		$this->_smarty->force_compile = !QFW::$config['QFW']['release'];
 
 		$this->_smarty->compile_dir = TMPPATH . '/templates_c';
 		$this->_smarty->config_dir  = TMPPATH . '/configs';
@@ -48,12 +48,12 @@ class Templater_Smarty
 	}
 
 	/**
-	* Constructor
-	*
-	* @param string $tmplPath
-	* @param string $mainTpl
-	* @return void
-	*/
+	 * Constructor
+	 *
+	 * @param string $tmplPath
+	 * @param string $mainTpl
+	 * @return void
+	 */
 	public function __construct($tmplPath, $mainTpl)
 	{
 		$this->_tmplPath = $tmplPath;
@@ -62,11 +62,11 @@ class Templater_Smarty
 	}
 
 	/**
-	* Set the path to the templates
-	*
-	* @param string $path The directory to set as the path.
-	* @return void
-	*/
+	 * Set the path to the templates
+	 *
+	 * @param string $path The directory to set as the path.
+	 * @return void
+	 */
 	public function setScriptPath($path)
 	{
 		if (!is_readable($path))
@@ -84,28 +84,28 @@ class Templater_Smarty
 	}
 
 	/**
-	* Retrieve the current template directory
-	*
-	* @return string
-	*/
+	 * Retrieve the current template directory
+	 *
+	 * @return string
+	 */
 	public function getScriptPath()
 	{
 		return $this->_tmplPath;
 	}
 
 	/**
-	* Assign variables to the template
-	*
-	* Allows setting a specific key to the specified value, OR passing an array
-	* of key => value pairs to set en masse.
-	*
-	* @see __set()
-	* @param string|array $spec The assignment strategy to use (key or array of key
-	* => value pairs)
-	* @param mixed $value (Optional) If assigning a named variable, use this
-	* as the value.
-	* @return void
-	*/
+	 * Assign variables to the template
+	 *
+	 * Allows setting a specific key to the specified value, OR passing an array
+	 * of key => value pairs to set en masse.
+	 *
+	 * @see __set()
+	 * @param string|array $spec The assignment strategy to use (key or array of key
+	 * => value pairs)
+	 * @param mixed $value (Optional) If assigning a named variable, use this
+	 * as the value.
+	 * @return void
+	 */
 	public function assign($spec, $value = null)
 	{
 		if (is_array($spec))
@@ -116,21 +116,21 @@ class Templater_Smarty
 	}
 
 	/**
-	* Clear assigned variable
-	*
-	* @param string|array
-	* @return void
-	*/
+	 * Clear assigned variable
+	 *
+	 * @param string|array
+	 * @return void
+	 */
 	public function delete($key)
 	{
 		$this->getEngine()->clear_assign($key);
 	}
 
 	/**
-	* Clear all assigned variables
-	*
-	* @return void
-	*/
+	 * Clear all assigned variables
+	 *
+	 * @return void
+	 */
 	public function clearVars()
 	{
 		$this->getEngine()->clear_all_assign();
@@ -149,11 +149,11 @@ class Templater_Smarty
 	}
 
 	/**
-	* Processes a template and returns the output.
-	*
-	* @param string $name The template to process.
-	* @return string The output.
-	*/
+	 * Processes a template and returns the output.
+	 *
+	 * @param string $name The template to process.
+	 * @return string The output.
+	 */
 	public function render($name)
 	{
 		return $this->getEngine()->fetch($name);
@@ -179,10 +179,10 @@ class Templater_Smarty
 	}
 
 	/**
-	* Return the template engine object
-	*
-	* @return Smarty
-	*/
+	 * Return the template engine object
+	 *
+	 * @return Smarty
+	 */
 	private function getEngine()
 	{
 		if (!$this->_smarty)
