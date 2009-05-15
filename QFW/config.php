@@ -14,15 +14,10 @@ $config['default']=array(
 	'action'     => 'index',
 );
 
-$config['database']=array(
-	'type'     => '',
-	'host'     => '',
-	'username' => '',
-	'password' => '',
-	'dbname'   => '',
-	'prefix'   => '',
-	'encoding' => '',
-);
+/*
+ * Настройки коннекта к базе данных в формате
+ * driver:[//[user[:pass]@]host[:port]]base[?enc=codepage][&persist=(0|1)][&timeout=(sec|0)]
+ */
 $config['database']='mypdo://root@localhost/base?enc=utf8';
 
 $config['redirection']=array(

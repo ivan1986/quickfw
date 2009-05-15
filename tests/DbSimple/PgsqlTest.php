@@ -8,7 +8,7 @@ class PgsqlTest extends PHPUnit_Framework_TestCase
 	protected function setUp()
 	{
 		$this->pg = new QuickFW_AutoDbSimple(DSNPG);
-		$this->pg->setErrorHandler(false);
+		$this->pg->setErrorHandler(false, false);
 	}
 
 	protected $Qlog=array();

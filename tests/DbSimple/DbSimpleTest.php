@@ -7,7 +7,7 @@ class DbSimpleTest extends PHPUnit_Framework_TestCase
 	protected function setUp()
 	{
 		$this->db = new QuickFW_AutoDbSimple(DSN);
-		$this->db->setErrorHandler(false);
+		$this->db->setErrorHandler(false, false);
 	}
 
 	protected function tearDown()
@@ -63,7 +63,7 @@ class DbSimpleTest extends PHPUnit_Framework_TestCase
 	
 	public function testReturnError()
 	{
-		$this->db->setErrorHandler(array(&$this,'ErrHandler'));
+		$this->db->setErrorHandler(array(&$this,'ErrHandler'), false);
 		$r = $this->db->select('SELECT * FROM `non_exist_table`');
 		$msg = 'Table \'DbSimple.non_exist_table\' doesn\'t exist at '.__FILE__.' line '.(__LINE__-1);
 		$info = array (

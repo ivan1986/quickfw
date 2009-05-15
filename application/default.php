@@ -16,16 +16,10 @@ $config['default']=array(
 	'action'    => 'index',
 );
 
-/* Настройки коннекта к базе данных */
-$config['database']=array(
-	'type'     => 'mysql',
-	'host'     => 'localhost',
-	'username' => 'root',
-	'password' => '',
-	'dbname'   => 'mblogi',
-	'prefix'   => '',
-	'encoding' => 'utf8',
-);
+/*
+ * Настройки коннекта к базе данных в формате
+ * driver:[//[user[:pass]@]host[:port]]base[?enc=codepage][&persist=(0|1)][&timeout=(sec|0)]
+ */
 $config['database']='mypdo://root@localhost/smspr?enc=utf8';
 
 /* Настройки перенаправления */
@@ -70,13 +64,6 @@ $config['templater']= array(
 	'name'      => 'PlainView',
 	'def_tpl'   => 'main.html',
 );
-
-/**/
-$config['templater']= array(
-	'name'      => 'Smarty',
-	'def_tpl'   => 'main.tpl',
-);
-/**/
 
 $config['templater']= array(
 	'name'      => 'Proxy',

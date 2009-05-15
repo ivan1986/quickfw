@@ -1204,23 +1204,23 @@ abstract class DbSimple_Generic_LastError
 			'query'   => $query,
 			'context' => '',
 		);
-		if ($t = $this->findLibraryCaller($this->showStack)) 
+		if ($t = $this->findLibraryCaller($this->showStack))
 		{
 			if (!$this->showStack)
-				$this->error['context'] = (isset($t['file'])? $t['file'] : '?') . ' line ' . (isset($t['line'])? $t['line'] : '?');
+				$this->error['context'] = (isset($t['file'])? $t['file'] : '?') .
+					' line ' . (isset($t['line'])? $t['line'] : '?');
 			else
 			{
-				$this->error['context'] =
-					(isset($t[0]['file'])? $t[0]['file'] : '?') . 
+				$this->error['context'] = (isset($t[0]['file'])? $t[0]['file'] : '?') .
 					' line ' . (isset($t[0]['line'])? $t[0]['line'] : '?');
 				$this->error['stack'] = array();
 				foreach($t as $f)
-					$this->error['stack'][] = 'call '.(isset($f['class']) ? $f['class'].'::' : '').
-						(isset($f['function']) ? $f['function'] : '?').' at '.
-						(isset($f['file'])? $f['file'] : '?') . ' line ' . (isset($f['line'])? $f['line'] : '?');
+					$this->error['stack'][] = (isset($f['class']) ? $f['class'].$f['type'] : '').
+						(isset($f['function']) ? $f['function'] : '?').'() '.
+						(isset($f['file'])? $f['file'] : '?') . ':' . (isset($f['line'])? $f['line'] : '?');
 			}
 		}
-		$this->errmsg = rtrim($msg) . ($context? " at $context" : "");
+		$this->errmsg = rtrim($msg) . ($this->error['context']? ' at '.$this->error['context'] : '');
 
 		$this->_logQuery("  -- error #".$code.": ".preg_replace('/(\r?\n)+/s', ' ', $this->errmsg));
 

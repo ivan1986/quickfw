@@ -16,7 +16,7 @@ class QuickFW_AutoDbSimple
 	protected $DbSimple, $DSN;
 
 	/**
-	 * Конструктор только запоминает переданный DSN 
+	 * Конструктор только запоминает переданный DSN
 	 * создание класса и коннект происходит позже
 	 *
 	 * @param string $dsn - DSN строка БД
@@ -61,7 +61,7 @@ class QuickFW_AutoDbSimple
 			$this->DbSimple->setIdentPrefix($parsed['prefix']);
 		$this->DbSimple->setCachePrefix('db_'.md5($parsed['dsn']).'_');
 		//$this->DbSimple->addIgnoreInTrace('QuickFW_AutoDbSimple::.*');
-		$this->DbSimple->setErrorHandler(array(&$this, 'errorHandler'), false);
+		$this->DbSimple->setErrorHandler(array(&$this, 'errorHandler'), true);
 	}
 
 	/**

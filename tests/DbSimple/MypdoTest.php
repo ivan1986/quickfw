@@ -9,7 +9,7 @@ class MypdoTest extends GenericDbSimpleTestClass
 	protected function setUp()
 	{
 		$this->db = new QuickFW_AutoDbSimple(DSNMYPDO);
-		$this->db->setErrorHandler(false);
+		$this->db->setErrorHandler(false, false);
 	}
 
 	protected $Qlog=array();

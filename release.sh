@@ -20,6 +20,10 @@ rm -rf www/datagrid
 ./prem.sh 777
 rm -f release.sh
 
+rm -f .project
+rm -rf .cache
+rm -rf .settings
+
 cd ..
 rm -f $1.tar.gz
 tar -czf $1.tar.gz $1
