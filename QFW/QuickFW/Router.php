@@ -265,8 +265,9 @@ class QuickFW_Router
 		$params[]=substr($par,$startpar);
 		foreach ($params as $k=>$v)
 		{
-			//при таком разборе если строка начинается кавычкой она ей обязательно заканчивается (?)
-			if (($v[0]=="'" || $v[0]=='"') )//&& $v[0]==$v[strlen($v)-1])
+			//при таком разборе если строка начинается кавычкой
+			//она ей обязательно заканчивается (регулярка так разбивает)
+			if ($v[0]=="'" || $v[0]=='"')
 			{
 				$v=str_replace(
 					array('\\\\','\\'.$v[0]),
@@ -379,9 +380,9 @@ class QuickFW_Router
 		$pos = strpos($uri,'?');
 		if ($pos !== false)
 			$uri = substr($uri,0,$pos);
-		if (!substr_compare($uri,$config['redirection']['baseUrl'],0,strlen($config['redirection']['baseUrl'])))
+		if (strpos($uri,$config['redirection']['baseUrl']) === 0)
 			$uri = substr($uri,strlen($config['redirection']['baseUrl']));
-		if ($config['redirection']['useIndex'] && strlen($uri)>=10 && !substr_compare($uri,'index.php/',0,10))
+		if ($config['redirection']['useIndex'] && strpos($uri,'index.php/') === 0)
 			$uri = substr($uri,10);
 		if (!empty($config['redirection']['defExt']))
 		{
