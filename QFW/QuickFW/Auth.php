@@ -14,9 +14,9 @@ class QuickFW_Auth
 	{
 		if (isset($_REQUEST[session_name()]))
 			$this->session();
-
+		
 		$this->name=$name;
-		$this->authorized = false;
+		$this->userdata = $this->authorized = false;
 		if (isset($_SESSION[$name]))
 		{
 			$this->authorized = true;
@@ -32,22 +32,46 @@ class QuickFW_Auth
 		die();
 	}
 	
-	function isAuthorized()
-	{
-		return $this->authorized;
-	}
-	
-	function getUser()
-	{
-		return $this->authorized?$this->userdata:false;
-	}
-	
-	function session()
+	/**
+	 * Старт сессии
+	 *
+	 * Если сессия уже есть ничего не делает
+	 * Если сессии нет, то стартует новая
+	 *
+	 * @param string $sid - идентификатор сессии
+	 */
+	function session($sid = '')
 	{
 		if (QuickFW_Auth::$session!=null)
 			return;
 		require (QFWPATH.'/QuickFW/Session.php');
-		QuickFW_Auth::$session = new QuickFW_Session();
+		QuickFW_Auth::$session = new QuickFW_Session($sid);
+	}
+	
+	/**
+	 * Старт сессии
+	 *
+	 * Если сессия уже есть - уничтожает старую и стартует новую
+	 * Если сессии нет, то стартует новая
+	 *
+	 * @param string $sid - идентификатор сессии
+	 */
+	function sessionRestart($sid = '')
+	{
+		if (QuickFW_Auth::$session!=null)
+			return QuickFW_Auth::$session->restart($sid);
+		require (QFWPATH.'/QuickFW/Session.php');
+		QuickFW_Auth::$session = new QuickFW_Session($sid);
+	}
+	
+	/**
+	 * Уничтожение сессии
+	 */
+	function sessionDestroy()
+	{
+		if (QuickFW_Auth::$session==null)
+			return;
+		QuickFW_Auth::$session->destroy(session_id());
 	}
 	
 	/**

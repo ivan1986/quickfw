@@ -6,12 +6,12 @@ class QuickFW_Session
 
 	static function close()
 	{
-		return(true);
+		return true;
 	}
 
 	static function open()
 	{
-		return(true);
+		return true;
 	}
 
 	static function read($id)
@@ -19,44 +19,94 @@ class QuickFW_Session
 		$data = self::$cache->load('sess_'.$id);
 		if (!$data)
 			return false;
-		$_SESSION=unserialize($data);
+		$_SESSION = $data;
 		return $data;
 	}
 
 	static function write($id,$data)
 	{
 		if (!empty($_SESSION))
-			self::$cache->save(serialize($_SESSION),'sess_'.$id);
+			self::$cache->save($_SESSION, 'sess_'.$id);
 		else
 			self::$cache->remove('sess_'.$id);
 	}
 
 	static function destroy($id)
 	{
+		setcookie(session_name(), '', 1, '/',
+			isset(QFW::$config['session']['domain']) ? QFW::$config['session']['domain'] : '');
+		unset($_COOKIE[session_name()]);
 		self::$cache->remove('sess_'.$id);
-		$_SESSION=array();
+		$_SESSION = array();
+		session_id('');
 	}
 
 	static function gc()
 	{
-		self::$cache->clean(CACHE_CLR_OLD);
+		//WARNING: На сильно нагруженных системах лучше делать очистку отдельно
+		//self::$cache->clean(CACHE_CLR_OLD);
+		return true;
 	}
 
-	public function __construct()
+	/**
+	 * Отдает данные сессии без ее старта
+	 *
+	 * @param string $id - идентификатор сессии
+	 * @param bool $update - обновить время доступа
+	 * @return mixed session data
+	 */
+	static function get($id, $update = true)
+	{
+		$data = self::$cache->load('sess_'.$id);
+		if (!$data)
+			return false;
+		if ($update)
+			self::$cache->save($data, 'sess_'.$id);
+		return $data;
+	}
+	
+	/**
+	 * Стартует новую сессию с новым сидом
+	 * Старая полностью уничтожается
+	 *
+	 * @param string $sid
+	 */
+	public function restart($sid = '')
+	{
+		$old = session_id();
+		if ($sid!=$old)
+		{
+			session_destroy();
+			if (!empty($sid))
+				session_id($sid);
+			else
+				session_regenerate_id();
+			$this->start();
+		}
+	}
+	
+	public function __construct($sid = '')
 	{
 		self::$cache = Cache::get();
-		call_user_func_array('session_set_cookie_params',QFW::$config['session']);
+		call_user_func_array('session_set_cookie_params', QFW::$config['session']);
+		if (!empty($sid))
+			session_id($sid);
+		$this->start();
+	}
+
+	private function start()
+	{
 		session_set_save_handler(
-			array('QuickFW_Session',"open"),
-			array('QuickFW_Session',"close"),
-			array('QuickFW_Session',"read"),
-			array('QuickFW_Session',"write"),
-			array('QuickFW_Session',"destroy"),
-			array('QuickFW_Session',"gc")
+			array('QuickFW_Session','open'),
+			array('QuickFW_Session','close'),
+			array('QuickFW_Session','read'),
+			array('QuickFW_Session','write'),
+			array('QuickFW_Session','destroy'),
+			array('QuickFW_Session','gc')
 		);
 		session_start();
 	}
-
+	
 }
 
 ?>

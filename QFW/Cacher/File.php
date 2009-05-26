@@ -15,7 +15,6 @@ class Cacher_File implements Zend_Cache_Backend_Interface
 		'writeControl' => false,
 		'readControl' => false,
 		'fileNameProtection' => true,
-		'automaticSerialization' => true,
 		'automaticCleaningFactor' => 0,
 		'hashedDirectoryLevel' => 0,
 		'hashedDirectoryUmask' => 0777,
@@ -33,7 +32,6 @@ class Cacher_File implements Zend_Cache_Backend_Interface
  *     'writeControl' => enable / disable write control (boolean),
  *     'readControl' => enable / disable read control (boolean),
  *     'fileNameProtection' => enable / disable automatic file name protection (boolean),
- *     'automaticSerialization' => enable / disable automatic serialization (boolean),
  *     'automaticCleaningFactor' => distable / tune automatic cleaning process (int),
  *     'hashedDirectoryLevel' => level of the hashed directory system (int),
  *     'hashedDirectoryUmask' => umask for hashed directory structure (int),
@@ -72,8 +70,7 @@ class Cacher_File implements Zend_Cache_Backend_Interface
 		$data = false;
 		if ($doNotTest || is_null($time = time()) || filemtime($file) > $time)
 			$data = $this->_read($file);
-		if ($this->options['automaticSerialization'] && is_string($data))
-			$data = unserialize($data);
+		$data = unserialize($data);
 		return $data;
 	}
 
@@ -81,8 +78,7 @@ class Cacher_File implements Zend_Cache_Backend_Interface
 	{
 		if (!$this->options['caching'])
 			return false;
-		if ($this->options['automaticSerialization'])
-			$data = serialize($data);
+		$data = serialize($data);
 		$file = $this->fileName($id,true);
 
 		if ($this->options['automaticCleaningFactor']>0 && rand(1, $this->options['automaticCleaningFactor']) == 1)
