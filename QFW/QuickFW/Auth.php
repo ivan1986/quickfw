@@ -62,6 +62,7 @@ class QuickFW_Auth
 			return QuickFW_Auth::$session->restart($sid);
 		require (QFWPATH.'/QuickFW/Session.php');
 		QuickFW_Auth::$session = new QuickFW_Session($sid);
+		return null;
 	}
 	
 	/**

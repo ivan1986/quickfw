@@ -73,16 +73,14 @@ class QuickFW_Session
 	 */
 	public function restart($sid = '')
 	{
-		$old = session_id();
-		if ($sid!=$old)
-		{
-			session_destroy();
-			if (!empty($sid))
-				session_id($sid);
-			else
-				session_regenerate_id();
-			$this->start();
-		}
+		if ($sid==session_id())
+			return;
+		session_destroy();
+		if (!empty($sid))
+			session_id($sid);
+		else
+			session_regenerate_id();
+		$this->start();
 	}
 	
 	public function __construct($sid = '')
