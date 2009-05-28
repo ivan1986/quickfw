@@ -298,42 +298,16 @@ class QuickFW_Router
 
 	protected function parseScobParams($par)
 	{
-		$instr  = false;
-		$strbeg = '';
-		$params = array();
-		$startpar=0;
-		for($i=0;$i<strlen($par);$i++)
-		{
-			if (!$instr && $par[$i]==',')
-			{
-				$params[]=substr($par,$startpar,$i-$startpar);
-				$startpar=$i+1;
-			}
-			elseif (!$instr && ($par[$i]=="'" || $par[$i]=='"'))
-			{
-				$instr=true;
-				$strbeg=$par[$i];
-			}
-			elseif ($instr && ($par[$i]==$strbeg))
-			{
-				$instr=$par[$i-1]=='\\';
-			}
-		}
-		$params[]=substr($par,$startpar);
-		foreach ($params as $k=>$v)
-		{
-			//при таком разборе если строка начинается кавычкой
-			//она ей обязательно заканчивается (регулярка так разбивает)
-			if ($v[0]=="'" || $v[0]=='"')
-			{
-				$v=str_replace(
-					array('\\\\','\\'.$v[0]),
-					array('\\'  ,$v[0]),
-					$v);
-				$params[$k]=substr($v,1,strlen($v)-2);
-			}
-		}
-		return $params;
+//регулярка для парсинга параметров - записана так, чтобы не было страшных экранировок
+$re = <<<SREG
+#\s*([^,"']+|"(?:[^"]|\\"|"")*?[^\"]"|'(?:[^']|\\'|'')*?[^\']')\s*(?:,|$)#
+SREG;
+		$m=array();
+		preg_match_all($re, $par, $m);
+		foreach ($m[1] as &$v)
+			$v = str_replace(array('""',"''",'\"',"\'"), array('"',"'",'"',"'"),
+				trim($v,'\'" '));
+		return $m[1];
 	}
 
 	protected function loadMCA(&$data,$type)

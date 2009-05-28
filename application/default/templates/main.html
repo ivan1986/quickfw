@@ -16,8 +16,8 @@
 
 <?=$P->getHead(false,'h');?>HEAD<?=$P->getHead(true,'h');?>
 А сюда у нас подключен блок test/index<br />
-<?=$this->block('test');?><br />
-<?=$this->block('test');?><br />
+<?=$this->block('default.test.index(1,2,3,4)');?><br />
+<?=$this->block('test(\'34\\\'23\',342,\'sfsdf,sfs\'\'df\',"234545\"fdsgdf")');?><br />
 <?=$this->block('test');?><br />
 <?=$this->block('test');?><br />
 А вот тут он закончился
