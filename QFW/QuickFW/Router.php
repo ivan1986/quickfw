@@ -116,9 +116,29 @@ class QuickFW_Router
 			echo $view->displayMain($result);
 	}
 
-	public function getTemplate($tpl_name)
+	public function blockRoute($Uri)
 	{
-		$MCA=$this->blockRoute($tpl_name);
+		global $config;
+		$patt=array();
+		$MCA=array();
+
+		if ($config['redirection']['useBlockRewrite'])
+			$Uri = $this->rewrite($Uri);
+
+		//два варианта записи вызова
+		// module.controller.action(p1,p2,p3,...)
+		if (preg_match('|(?:(.*?)\.)?(.*?)(?:\.(.*))?\((.*)\)|',$Uri,$patt))
+		{
+			$MCA=$this->loadMCA(array_slice($patt,1,3),'Block');
+			$MCA['Params']=$this->parseScobParams($patt[4]);
+		}
+		else
+		{
+			// module/controller/action/p1/p2/p3/...
+			$data = split('/', $Uri);
+			$MCA = $this->loadMCA($data,'Block');
+			$MCA['Params']=$this->parseParams($data);
+		}
 		if (isset($MCA['Error']))
 			return "Ошибка подключения блока ".$tpl_name." адрес был разобран в\t\t ".
 				$MCA['Path']."\n".$MCA['Error'];
@@ -161,33 +181,6 @@ class QuickFW_Router
 		}
 
 		return $result;
-	}
-
-	public function blockRoute($Uri)
-	{
-		global $config;
-		$patt=array();
-		$MCA=array();
-
-		if ($config['redirection']['useBlockRewrite'])
-			$Uri = $this->rewrite($Uri);
-
-		//два варианта записи вызова
-		// module.controller.action(p1,p2,p3,...)
-		if (preg_match('|(?:(.*?)\.)?(.*?)(?:\.(.*))?\((.*)\)|',$Uri,$patt))
-		{
-			$MCA=$this->loadMCA(array_slice($patt,1,3),'Block');
-			$MCA['Params']=$this->parseScobParams($patt[4]);
-		}
-		else
-		{
-			// module/controller/action/p1/p2/p3/...
-			$data = split('/', $Uri);
-			$MCA = $this->loadMCA($data,'Block');
-			$MCA['Params']=$this->parseParams($data);
-		}
-
-		return $MCA;
 	}
 
 	//Необходимо для вызовов всех деструкторов

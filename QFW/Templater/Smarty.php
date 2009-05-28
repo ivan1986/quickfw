@@ -144,7 +144,7 @@ class Templater_Smarty
 
 	public function block($block)
 	{
-		return QFW::$router->getTemplate($block);
+		return QFW::$router->blockRoute($block);
 	}
 
 	/**
@@ -192,7 +192,7 @@ class Templater_Smarty
 	//Block Wrapper
 	public static function getTemplate($tpl_name, &$tpl_source, &$smarty)
 	{
-		$tpl_source = '{literal}'.QFW::$router->getTemplate($block).'{/literal}';
+		$tpl_source = '{literal}'.QFW::$router->blockRoute($block).'{/literal}';
 		return true;
 	}
 

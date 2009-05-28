@@ -112,7 +112,7 @@ class Templater_Proxy
 
 	public function block($block)
 	{
-		return QFW::$router->getTemplate($block);
+		return QFW::$router->blockRoute($block);
 	}
 
 	/**

@@ -94,7 +94,7 @@ class Templater_PlainView
 
 	public function block($block)
 	{
-		return QFW::$router->getTemplate($block);
+		return QFW::$router->blockRoute($block);
 	}
 
 	public function render($tmpl)
