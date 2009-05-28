@@ -116,6 +116,53 @@ class QuickFW_Router
 			echo $view->displayMain($result);
 	}
 
+	public function getTemplate($tpl_name)
+	{
+		$MCA=$this->blockRoute($tpl_name);
+		if (isset($MCA['Error']))
+			return "Ошибка подключения блока ".$tpl_name." адрес был разобран в\t\t ".
+				$MCA['Path']."\n".$MCA['Error'];
+
+		$CacheInfo=false;
+		if ($MCA['cache'])
+		{
+			$CacheInfo=$MCA['Class']->CacheInfo($MCA['Action'],$MCA['Params']);
+			if (is_array($CacheInfo))
+			{
+				if (array_key_exists('Cacher',$CacheInfo) && array_key_exists('id',$CacheInfo))
+				$data = $CacheInfo['Cacher']->load($CacheInfo['id']);
+				if ($data)
+					return $data;
+			}
+		}
+
+		list($lpPath, $this->ParentPath, $this->CurPath) =
+			array($this->ParentPath, $this->CurPath, $MCA['Path']);
+
+		$result = call_user_func_array(array($MCA['Class'], $MCA['Action']), $MCA['Params']);
+
+		list($this->CurPath, $this->ParentPath) =
+			array($this->ParentPath, $lpPath);
+
+		if (is_array($CacheInfo))
+		{
+			if (array_key_exists('Cacher',$CacheInfo) && array_key_exists('id',$CacheInfo))
+			{
+				if (array_key_exists('time',$CacheInfo))
+					$CacheInfo['Cacher']->save($result,$CacheInfo['id'],
+						array_key_exists('tags',$CacheInfo)?$CacheInfo['tags']:array(),
+						$CacheInfo['time']
+					);
+				else
+					$CacheInfo['Cacher']->save($result,$CacheInfo['id'],
+						array_key_exists('tags',$CacheInfo)?$CacheInfo['tags']:array()
+					);
+			}
+		}
+
+		return $result;
+	}
+
 	public function blockRoute($Uri)
 	{
 		global $config;

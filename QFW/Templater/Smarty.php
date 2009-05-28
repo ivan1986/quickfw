@@ -38,7 +38,6 @@ class Templater_Smarty
 			$this->setScriptPath($this->_tmplPath);
 		}
 
-		$block = QuickFW_Block::getInstance();
 		$this->_smarty->register_resource('block', array(&$this,
 													"getTemplate",
 													"getTimestamp",
@@ -145,7 +144,7 @@ class Templater_Smarty
 
 	public function block($block)
 	{
-		return QuickFW_Block::getTemplate($block);
+		return QFW::$router->getTemplate($block);
 	}
 
 	/**
@@ -186,17 +185,14 @@ class Templater_Smarty
 	private function getEngine()
 	{
 		if (!$this->_smarty)
-		{
 			$this->Init();
-		}
 		return $this->_smarty;
 	}
 
 	//Block Wrapper
 	public static function getTemplate($tpl_name, &$tpl_source, &$smarty)
 	{
-		$tpl_source = QuickFW_Block::getTemplate($tpl_name);
-		$tpl_source = '{literal}'.$tpl_source.'{/literal}';
+		$tpl_source = '{literal}'.QFW::$router->getTemplate($block).'{/literal}';
 		return true;
 	}
 
