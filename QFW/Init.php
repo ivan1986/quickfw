@@ -19,7 +19,6 @@
 		require_once QFWPATH.'/QuickFW/Error.php';
 
 	require QFWPATH.'/QuickFW/Cache.php';
-	require QFWPATH.'/QuickFW/Block.php';
 	require QFWPATH.'/QuickFW/Plugs.php';
 
 	$templ = ucfirst($config['templater']['name']);
