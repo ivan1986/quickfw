@@ -5,8 +5,7 @@ class QuickFW_Router
 	protected $classes=array();
 
 	protected $baseDir;
-	protected $rewriter;
-
+	
 	protected $defM,$defC,$defA;
 
 	//модуль и контроллер в контексте которого выполняется,
@@ -140,7 +139,7 @@ class QuickFW_Router
 			$MCA['Params']=$this->parseParams($data);
 		}
 		if (isset($MCA['Error']))
-			return "Ошибка подключения блока ".$tpl_name." адрес был разобран в\t\t ".
+			return "Ошибка подключения блока ".$Uri." адрес был разобран в\t\t ".
 				$MCA['Path']."\n".$MCA['Error'];
 
 		$CacheInfo=false;
@@ -243,28 +242,45 @@ class QuickFW_Router
 		exit();
 	}
 
+	protected $rewrite = array();
+	protected $backrewrite = array();
+	
+	/**
+	 * Функция производит преобразования урла для вывода на страницу
+	 *
+	 * @param string $uri
+	 * @return string
+	 */
 	public function backrewrite($uri)
 	{
 		if (!QFW::$config['redirection']['useRewrite'])
 			return $uri;
-		if (!$this->rewriter)
+		if (!$this->backrewrite)
 		{
-			require QFWPATH.'/QuickFW/Rewrite.php';
-			$this->rewriter = new QuickFW_Rewrite();
+			$backrewrite = array();
+			require APPPATH . '/rewrite.php';
+			$this->backrewrite = $backrewrite;
 		}
-		return $this->rewriter->back($uri);
+		return preg_replace(array_keys($this->backrewrite), array_values($this->backrewrite), $uri);
 	}
 
+	/**
+	 * Функция производит преобразования урла при запросе
+	 *
+	 * @param string $uri
+	 * @return string
+	 */
 	protected function rewrite($uri)
 	{
 		if (!QFW::$config['redirection']['useRewrite'])
 			return $uri;
-		if (!$this->rewriter)
+		if (!$this->rewrite)
 		{
-			require QFWPATH.'/QuickFW/Rewrite.php';
-			$this->rewriter = new QuickFW_Rewrite();
+			$rewrite = array();
+			require APPPATH . '/rewrite.php';
+			$this->rewrite = $rewrite;
 		}
-		return $this->rewriter->forward($uri);
+		return preg_replace(array_keys($this->rewrite), array_values($this->rewrite), $uri);
 	}
 
 	/**
