@@ -1,17 +1,6 @@
 <?php
 
-	/**
-	 * Инициализация конфигов
-	 */
-	require QFWPATH.'/config.php';
-	require APPPATH.'/default.php';
-
-	if (!isset($_SERVER['HTTP_HOST']))
-		die('$_SERVER[\'HTTP_HOST\'] NOT SET');
-	$file=APPPATH.'/'.$_SERVER['HTTP_HOST'].'.php';
-	if (is_file($file))
-		require ($file);
-	//-------------------------------------------------------------------------
+	$config = QFW::config();
 
 	if (isset($config['host']['encoding']))
 		header("Content-Type: text/html; charset=".$config['host']['encoding']);
@@ -25,7 +14,7 @@
 	$class = 'Templater_'.$templ;
 	require (QFWPATH.'/Templater/'.$templ.'.php');
 	$view = new $class(APPPATH,
-		isset($config['templater']['def_tpl'])?$config['templater']['def_tpl']:"");
+		isset($config['templater']['def_tpl']) ? $config['templater']['def_tpl'] : '');
 
 	require (QFWPATH.'/QuickFW/AutoDbSimple.php');
 	$db = new QuickFW_AutoDbSimple($config['database']);
@@ -46,6 +35,22 @@
 		static public $db;
 
 		private function __construct() {}
+		
+		/**
+		 * Инициализация конфига
+		 */
+		static public function config()
+		{
+			require QFWPATH.'/config.php';
+			require APPPATH.'/default.php';
+
+			if (!isset($_SERVER['HTTP_HOST']))
+				die('$_SERVER[\'HTTP_HOST\'] NOT SET');
+			$file = APPPATH.'/'.$_SERVER['HTTP_HOST'].'.php';
+			if (is_file($file))
+				require ($file);
+			return $config;
+		}
 
 		static public function Init()
 		{
