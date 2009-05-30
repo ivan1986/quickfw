@@ -90,6 +90,11 @@ class Templater_Templater
 	{
 	}
 
+	public function block($block)
+	{
+		return QFW::$router->blockRoute($block);
+	}
+
 	/**
 	* Processes a template and returns the output.
 	*

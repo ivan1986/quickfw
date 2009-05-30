@@ -1,7 +1,5 @@
 <?php
 
-require_once(QFWPATH.'/QuickFW/Cacher/Interface.php');
-
 class Cacher_Class implements Zend_Cache_Backend_Interface 
 {
     /**
