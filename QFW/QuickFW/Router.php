@@ -415,9 +415,10 @@ SREG;
 		{
 			$len_de=strlen($config['redirection']['defExt']);
 			$l=strlen($uri)-$len_de;
-			if ($l>0 && !substr_compare($uri,$config['redirection']['defExt'],$l,$len_de))
+			if ($l>0 && strpos($uri,$config['redirection']['defExt'],$l)!==false)
 				$uri = substr($uri,0,$l);
 		}
+		
 		return trim($uri, '/');
 	}
 
