@@ -78,14 +78,13 @@ class Templater_Proxy
 	* @param string|array
 	* @return void
 	*/
-	public function delete($key)
+	public function delete($spec)
 	{
 		$this->unsyncronize();
 		if (is_array($spec))
 			foreach ($spec as $item)
 				$this->delete($item);
-		else
-			if (isset($this->_vars[$spec]))
+		elseif (isset($this->_vars[$spec]))
 				unset($this->_vars[$spec]);
 	}
 
@@ -104,7 +103,7 @@ class Templater_Proxy
 	{
 		if ($var === null)
 			return $this->_vars;
-		else if (isset($this->_vars[$var]))
+		elseif (isset($this->_vars[$var]))
 			return $this->_vars[$var];
 		else
 			return null;

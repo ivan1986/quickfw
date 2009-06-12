@@ -54,8 +54,7 @@ class Templater_PlainView
 		if (is_array($spec))
 			foreach ($spec as $item)
 				$this->delete($item);
-		else
-			if (isset($this->_vars[$spec]))
+		elseif (isset($this->_vars[$spec]))
 				unset($this->_vars[$spec]);
 	}
 
@@ -73,7 +72,7 @@ class Templater_PlainView
 	{
 		if ($var === null)
 			return $this->_vars;
-		else if (isset($this->_vars[$var]))
+		elseif (isset($this->_vars[$var]))
 			return $this->_vars[$var];
 		else
 			return null;
@@ -100,7 +99,6 @@ class Templater_PlainView
 	public function render($tmpl)
 	{
 		extract($this->_vars, EXTR_OVERWRITE);
-		error_reporting(E_ALL ^ E_NOTICE);
 		$P=&$this->P;
 		ob_start();
 		include($this->_tmplPath . '/' . $tmpl);
@@ -112,7 +110,6 @@ class Templater_PlainView
 	public function fetch($tmpl)
 	{
 		extract($this->_vars, EXTR_OVERWRITE);
-		error_reporting(E_ALL ^ E_NOTICE);
 		$P=&$this->P;
 		ob_start();
 		include($this->_tmplPath . '/' . $tmpl);
