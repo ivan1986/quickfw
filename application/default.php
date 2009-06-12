@@ -78,6 +78,21 @@ $config['templater']= array(
 	),
 );
 
+$config['jabber'] = array(
+	'host' => 'webim.qip.ru',
+	'port' => 5222,
+	'server' => 'qip.ru',
+	'user' => 'subaaaaaa',
+	'pass' => '123456',
+	'resource' => 'bot',
+);
+
+$config['log'] = array(
+	'log' => 'error',
+	'critical' => 'xmpp://ivan1986@jabber.ru',
+	'error' => 'mailto:ivan1986@list.ru',
+);
+
 /* деквотатор, включите если нужно на хостинге */
 /*
 function strips(&$el) {
