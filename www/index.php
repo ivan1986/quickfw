@@ -1,6 +1,6 @@
 <?php
-	define ('DOC_ROOT', realpath($_SERVER['DOCUMENT_ROOT']));
-	define ('ROOTPATH', realpath($_SERVER['DOCUMENT_ROOT'] . '/../'));
+	define ('DOC_ROOT', dirname(__FILE__));
+	define ('ROOTPATH', dirname(dirname(__FILE__)));
 	define ('APPPATH', ROOTPATH . '/application');
 	define ('TMPPATH', ROOTPATH . '/tmp');
 	define ('QFWPATH', ROOTPATH . '/QFW');
