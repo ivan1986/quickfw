@@ -80,12 +80,9 @@ class QuickFW_Router
 				}
 			}
 		}
-
-		if (!empty($params))
-			$result = call_user_func_array(array($MCA['Class'], $this->action), $params);
-		else
-			$result = call_user_func(array($MCA['Class'], $this->action));
-
+		
+		$result = call_user_func_array(array($MCA['Class'], $this->action), $params);
+		
 		QFW::$view->setScriptPath($this->baseDir.'/'.$MCA['Module'].'/templates');
 
 		if ($CacheInfo && array_key_exists('Cacher',$CacheInfo) && array_key_exists('id',$CacheInfo))
