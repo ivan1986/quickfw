@@ -353,7 +353,13 @@ SREG;
 
 		if (!isset($this->classes[$class_key]))
 		{
-			require_once($fullname);
+			require($fullname);
+			if (!class_exists($class))
+			{
+				$MCA['Error']="не найден класс \t\t\t".$class."\nКласс не найден, мать его за ногу";
+				$MCA['Path']=$MCA['Module'].'/'.$MCA['Controller'].'/...';
+				return $MCA;
+			}
 			$vars = get_class_vars($class);
 			$acts = get_class_methods($class);
 			$this->classes[$class_key] = array(
@@ -364,13 +370,6 @@ SREG;
 			);
 		}
 		$MCA['Class'] = $this->classes[$class_key]['i'];
-
-		if (!class_exists($class))
-		{
-			$MCA['Error']="не найден класс \t\t\t".$class."\nКласс не найден, мать его за ногу";
-			$MCA['Path']=$MCA['Module'].'/'.$MCA['Controller'].'/...';
-			return $MCA;
-		}
 
 		$aname = isset($data[0]) ? $data[0] : $this->classes[$class_key]['defA'];
 		$MCA['Action'] = strtr($aname,'.','_').$type;
