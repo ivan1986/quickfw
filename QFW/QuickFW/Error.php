@@ -34,7 +34,7 @@
 		elseif (QFW::$config['QFW']['release'])
 		{
 			require_once LIBPATH.'/Log.php';
-			Log::log("Uncaught exception: " , $exception->getMessage(),'debug');
+			Log::log("Uncaught exception: " . $exception->getMessage(),'debug');
 			QFW::$router->show404();
 		}
 		else
@@ -59,25 +59,13 @@
 		//тут определим что жопа не случилась
 		if ($GLOBALS['DONE'])
 			return false;
-		/**
-		 * Случилась жопа, начинаем обработку ошибок
-		 */
-		require QFWPATH.'/config.php';
-		require APPPATH.'/default.php';
-		if (isset($_SERVER['HTTP_HOST']))
-		{
-			$file=APPPATH.'/'.$_SERVER['HTTP_HOST'].'.php';
-			if (is_file($file))
-				require ($file);
-		}
-		$GLOBALS['config']=$config;
+		// Случилась жопа, начинаем обработку ошибок
+		$GLOBALS['config'] = QFW::config();
 		QFW::Init();
 		require_once LIBPATH.'/Log.php';
+		Log::log("Fatal Error" ,'critical');
 		//TODO: Выдирать лог ошибок и отправлять последние куда-то
-		/*$err = file_get_contents('/home/ivan/QuickFramework/error.log');
-		Log::log($err);*/
-		//file_put_contents(TMPPATH.'/2',serialize($GLOBALS));
-		return $text.'CALL';
+		return $text;
 	}
 	ob_start('FatalErrorHandler');
 
