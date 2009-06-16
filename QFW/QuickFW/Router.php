@@ -288,6 +288,7 @@ class QuickFW_Router
 		if (empty($data) || !empty($data[0]))
 			return $data;
 		array_shift($data);	//Удаляем первый пустой параметр
+		$params = array();
 		while(!empty($data))
 			$params[array_shift($data)] = array_shift($data);
 		return array('params' => $params);
