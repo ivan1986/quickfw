@@ -35,7 +35,7 @@ class QuickFW_Router
 		$requestUri = $this->filterUri($requestUri);
 		$requestUri = $this->rewrite($requestUri);
 
-		$data = split('/', $requestUri);
+		$data = explode('/', $requestUri);
 		$data = array_map('urldecode', $data);
 
 		$MCA = $this->loadMCA($data,$type);
@@ -131,7 +131,7 @@ class QuickFW_Router
 		else
 		{
 			// module/controller/action/p1/p2/p3/...
-			$data = split('/', $Uri);
+			$data = explode('/', $Uri);
 			$MCA = $this->loadMCA($data,'Block');
 			$MCA['Params']=$this->parseParams($data);
 		}
