@@ -8,8 +8,10 @@ class Log
 	/**
 	 * Диспетчеризация сообщения - отправляет в нужный логер или в файл
 	 */
-	public static function log($str,$to='general')
+	public static function __callStatic($method, $params)
 	{
+		$str = $params[0];
+		$to = $method=='log' ? (isset($params[1])?$params[1]:'general') : $method;
 		if (isset(QFW::$config['log'][$to]))
 			$to = QFW::$config['log'][$to];
 		if (self::$l === null)
@@ -23,8 +25,6 @@ class Log
 		else
 			self::f($str, $to);
 	}
-
-	public function __construct() {}
 
 	private function jabber($str, $to) { self::$messages['jabber'][$to][]=$str; }
 	private function email($str, $to) { self::$messages['email'][$to][]=$str; }
