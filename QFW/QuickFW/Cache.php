@@ -110,10 +110,10 @@
 
 		private function __construct() {}
 
-		public static function get($name='default', $namespace='')
+		public static function get($name='default', $ns='')
 		{
-			if (isset(self::$cachers[$name.'_'.$namespace]))
-				return self::$cachers[$name.'_'.$namespace];
+			if (isset(self::$cachers[$name.'_'.$ns]))
+				return self::$cachers[$name.'_'.$ns];
 			if (!isset(QFW::$config['cache'][$name]))
 				throw new Exception('Не найдены парамерты кеша '.$name);
 			$data = QFW::$config['cache'][$name];
@@ -124,20 +124,20 @@
 			$c->setDirectives(is_array($data['options'])?$data['options']:array());
 
 			// если у нас не пустое пространство имен - юзаем проксирующий класс
-			if ($ns = (isset($data['namespace'])?$data['namespace']:'').$namespace)
-				$c=self::namespace($c,$n);
+			if ($ns = (isset($data['namespace'])?$data['namespace']:'').$ns)
+				$c=self::ns($c,$n);
 			if (isset($data['tags']) && $data['tags'])
 			{
 				require_once(QFWPATH.'/QuickFW/Cacher/TagEmu.php');
 				$c=new Dklab_Cache_Backend_TagEmuWrapper($c);
 			}
-			return self::$cachers[$name.'_'.$namespace]=$c;
+			return self::$cachers[$name.'_'.$ns]=$c;
 		}
 
-		public static function namespace(Zend_Cache_Backend_Interface $cacher, $namespace='')
+		public static function ns(Zend_Cache_Backend_Interface $cacher, $ns='')
 		{
 			require_once(QFWPATH.'/QuickFW/Cacher/Namespace.php');
-			return new Dklab_Cache_Backend_NamespaceWrapper($cacher,$namespace);
+			return new Dklab_Cache_Backend_NamespaceWrapper($cacher,$ns);
 		}
 
 		public static function slot($name)
