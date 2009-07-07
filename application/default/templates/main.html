@@ -1,26 +1,26 @@
 <html>
 <head><title>Main.tpl</title></head>
 <body>
-<?=$P->outHead('h','1','2'); ?>
+<?php echo $P->outHead('h','1','2'); ?>
 Это файл Main.tpl<br />
-Это урл <?=$P->siteUrl('test'); ?>
+Это урл <?php echo $P->siteUrl('test'); ?>
 
 <br />
-<?=$content; ?>
+<?php echo $content; ?>
 <br />
 
-<?=$P->addJS('file.js'); ?>
-<?=$P->addJS('file.js'); ?>
-<?=$P->addCSS('file.css'); ?>
-<?=$P->addCSS('file.css'); ?>
+<?php echo $P->addJS('file.js'); ?>
+<?php echo $P->addJS('file.js'); ?>
+<?php echo $P->addCSS('file.css'); ?>
+<?php echo $P->addCSS('file.css'); ?>
 
-<?=$P->getHead(false,'h');?>HEAD<?=$P->getHead(true,'h');?>
+<?php echo $P->getHead(false,'h');?>HEAD<?php echo $P->getHead(true,'h');?>
 А сюда у нас подключен блок test/index<br />
-<?=$this->block('default.test.index(1,2,3,4)');?><br />
-<?=$this->block('test(\'34\\\'23\',342,\'sfsdf,sfs\'\'df\',"234545\"fdsgdf")');?><br />
-<?=$this->block('test');?><br />
-<?=$this->block('test');?><br />
+<?php echo $this->block('default.test.index(1,2,3,4)');?><br />
+<?php echo $this->block('test(\'34\\\'23\',342,\'sfsdf,sfs\'\'df\',"234545\"fdsgdf")');?><br />
+<?php echo $this->block('test');?><br />
+<?php echo $this->block('test');?><br />
 А вот тут он закончился
-<?=$P->getHead(false,'h');?>HEAD<?=$P->getHead(true,'h');?>
+<?php echo $P->getHead(false,'h');?>HEAD<?php echo $P->getHead(true,'h');?>
 </body>
 </html>
