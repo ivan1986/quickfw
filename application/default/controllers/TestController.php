@@ -12,7 +12,7 @@ class TestController
 		global $router,$view;
 		return "<pre>".$view->render('b.html')
 		."\nБлок index - ".$router->UriPath.' '.$router->CurPath.' '.$router->ParentPath
-		."\nЭто результат работы блока index с параметрами ". var_export(func_get_args(),true)."</pre>";
+		."\nЭто результат работы блока index с параметрами ". print_r(func_get_args(),true)."</pre>";
 	}
 
 	public function aBlock()

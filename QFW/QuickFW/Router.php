@@ -124,9 +124,9 @@ class QuickFW_Router
 		// module.controller.action(p1,p2,p3,...)
 		if (preg_match('|(?:(.*?)\.)?(.*?)(?:\.(.*))?\((.*)\)|',$Uri,$patt))
 		{
-			$MCA = array_slice($patt,1,3);
-			$MCA = $this->loadMCA($MCA,'Block');
-			$MCA['Params']=$this->parseScobParams($patt[4]);
+			$data = array_slice($patt,1,3);
+			$MCA = $this->loadMCA($data,'Block');
+			$MCA['Params']=str_getcsv($patt[4],',',"'",'\\'); // $this->parseScobParams($patt[4]);
 		}
 		else
 		{

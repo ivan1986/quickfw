@@ -6,6 +6,7 @@ class IndexController extends QuickFW_Auth
 {
 	public function indexAction()
 	{
+		echo addslashes('sljkghlfshg"dfdfgd');
 		//$x = Cache::slot('Test',1);
 		return QFW::$view->fetch('b.html');
 
