@@ -65,5 +65,8 @@
 	}
 
 	QFW::Init();
+	
+	if (isset($_REQUEST['JsHttpRequest']))
+		require_once LIBPATH.'/JsHttpRequest.php';
 
 ?>
