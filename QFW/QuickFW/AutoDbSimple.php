@@ -27,6 +27,18 @@ class QuickFW_AutoDbSimple
 		$this->DSN       = $dsn;
 	}
 
+	/**
+	 * Взять базу из пула коннектов
+	 */
+	public static function get($dsn)
+	{
+		static $pool = array();
+		return isset($pool[$dsn]) ? $pool[$dsn] : $pool[$dsn] = new self($dsn);
+	}
+
+	/**
+	 * Коннект при первом запросе к базе данных
+	 */
 	public function __call($method, $params)
 	{
 		if ($this->DbSimple === null)
@@ -47,6 +59,9 @@ class QuickFW_AutoDbSimple
 		return call_user_func_array(array(&$this->DbSimple, 'selectPage'), $args);
 	}
 
+	/**
+	 * Подключение к базе данных
+	 */
 	protected function connect($dsn)
 	{
 		$parsed = $this->parseDSN($dsn);
