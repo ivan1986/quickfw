@@ -15,7 +15,7 @@ function getUrl($url, $data=array())
 		CURLOPT_RETURNTRANSFER => 1,
 		CURLOPT_FOLLOWLOCATION => 1,
 	));
-	if (isset($data['post']))	//POST запрос
+	if (isset($data['post'])) //POST запрос
 	{
 		curl_setopt_array($c, array(
 			CURLOPT_POST => 1,
@@ -57,7 +57,6 @@ function getUrl($url, $data=array())
 	return $content;
 }
 
-
 /**
  * Вывод сообщения с разбивкой длинных слов без повреждения тегов
  */
@@ -81,18 +80,18 @@ function msg2html($s,$n=50) {
 }
 
 /**
- * 	Преобразование URL в ссылки
+ * Преобразование URL в ссылки
  */
 function make_urls($string, $nofollow=false) {
-    $p = '/((?:(?:ht|f)tps?:\/\/|www\.)[^<\s\n]+)(?<![]\.,:;!\})<-])/msiu';
-    $r = '<a href="$1">$1</a>$2';
+	$p = '/((?:(?:ht|f)tps?:\/\/|www\.)[^<\s\n]+)(?<![]\.,:;!\})<-])/msiu';
+	$r = '<a href="$1">$1</a>$2';
 
-    $string = preg_replace($p, $r, $string);
+	$string = preg_replace($p, $r, $string);
 
-    $p = '/ href="www\./msiu';
-    $r = ' href="http://www.';
+	$p = '/ href="www\./msiu';
+	$r = ' href="http://www.';
 
-    return preg_replace($p, $r, $string);
+	return preg_replace($p, $r, $string);
 }
 
 /**
@@ -115,6 +114,18 @@ function my_trim($str,$size)
 	if (mb_strlen($str)>$size)
 		$str=mb_substr($str,0,$size-3).'...';
 	return $str;
+}
+
+/**
+ * Функции обрезания текста без повреждения слов
+ */
+public function clearCut($text, $length)
+{
+	if(mb_strlen($text) <= $length)
+		return $text;
+
+	$words = explode(' ', mb_substr($text, 0, $length));
+	return implode(' ', array_slice($words, 0, count($words)-1)).'...';
 }
 
 /**
