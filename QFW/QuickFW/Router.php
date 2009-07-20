@@ -1,5 +1,11 @@
 <?php
 
+/**
+ * Класс для работы с uri
+ *
+ * <br>редирект, прямой и обратный роутинг, загрузка контроллера
+ * @package QFW
+ */
 class QuickFW_Router
 {
 	protected $classes=array();
@@ -11,9 +17,66 @@ class QuickFW_Router
 	//модуль и контроллер в контексте которого выполняется,
 	//необходимо для роутинга компонентов
 	protected $cModule, $cController;
-	public $module, $controller, $action;
 
-	public $UriPath, $CurPath, $ParentPath, $Uri, $RequestUri;
+	/**
+	 * модуль, в контексте которого выполняется текущий запрос
+	 *
+	 * @var string
+	 */
+	public $module;
+	
+	/**
+	 * контроллер, в контексте которого выполняется текущий запрос
+	 * 
+	 * @var string
+	 */
+	public $controller;
+
+	/**
+	 * экшен, в контексте которого выполняется текущий запрос
+	 *
+	 * @var string
+	 */
+	public $action;
+
+	/**
+	 * Uri который был вызван для исполнения
+	 * Без учета параметров - только модуль, контроллер и экшен
+	 *
+	 * @var string
+	 */
+	public $UriPath;
+
+	/**
+	 * Uri который выполняется в данный момент
+	 * (отличается от вызванного в подключаемых модулях)
+	 * 
+	 * @var string
+	 */
+	public $CurPath;
+
+	/**
+	 * Uri из которого был вызван выполняемый модуль
+	 *
+	 * @var string
+	 */
+	public $ParentPath;
+
+	/**
+	 * Uri который был вызван для исполнения
+	 * модуль, контроллер, экшен и параметры
+	 *
+	 * @var string
+	 */
+	public $Uri;
+
+	/**
+	 * Uri который был вызван для исполнения
+	 * после фильтрации переменных и реврайта
+	 *
+	 * @var string
+	 */
+	public $RequestUri;
 
 	public function __construct($baseDir)
 	{
