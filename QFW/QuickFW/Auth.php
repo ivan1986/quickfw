@@ -2,17 +2,31 @@
 
 /**
  * Класс для работы с сессиями и авторизацией
+ *
+ * @package QFW
  */
 class QuickFW_Auth
 {
+	/** Поле логина в $_POST */
 	const USERNAME_FIELD = 'login';
+	/** Поле пароля в $_POST */
 	const PASSWORD_FIELD = 'password';
 	
 	static private $session=null;
+	/** Флаг авторизованного пользователя */
 	protected $authorized;
+	/** Данные, которые сохраняются в сессии в подмассиве $name */
 	protected $userdata;
+	/** Имя подмассива сесии в котором сохраняются данные */
 	protected $name;
-	
+
+	/**
+	 * Инициализация пользователя - авторизация или восстановление сесии
+	 *
+	 * @param string $name ключ в $_SESSION для хранения данных авторизации
+	 * @param boolean|string $redir адрес редиректа при неудачном логине
+	 * @return boolean авторизован пользователь или нет
+	 */
 	function __construct($name='user',$redir=false)
 	{
 		if (isset($_REQUEST[session_name()]))
@@ -45,10 +59,10 @@ class QuickFW_Auth
 	 */
 	function session($sid = '')
 	{
-		if (QuickFW_Auth::$session!=null)
+		if (self::$session!=null)
 			return;
 		require (QFWPATH.'/QuickFW/Session.php');
-		QuickFW_Auth::$session = new QuickFW_Session($sid);
+		self::$session = new QuickFW_Session($sid);
 	}
 	
 	/**
@@ -61,10 +75,10 @@ class QuickFW_Auth
 	 */
 	function sessionRestart($sid = '')
 	{
-		if (QuickFW_Auth::$session!=null)
-			return QuickFW_Auth::$session->restart($sid);
+		if (self::$session!=null)
+			return self::$session->restart($sid);
 		require (QFWPATH.'/QuickFW/Session.php');
-		QuickFW_Auth::$session = new QuickFW_Session($sid);
+		self::$session = new QuickFW_Session($sid);
 		return null;
 	}
 	
@@ -75,14 +89,15 @@ class QuickFW_Auth
 	 */
 	function sessionDestroy()
 	{
-		if (QuickFW_Auth::$session==null)
+		if (self::$session==null)
 			return;
-		QuickFW_Auth::$session->destroy(session_id());
+		self::$session->destroy(session_id());
 	}
 	
 	/**
-	 * Check if we get data from form with username and password
+	 * Проверка авторизации и сохранение данных в сессии
 	 *
+	 * @internal
 	 * @return boolean
 	 */
 	private function checkPostData()
@@ -104,7 +119,16 @@ class QuickFW_Auth
 		$this->userdata = & $_SESSION[$this->name];
 	}
 	
-	//You can overload this!
+	/**
+	 * Простейшая проверка авторизации - имя и пароль в конфиге
+	 *
+	 * <br>Это основная функция проверки авторизации
+	 * <br>она перегружается в наследуемых классах
+	 * <br>для авторизации на реальных проектах
+	 *
+	 * @global array $config['admin'] данные об авторизации пользователя
+	 * @return string|false результат проверки - имя пользователя или false
+	 */
 	protected function checkUser()
 	{
 		if (!isset($_POST[self::USERNAME_FIELD]))
@@ -112,12 +136,8 @@ class QuickFW_Auth
 		global $config;
 		$username = isset($_POST[self::USERNAME_FIELD]) ? $_POST[self::USERNAME_FIELD] : null;
 		$password = isset($_POST[self::PASSWORD_FIELD]) ? $_POST[self::PASSWORD_FIELD] : null;
-		//Check if this admin
-		if
-		(
-			(strcasecmp($config['admin']['login'],    trim($username)) == 0)
-		and
-			(strcasecmp($config['admin']['password'], trim($password)) == 0)
+		if(	(strcasecmp($config['admin']['login'],    trim($username)) == 0)
+		and	(strcasecmp($config['admin']['password'], trim($password)) == 0)
 		)
 			return $username;
 		else
