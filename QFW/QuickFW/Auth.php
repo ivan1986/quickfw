@@ -27,7 +27,7 @@ class QuickFW_Auth
 	 * @param boolean|string $redir адрес редиректа при неудачном логине
 	 * @return boolean авторизован пользователь или нет
 	 */
-	function __construct($name='user',$redir=false)
+	public function __construct($name='user',$redir=false)
 	{
 		if (isset($_REQUEST[session_name()]))
 			$this->session();
@@ -57,7 +57,7 @@ class QuickFW_Auth
 	 *
 	 * @param string $sid - идентификатор сессии
 	 */
-	function session($sid = '')
+	public function session($sid = '')
 	{
 		if (self::$session!=null)
 			return;
@@ -73,7 +73,7 @@ class QuickFW_Auth
 	 *
 	 * @param string $sid - идентификатор сессии
 	 */
-	function sessionRestart($sid = '')
+	public function sessionRestart($sid = '')
 	{
 		if (self::$session!=null)
 			return self::$session->restart($sid);
@@ -87,7 +87,7 @@ class QuickFW_Auth
 	 *
 	 * <br>Уничтожает данные сессии, стирает куки пользователя
 	 */
-	function sessionDestroy()
+	public function sessionDestroy()
 	{
 		if (self::$session==null)
 			return;
