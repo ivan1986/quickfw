@@ -90,6 +90,13 @@ class QuickFW_Router
 		$this->defA = $config['default']['action'];
 	}
 
+	/**
+	 * Вызов Uri для исполнения
+	 *
+	 * @param string $requestUri запрашиваемый Uri
+	 * @param string $type тип Uri (Action|Cli|...)
+	 * @return null
+	 */
 	public function route($requestUri = null, $type='Action')
 	{
 		global $view, $config;
@@ -175,6 +182,13 @@ class QuickFW_Router
 			echo $view->displayMain($result);
 	}
 
+	/**
+	 * Вызов блока с заданным Uri
+	 *
+	 * @internal
+	 * @param string $Uri Uri блока
+	 * @return string содержимое блока
+	 */
 	public function blockRoute($Uri)
 	{
 		global $config;
@@ -242,9 +256,18 @@ class QuickFW_Router
 		return $result;
 	}
 
-	//Необходимо для вызовов всех деструкторов
+	/**
+	 * 	Необходимо для вызовов всех деструкторов
+	 *
+	 *  @internal
+	 */
 	public function startDisplayMain() { $this->classes = array(); }
 
+	/**
+	 * Отображает страницу 404 и завершает выполнение скрипта
+	 *
+	 * @return die
+	 */
 	public function show404()
 	{
 		$GLOBALS['DONE'] = 1;
@@ -256,7 +279,11 @@ class QuickFW_Router
 
 	/**
 	 * Удаляет из адреса дефолтовые компоненты
+	 *
 	 * (напр: default/other/index => other)
+	 *
+	 * @param string $url Исходный Uri
+	 * @return string Uri с удаленными компонентами
 	 */
 	public function delDef($url)
 	{
@@ -276,6 +303,13 @@ class QuickFW_Router
 		return join('/',$url);
 	}
 
+	/**
+	 * Посылает заголовок Location для перехода на нужное действие
+	 *
+	 * @param string $MCA Uri нужного действия (модуль/контроллер/экшен)
+	 * @param string $tail Дополниетельные параметры, например get
+	 * @return exit
+	 */
 	public function redirectMCA($MCA,$tail='')
 	{
 		global $config;
@@ -288,6 +322,12 @@ class QuickFW_Router
 		exit();
 	}
 
+	/**
+	 * Отправляет заголовок Location с заданным Url
+	 *
+	 * @param string $url Url на который перейдет браузер
+	 * @return exit
+	 */
 	public function redirect($url=null)
 	{
 		//если не указан - редирект откуда пришли
@@ -296,6 +336,13 @@ class QuickFW_Router
 		exit();
 	}
 
+	/**
+	 * Перезагрузка текущей страницы
+	 *
+	 * <br>Полностью аналогична "Location: $_SERVER['REQUEST_URI']"
+	 *
+	 * @return exit
+	 */
 	public function reload()
 	{
 		header('Location: '.$_SERVER['REQUEST_URI']);
@@ -308,8 +355,9 @@ class QuickFW_Router
 	/**
 	 * Функция производит преобразования урла для вывода на страницу
 	 *
-	 * @param string $uri
-	 * @return string
+	 * @internal
+	 * @param string $uri Uri для бекреврайта
+	 * @return string преобразованный Uri
 	 */
 	public function backrewrite($uri)
 	{
@@ -327,8 +375,9 @@ class QuickFW_Router
 	/**
 	 * Функция производит преобразования урла при запросе
 	 *
-	 * @param string $uri
-	 * @return string
+	 * @internal
+	 * @param string $uri Uri для реврайта
+	 * @return string преобразованный Uri
 	 */
 	protected function rewrite($uri)
 	{

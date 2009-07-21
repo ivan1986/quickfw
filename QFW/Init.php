@@ -27,11 +27,46 @@
 
 	class QFW
 	{
+		/**
+		 * Глобальный массив данных
+		 *
+		 * @var array
+		 */
 		static public $globalData;
+
+		/**
+		 * Роутер
+		 *
+		 * @var QuickFW_Router
+		 */
 		static public $router;
+
+		/**
+		 * Конфигурация
+		 *
+		 * @var array
+		 */
 		static public $config;
+
+		/**
+		 * Шаблонизатор
+		 *
+		 * @var Templater_PlainView
+		 */
 		static public $view;
+
+		/**
+		 * Подключенные глобальные библиотеки
+		 *
+		 * @var array
+		 */
 		static public $libs;
+		
+		/**
+		 * Подключение к базе данных
+		 *
+		 * @var DbSimple_Generic_Database
+		 */
 		static public $db;
 
 		private function __construct() {}

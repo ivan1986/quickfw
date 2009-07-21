@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * Класс для работы с сессиями
+ *
+ * @package QFW
+ */
 class QuickFW_Session
 {
 	private static $cache;
@@ -53,7 +58,7 @@ class QuickFW_Session
 	 *
 	 * @param string $id - идентификатор сессии
 	 * @param bool $update - обновить время доступа
-	 * @return mixed session data
+	 * @return mixed данные сесии
 	 */
 	static function get($id, $update = true)
 	{
@@ -67,9 +72,9 @@ class QuickFW_Session
 	
 	/**
 	 * Стартует новую сессию с новым сидом
-	 * Старая полностью уничтожается
+	 * Старая(активная) полностью уничтожается
 	 *
-	 * @param string $sid
+	 * @param string $sid идентификатор сессии
 	 */
 	public function restart($sid = '')
 	{
@@ -92,6 +97,12 @@ class QuickFW_Session
 		$this->start();
 	}
 
+	/**
+	 * Старт сессии
+	 *
+	 * <br>Вызывается при наличие $_REQUEST[sessin_name()]
+	 * <br>функция нужна для инициализации обработчиков сессий
+	 */
 	private function start()
 	{
 		session_set_save_handler(
