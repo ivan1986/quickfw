@@ -9,15 +9,19 @@ class QuickFW_Auth
 {
 	/** Поле логина в $_POST */
 	const USERNAME_FIELD = 'login';
+
 	/** Поле пароля в $_POST */
 	const PASSWORD_FIELD = 'password';
 	
 	static private $session=null;
-	/** Флаг авторизованного пользователя */
+
+	/** @var boolean Флаг авторизованного пользователя */
 	protected $authorized;
-	/** Данные, которые сохраняются в сессии в подмассиве $name */
+
+	/** @var array Данные, которые сохраняются в сессии в подмассиве $name */
 	protected $userdata;
-	/** Имя подмассива сесии в котором сохраняются данные */
+	
+	/** @var string Имя подмассива сесии в котором сохраняются данные */
 	protected $name;
 
 	/**
@@ -55,7 +59,7 @@ class QuickFW_Auth
 	 * <br>Если сессия уже есть ничего не делает
 	 * <br>Если сессии нет, то стартует новая
 	 *
-	 * @param string $sid - идентификатор сессии
+	 * @param string $sid идентификатор сессии
 	 */
 	public function session($sid = '')
 	{
@@ -71,7 +75,7 @@ class QuickFW_Auth
 	 * <br>Если сессия уже есть - уничтожает старую и стартует новую
 	 * <br>Если сессии нет, то стартует новая
 	 *
-	 * @param string $sid - идентификатор сессии
+	 * @param string $sid идентификатор сессии
 	 */
 	public function sessionRestart($sid = '')
 	{
