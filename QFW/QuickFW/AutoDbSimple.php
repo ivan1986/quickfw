@@ -52,6 +52,7 @@ class QuickFW_AutoDbSimple
 	 * Взять базу из пула коннектов
 	 *
 	 * @param string $dsn DSN строка БД
+         * @return QuickFW_AutoDbSimple
 	 */
 	public static function get($dsn)
 	{
