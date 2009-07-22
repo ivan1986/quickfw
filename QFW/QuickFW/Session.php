@@ -9,16 +9,34 @@ class QuickFW_Session
 {
 	private static $cache;
 
+	/**
+	 * Нужна для session_set_save_handler
+	 *
+	 * @internal
+	 * @return boolean всегда true
+	 */
 	static function close()
 	{
 		return true;
 	}
 
+	/**
+	 * Нужна для session_set_save_handler
+	 *
+	 * @internal
+	 * @return boolean всегда true
+	 */
 	static function open()
 	{
 		return true;
 	}
 
+	/**
+	 * Чтение сессии для session_set_save_handler
+	 *
+	 * @internal
+	 * @return mixed
+	 */
 	static function read($id)
 	{
 		$data = self::$cache->load('sess_'.$id);
@@ -28,6 +46,13 @@ class QuickFW_Session
 		return $data;
 	}
 
+	/**
+	 * Запись сессии для session_set_save_handler
+	 *
+	 * @internal
+	 * @param string $id идентификатор сесии
+	 * @param string $data данные сесии
+	 */
 	static function write($id,$data)
 	{
 		if (!empty($_SESSION))
@@ -36,6 +61,11 @@ class QuickFW_Session
 			self::$cache->remove('sess_'.$id);
 	}
 
+	/**
+	 * Уничтожение сесии для session_set_save_handler
+	 *
+	 * @param string $id идентификатор сесии
+	 */
 	static function destroy($id)
 	{
 		setcookie(session_name(), '', 1, '/',
@@ -46,6 +76,11 @@ class QuickFW_Session
 		session_id('');
 	}
 
+	/**
+	 * Очистка мусора для session_set_save_handler
+	 *
+	 * @return boolean всегда true
+	 */
 	static function gc()
 	{
 		//WARNING: На сильно нагруженных системах лучше делать очистку отдельно
@@ -87,7 +122,12 @@ class QuickFW_Session
 			session_regenerate_id();
 		$this->start();
 	}
-	
+
+	/**
+	 * Инициализация кешера для сессий и настройки кук
+	 *
+	 * @param string $sid идентификатор сессии
+	 */
 	public function __construct($sid = '')
 	{
 		self::$cache = Cache::get();
@@ -101,6 +141,7 @@ class QuickFW_Session
 	 * Старт сессии
 	 *
 	 * <br>Вызывается при наличие $_REQUEST[sessin_name()]
+	 * или при рестарте сессии
 	 * <br>функция нужна для инициализации обработчиков сессий
 	 */
 	private function start()
