@@ -15,7 +15,7 @@ class QuickFW_Session
 	 * @internal
 	 * @return boolean всегда true
 	 */
-	static function close()
+	public static function close()
 	{
 		return true;
 	}
@@ -26,7 +26,7 @@ class QuickFW_Session
 	 * @internal
 	 * @return boolean всегда true
 	 */
-	static function open()
+	public static function open()
 	{
 		return true;
 	}
@@ -37,7 +37,7 @@ class QuickFW_Session
 	 * @internal
 	 * @return mixed
 	 */
-	static function read($id)
+	public static function read($id)
 	{
 		$data = self::$cache->load('sess_'.$id);
 		if (!$data)
@@ -53,7 +53,7 @@ class QuickFW_Session
 	 * @param string $id идентификатор сесии
 	 * @param string $data данные сесии
 	 */
-	static function write($id,$data)
+	public static function write($id,$data)
 	{
 		if (!empty($_SESSION))
 			self::$cache->save($_SESSION, 'sess_'.$id);
@@ -66,7 +66,7 @@ class QuickFW_Session
 	 *
 	 * @param string $id идентификатор сесии
 	 */
-	static function destroy($id)
+	public static function destroy($id)
 	{
 		setcookie(session_name(), '', 1, '/',
 			isset(QFW::$config['session']['domain']) ? QFW::$config['session']['domain'] : '');
@@ -81,7 +81,7 @@ class QuickFW_Session
 	 *
 	 * @return boolean всегда true
 	 */
-	static function gc()
+	public static function gc()
 	{
 		//WARNING: На сильно нагруженных системах лучше делать очистку отдельно
 		//self::$cache->clean(CACHE_CLR_OLD);
@@ -95,7 +95,7 @@ class QuickFW_Session
 	 * @param bool $update - обновить время доступа
 	 * @return mixed данные сесии
 	 */
-	static function get($id, $update = true)
+	public static function get($id, $update = true)
 	{
 		$data = self::$cache->load('sess_'.$id);
 		if (!$data)

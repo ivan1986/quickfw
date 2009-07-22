@@ -435,7 +435,7 @@ SREG;
 		$path = $this->baseDir.'/'.$MCA['Module'];
 		QFW::$view->setScriptPath($path.'/templates');
 
-		$c=count($data);	// Количество элементов URI исключая модуль
+		$c=count($data); // Количество элементов URI исключая модуль
 		//Determine Controller
 		$cname = isset($data[0])?$data[0]: ($type=='Block' ? $this->cController : $this->defC);
 		if ($type!='Block')
@@ -500,7 +500,7 @@ SREG;
 			}
 		}
 
-		if (count($data)==$c && $c>0)	// если из URI после модуля ничего не забрали и что-то осталось
+		if (count($data)==$c && $c>0) // если из URI после модуля ничего не забрали и что-то осталось
 		{
 			$MCA['Error']="Указаны параметры у дефолтового CA \n".
 				"или несуществующий Контроллер или Экшен дефолтового контроллера\n".
@@ -513,6 +513,9 @@ SREG;
 
 	/**
 	 * Проводит базовые преобразования Uri определенные в $config['redirection']
+	 *
+	 * @param string $uri Изначальный Uri
+	 * @return string преобразованный Uri
 	 */
 	protected function filterUri($uri)
 	{
@@ -522,7 +525,8 @@ SREG;
 			$uri = substr($uri,0,$pos);
 		if (strpos($uri,$config['redirection']['baseUrl']) === 0)
 			$uri = substr($uri,strlen($config['redirection']['baseUrl']));
-		if ($config['redirection']['useIndex'] && strpos($uri,'index.php/') === 0)
+		if (!empty($config['redirection']['useIndex'])
+		 && strpos($uri,'index.php/') === 0)
 			$uri = substr($uri,10);
 		if (!empty($config['redirection']['defExt']))
 		{
