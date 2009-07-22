@@ -214,6 +214,7 @@ abstract class DbSimple_Generic_Database extends DbSimple_Generic_LastError
 	}
 
 	/**
+	 * DbSimple_SubQuery subquery(string $query [, $arg1] [,$arg2] ...)
 	 * Выполняет разворачивание плейсхолдеров без коннекта к базе
 	 * Нужно для сложных запросов, состоящих из кусков, которые полезно сохранить
 	 *
@@ -261,7 +262,7 @@ abstract class DbSimple_Generic_Database extends DbSimple_Generic_LastError
 	}
 
 	/**
-	 * string setIdentPrefix($prx)
+	 * string setCachePrefix($prx)
 	 * Set cache prefix used in key caclulation.
 	 */
 	public function setCachePrefix($prx)

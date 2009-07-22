@@ -11,6 +11,27 @@ define('DBSIMPLE_SKIP', log(0));
 define('DBSIMPLE_ARRAY_KEY', 'ARRAY_KEY');   // hash-based resultset support
 define('DBSIMPLE_PARENT_KEY', 'PARENT_KEY'); // forrest-based resultset support
 
+/**
+ * Класс обертка для DbSimple
+ *
+ * <br>нужен для ленивой инициализации коннекта к базе
+ *
+ * @package QFW
+ * @method mixed transaction(string $mode=null)
+ * @method mixed commit()
+ * @method mixed rollback()
+ * @method mixed select(string $query [, $arg1] [,$arg2] ...)
+ * @method mixed selectRow(string $query [, $arg1] [,$arg2] ...)
+ * @method array selectCol(string $query [, $arg1] [,$arg2] ...)
+ * @method string selectCell(string $query [, $arg1] [,$arg2] ...)
+ * @method mixed query(string $query [, $arg1] [,$arg2] ...)
+ * @method string escape(mixed $s, bool $isIdent=false)
+ * @method DbSimple_SubQuery subquery(string $query [, $arg1] [,$arg2] ...)
+ * @method callback setLogger(callback $logger)
+ * @method callback setCacher(callback $cacher)
+ * @method string setIdentPrefix($prx)
+ * @method string setCachePrefix($prx)
+ */
 class QuickFW_AutoDbSimple
 {
 	protected $DbSimple, $DSN;
@@ -19,7 +40,7 @@ class QuickFW_AutoDbSimple
 	 * Конструктор только запоминает переданный DSN
 	 * создание класса и коннект происходит позже
 	 *
-	 * @param string $dsn - DSN строка БД
+	 * @param string $dsn DSN строка БД
 	 */
 	public function __construct($dsn)
 	{
@@ -29,6 +50,8 @@ class QuickFW_AutoDbSimple
 
 	/**
 	 * Взять базу из пула коннектов
+	 *
+	 * @param string $dsn DSN строка БД
 	 */
 	public static function get($dsn)
 	{
