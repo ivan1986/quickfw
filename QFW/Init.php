@@ -73,6 +73,10 @@
 		
 		/**
 		 * Инициализация конфига
+		 *
+		 * <br>возвращает конфигурацию, специфичную для текущего хоста
+		 *
+		 * @return array конфигурация на этом хосте
 		 */
 		static public function config()
 		{
@@ -87,6 +91,16 @@
 			return $config;
 		}
 
+		/**
+		 * Инициализация основных объектов QFW
+		 *
+		 * @global QuickFW_Router $router Роутер
+		 * @global DbSimple_Generic_Database $db Подключение к базе данных
+		 * @global Templater_PlainView $view Шаблонизатор
+		 * @global array $globalData Глобальный массив данных
+		 * @global array $libs Подключенные глобальные библиотеки
+		 * @global array $config Конфигурация
+		 */
 		static public function Init()
 		{
 			global $router, $db, $view, $globalData, $libs, $config;
