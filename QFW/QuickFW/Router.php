@@ -397,7 +397,7 @@ class QuickFW_Router
 	 */
 	protected function parseParams(&$data)
 	{
-		if (empty($data) || !empty($data[0]))
+		if (empty($data) || $data[0]!='')
 			return $data;
 		array_shift($data);	//Удаляем первый пустой параметр
 		$params = array();
