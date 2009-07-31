@@ -307,18 +307,20 @@ class QuickFW_Router
 	 * Посылает заголовок Location для перехода на нужное действие
 	 *
 	 * @param string $MCA Uri нужного действия (модуль/контроллер/экшен)
-	 * @param string $tail Дополниетельные параметры, например get
+	 * @param string|array $get GET парамерты или произвольный хвост
 	 * @return exit
 	 */
-	public function redirectMCA($MCA,$tail='')
+	public function redirectMCA($MCA,$get='')
 	{
 		global $config;
 		$base   = $config['redirection']['baseUrl'];
 		$index  = $config['redirection']['useIndex']?'index.php/':'';
 		$url    = $config['redirection']['useRewrite']?$this->backrewrite($MCA):$MCA;
 		$defext = $config['redirection']['defExt'];
+		if (is_array($get) && count($get))
+			$get = '?'.http_build_query($get);
 
-		header('Location: '.$base.$index.$url.($url!==''?$defext:'').$tail);
+		header('Location: '.$base.$index.$url.($url!==''?$defext:'').$get);
 		exit();
 	}
 

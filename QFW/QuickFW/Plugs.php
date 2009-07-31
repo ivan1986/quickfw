@@ -26,12 +26,11 @@ class QuickFW_Plugs
 		if (QFW::$config['redirection']['useRewrite'])
 			$url = $router->backrewrite($url);
 		if (is_array($get) && count($get))
-			$get = http_build_query($get);
+			$get = '?'.http_build_query($get);
 		return QFW::$config['redirection']['baseUrl'].
 			(QFW::$config['redirection']['useIndex']?'index.php/':'').
 			$url.
-			($url!==''?QFW::$config['redirection']['defExt']:'').
-			($get ? '?'.$get : '');
+			($url!==''?QFW::$config['redirection']['defExt']:'').$get;
 	}
 
 	protected $Head = array();
