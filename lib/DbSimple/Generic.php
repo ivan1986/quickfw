@@ -9,7 +9,7 @@
  * version 2.1 of the License, or (at your option) any later version.
  * See http://www.gnu.org/copyleft/lesser.html
  *
- * Use static DbSimple_Generic::connect($dsn) call if you don't know
+ * Use class QuickFW_AutoDbSimple if you don't know
  * database type and parameters, but have its DSN.
  *
  * Additional keys can be added by appending a URI query string to the
