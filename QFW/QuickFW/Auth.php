@@ -33,7 +33,9 @@ class QuickFW_Auth
 	 */
 	public function __construct($name='user',$redir=false)
 	{
-		if (isset($_REQUEST[session_name()]))
+		//В PHP 5.3 $_REQUEST = $_GET + $_POST по умолчанию
+		//Так как cookie включены почти всегда, то такой порядок оптимален
+		if (isset($_COOKIE[session_name()]) || isset($_REQUEST[session_name()]))
 			$this->session();
 		
 		$this->name=$name;
