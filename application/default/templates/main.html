@@ -9,10 +9,8 @@
 <?php echo $content; ?>
 <br />
 
-<?php $P->formPersist(); ?>
 <form method="post">
-<input type="text" name="test" default="ttt" label="test: ^" id="wdf" />
-<select name="sss">ddd</select>
+<input type="text" name="test" default="ttt" label="test: ^" id="wdf" meta:validator="!filled" />
 <input type="submit" />
 </form>
 

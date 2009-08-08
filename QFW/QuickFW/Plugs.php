@@ -42,9 +42,6 @@ class QuickFW_Plugs
 		'css'=>array(),
 	);
 	protected $isMain = false;
-	protected $formPersist = false;
-
-	public function formPersist() { $this->formPersist = true; }
 
 	public function startDisplayMain() { $this->isMain = true; }
 
@@ -147,13 +144,6 @@ class QuickFW_Plugs
 			unset($this->HeadData[$k]);
 		}
 		$head.="</head>\n";
-
-		if ($this->formPersist)
-		{
-			//HTML_FormPersisten
-			require_once LIBPATH.'/FormPersister/FormPersister.php';
-			$text = HTML_FormPersister::ob_formPersisterHandler($text);
-		}
 
 		$text = str_replace('</head>',$head,$text);
 		$text = str_replace(array_keys($this->HeadData),array_values($this->HeadData),$text);
