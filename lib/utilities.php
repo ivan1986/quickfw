@@ -119,7 +119,7 @@ function my_trim($str,$size)
 /**
  * Функции обрезания текста без повреждения слов
  */
-public function clearCut($text, $length)
+function clearCut($text, $length)
 {
 	if(mb_strlen($text) <= $length)
 		return $text;

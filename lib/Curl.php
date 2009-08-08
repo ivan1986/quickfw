@@ -164,8 +164,20 @@ class Curl
  */
 class CurlResponse
 {
+	/**
+	 * тело ответа
+	 *
+	 * @var string
+	 */
 	public $body = '';
+	
+	/**
+	 * заголовки ответа
+	 *
+	 * @var array
+	 */
 	public $headers = array ();
+	private $win=false;
 
 	public function __construct($response)
 	{
@@ -186,6 +198,21 @@ class CurlResponse
 			system('cat '.TMPPATH.'/a | gunzip | cat > '.TMPPATH.'/b');
 			$this->body = file_get_contents(TMPPATH.'/b');
 		}
+	}
+
+	/**
+	 * Преобразовывает запрос из Win1251 в UTF-8
+	 * 
+	 * Очень часто требуется, так как виндузятников развелось немеряно
+	 * 
+	 * @return string преобразованная строка
+	 */
+	public function fromWin()
+	{
+		if ($this->win)
+			return $this->body;
+		$this->win = true;
+		return $this->body = mb_convert_encoding($this->body,'utf-8','cp1251');
 	}
 
 	/**
