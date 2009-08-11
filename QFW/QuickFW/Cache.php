@@ -130,7 +130,7 @@
 			}
 			
 			// если у нас не пустое пространство имен - юзаем проксирующий класс
-			if ($ns = (isset($data['namespace'])?$data['namespace']:'').$ns)
+			if ($n = (isset($data['namespace'])?$data['namespace']:'').$ns)
 				$c=self::ns($c,$n);
 			if (isset($data['tags']) && $data['tags'])
 			{
