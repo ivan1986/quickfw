@@ -114,15 +114,21 @@
 		{
 			if (isset(self::$cachers[$name.'_'.$ns]))
 				return self::$cachers[$name.'_'.$ns];
-			if (!isset(QFW::$config['cache'][$name]))
-				throw new Exception('Не найдены парамерты кеша '.$name);
-			$data = QFW::$config['cache'][$name];
-			$backend=ucfirst($data['module']);
-			$cl='Cacher_'.$backend;
-			require_once(QFWPATH.'/Cacher/'.$backend.'.php');
-			$c=new $cl;
-			$c->setDirectives(is_array($data['options'])?$data['options']:array());
-
+			if (isset(self::$cachers['__'.$name]))
+				$c = self::$cachers['__'.$name];
+			else
+			{
+				if (!isset(QFW::$config['cache'][$name]))
+					throw new Exception('Не найдены парамерты кеша '.$name);
+				$data = QFW::$config['cache'][$name];
+				$backend=ucfirst($data['module']);
+				$cl='Cacher_'.$backend;
+				require_once(QFWPATH.'/Cacher/'.$backend.'.php');
+				$c=new $cl;
+				$c->setDirectives(is_array($data['options'])?$data['options']:array());
+				self::$cachers['__'.$name] = $c;
+			}
+			
 			// если у нас не пустое пространство имен - юзаем проксирующий класс
 			if ($ns = (isset($data['namespace'])?$data['namespace']:'').$ns)
 				$c=self::ns($c,$n);
