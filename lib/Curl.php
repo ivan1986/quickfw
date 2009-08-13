@@ -20,7 +20,7 @@ class Curl
 	public function __construct()
 	{
 		$this->user_agent  = 'Opera/10.00 (X11; Linux i686 ; U; ru) Presto/2.2.0';
-		$this->proxy       = QFW::$config['host']['proxy'];
+		$this->proxy       = isset(QFW::$config['host']['proxy']) ? QFW::$config['host']['proxy'] : '';
 		$this->cookie_file = tempnam(sys_get_temp_dir(), 'curl_cookie');
 	}
 

@@ -125,7 +125,10 @@
 				$cl='Cacher_'.$backend;
 				require_once(QFWPATH.'/Cacher/'.$backend.'.php');
 				$c=new $cl;
-				$c->setDirectives(is_array($data['options'])?$data['options']:array());
+				$c->setDirectives(
+					(isset($data['options']) && is_array($data['options']))
+					? $data['options'] : array()
+				);
 				self::$cachers['__'.$name] = $c;
 			}
 			
