@@ -65,7 +65,7 @@ class Cacher_File implements Zend_Cache_Backend_Interface
 			return $x;
 		}
 		$file = $this->fileName($id);
-		if (!file_exists($file))
+		if (!is_file($file))
 			return false;
 		$data = false;
 		if ($doNotTest || is_null($time = time()) || filemtime($file) > $time)
