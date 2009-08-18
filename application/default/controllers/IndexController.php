@@ -19,7 +19,6 @@ class IndexController extends QuickFW_Auth
 		$FormPersister = new HTML_FormPersister();
 		$SemiParser->addObject($FormPersister);
 
-		$MetaForm = new HTML_MetaForm('secret_secret');
 		$metaFormAction = new HTML_MetaFormAction($MetaForm);
 		print_r($metaFormAction->process());
 		print_r($metaFormAction->getErrors());
