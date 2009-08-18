@@ -105,7 +105,7 @@ class HTML_FormPersister extends HTML_SemiParser
 	function tag_form($attr)
 	{
 		if (isset($attr['action'])) return;
-		if (strtolower(@$attr['method']) == 'get') {
+		if (isset($attr['method']) && strtolower($attr['method']) == 'get') {
 			$attr['action'] = preg_replace('/\?.*/s', '', $_SERVER['REQUEST_URI']);
 		} else { 
 			$attr['action'] = $_SERVER['REQUEST_URI'];
@@ -120,7 +120,7 @@ class HTML_FormPersister extends HTML_SemiParser
 	function tag_input($attr)
 	{
 		static $uid = 0;
-		switch (@strtolower($attr['type'])) {
+		if (isset($attr['type'])) switch (strtolower($attr['type'])) {
 			case 'radio':
 				if (!isset($attr['name'])) return;
 				if (isset($attr['checked']) || !isset($attr['value'])) return;
@@ -317,8 +317,9 @@ class HTML_FormPersister extends HTML_SemiParser
 	 */
 	function getCurValue($attr, $isBoolean = false)
 	{
-		$name = @$attr['name'];
-		if ($name === null) return null; 
+		if (empty($attr['name']))
+			return null;
+		$name = $attr['name'];
 		$isArrayLike = false; // boolean AND contain [] in the name
 		// Handle boolean fields.
 		if ($isBoolean && false !== ($p = strpos($name, '[]'))) {
@@ -340,13 +341,13 @@ class HTML_FormPersister extends HTML_SemiParser
 		} else {
 		   $value = '';
 		}
-		if ($fromForm) {
+		/*if ($fromForm) { - magic_quotes_gpc не нужна
 			// Remove slashes on stupid magic_quotes_gpc mode.
 			// TODO: handle nested arrays too!
 			if (is_scalar($value) && get_magic_quotes_gpc() && !@constant('MAGIC_QUOTES_GPC_DISABLED')) { 
 				$value = stripslashes($value);
 			}
-		}
+		}*/
 		// Return value depending on field type.
 		$attrValue = strval(isset($attr['value'])? $attr['value'] : 'on');
 		if ($isArrayLike) {
@@ -359,10 +360,10 @@ class HTML_FormPersister extends HTML_SemiParser
 		} else {
 			if ($isBoolean) {
 				// Non-array boolean elements must be equal to values to match.
-				return (bool)@strval($value) === (bool)$attrValue;
+				return (bool)strval($value) === (bool)$attrValue;
 			} else {
 				// This is not boolean nor array field. Return it now.
-				return @strval($value);
+				return strval($value);
 			}
 		} 
 	} 

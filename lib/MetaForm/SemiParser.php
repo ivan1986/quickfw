@@ -423,7 +423,8 @@ class HTML_SemiParser
 			$s .= " " . $k;
 			if ($v !== null) $s .= '="' . $this->quoteHandler($v) . '"';
 		}
-		if (!@$attr['_tagName']) $attr['_tagName'] = "???";
+		if (!isset($attr['_tagName']) || !$attr['_tagName'])
+			$attr['_tagName'] = "???";
 
 		if (!array_key_exists('_text', $attr)) { // do not use isset()! 
 			$tag = "<{$attr['_tagName']}{$s}>";
@@ -552,7 +553,7 @@ class HTML_SemiParser
 		$attr = array();
 		for ($i = 0, $c = count($names); $i < $c; $i++) {
 			$name = strtolower($names[$i]);
-			if (!@$checks[$i]) {
+			if (!isset($checks[$i]) || !$checks[$i]) {
 				$value = $name;
 			} else {
 				$value = $values[$i];
