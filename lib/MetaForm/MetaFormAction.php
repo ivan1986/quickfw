@@ -110,7 +110,8 @@ class HTML_MetaFormAction
 		// Check FORM action against REQUEST_URI. This is needed to exclude
 		// ability to POST forms to some different script.
 		if (!$this->_checkDynamicField(
-			@$metas[$this->MFA_ATTR_DYNAMIC], $metas['original'],  // allowed values
+			isset($metas[$this->MFA_ATTR_DYNAMIC]) ? $metas[$this->MFA_ATTR_DYNAMIC] : '',
+			$metas['original'],                                    // allowed values
 			$this->metaForm->MF_REQUEST_URI,                       // got values 
 			$this->MFA_ERRORS['bad_form_action'],                  // error message
 			array(&$this->metaForm, '_getUriByUrl')                // allowed value modifier
@@ -139,8 +140,9 @@ class HTML_MetaFormAction
 		// Process all form fields.
 		$numErrors = 0;
 		foreach ($fieldNames as $name) {
-			$meta = @$flat[$name];
-			if (!$meta) continue;
+			if (empty($flat[$name]))
+				continue;
+			$meta = $flat[$name];
 
 			// Mandatory validate values of array-based, dangerous to hack fields 
 			// (e.g. checkboxes, selects, static hidden fields etc.).
@@ -149,7 +151,8 @@ class HTML_MetaFormAction
 				case 'single':
 				case 'multiple':
 					if (!$this->_checkDynamicField(
-						@$meta[$this->MFA_ATTR_DYNAMIC], array_keys($meta['items']),
+						isset($metas[$this->MFA_ATTR_DYNAMIC]) ? $metas[$this->MFA_ATTR_DYNAMIC] : '',
+						array_keys($meta['items']),
 						$value, 
 						array($this->MFA_ERRORS['non_existed_value'], $name, $meta['type']),
 						null,
@@ -159,7 +162,8 @@ class HTML_MetaFormAction
 				default:
 					if (isset($meta['original']) || isset($meta[$this->MFA_ATTR_DYNAMIC])) {
 						if (!$this->_checkDynamicField(
-							@$meta[$this->MFA_ATTR_DYNAMIC], trim(@$meta['original']),
+							isset($metas[$this->MFA_ATTR_DYNAMIC]) ? $metas[$this->MFA_ATTR_DYNAMIC] : '',
+							isset($meta['original']) ? trim($meta['original']) : '',
 							trim($value), // trim() - for FF hidden field compatibility!!!
 							array($this->MFA_ERRORS['invalid_value'], $name, $meta['type']),
 							null,
@@ -266,13 +270,13 @@ class HTML_MetaFormAction
 		if (is_array($validator)) {
 			$validatorName = (is_object($validator[0])? get_class($validator[0]) : $validator[0]) . '::' . $validator[1];
 		} else {
-			$validatorName = $validator === null? null : @strval($validator);
+			$validatorName = $validator === null? null : strval($validator);
 		}
 		$this->_mfa_errors[] = $errorItem = array(
 			'name'      => $name,
 			'message'   => $message,
 			'validator' => $validatorName === null? null : strtolower($validatorName), // strtolower - for PHP 4/5 compatibility
-			'meta'      => $name !== null? @$metas['items'][$name] : null,   
+			'meta'      => $name !== null && isset($metas['items'][$name]) ? $metas['items'][$name] : null,
 		);
 		if ($this->_mfa_errorHandler) {
 			call_user_func($this->_mfa_errorHandler, $errorItem);
@@ -366,7 +370,7 @@ class HTML_MetaFormAction
 		// Prepare list of allowed values.
 		if (!is_array($allowed)) {
 			$allowed = array($allowed);
-		}        
+		}
 		if ($dynamic !== null) {
 			$allowed = array_merge($allowed, explode(' ', $dynamic));
 		}
