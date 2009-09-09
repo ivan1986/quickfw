@@ -41,7 +41,7 @@ class Log
 		if (isset(self::$messages['jabber']))
 		{
 			if (!isset(QFW::$config['jabber']))
-				error_log('Jabber не настроен '.join("\n",$msg));
+				error_log('Jabber не настроен ');
 			else
 			{
 				require_once LIBPATH.'/jabber/XMPPHP/XMPP.php';
