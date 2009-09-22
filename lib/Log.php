@@ -1,5 +1,11 @@
 <?php
 
+/**
+ * Класс логирования
+ *
+ * @method null log() log(string $string, string $to) заносит запись в лог
+ * @method null out() out(string $string, string $to) заносит запись в лог
+ */
 class Log
 {
 	private static $l=null;
@@ -11,7 +17,7 @@ class Log
 	public static function __callStatic($method, $params)
 	{
 		$str = $params[0];
-		$to = $method=='log' ? (isset($params[1])?$params[1]:'general') : $method;
+		$to = ($method == 'log' || $method == 'out') ? (isset($params[1])?$params[1]:'general') : $method;
 		if (isset(QFW::$config['log'][$to]))
 			$to = QFW::$config['log'][$to];
 		if (self::$l === null)
