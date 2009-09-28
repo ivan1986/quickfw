@@ -273,15 +273,10 @@ class JsHttpRequest
 			parse_str($s, $data);
 			$GLOBALS[$dst] = $this->_ucs2EntitiesDecode($data);
 		}
-		$GLOBALS['HTTP_GET_VARS'] = $_GET; // deprecated vars
-		$GLOBALS['HTTP_POST_VARS'] = $_POST;
 		$_REQUEST =
 			(isset($_COOKIE)? $_COOKIE : array()) +
 			(isset($_POST)? $_POST : array()) +
 			(isset($_GET)? $_GET : array());
-		if (ini_get('register_globals')) {
-			// TODO?
-		}
 	}
 
 
