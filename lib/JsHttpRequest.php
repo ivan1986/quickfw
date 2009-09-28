@@ -77,10 +77,7 @@ class JsHttpRequest
 			$_SERVER['QUERY_STRING'] = preg_replace('/^&+|&+$/s', '', preg_replace('/(^|&)'.session_name().'=[^&]*&?/s', '&', $m[1] . $m[4]));
 			unset(
 				$_GET['JsHttpRequest'],
-				$_REQUEST['JsHttpRequest'],
-				$_GET[session_name()],
-				$_POST[session_name()],
-				$_REQUEST[session_name()]
+				$_REQUEST['JsHttpRequest']
 			);
 			// Detect Unicode conversion method.
 			$this->_unicodeConvMethod = function_exists('mb_convert_encoding')? 'mb' : (function_exists('iconv')? 'iconv' : null);
