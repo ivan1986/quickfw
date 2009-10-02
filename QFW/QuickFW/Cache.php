@@ -110,6 +110,13 @@
 
 		private function __construct() {}
 
+		/**
+		 * Фабрика кешеров
+		 *
+		 * @param string $name тип кешера
+		 * @param string $namespace пространство имен
+		 * @return Zend_Cache_Backend_Interface кешер
+		 */
 		public static function get($name='default', $ns='')
 		{
 			if (isset(self::$cachers[$name.'_'.$ns]))
@@ -133,7 +140,7 @@
 			}
 			
 			// если у нас не пустое пространство имен - юзаем проксирующий класс
-			if ($n = (isset($data['namespace'])?$data['namespace']:'').$ns)
+			if ($n = (isset($data['namespace']) ? $data['namespace'] : '').$ns)
 				$c=self::ns($c,$n);
 			if (isset($data['tags']) && $data['tags'])
 			{
@@ -143,12 +150,24 @@
 			return self::$cachers[$name.'_'.$ns]=$c;
 		}
 
+		/**
+		 * Фабрика пространств имен
+		 *
+		 * @param string $name имя пространства имен
+		 * @return Dklab_Cache_Backend_NamespaceWrapper новое пространство имен
+		 */
 		public static function ns(Zend_Cache_Backend_Interface $cacher, $ns='')
 		{
 			require_once(QFWPATH.'/QuickFW/Cacher/Namespace.php');
 			return new Dklab_Cache_Backend_NamespaceWrapper($cacher,$ns);
 		}
 
+		/**
+		 * Фабрика слотов
+		 *
+		 * @param string $name имя слота
+		 * @return Dklab_Cache_Frontend_Slot новый слот
+		 */
 		public static function slot($name)
 		{
 			require_once QFWPATH.'/QuickFW/Cacher/Slot.php';
@@ -159,6 +178,12 @@
 			return $reflectionObj->newInstanceArgs($args);
 		}
 
+		/**
+		 * Фабрика тегов
+		 *
+		 * @param string $name имя тега
+		 * @return Dklab_Cache_Frontend_Tag новый тег
+		 */
 		public static function tag($name)
 		{
 			require_once QFWPATH.'/QuickFW/Cacher/Tag.php';
