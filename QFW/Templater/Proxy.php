@@ -19,6 +19,7 @@ class Templater_Proxy
 	*/
 	public function __construct($tmplPath, $mainTpl)
 	{
+		$this->_vars = array();
 		$this->mainTemplate = $mainTpl;
 		$this->P = QuickFW_Plugs::getInstance();
 		$this->templates = array();
