@@ -257,9 +257,9 @@ class QuickFW_Router
 	}
 
 	/**
-	 * 	Необходимо для вызовов всех деструкторов
+	 * Необходимо для вызовов всех деструкторов
 	 *
-	 *  @internal
+	 * @internal
 	 */
 	public function startDisplayMain() { $this->classes = array(); }
 
@@ -422,7 +422,7 @@ SREG;
 		return $m[1];
 	}
 
-	protected function loadMCA(&$data,$type)
+	protected function loadMCA(&$data, $type)
 	{
 		$MCA = array();
 		while (isset($data[0]) AND $data[0] === '') array_shift($data);
@@ -463,6 +463,14 @@ SREG;
 		$MCA['Controller'] = $cname;
 		$class_key=$MCA['Module'].'|'.$MCA['Controller'];
 
+		//Инициализируем те значения, которые мы уже знаем,
+		//чтобы можно было узнать как нас вызвали в конструкторе
+		if ($type != 'Block')
+		{
+			$this->module = $MCA['Module'];
+			$this->controller = $MCA['Controller'];
+		}
+
 		if (!isset($this->classes[$class_key]))
 		{
 			require($fullname);
@@ -474,6 +482,18 @@ SREG;
 			}
 			$vars = get_class_vars($class);
 			$acts = get_class_methods($class);
+			
+			//устанавливаем значение $this->action
+			if ($type != 'Block')
+			{
+				$aname = isset($data[0]) ? $data[0] :
+					(isset($vars['defA']) ? $vars['defA'] : $this->defA);
+				$fname = strtr($aname,'.','_').$type;
+				if (!in_array($fname,$acts))
+					$fname = (isset($vars['defA']) ? $vars['defA'] : $this->defA).$type;
+				$this->action = $fname;
+			}
+			
 			$this->classes[$class_key] = array(
 				'i'    => new $class,
 				'defA' => isset($vars['defA']) ? $vars['defA'] : $this->defA,
@@ -482,11 +502,11 @@ SREG;
 			);
 		}
 		$MCA['Class'] = $this->classes[$class_key]['i'];
-
+		$MCA['cache'] = $this->classes[$class_key]['c'];
+		
 		$aname = isset($data[0]) ? $data[0] : $this->classes[$class_key]['defA'];
 		$MCA['Action'] = strtr($aname,'.','_').$type;
-
-		$MCA['cache'] = $this->classes[$class_key]['c'];
+		
 		if (in_array($MCA['Action'],$this->classes[$class_key]['a']))
 			array_shift($data);
 		else
