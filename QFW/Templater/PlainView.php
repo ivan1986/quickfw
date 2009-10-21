@@ -5,6 +5,7 @@ class Templater_PlainView
 	protected $_vars;
 	protected $_tmplPath;
 
+	/** @var QuickFW_Plugs Плагины фреймворка */
 	public $P;
 	public $mainTemplate;
 

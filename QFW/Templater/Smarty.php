@@ -4,11 +4,7 @@ class Templater_Smarty
 {
 	protected $_smarty;
 
-	/**
-	 * Плагины фреймворка
-	 *
-	 * @var QuickFW_Plugs
-	 */
+	/** @var QuickFW_Plugs Плагины фреймворка */
 	public $P;
 
 	protected $_tmplPath;

@@ -2,6 +2,7 @@
 
 class Templater_Proxy
 {
+	/** @var QuickFW_Plugs Плагины фреймворка */
 	public $P;
 	public $mainTemplate;
 
