@@ -50,19 +50,19 @@ class JsHttpRequest
 
 
 	/**
-	* Constructor.
-	*
-	* Create new JsHttpRequest backend object and attach it
-	* to script output buffer. As a result - script will always return
-	* correct JavaScript code, even in case of fatal errors.
-	*
-	* QUERY_STRING is in form of: PHPSESSID=<sid>&a=aaa&b=bbb&JsHttpRequest=<id>-<loader>
-	* where <id> is a request ID, <loader> is a loader name, <sid> - a session ID (if present),
-	* PHPSESSID - session parameter name (by default = "PHPSESSID").
-	*
-	* If an object is created WITHOUT an active AJAX query, it is simply marked as
-	* non-active. Use statuc method isActive() to check.
-	*/
+	 * Constructor.
+	 *
+	 * Create new JsHttpRequest backend object and attach it
+	 * to script output buffer. As a result - script will always return
+	 * correct JavaScript code, even in case of fatal errors.
+	 *
+	 * QUERY_STRING is in form of: PHPSESSID=<sid>&a=aaa&b=bbb&JsHttpRequest=<id>-<loader>
+	 * where <id> is a request ID, <loader> is a loader name, <sid> - a session ID (if present),
+	 * PHPSESSID - session parameter name (by default = "PHPSESSID").
+	 *
+	 * If an object is created WITHOUT an active AJAX query, it is simply marked as
+	 * non-active. Use statuc method isActive() to check.
+	 */
 	function JsHttpRequest($enc)
 	{
 		global $JsHttpRequest_Active;
@@ -104,8 +104,7 @@ class JsHttpRequest
 			// Check if headers are already sent (see Content-Type library usage).
 			// If true - generate a debug message and exit.
 			$file = $line = null;
-			$headersSent = version_compare(PHP_VERSION, "4.3.0") < 0? headers_sent() : headers_sent($file, $line);
-			if ($headersSent) {
+			if (headers_sent($file, $line)) {
 				trigger_error(
 					"HTTP headers are already sent" . ($line !== null? " in $file on line $line" : " somewhere in the script") . ". "
 					. "Possibly you have an extra space (or a newline) before the first line of the script or any library. "
@@ -124,11 +123,11 @@ class JsHttpRequest
 
 
 	/**
-	* Static function.
-	* Returns true if JsHttpRequest output processor is currently active.
-	*
-	* @return boolean    True if the library is active, false otherwise.
-	*/
+	 * Static function.
+	 * Returns true if JsHttpRequest output processor is currently active.
+	 *
+	 * @return boolean    True if the library is active, false otherwise.
+	 */
 	function isActive()
 	{
 		return !empty($GLOBALS['JsHttpRequest_Active']);
@@ -136,10 +135,10 @@ class JsHttpRequest
 
 
 	/**
-	* string getJsCode()
-	*
-	* Return JavaScript part of the library.
-	*/
+	 * string getJsCode()
+	 *
+	 * Return JavaScript part of the library.
+	 */
 	function getJsCode()
 	{
 		return file_get_contents(dirname(__FILE__) . '/JsHttpRequest.js');
@@ -147,16 +146,16 @@ class JsHttpRequest
 
 
 	/**
-	* void setEncoding(string $encoding)
-	*
-	* Set an active script encoding & correct QUERY_STRING according to it.
-	* Examples:
-	*   "windows-1251"          - set plain encoding (non-windows characters,
-	*                             e.g. hieroglyphs, are totally ignored)
-	*   "windows-1251 entities" - set windows encoding, BUT additionally replace:
-	*                             "&"         ->  "&amp;"
-	*                             hieroglyph  ->  &#XXXX; entity
-	*/
+	 * void setEncoding(string $encoding)
+	 *
+	 * Set an active script encoding & correct QUERY_STRING according to it.
+	 * Examples:
+	 *   "windows-1251"          - set plain encoding (non-windows characters,
+	 *                             e.g. hieroglyphs, are totally ignored)
+	 *   "windows-1251 entities" - set windows encoding, BUT additionally replace:
+	 *                             "&"         ->  "&amp;"
+	 *                             hieroglyph  ->  &#XXXX; entity
+	 */
 	function setEncoding($enc)
 	{
 		// Parse an encoding.
@@ -169,16 +168,16 @@ class JsHttpRequest
 
 
 	/**
-	* string quoteInput(string $input)
-	*
-	* Quote a string according to the input decoding mode.
-	* If entities are used (see setEncoding()), no '&' character is quoted,
-	* only '"', '>' and '<' (we presume that '&' is already quoted by
-	* an input reader function).
-	*
-	* Use this function INSTEAD of htmlspecialchars() for $_GET data
-	* in your scripts.
-	*/
+	 * string quoteInput(string $input)
+	 *
+	 * Quote a string according to the input decoding mode.
+	 * If entities are used (see setEncoding()), no '&' character is quoted,
+	 * only '"', '>' and '<' (we presume that '&' is already quoted by
+	 * an input reader function).
+	 *
+	 * Use this function INSTEAD of htmlspecialchars() for $_GET data
+	 * in your scripts.
+	 */
 	function quoteInput($s)
 	{
 		if ($this->SCRIPT_DECODE_MODE == 'entities')
@@ -189,13 +188,13 @@ class JsHttpRequest
 
 
 	/**
-	* Convert a PHP scalar, array or hash to JS scalar/array/hash. This function is
-	* an analog of json_encode(), but it can work with a non-UTF8 input and does not
-	* analyze the passed data. Output format must be fully JSON compatible.
-	*
-	* @param mixed $a   Any structure to convert to JS.
-	* @return string    JavaScript equivalent structure.
-	*/
+	 * Convert a PHP scalar, array or hash to JS scalar/array/hash. This function is
+	 * an analog of json_encode(), but it can work with a non-UTF8 input and does not
+	 * analyze the passed data. Output format must be fully JSON compatible.
+	 *
+	 * @param mixed $a   Any structure to convert to JS.
+	 * @return string    JavaScript equivalent structure.
+	 */
 	function php2js($a=false)
 	{
 		if (is_null($a)) return 'null';
@@ -240,12 +239,12 @@ class JsHttpRequest
 
 
 	/**
-	* Internal methods.
-	*/
+	 * Internal methods.
+	 */
 
 	/**
-	* Parse & decode QUERY_STRING.
-	*/
+	 * Parse & decode QUERY_STRING.
+	 */
 	function _correctSuperglobals()
 	{
 		// In case of FORM loader we may go to nirvana, everything is already parsed by PHP.
@@ -278,8 +277,8 @@ class JsHttpRequest
 
 
 	/**
-	* Called in case of error too!
-	*/
+	 * Called in case of error too!
+	 */
 	function _obHandler($text)
 	{
 		unset($this->_emergBuffer); // free a piece of memory for memory_limit error
@@ -384,10 +383,10 @@ class JsHttpRequest
 
 
 	/**
-	* Internal function, used in array_walk_recursive() before json_encode() call.
-	* If a key contains non-ASCII characters, this function sets $this->_toUtfFailed = true,
-	* becaues array_walk_recursive() cannot modify array keys.
-	*/
+	 * Internal function, used in array_walk_recursive() before json_encode() call.
+	 * If a key contains non-ASCII characters, this function sets $this->_toUtfFailed = true,
+	 * becaues array_walk_recursive() cannot modify array keys.
+	 */
 	function _toUtf8_callback(&$v, $k, $fromEnc)
 	{
 		if ($v === null || is_bool($v)) return;
@@ -400,9 +399,9 @@ class JsHttpRequest
 
 
 	/**
-	* Decode all %uXXXX entities in string or array (recurrent).
-	* String must not contain %XX entities - they are ignored!
-	*/
+	 * Decode all %uXXXX entities in string or array (recurrent).
+	 * String must not contain %XX entities - they are ignored!
+	 */
 	function _ucs2EntitiesDecode($data)
 	{
 		if (is_array($data)) {
@@ -421,8 +420,8 @@ class JsHttpRequest
 
 
 	/**
-	* Decode one %uXXXX entity (RE callback).
-	*/
+	 * Decode one %uXXXX entity (RE callback).
+	 */
 	function _ucs2EntitiesDecodeCallback($p)
 	{
 		$hex = $p[1];
@@ -449,11 +448,11 @@ class JsHttpRequest
 
 
 	/**
-	* Wrapper for iconv() or mb_convert_encoding() functions.
-	* This function will generate fatal error if none of these functons available!
-	*
-	* @see iconv()
-	*/
+	 * Wrapper for iconv() or mb_convert_encoding() functions.
+	 * This function will generate fatal error if none of these functons available!
+	 *
+	 * @see iconv()
+	 */
 	function _unicodeConv($fromEnc, $toEnc, $v)
 	{
 		if ($this->_unicodeConvMethod == 'iconv') {
@@ -464,13 +463,13 @@ class JsHttpRequest
 
 
 	/**
-	* If there is no ICONV, try to decode 1-byte characters and UTF-8 manually
-	* (for most popular charsets only).
-	*/
+	 * If there is no ICONV, try to decode 1-byte characters and UTF-8 manually
+	 * (for most popular charsets only).
+	 */
 
 	/**
-	* Convert from UCS-2BE decimal to $toEnc.
-	*/
+	 * Convert from UCS-2BE decimal to $toEnc.
+	 */
 	function _decUcs2Decode($code, $toEnc)
 	{
 		// Little speedup by using array_flip($this->_encTables) and later hash access.
@@ -497,8 +496,8 @@ class JsHttpRequest
 
 
 	/**
-	* UCS-2BE -> 1-byte encodings (from #128).
-	*/
+	 * UCS-2BE -> 1-byte encodings (from #128).
+	 */
 	var $_encTables = array(
 		'windows-1251' => array(
 			0x0402, 0x0403, 0x201A, 0x0453, 0x201E, 0x2026, 0x2020, 0x2021,
