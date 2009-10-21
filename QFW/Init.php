@@ -1,72 +1,28 @@
 <?php
 
-	$config = QFW::config();
-
-	if (isset($config['host']['encoding']))
-		header("Content-Type: text/html; charset=".$config['host']['encoding']);
-	if (isset($config['QFW']['catchFE']) && $config['QFW']['catchFE'])
-		require QFWPATH.'/QuickFW/Error.php';
-
 	require QFWPATH.'/QuickFW/Cache.php';
 	require QFWPATH.'/QuickFW/Plugs.php';
-
-	$templ = ucfirst($config['templater']['name']);
-	$class = 'Templater_'.$templ;
-	require (QFWPATH.'/Templater/'.$templ.'.php');
-	$view = new $class(APPPATH,
-		isset($config['templater']['def_tpl']) ? $config['templater']['def_tpl'] : '');
-
-	require (QFWPATH.'/QuickFW/AutoDbSimple.php');
-	$db = new QuickFW_AutoDbSimple($config['database']);
-
-	$globalData = array();
-	$libs = array();
-
-	require (QFWPATH.'/QuickFW/Router.php');
-	$router = new QuickFW_Router(APPPATH);
+	require QFWPATH.'/QuickFW/AutoDbSimple.php';
+	require QFWPATH.'/QuickFW/Router.php';
 
 	class QFW
 	{
-		/**
-		 * Глобальный массив данных
-		 *
-		 * @var array
-		 */
+		/** @var array Глобальный массив данных */
 		static public $globalData;
 
-		/**
-		 * Роутер
-		 *
-		 * @var QuickFW_Router
-		 */
+		/** @var QuickFW_Router Роутер */
 		static public $router;
 
-		/**
-		 * Конфигурация
-		 *
-		 * @var array
-		 */
+		/** @var array Конфигурация */
 		static public $config;
 
-		/**
-		 * Шаблонизатор
-		 *
-		 * @var Templater_PlainView
-		 */
+		/** @var Templater_PlainView Шаблонизатор */
 		static public $view;
 
-		/**
-		 * Подключенные глобальные библиотеки
-		 *
-		 * @var array
-		 */
+		/** @var array Подключенные глобальные библиотеки */
 		static public $libs;
 		
-		/**
-		 * Подключение к базе данных
-		 *
-		 * @var DbSimple_Generic_Database
-		 */
+		/** @var DbSimple_Generic_Database Подключение к базе данных */
 		static public $db;
 
 		private function __construct() {}
@@ -94,22 +50,35 @@
 		/**
 		 * Инициализация основных объектов QFW
 		 *
-		 * @global QuickFW_Router $router Роутер
-		 * @global DbSimple_Generic_Database $db Подключение к базе данных
-		 * @global Templater_PlainView $view Шаблонизатор
-		 * @global array $globalData Глобальный массив данных
-		 * @global array $libs Подключенные глобальные библиотеки
-		 * @global array $config Конфигурация
 		 */
 		static public function Init()
 		{
-			global $router, $db, $view, $globalData, $libs, $config;
-			self::$globalData=$globalData;
-			self::$router=$router;
-			self::$config=$config;
-			self::$view=$view;
-			self::$libs=$libs;
-			self::$db=$db;
+			self::$config = self::config();
+
+			//Библиотеки
+			self::$libs = array();
+			//глобальный массив
+			self::$globalData = array();
+
+			//Подключаем шаблонизатор
+			$templ = ucfirst(self::$config['templater']['name']);
+			$class = 'Templater_'.$templ;
+			require (QFWPATH.'/Templater/'.$templ.'.php');
+			self::$view = new $class(APPPATH,
+				isset(self::$config['templater']['def_tpl']) ? self::$config['templater']['def_tpl'] : '');
+
+			//Инициализируем класс базы данных
+			self::$db = new QuickFW_AutoDbSimple(self::$config['database']);
+
+			//выставляем заголовок с нужной кодировкой
+			if (isset(self::$config['host']['encoding']))
+				header("Content-Type: text/html; charset=".self::$config['host']['encoding']);
+			//Включаем обработку фатальных ошибок, если в конфиге указано
+			if (isset(self::$config['QFW']['catchFE']) && self::$config['QFW']['catchFE'])
+				require QFWPATH.'/QuickFW/Error.php';
+
+			self::$router = new QuickFW_Router(APPPATH);
+
 		}
 	}
 

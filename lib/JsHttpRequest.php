@@ -468,6 +468,11 @@ class JsHttpRequest
 	 */
 
 	/**
+	 * @todo Проверить функцию
+	 * Необходимость этой функции под большим вопросом,
+	 * Похоже вызывается из мертвой ветки, так как фреймворк 
+	 * подразумевает использование mb_convert_encoding
+	 *
 	 * Convert from UCS-2BE decimal to $toEnc.
 	 */
 	function _decUcs2Decode($code, $toEnc)
@@ -539,4 +544,5 @@ class JsHttpRequest
 }
 
 QFW::$libs['JsHttpRequest'] = new JsHttpRequest('utf-8');
+
 ?>

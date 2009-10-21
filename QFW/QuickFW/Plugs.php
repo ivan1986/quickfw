@@ -22,9 +22,8 @@ class QuickFW_Plugs
 
 	public function siteUrl($url,$get='')
 	{
-		global $router;
 		if (QFW::$config['redirection']['useRewrite'])
-			$url = $router->backrewrite($url);
+			$url = QFW::$router->backrewrite($url);
 		if (is_array($get) && count($get))
 			$get = '?'.http_build_query($get);
 		return QFW::$config['redirection']['baseUrl'].

@@ -93,6 +93,11 @@ $config['log'] = array(
 	'error' => 'mailto:ivan1986@list.ru',
 );
 
+$config['admin'] = array(
+	'login' => 'root',
+	'passw' => 'root',
+);
+
 /* деквотатор, включите если нужно на хостинге */
 /*
 function strips(&$el) {

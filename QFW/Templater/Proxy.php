@@ -129,11 +129,10 @@ class Templater_Proxy
 
 	public function fetch($name)
 	{
-		global $config;
 		$key=substr($name,strrpos($name,'.')+1);
-		if (!array_key_exists($key,$config['templater']['exts']))
+		if (!array_key_exists($key, QFW::$config['templater']['exts']))
 			return '';
-		$T = $config['templater']['exts'][$key];
+		$T = QFW::$config['templater']['exts'][$key];
 
 		if (!array_key_exists($T,$this->templates))
 		{

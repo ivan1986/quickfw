@@ -55,11 +55,10 @@ class QFWTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testDdef($in,$out)
 	{
-		global $config;
-		$config['default']['module'] = 'aaa';
-		$config['default']['controller'] = 'bbb';
-		$config['default']['action'] = 'ccc';
 		QFW::Init();
+		QFW::$config['default']['module'] = 'aaa';
+		QFW::$config['default']['controller'] = 'bbb';
+		QFW::$config['default']['action'] = 'ccc';
 		QFW::$router->__construct(APPPATH);
 		$this->assertEquals(QFW::$router->delDef($in),$out);
 	}

@@ -18,32 +18,19 @@ class QuickFW_Router
 	//необходимо для роутинга компонентов
 	protected $cModule, $cController;
 
-	/**
-	 * модуль, в контексте которого выполняется текущий запрос
-	 *
-	 * @var string
-	 */
+	/** @var string модуль, в контексте которого выполняется текущий запрос */
 	public $module;
 	
-	/**
-	 * контроллер, в контексте которого выполняется текущий запрос
-	 * 
-	 * @var string
-	 */
+	/** @var string контроллер, в контексте которого выполняется текущий запрос */
 	public $controller;
 
-	/**
-	 * экшен, в контексте которого выполняется текущий запрос
-	 *
-	 * @var string
-	 */
+	/** @var string экшен, в контексте которого выполняется текущий запрос */
 	public $action;
 
-	/**
+	/** 
 	 * Uri который был вызван для исполнения
 	 * Без учета параметров - только модуль, контроллер и экшен
-	 *
-	 * @var string
+	 * @var string 
 	 */
 	public $UriPath;
 
@@ -80,14 +67,13 @@ class QuickFW_Router
 
 	public function __construct($baseDir)
 	{
-		global $config;
 		$this->baseDir = rtrim($baseDir, '/\\');
 		$this->module = '';
 		$this->controller = NULL;
 		$this->action = '';
-		$this->defM = $config['default']['module'];
-		$this->defC = $config['default']['controller'];
-		$this->defA = $config['default']['action'];
+		$this->defM = QFW::$config['default']['module'];
+		$this->defC = QFW::$config['default']['controller'];
+		$this->defA = QFW::$config['default']['action'];
 	}
 
 	/**
@@ -99,7 +85,6 @@ class QuickFW_Router
 	 */
 	public function route($requestUri = null, $type='Action')
 	{
-		global $view, $config;
 		if ($requestUri === null)
 			$requestUri = $_SERVER['REQUEST_URI'];
 		$requestUri = $this->filterUri($requestUri);
@@ -111,7 +96,7 @@ class QuickFW_Router
 		$MCA = $this->loadMCA($data,$type);
 		if (isset($MCA['Error']))
 		{
-			if ($config['QFW']['release'])
+			if (QFW::$config['QFW']['release'])
 				$this->show404();
 			else
 				die("Был выполнен запрос \t\t".$requestUri."\nадрес был разобран в\t\t ".
@@ -143,8 +128,8 @@ class QuickFW_Router
 						echo $data;
 					else
 					{
-						$view->mainTemplate = $CacheInfo['Cacher']->load($CacheInfo['id'].'_MTPL');
-						echo $view->displayMain($data);
+						QFW::$view->mainTemplate = $CacheInfo['Cacher']->load($CacheInfo['id'].'_MTPL');
+						echo QFW::$view->displayMain($data);
 					}
 					return;
 				}
@@ -157,21 +142,22 @@ class QuickFW_Router
 
 		if ($CacheInfo && array_key_exists('Cacher',$CacheInfo) && array_key_exists('id',$CacheInfo))
 		{
-			$par=array();
-			$par[0]=$view->mainTemplate;
-			$par[1]=$CacheInfo['id'].'_MTPL';
-			$par[2]=array_key_exists('tags',$CacheInfo)?$CacheInfo['tags']:array();
+			$par = array(
+				0 => QFW::$view->mainTemplate,
+				1 => $CacheInfo['id'].'_MTPL',
+				2 => array_key_exists('tags',$CacheInfo)?$CacheInfo['tags']:array(),
+			);
 			if (array_key_exists('time',$CacheInfo))
 				$par[3]=$CacheInfo['time'];
 
 			if ($full)
 			{
-				echo $result=$view->displayMain($result);
+				echo $result=QFW::$view->displayMain($result);
 			}
 			else
 			{
 				call_user_func_array(array($CacheInfo['Cacher'],'save'),$par);
-				echo $view->displayMain($result);
+				echo QFW::$view->displayMain($result);
 			}
 
 			$par[0]=$result;
@@ -179,7 +165,7 @@ class QuickFW_Router
 			call_user_func_array(array($CacheInfo['Cacher'],'save'),$par);
 		}
 		else
-			echo $view->displayMain($result);
+			echo QFW::$view->displayMain($result);
 	}
 
 	/**
@@ -191,10 +177,9 @@ class QuickFW_Router
 	 */
 	public function blockRoute($Uri)
 	{
-		global $config;
 		$patt=array();
 
-		if ($config['redirection']['useBlockRewrite'])
+		if (QFW::$config['redirection']['useBlockRewrite'])
 			$Uri = $this->rewrite($Uri);
 
 		//два варианта записи вызова
@@ -310,13 +295,12 @@ class QuickFW_Router
 	 * @param string|array $get GET парамерты или произвольный хвост
 	 * @return exit
 	 */
-	public function redirectMCA($MCA,$get='')
+	public function redirectMCA($MCA, $get='')
 	{
-		global $config;
-		$base   = $config['redirection']['baseUrl'];
-		$index  = $config['redirection']['useIndex']?'index.php/':'';
-		$url    = $config['redirection']['useRewrite']?$this->backrewrite($MCA):$MCA;
-		$defext = $config['redirection']['defExt'];
+		$base   = QFW::$config['redirection']['baseUrl'];
+		$index  = QFW::$config['redirection']['useIndex']?'index.php/':'';
+		$url    = QFW::$config['redirection']['useRewrite']?$this->backrewrite($MCA):$MCA;
+		$defext = QFW::$config['redirection']['defExt'];
 		if (is_array($get) && count($get))
 			$get = '?'.http_build_query($get);
 
@@ -355,7 +339,9 @@ class QuickFW_Router
 		exit();
 	}
 
+	/** @var array Массив прямых преобразований Uri */
 	protected $rewrite = array();
+	/** @var array Массив обратных преобразований Uri */
 	protected $backrewrite = array();
 	
 	/**
@@ -400,6 +386,8 @@ class QuickFW_Router
 
 	/**
 	 * Парсит параметры, переданные как //p1/v1/p2/v2/p3
+	 *
+	 * @internal
 	 */
 	protected function parseParams(&$data)
 	{
@@ -545,19 +533,18 @@ SREG;
 	 */
 	protected function filterUri($uri)
 	{
-		global $config;
 		$pos = strpos($uri,'?');
 		if ($pos !== false)
 			$uri = substr($uri,0,$pos);
-		if (strpos($uri,$config['redirection']['baseUrl']) === 0)
-			$uri = substr($uri,strlen($config['redirection']['baseUrl']));
+		if (strpos($uri,QFW::$config['redirection']['baseUrl']) === 0)
+			$uri = substr($uri,strlen(QFW::$config['redirection']['baseUrl']));
 		if (strpos($uri,'index.php/') === 0)
 			$uri = substr($uri,10);
-		if (!empty($config['redirection']['defExt']))
+		if (!empty(QFW::$config['redirection']['defExt']))
 		{
-			$len_de=strlen($config['redirection']['defExt']);
+			$len_de=strlen(QFW::$config['redirection']['defExt']);
 			$l=strlen($uri)-$len_de;
-			if ($l>0 && strpos($uri,$config['redirection']['defExt'],$l)!==false)
+			if ($l>0 && strpos($uri,QFW::$config['redirection']['defExt'],$l)!==false)
 				$uri = substr($uri,0,$l);
 		}
 		

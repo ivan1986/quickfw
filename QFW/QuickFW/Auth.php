@@ -11,7 +11,7 @@ class QuickFW_Auth
 	const USERNAME_FIELD = 'login';
 
 	/** Поле пароля в $_POST */
-	const PASSWORD_FIELD = 'password';
+	const PASSWORD_FIELD = 'passw';
 	
 	static private $session=null;
 
@@ -139,11 +139,10 @@ class QuickFW_Auth
 	{
 		if (!isset($_POST[self::USERNAME_FIELD]))
 			return false;
-		global $config;
 		$username = isset($_POST[self::USERNAME_FIELD]) ? $_POST[self::USERNAME_FIELD] : null;
 		$password = isset($_POST[self::PASSWORD_FIELD]) ? $_POST[self::PASSWORD_FIELD] : null;
-		if(	(strcasecmp($config['admin']['login'],    trim($username)) == 0)
-		and	(strcasecmp($config['admin']['password'], trim($password)) == 0)
+		if(	(strcasecmp(QFW::$config['admin']['login'],    trim($username)) == 0)
+		and	(strcasecmp(QFW::$config['admin']['passw'], trim($password)) == 0)
 		)
 			return $username;
 		else

@@ -60,7 +60,6 @@
 		if ($GLOBALS['DONE'])
 			return false;
 		// Случилась жопа, начинаем обработку ошибок
-		$GLOBALS['config'] = QFW::config();
 		QFW::Init();
 		require_once LIBPATH.'/Log.php';
 		Log::log("Fatal Error" ,'critical');

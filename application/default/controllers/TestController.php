@@ -9,23 +9,21 @@ class TestController
 
 	public function indexBlock()
 	{
-		global $router,$view;
-		return "<pre>".$view->render('b.html')
-		."\nБлок index - ".$router->UriPath.' '.$router->CurPath.' '.$router->ParentPath
+		return "<pre>".QFW::$view->render('b.html')
+		."\nБлок index - ".QFW::$router->UriPath.' '.QFW::$router->CurPath.' '.QFW::$router->ParentPath
 		."\nЭто результат работы блока index с параметрами ". print_r(func_get_args(),true)."</pre>";
 	}
 
 	public function aBlock()
 	{
-		global $router,$view;
-		return $view->render('b.html')
-		."\nБлок A - ".$router->UriPath.' '.$router->CurPath.' '.$router->ParentPath;
+		return QFW::$view->render('b.html')
+		."\nБлок A - ".QFW::$router->UriPath.' '.QFW::$router->CurPath.' '.QFW::$router->ParentPath;
 	}
 
 	public function bBlock()
 	{
-		global $router,$view;
-		return $view->render('b.html')."\nБлок B - ".$router->UriPath.' '.$router->CurPath.' '.$router->ParentPath;
+		return QFW::$view->render('b.html')."\nБлок B - ".
+			QFW::$router->UriPath.' '.QFW::$router->CurPath.' '.QFW::$router->ParentPath;
 	}
 
 	/*public function CacheInfo($action,$params)
