@@ -40,7 +40,12 @@ class HTML_MetaFormAction
 	 * @var string Name of 'manual' modifier.
 	 */
 	var $MFA_MODIFIER_MANUAL = 'manual';
-	
+
+	/**
+	 * @var string Класс для функций валидаторов
+	 */
+	var $MFA_VALIDATOR_CLASS = '';
+
 	/**
 	 * @var HTML_MetaForm HTML_MetaForm object (public property).
 	 */
@@ -205,11 +210,19 @@ class HTML_MetaFormAction
 					// Validator name MUST always be started with 'validator_' prefix
 					// (security purpose: we must not allow to call ANY plain function
 					// in the program if form is injected).
-					$func = "validator_$validatorName";
-					
-					// Check if we are subclassed. Function-based validators have priority.
-					if (!is_callable($func) && is_callable(array(&$this, $func))) {
-						$func = array(&$this, $func);
+					//$this->MFA_VALIDATOR_CLASS
+					$func = 'validator_'.$validatorName;
+
+					if ($this->MFA_VALIDATOR_CLASS == '')
+					{
+						// Check if we are subclassed. Function-based validators have priority.
+						if (!is_callable($func) && is_callable(array(&$this, $func))) {
+							$func = array(&$this, $func);
+						}
+					}
+					else
+					{
+						$func = array($this->MFA_VALIDATOR_CLASS, 'validator_'.$validatorName);
 					}
 					// Check for validator existance.
 					if (is_callable($func)) {
