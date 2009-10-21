@@ -325,15 +325,19 @@ class QuickFW_Router
 	}
 
 	/**
-	 * Отправляет заголовок Location с заданным Url
+	 * Редирект на нужный урл или возвращает по рефереру
 	 *
 	 * @param string $url Url на который перейдет браузер
+	 * @param boolean $ref переходить по HTTP_REFERER, если есть, иначе на $url
 	 * @return exit
 	 */
-	public function redirect($url=null)
+	public function redirect($url, $ref=false)
 	{
 		//если не указан - редирект откуда пришли
-		$url = $url ? $url : (isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '');
+		if ($ref && isset($_SERVER['HTTP_REFERER']))
+			$url = $_SERVER['HTTP_REFERER'];
+		else
+			$url = $url ? $url : '';
 		header('Location: '.$url);
 		exit();
 	}
