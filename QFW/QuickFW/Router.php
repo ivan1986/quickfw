@@ -551,7 +551,7 @@ SREG;
 			$uri = substr($uri,0,$pos);
 		if (strpos($uri,$config['redirection']['baseUrl']) === 0)
 			$uri = substr($uri,strlen($config['redirection']['baseUrl']));
-		if (!empty($config['redirection']['useIndex']) && strpos($uri,'index.php/') === 0)
+		if (strpos($uri,'index.php/') === 0)
 			$uri = substr($uri,10);
 		if (!empty($config['redirection']['defExt']))
 		{
