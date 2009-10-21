@@ -123,8 +123,15 @@ abstract class ScafoldController extends Controller
 		$data = QFW::$db->selectRow('SELECT * FROM ?# {WHERE ?#=?|LIMIT 1}',
 			$this->table, $this->primaryKey, $id==-1 ? DBSIMPLE_SKIP : $id);
 		if ($id == -1)
+		{
+			if (count($data == 0))
+			{
+				$data = QFW::$db->selectCol('SHOW FIELDS IN ?#', $this->table);
+				$data = array_flip($data);
+			}
 			foreach ($data as $k=>$v)
 				$data[$k]='';
+		}
 
 		return QFW::$view->assign(array(
 			'id' => $id,
