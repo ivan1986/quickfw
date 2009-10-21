@@ -715,7 +715,12 @@ abstract class DbSimple_Generic_Database extends DbSimple_Generic_LastError
 					return $mult ? join(self::$join[$type]['outer'], $multi) : join(', ', $parts);
 				case "#":
 					// Identifier.
-					if (!is_array($value)) return $this->escape($value, true);
+					if (!is_array($value))
+					{
+						if (substr($value, 0, 2) == '?_')
+							$value = $this->_identPrefix . substr($value, 2);
+						return $this->escape($value, true);
+					}
 					$parts = array();
 					foreach ($value as $table => $identifiers) {
 						if (!is_array($identifiers)) $identifiers = array($identifiers);
