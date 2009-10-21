@@ -403,9 +403,9 @@ class QuickFW_Router
 	 */
 	protected function parseParams(&$data)
 	{
-		if (empty($data) || $data[0]!='')
+		if (empty($data) || !empty($data[0]))
 			return $data;
-		array_shift($data);	//Удаляем первый пустой параметр
+		array_shift($data); //Удаляем первый пустой параметр
 		$params = array();
 		while(!empty($data))
 			$params[array_shift($data)] = array_shift($data);
@@ -551,8 +551,7 @@ SREG;
 			$uri = substr($uri,0,$pos);
 		if (strpos($uri,$config['redirection']['baseUrl']) === 0)
 			$uri = substr($uri,strlen($config['redirection']['baseUrl']));
-		if (!empty($config['redirection']['useIndex'])
-		 && strpos($uri,'index.php/') === 0)
+		if (!empty($config['redirection']['useIndex']) && strpos($uri,'index.php/') === 0)
 			$uri = substr($uri,10);
 		if (!empty($config['redirection']['defExt']))
 		{
