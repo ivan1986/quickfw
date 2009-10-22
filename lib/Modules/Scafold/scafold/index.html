@@ -11,7 +11,7 @@
 		<th><?php echo isset($i['title']) ? $i['title'] : $key ?></th>
 	<?php } ?>
 	<th><a href="<?php echo $P->siteUrl($info['ControllerUrl'].
-		'/edit/-1') ?>">добавить</a></th>
+		'/edit/-1') ?>">доб.</a></th>
 	<th>&nbsp;</th>
 	<?php if (count($actions)) { ?><th>действия</th><?php } ?>
 </tr>
@@ -30,9 +30,9 @@
 		?></td>
 	<?php } ?>
 	<td><a href="<?php echo $P->siteUrl($info['ControllerUrl'].
-		'/edit/'.$row[$info['primaryKey']]) ?>">редактировать</a></td>
+		'/edit/'.$row[$info['primaryKey']]) ?>">ред.</a></td>
 	<td><a onclick="return confirm('Удалить?')" href="<?php echo $P->siteUrl($info['ControllerUrl'].
-		'/delete/'.$row[$info['primaryKey']]) ?>">удалить</a></td>
+		'/delete/'.$row[$info['primaryKey']]) ?>">уд.</a></td>
 	<?php if (count($actions)) {?><td><?php foreach ($actions as $tit => $uri) { ?>
 		<a href="<?php echo $P->siteUrl($info['ControllerUrl'].
 		'/'.$uri.'/'.$row[$info['primaryKey']]) ?>"><?php echo $tit ?></a>
