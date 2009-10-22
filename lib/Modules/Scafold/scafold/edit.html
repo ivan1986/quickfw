@@ -13,9 +13,11 @@
 	<p>
 		<label<?php if (isset($errors[$k])) echo ' class="err"'; ?>>
 			<?php echo isset($i['title']) ? $i['title'] : $k ?></label>
-		<?php //редактирование обычного не связанного поля
-		if (isset($lookup[$k]))
-		{	//foregen ключи имеют приоритет над ручным редактором
+		<?php
+		if (isset($methods['editor_'.ucfirst($k)]))
+			echo call_user_func($class.'::editor_'.ucfirst($key), $v, $data);
+		elseif (isset($lookup[$k]))
+		{
 			?><select name="data[<?php echo $k ?>]">
 				<option value="0" <?php
 					if (!isset($lookup[$k][$v])) echo 'selected="selected"';
@@ -25,10 +27,7 @@
 					if ($id == $v) echo 'selected="selected"';
 					?>><?php echo $value ?></option>
 			<?php } ?></select><?php
-		}
-		elseif (isset($methods['editor_'.ucfirst($k)]))
-			echo call_user_func($class.'::editor_'.ucfirst($key), $v, $data);
-		else { ?>
+		} else { ?>
 		<input type="text" 
 			   name="data[<?php echo $k ?>]"
 			   default="<?php echo $v ?>"
