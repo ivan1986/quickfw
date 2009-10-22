@@ -1,0 +1,27 @@
+<?php if (count($errors)) foreach($errors as $k=>$err) { ?>
+	Поле <?php echo $k ?> имеет некорректное значение<br />
+<?php } ?>
+<form action="<?php echo $P->siteUrl($info['ControllerUrl'].'/edit/'.$id) ?>" method="post">
+<?php foreach($data as $k=>$v) {
+	if ($k==$info['primaryKey'])
+		continue;
+	?>
+	<p>
+		<label<?php if (isset($errors[$k])) echo ' class="err"'; ?>><?php echo $k ?></label>
+		<?php //редактирование обычного не связанного поля
+		if (isset($methods['editor_'.ucfirst($k)]))
+			echo call_user_func($class.'::editor_'.ucfirst($key), $v);
+		else { ?>
+		<input type="text" 
+			   name="data[<?php echo $k ?>]"
+			   default="<?php echo $v ?>"
+			   <?php //добавляем валидатор, если он указан для поля
+			   if (isset($methods['validator_'.ucfirst($k)]))
+					echo 'meta:validator="'.ucfirst($k).'"';
+				?>
+		/>
+		<?php } ?>
+	</p>
+<?php } ?>
+	<input type="submit" value="Отправить" name="send" />
+</form>

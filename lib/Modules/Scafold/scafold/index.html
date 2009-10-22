@@ -1,0 +1,35 @@
+<?php echo $pager; ?>
+
+<?php if (count($data)>0) { ?>
+<table>
+<tr>
+	<?php foreach($data[0] as $key=>$v) { ?>
+		<th><?php echo $key ?></th>
+	<?php } ?>
+	<th><a href="<?php echo $P->siteUrl($info['ControllerUrl'].
+		'/edit/-1') ?>">добавить</a></th>
+	<th>&nbsp;</th>
+</tr>
+<?php foreach($data as $row) { ?>
+<tr>
+	<?php foreach($row as $key=>$v) { ?>
+		<td><?php //отображение обычного не связанного поля
+			if (isset($methods['display_'.ucfirst($key)]))
+				echo call_user_func($class.'::display_'.ucfirst($key), $v);
+			else
+				echo $v;
+		?></td>
+	<?php } ?>
+	<td><a href="<?php echo $P->siteUrl($info['ControllerUrl'].
+		'/edit/'.$row[$info['primaryKey']]) ?>">редактировать</a></td>
+	<td><a onclick="return confirm('Удалить?')" href="<?php echo $P->siteUrl($info['ControllerUrl'].
+		'/delete/'.$row[$info['primaryKey']]) ?>">удалить</a></td>
+</tr>
+<?php } ?>
+</table>
+<?php } else { ?>
+	Записей нет
+	<a href="<?php echo $P->siteUrl($info['ControllerUrl'].'/edit/-1') ?>">добавить</a>
+<?php } ?>
+
+<?php echo $pager; ?>
