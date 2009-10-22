@@ -11,12 +11,16 @@ abstract class ScafoldController extends Controller
 {
 	/** @var string Имя таблицы */
 	protected $table = '';
+	/** @var string хвост запроса на выборку после FROM table */
+	protected $where = '';
 	/** @var integer Количество элементов на странице */
 	protected $pageSize = 20;
 	/** @var string Имя первичного ключа таблицы */
 	protected $primaryKey = 'id';
-	/** @var array Зависимых ключей */
-	protected $foregen = array();
+	/** @var array Информация о полях */
+	protected $fields = array();
+	/** @var array Действия, производимые над каждой строчкой */
+	protected $actions = array();
 
 	/** @var string Адрес контроллера */
 	private $ControllerUrl;
@@ -28,6 +32,18 @@ abstract class ScafoldController extends Controller
 		parent::__construct();
 		$this->ControllerUrl = QFW::$router->module.'/'.QFW::$router->controller;
 		$this->methods = array_flip(get_class_methods($this));
+		//Общая информация о таблице
+		QFW::$view->assign(array(
+			'methods' => $this->methods,
+			'class' => get_class($this),
+			'info' => array(
+				'ControllerUrl' => $this->ControllerUrl,
+				'primaryKey' => $this->primaryKey,
+			),
+			'fields' => $this->fields,
+			'actions' => $this->actions,
+			'table' => str_replace('?_', '', $this->table),
+		));
 	}
 
 	/**
@@ -39,9 +55,15 @@ abstract class ScafoldController extends Controller
 	{
 		// считаем страницы с нуля и убираем отрицательные
 		$page = max($page-1, 0);
-		$count = QFW::$db->selectCell('SELECT count(*) FROM ?#', $this->table);
-		$data = QFW::$db->select('SELECT * FROM ?# LIMIT ?d, ?d', 
-			$this->table, $page*$this->pageSize, $this->pageSize);
+		$count = QFW::$db->selectCell('SELECT count(*) FROM ?# '.$this->where, $this->table);
+
+		$foregen = $this->getForegen();
+		$data = QFW::$db->select('SELECT ?# { ?s } FROM ?# { ?s }'.$this->where.' LIMIT ?d, ?d',
+			array($this->table=>'*'),
+			isset($foregen['field']) ? $foregen['field'] : DBSIMPLE_SKIP,
+			$this->table,
+			isset($foregen['join']) ? $foregen['join'] : DBSIMPLE_SKIP,
+			$page*$this->pageSize, $this->pageSize);
 
 		//получаем пагинатор
 		$curUrl = QFW::$view->P->siteUrl($this->ControllerUrl.'/index/$');
@@ -51,12 +73,6 @@ abstract class ScafoldController extends Controller
 		return QFW::$view->assign(array(
 			'data' => $data,
 			'pager' => $pager,
-			'info' => array(
-				'ControllerUrl' => $this->ControllerUrl,
-				'primaryKey' => $this->primaryKey,
-			),
-			'methods' => $this->methods,
-			'class' => get_class($this),
 		))->fetch('scafold/index.html');
 	}
 
@@ -132,16 +148,20 @@ abstract class ScafoldController extends Controller
 			foreach ($data as $k=>$v)
 				$data[$k]='';
 		}
+		//связанные поля - строим комбобоксы
+		$lookup = array();
+		foreach ($this->fields as $f=>$info)
+		{
+			if (!isset($info['foregen']))
+				continue;
+			$lookup[$f] = QFW::$db->selectCol('SELECT ?# AS ARRAY_KEY_1, ?# FROM ?#',
+				$info['foregen']['key'], $info['foregen']['field'], $info['foregen']['table']);
+		}
 
 		return QFW::$view->assign(array(
 			'id' => $id,
 			'data' => $data,
-			'info' => array(
-				'ControllerUrl' => $this->ControllerUrl,
-				'primaryKey' => $this->primaryKey,
-			),
-			'methods' => $this->methods,
-			'class' => get_class($this),
+			'lookup' => $lookup,
 			'errors' => $errors,
 		))->fetch('scafold/edit.html');
 	}
@@ -156,6 +176,45 @@ abstract class ScafoldController extends Controller
 		QFW::$db->query('DELETE FROM ?# WHERE ?#=?',
 			$this->table, $this->primaryKey, $id);
 		QFW::$router->redirect($this->ControllerUrl.'/index', true);
+	}
+
+	/**
+	 * Получает части запроса для связанных полей
+	 *
+	 * @return array два объекта subQuery - список полей и список join
+	 */
+	private function getForegen()
+	{
+		$foregen = array();
+		foreach ($this->fields as $f=>$info)
+		{
+			if (!isset($info['foregen']))
+				continue;
+			$foregen['field'][$f] = QFW::$db->subquery('?# AS ?#', array(
+				$f.'_table' => $info['foregen']['field']),
+				$f);
+			$foregen['join'][$f] = QFW::$db->subquery('LEFT JOIN ?# AS ?# ON ?# = ?#',
+				$info['foregen']['table'],
+				$f.'_table',
+				array($f.'_table' => $info['foregen']['key']),
+				array($this->table => $f)
+			);
+		}
+		if (isset($foregen['field']))
+		{
+			$s = str_repeat(', ?s', count($foregen['field']));
+			$args = array_values($foregen['field']);
+			$args = array_merge(array($s), $args);
+			$foregen['field'] = call_user_method_array('subquery', &QFW::$db, $args);
+		}
+		if (isset($foregen['join']))
+		{
+			$s = str_repeat("\n ?s", count($foregen['join']));
+			$args = array_values($foregen['join']);
+			$args = array_merge(array($s), $args);
+			$foregen['join'] = call_user_method_array('subquery', &QFW::$db, $args);
+		}
+		return $foregen;
 	}
 
 }

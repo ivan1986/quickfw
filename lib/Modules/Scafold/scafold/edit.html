@@ -1,16 +1,33 @@
 <?php if (count($errors)) foreach($errors as $k=>$err) { ?>
 	Поле <?php echo $k ?> имеет некорректное значение<br />
 <?php } ?>
-<form action="<?php echo $P->siteUrl($info['ControllerUrl'].'/edit/'.$id) ?>" method="post">
+<form action="<?php echo $P->siteUrl($info['ControllerUrl'].'/edit/'.$id) ?>" 
+	  method="post" id="form_<?php echo $table ?>">
 <?php foreach($data as $k=>$v) {
 	if ($k==$info['primaryKey'])
 		continue;
+	$i = isset($fields[$k]) ? $fields[$k] : false;
+	if (isset($i['hide']))
+		continue;
 	?>
 	<p>
-		<label<?php if (isset($errors[$k])) echo ' class="err"'; ?>><?php echo $k ?></label>
+		<label<?php if (isset($errors[$k])) echo ' class="err"'; ?>>
+			<?php echo isset($i['title']) ? $i['title'] : $k ?></label>
 		<?php //редактирование обычного не связанного поля
-		if (isset($methods['editor_'.ucfirst($k)]))
-			echo call_user_func($class.'::editor_'.ucfirst($key), $v);
+		if (isset($lookup[$k]))
+		{	//foregen ключи имеют приоритет над ручным редактором
+			?><select name="data[<?php echo $k ?>]">
+				<option value="0" <?php
+					if (!isset($lookup[$k][$v])) echo 'selected="selected"';
+					?>> -- Не указано -- </option>
+			<?php foreach ($lookup[$k] as $id=>$value) {?>
+				<option value="<?php echo $id ?>" <?php 
+					if ($id == $v) echo 'selected="selected"';
+					?>><?php echo $value ?></option>
+			<?php } ?></select><?php
+		}
+		elseif (isset($methods['editor_'.ucfirst($k)]))
+			echo call_user_func($class.'::editor_'.ucfirst($key), $v, $data);
 		else { ?>
 		<input type="text" 
 			   name="data[<?php echo $k ?>]"
