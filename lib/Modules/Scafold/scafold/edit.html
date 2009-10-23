@@ -1,5 +1,5 @@
 <?php if (count($errors)) foreach($errors as $k=>$err) { ?>
-	Поле <?php echo $k ?> имеет некорректное значение<br />
+	Поле <?php echo isset($fields[$k]['title']) ? $fields[$k]['title'] : $k ?> имеет некорректное значение<br />
 <?php } ?>
 <form action="<?php echo $P->siteUrl($info['ControllerUrl'].'/edit/'.$id) ?>" 
 	  method="post" id="form_<?php echo $table ?>">

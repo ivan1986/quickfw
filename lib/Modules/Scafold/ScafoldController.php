@@ -136,18 +136,17 @@ abstract class ScafoldController extends Controller
 		if (isset($_SERVER['HTTP_REFERER']) && strpos($_SERVER['HTTP_REFERER'], 'index'))
 			$_SESSION['scafold_return'] = $_SERVER['HTTP_REFERER'];
 
-		$data = QFW::$db->selectRow('SELECT * FROM ?# {WHERE ?#=?|LIMIT 1}',
-			$this->table, $this->primaryKey, $id==-1 ? DBSIMPLE_SKIP : $id);
 		if ($id == -1)
 		{
-			if (count($data == 0))
-			{
-				$data = QFW::$db->selectCol('SHOW FIELDS IN ?#', $this->table);
-				$data = array_flip($data);
-			}
-			foreach ($data as $k=>$v)
-				$data[$k]='';
+			$data = array();
+			$fields = QFW::$db->select('SHOW FIELDS IN ?#', $this->table);
+			foreach ($fields as $v)
+				$data[$v['Field']]= $v['Default'] == 'CURRENT_TIMESTAMP' ? '' : $v['Default'];
 		}
+		else
+			$data = QFW::$db->selectRow('SELECT * FROM ?# WHERE ?#=?',
+				$this->table, $this->primaryKey, $id);
+
 		//связанные поля - строим комбобоксы
 		$lookup = array();
 		foreach ($this->fields as $f=>$info)
