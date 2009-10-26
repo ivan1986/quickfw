@@ -113,60 +113,12 @@ class QuickFW_Router
 		$this->Uri = $MCA['Path'].'/'.join('/',$data);
 		$this->RequestUri = $requestUri;
 		$this->ParentPath = null;
-
-		$CacheInfo=false;
-		if ($MCA['cache'])
-		{
-			$CacheInfo=$MCA['Class']->CacheInfo($this->action,$params);
-			if (is_array($CacheInfo))
-			{
-				if (array_key_exists('Cacher',$CacheInfo) && array_key_exists('id',$CacheInfo))
-				$data = $CacheInfo['Cacher']->load($CacheInfo['id']);
-				$full=array_key_exists('full',$CacheInfo);
-				if ($data)
-				{
-					if ($full)
-						echo $data;
-					else
-					{
-						QFW::$view->mainTemplate = $CacheInfo['Cacher']->load($CacheInfo['id'].'_MTPL');
-						echo QFW::$view->displayMain($data);
-					}
-					return;
-				}
-			}
-		}
 		
 		$result = call_user_func_array(array($MCA['Class'], $this->action), $params);
 		
 		QFW::$view->setScriptPath($this->baseDir.'/'.$MCA['Module'].'/templates');
 
-		if ($CacheInfo && array_key_exists('Cacher',$CacheInfo) && array_key_exists('id',$CacheInfo))
-		{
-			$par = array(
-				0 => QFW::$view->mainTemplate,
-				1 => $CacheInfo['id'].'_MTPL',
-				2 => array_key_exists('tags',$CacheInfo)?$CacheInfo['tags']:array(),
-			);
-			if (array_key_exists('time',$CacheInfo))
-				$par[3]=$CacheInfo['time'];
-
-			if ($full)
-			{
-				echo $result=QFW::$view->displayMain($result);
-			}
-			else
-			{
-				call_user_func_array(array($CacheInfo['Cacher'],'save'),$par);
-				echo QFW::$view->displayMain($result);
-			}
-
-			$par[0]=$result;
-			$par[1]=$CacheInfo['id'];
-			call_user_func_array(array($CacheInfo['Cacher'],'save'),$par);
-		}
-		else
-			echo QFW::$view->displayMain($result);
+		echo QFW::$view->displayMain($result);
 	}
 
 	/**
@@ -203,19 +155,6 @@ class QuickFW_Router
 			return "Ошибка подключения блока ".$Uri." адрес был разобран в\t\t ".
 				$MCA['Path']."\n".$MCA['Error'];
 
-		$CacheInfo=false;
-		if ($MCA['cache'])
-		{
-			$CacheInfo=$MCA['Class']->CacheInfo($MCA['Action'],$MCA['Params']);
-			if (is_array($CacheInfo))
-			{
-				if (array_key_exists('Cacher',$CacheInfo) && array_key_exists('id',$CacheInfo))
-				$data = $CacheInfo['Cacher']->load($CacheInfo['id']);
-				if ($data)
-					return $data;
-			}
-		}
-
 		list($lpPath, $this->ParentPath, $this->CurPath) =
 			array($this->ParentPath, $this->CurPath, $MCA['Path']);
 
@@ -223,22 +162,6 @@ class QuickFW_Router
 
 		list($this->CurPath, $this->ParentPath) =
 			array($this->ParentPath, $lpPath);
-
-		if (is_array($CacheInfo))
-		{
-			if (array_key_exists('Cacher',$CacheInfo) && array_key_exists('id',$CacheInfo))
-			{
-				if (array_key_exists('time',$CacheInfo))
-					$CacheInfo['Cacher']->save($result,$CacheInfo['id'],
-						array_key_exists('tags',$CacheInfo)?$CacheInfo['tags']:array(),
-						$CacheInfo['time']
-					);
-				else
-					$CacheInfo['Cacher']->save($result,$CacheInfo['id'],
-						array_key_exists('tags',$CacheInfo)?$CacheInfo['tags']:array()
-					);
-			}
-		}
 
 		return $result;
 	}
@@ -492,11 +415,9 @@ SREG;
 				'i'    => new $class,
 				'defA' => isset($vars['defA']) ? $vars['defA'] : $this->defA,
 				'a'    => $acts,
-				'c'    => in_array('CacheInfo',$acts),
 			);
 		}
 		$MCA['Class'] = $this->classes[$class_key]['i'];
-		$MCA['cache'] = $this->classes[$class_key]['c'];
 		
 		$aname = isset($data[0]) ? $data[0] : $this->classes[$class_key]['defA'];
 		$MCA['Action'] = strtr($aname,'.','_').$type;
