@@ -2,7 +2,7 @@
 	Поле <?php echo isset($fields[$k]['title']) ? $fields[$k]['title'] : $k ?> имеет некорректное значение<br />
 <?php } ?>
 <form action="<?php echo $P->siteUrl($info['ControllerUrl'].'/edit/'.$id) ?>" 
-	  method="post" id="form_<?php echo $table ?>">
+	  method="post" id="form_<?php echo $table ?>" enctype="multipart/form-data">
 <?php foreach($data as $k=>$v) {
 	if ($k==$info['primaryKey'])
 		continue;
@@ -15,7 +15,7 @@
 			<?php echo isset($i['title']) ? $i['title'] : $k ?></label>
 		<?php
 		if (isset($methods['editor_'.ucfirst($k)]))
-			echo call_user_func($class.'::editor_'.ucfirst($key), $v, $data);
+			echo call_user_func($class.'::editor_'.ucfirst($k), $v, $data);
 		elseif (isset($lookup[$k]))
 		{
 			?><select name="data[<?php echo $k ?>]">

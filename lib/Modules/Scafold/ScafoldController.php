@@ -105,6 +105,10 @@ abstract class ScafoldController extends Controller
 			if ($metaFormAction->process() == 'send')
 			{
 				$data = $_POST['data'];
+				//Обработка данных после POST
+				foreach ($data as $k=>$v)
+					if (isset($this->methods['proccess_'.ucfirst($k)]))
+						$data[$k] = call_user_method('proccess_'.ucfirst($k), $this, $v);
 				if ($id == -1)
 					QFW::$db->query('INSERT INTO ?#(?#) VALUES(?a)',
 						$this->table, array_keys($data), array_values($data));
@@ -172,6 +176,13 @@ abstract class ScafoldController extends Controller
 	 */
 	public function deleteAction($id=0)
 	{
+		if (isset($this->methods['delete']))
+		{
+			$row = QFW::$db->selectRow('SELECT FROM ?# WHERE ?#=?',
+				$this->table, $this->primaryKey, $id);
+			if (!call_user_method('delete', $this, $row))
+				QFW::$router->redirect($this->ControllerUrl.'/index', true);
+		}
 		QFW::$db->query('DELETE FROM ?# WHERE ?#=?',
 			$this->table, $this->primaryKey, $id);
 		QFW::$router->redirect($this->ControllerUrl.'/index', true);
