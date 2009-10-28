@@ -393,9 +393,15 @@ SREG;
 			require($fullname);
 			if (!class_exists($class))
 			{
-				$MCA['Error']="не найден класс \t\t\t".$class."\nКласс не найден, мать его за ногу";
-				$MCA['Path']=$MCA['Module'].'/'.$MCA['Controller'].'/...';
-				return $MCA;
+				//Смотрим, а не в неймспейсе ли он случайно
+				if (class_exists($MCA['Module'].'\\'.$class))
+					$class = $MCA['Module'].'\\'.$class;
+				else
+				{
+					$MCA['Error']="не найден класс \t\t\t".$class."\nКласс не найден, мать его за ногу";
+					$MCA['Path']=$MCA['Module'].'/'.$MCA['Controller'].'/...';
+					return $MCA;
+				}
 			}
 			$vars = get_class_vars($class);
 			$acts = get_class_methods($class);

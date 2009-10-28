@@ -25,12 +25,12 @@
 			<?php foreach ($lookup[$k] as $id=>$value) {?>
 				<option value="<?php echo $id ?>" <?php 
 					if ($id == $v) echo 'selected="selected"';
-					?>><?php echo $value ?></option>
+					?>><?php echo $this->esc($value) ?></option>
 			<?php } ?></select><?php
 		} else { ?>
 		<input type="text" 
 			   name="data[<?php echo $k ?>]"
-			   default="<?php echo $v ?>"
+			   default="<?php echo $this->esc($v) ?>"
 			   <?php //добавляем валидатор, если он указан для поля
 			   if (isset($methods['validator_'.ucfirst($k)]))
 					echo 'meta:validator="'.ucfirst($k).'"';
