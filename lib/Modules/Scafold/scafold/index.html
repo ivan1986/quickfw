@@ -26,7 +26,7 @@
 			if (isset($methods['display_'.ucfirst($key)]))
 				echo call_user_func($class.'::display_'.ucfirst($key), $v, $row);
 			else
-				echo $v===null ? "-" : $this->esc($v);
+				echo $v===null ? '-' : $this->esc($v);
 		?></td>
 	<?php } ?>
 	<td><a href="<?php echo $P->siteUrl($info['ControllerUrl'].

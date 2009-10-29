@@ -90,28 +90,25 @@ abstract class ScafoldController extends Controller
 	 */
 	public function editAction($id=-1)
 	{
-		//инициализация метаформы
+		//инициализация FormPersister
 		require_once LIBPATH.'/MetaForm/FormPersister.php';
-		require_once LIBPATH.'/MetaForm/MetaForm.php';
-		$SemiParser = new HTML_SemiParser();
-		ob_start(array(&$SemiParser, 'process'));
-
-		$MetaForm = new HTML_MetaForm('secret_secret');
-		$SemiParser->addObject($MetaForm);
-
 		$FormPersister = new HTML_FormPersister();
-		$SemiParser->addObject($FormPersister);
+		ob_start(array(&$FormPersister, 'process'));
 		$errors = array();
 		
-		if ($_SERVER['REQUEST_METHOD'] == 'POST')
+		if ($_SERVER['REQUEST_METHOD'] == 'POST' && count($_POST['data'])>0)
 		{
-			//инициализация метаформы
-			require_once LIBPATH.'/MetaForm/MetaFormAction.php';
-			$metaFormAction = new HTML_MetaFormAction($MetaForm);
-			$metaFormAction->MFA_VALIDATOR_CLASS = get_class($this);
-			if ($metaFormAction->process() == 'send')
+			$data = $_POST['data'];
+			foreach ($data as $k=>$v)
 			{
-				$data = $_POST['data'];
+				if (!isset($this->methods['validator_'.ucfirst($k)]))
+					continue;
+				$res = call_user_method('validator_'.ucfirst($k), $this, $v);
+				if ($res !== true)
+					$errors[$k] = $res;
+			}
+			if (count($errors) == 0)
+			{
 				//Обработка данных после POST
 				foreach ($data as $k=>$v)
 					if (isset($this->methods['proccess_'.ucfirst($k)]))
@@ -134,21 +131,14 @@ abstract class ScafoldController extends Controller
 					QFW::$router->redirect('/'.$this->ControllerUrl.'/index/');
 
 			}
-			else
-			{	//Сохраняем ошибки
-				$MFerrors = $metaFormAction->getErrors();
-				foreach($MFerrors as $k=>$v)
-				{
-					$name = substr($v['name'], 5, -1);
-					$errors[$name] = $name;
-				}
-			}
 		}
+		
 		if (isset($_SERVER['HTTP_REFERER']) && strpos($_SERVER['HTTP_REFERER'], 'index'))
 			$_SESSION['scafold_return'] = $_SERVER['HTTP_REFERER'];
 
 		if ($id == -1)
 		{
+			//получение дефолтовых значений для новой записи
 			$data = array();
 			$fields = QFW::$db->select('SHOW FIELDS IN ?#', $this->table);
 			foreach ($fields as $v)
@@ -185,7 +175,7 @@ abstract class ScafoldController extends Controller
 	{
 		if (isset($this->methods['delete']))
 		{
-			$row = QFW::$db->selectRow('SELECT FROM ?# WHERE ?#=?',
+			$row = QFW::$db->selectRow('SELECT * FROM ?# WHERE ?#=?',
 				$this->table, $this->primaryKey, $id);
 			if (!call_user_method('delete', $this, $row))
 				QFW::$router->redirect($this->ControllerUrl.'/index', true);
