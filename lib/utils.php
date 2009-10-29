@@ -59,30 +59,35 @@ function getUrl($url, $data=array())
 
 /**
  * Вывод сообщения с разбивкой длинных слов без повреждения тегов
+ *
+ * @param string $msg собщение, в котором нужно разбить слова
+ * @param integer $n длина, на которой ставить пробел
+ * @return string сообщение со словами, не превышающими n символов
  */
-function msg2html($s,$n=50) {
-
+function msg2html($msg, $n=50)
+{
 	$marker = " <> ";
 
 	# Сохраняем все тэги чтобы уберечь их от разбивки
-	preg_match_all("/(<.*?>)/si",$s,$tags);
+	preg_match_all("/(<.*?>)/si",$msg,$tags);
 
 	# Заменяем все тэги на маркеры
-	$s =  preg_replace("/(<.*?>)/si", $marker, $s);
+	$msg =  preg_replace("/(<.*?>)/si", $marker, $msg);
 
-	$s = preg_replace('|\S{'.$n.'}|u','\0 ',$s);
+	$msg = preg_replace('|\S{'.$n.'}|u','\0 ',$msg);
 
 	# Восстанавливаем тэги в места которых были отмечены маркерами
 	for ($i=0; $i<count($tags[0]);  $i++)
-		$s = preg_replace("/$marker/si", $tags[1][$i], $s, 1);
+		$msg = preg_replace("/$marker/si", $tags[1][$i], $msg, 1);
 
-	return $s;
+	return $msg;
 }
 
 /**
  * Преобразование URL в ссылки
  */
-function make_urls($string, $nofollow=false) {
+function make_urls($string)
+{
 	$p = '/((?:(?:ht|f)tps?:\/\/|www\.)[^<\s\n]+)(?<![]\.,:;!\})<-])/msiu';
 	$r = '<a href="$1">$1</a>$2';
 
@@ -107,9 +112,12 @@ function printSize($size)
 }
 
 /**
- * Усечение UTF8 строк
+ * Обрезает длинные строки, добавляя в конце многоточие
+ *
+ * @param string $str строка, которую нужно обрезать
+ * @param integer $size до скольки знаков
  */
-function my_trim($str,$size)
+function my_trim($str, $size)
 {
 	if (mb_strlen($str)>$size)
 		$str=mb_substr($str,0,$size-3).'...';
@@ -117,14 +125,17 @@ function my_trim($str,$size)
 }
 
 /**
- * Функции обрезания текста без повреждения слов
+ * Обрезает длинные строки, не разрывая последнее слово
+ *
+ * @param string $str строка, которую нужно обрезать
+ * @param integer $size до скольки знаков
  */
-function clearCut($text, $length)
+function clearCut($str, $size)
 {
-	if(mb_strlen($text) <= $length)
-		return $text;
+	if(mb_strlen($str) <= $size)
+		return $str;
 
-	$words = explode(' ', mb_substr($text, 0, $length));
+	$words = explode(' ', mb_substr($str, 0, $size));
 	return implode(' ', array_slice($words, 0, count($words)-1)).'...';
 }
 
