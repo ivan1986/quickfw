@@ -4,6 +4,11 @@ require_once(QFWPATH.'/QuickFW/Auth.php');
 
 class IndexController extends QuickFW_Auth
 {
+	public function __construct()
+	{
+		echo QFW::$router->module.'.'.QFW::$router->controller.'.'.QFW::$router->action."<br>\n";
+	}
+
 	public function indexAction()
 	{
 		print_r($_POST);
@@ -40,15 +45,6 @@ class IndexController extends QuickFW_Auth
 		QFW::$view->mainTemplate='';
 		return "медвед";
 	}
-
-	/*public function CacheInfo($action,$params)
-	{
-		return array(
-			'Cacher' => getCache(),
-			'id' => 'ALL'.$action,
-			//'full'=>1,
-		);
-	}*/
 
 }
 

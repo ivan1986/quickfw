@@ -353,21 +353,17 @@ SREG;
 		$MCA = array();
 		while (isset($data[0]) AND $data[0] === '') array_shift($data);
 
-		//Determine Module
+		//Определяем модуль
 		if (isset($data[0]) && (is_dir($this->baseDir . '/' . $data[0])))
 			$MCA['Module'] = array_shift($data);
 		else
 			$MCA['Module'] = $type=='Block' ? $this->cModule : $this->defM;
-		if ($type!='Block')
-			$this->cModule=$MCA['Module'];
 		$path = $this->baseDir.'/'.$MCA['Module'];
 		QFW::$view->setScriptPath($path.'/templates');
 
 		$c=count($data); // Количество элементов URI исключая модуль
-		//Determine Controller
-		$cname = isset($data[0])?$data[0]: ($type=='Block' ? $this->cController : $this->defC);
-		if ($type!='Block')
-			$this->cController=$cname;
+		//Определяем контроллер
+		$cname = isset($data[0]) ? $data[0] : ($type=='Block' ? $this->cController : $this->defC);
 
 		$class=ucfirst($cname).'Controller';
 		$fullname = $path . '/controllers/' . strtr($class,'_','/') . '.php';
@@ -389,14 +385,6 @@ SREG;
 		$MCA['Controller'] = $cname;
 		$class_key=$MCA['Module'].'|'.$MCA['Controller'];
 
-		//Инициализируем те значения, которые мы уже знаем,
-		//чтобы можно было узнать как нас вызвали в конструкторе
-		if ($type != 'Block')
-		{
-			$this->module = $MCA['Module'];
-			$this->controller = $MCA['Controller'];
-		}
-
 		if (!isset($this->classes[$class_key]))
 		{
 			require($fullname);
@@ -414,15 +402,20 @@ SREG;
 			}
 			$vars = get_class_vars($class);
 			$acts = get_class_methods($class);
-			
-			//устанавливаем значение $this->action
-			if ($type != 'Block')
+
+			//Выполняется при первом вызове и сохраняет значение вызванного MCA
+			//Достаточно проверить только один - после выполнения пустыми они быть не могут
+			if ($this->module == '')
 			{
 				$aname = isset($data[0]) ? $data[0] :
 					(isset($vars['defA']) ? $vars['defA'] : $this->defA);
 				$fname = strtr($aname,'.','_').$type;
 				if (!in_array($fname,$acts))
 					$fname = (isset($vars['defA']) ? $vars['defA'] : $this->defA).$type;
+				//Инициализируем значения, чтобы можно было узнать
+				//как нас вызвали в конструкторе
+				$this->module = $MCA['Module'];
+				$this->controller = $MCA['Controller'];
 				$this->action = $fname;
 			}
 			
@@ -437,7 +430,7 @@ SREG;
 		$aname = isset($data[0]) ? $data[0] : $this->classes[$class_key]['defA'];
 		$MCA['Action'] = strtr($aname,'.','_').$type;
 		
-		if (in_array($MCA['Action'],$this->classes[$class_key]['a']))
+		if (in_array($MCA['Action'], $this->classes[$class_key]['a']))
 			array_shift($data);
 		else
 		{
