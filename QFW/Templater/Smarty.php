@@ -1,18 +1,20 @@
 <?php
 
+/**
+ * Обертка для смарти
+ *
+ */
 class Templater_Smarty
 {
+	/** @var Smarty */
 	protected $_smarty;
 
 	/** @var QuickFW_Plugs Плагины фреймворка */
 	public $P;
 
 	protected $_tmplPath;
-	/**
-	 * Template file in which is all content
-	 *
-	 * @var string
-	 */
+	
+	/** @var string Template file in which is all content */
 	public $mainTemplate;
 
 	/**
