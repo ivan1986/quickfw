@@ -1,6 +1,6 @@
 --- QFW/QuickFW/Router.php
 +++ QFW/QuickFW/Router.php
-@@ -113,12 +113,60 @@
+@@ -114,12 +114,60 @@
  		$this->Uri = $MCA['Path'].'/'.join('/',$data);
  		$this->RequestUri = $requestUri;
  		$this->ParentPath = null;
@@ -62,7 +62,7 @@
  	}
  
  	/**
-@@ -155,6 +203,19 @@
+@@ -164,6 +212,19 @@
  			return "Ошибка подключения блока ".$Uri." адрес был разобран в\t\t ".
  				$MCA['Path']."\n".$MCA['Error'];
  
@@ -82,7 +82,7 @@
  		list($lpPath, $this->ParentPath, $this->CurPath) =
  			array($this->ParentPath, $this->CurPath, $MCA['Path']);
  
-@@ -163,6 +224,22 @@
+@@ -172,6 +233,22 @@
  		list($this->CurPath, $this->ParentPath) =
  			array($this->ParentPath, $lpPath);
  
@@ -105,7 +105,7 @@
  		return $result;
  	}
  
-@@ -415,9 +492,11 @@
+@@ -430,9 +507,11 @@
  				'i'    => new $class,
  				'defA' => isset($vars['defA']) ? $vars['defA'] : $this->defA,
  				'a'    => $acts,
