@@ -4,6 +4,7 @@
  * Класс для работы с uri
  *
  * <br>редирект, прямой и обратный роутинг, загрузка контроллера
+ * 
  * @package QFW
  */
 class QuickFW_Router
@@ -70,7 +71,7 @@ class QuickFW_Router
 	{
 		$this->baseDir = rtrim($baseDir, '/\\');
 		$this->module = '';
-		$this->controller = NULL;
+		$this->controller = '';
 		$this->action = '';
 		$this->defM = QFW::$config['default']['module'];
 		$this->defC = QFW::$config['default']['controller'];
@@ -132,20 +133,28 @@ class QuickFW_Router
 	{
 		$patt=array();
 
-		if (QFW::$config['redirection']['useBlockRewrite'])
-			$Uri = $this->rewrite($Uri);
-
 		//два варианта записи вызова
 		// module.controller.action(p1,p2,p3,...)
-		if (preg_match('|(?:(.*?)\.)?(.*?)(?:\.(.*))?\((.*)\)|',$Uri,$patt))
+		if (preg_match('|^(?:(\w*?)\.)?(\w*?)(?:\.(\w*))?(?:\((.*)\))?$|',$Uri,$patt))
 		{
 			$data = array_slice($patt,1,3);
 			$MCA = $this->loadMCA($data,'Block');
-			// Если вы все еще сидите на PHP 5.2 то раскомментируйте старый вариант
-			$MCA['Params']=str_getcsv($patt[4],',',"'",'\\'); // $this->parseScobParams($patt[4]);
+			if (isset($patt[4]))
+			{
+				// Если вы все еще сидите на PHP 5.2 то раскомментируйте старый вариант
+				$MCA['Params'] = str_getcsv($patt[4],',',"'",'\\'); // $this->parseScobParams($patt[4]);
+			}
+			else
+			{
+				$MCA['Params'] = func_get_args();
+				array_shift($MCA['Params']);
+			}
 		}
 		else
 		{
+			//реврайт имеет смысл только для вызовов, записанных через слеши
+			if (QFW::$config['redirection']['useBlockRewrite'])
+				$Uri = $this->rewrite($Uri);
 			// module/controller/action/p1/p2/p3/...
 			$data = explode('/', $Uri);
 			$MCA = $this->loadMCA($data,'Block');

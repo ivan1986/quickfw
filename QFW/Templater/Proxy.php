@@ -113,7 +113,7 @@ class Templater_Proxy
 
 	public function block($block)
 	{
-		return QFW::$router->blockRoute($block);
+		return call_user_func_array(array(&QFW::$router, 'blockRoute'), func_get_args());
 	}
 
 	/**
