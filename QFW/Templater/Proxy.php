@@ -30,7 +30,7 @@ class Templater_Proxy
 	* Set the path to the templates
 	*
 	* @param string $path The directory to set as the path.
-	* @return void
+	* @return boolean
 	*/
 	public function setScriptPath($path)
 	{

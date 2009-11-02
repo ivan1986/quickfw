@@ -75,7 +75,7 @@ abstract class ScafoldController extends Controller
 		//получаем пагинатор
 		$curUrl = QFW::$view->P->siteUrl($this->ControllerUrl.'/index/$');
 		$pages = ceil($count/$this->pageSize);
-		$pager=QFW::$router->blockRoute('nav.pager('.$curUrl.','.$pages.','.($page+1).')');
+		$pager=QFW::$router->blockRoute('helper.nav.pager('.$curUrl.','.$pages.','.($page+1).')');
 
 		return QFW::$view->assign(array(
 			'data' => $data,

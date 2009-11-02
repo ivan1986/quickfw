@@ -3,7 +3,7 @@
 class Rss
 {
 
-	public function parse($data,$count=-1)
+	static public function parse($data, $count=-1)
 	{
 		$dom = new DOMDocument('1.0');
 		$dom->preserveWhiteSpace = false;

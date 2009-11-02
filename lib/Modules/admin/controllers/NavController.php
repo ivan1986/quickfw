@@ -25,8 +25,8 @@ class NavController
 		) + $data['huru'];
 
 		$data['root'] = array(
-			'memcache' => array('memcache' => 'admin/info/memcache'),
-			'phpinfo' => array('phpinfo()'=> 'admin/info/phpinfo'),
+			'memcache' => 'admin/info/memcache',
+			'phpinfo()'=> 'admin/info/phpinfo',
 		) + $data['admin'];
 
 		$data = $data[$type];
