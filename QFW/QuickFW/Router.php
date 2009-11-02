@@ -133,6 +133,9 @@ class QuickFW_Router
 	{
 		$patt=array();
 
+		//Сохраняем старый путь шаблонов
+		$scriptPath = QFW::$view->getScriptPath();
+
 		//два варианта записи вызова
 		// module.controller.action(p1,p2,p3,...)
 		if (preg_match('|^(?:(\w*?)\.)?(\w*?)(?:\.(\w*))?(?:\((.*)\))?$|',$Uri,$patt))
@@ -171,6 +174,9 @@ class QuickFW_Router
 
 		list($this->CurPath, $this->ParentPath) =
 			array($this->ParentPath, $lpPath);
+
+		//Возвращаем путь к шаблонам после вызова
+		QFW::$view->setScriptPath($scriptPath);
 
 		return $result;
 	}
