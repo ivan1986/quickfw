@@ -225,6 +225,8 @@ class QuickFW_Router
 			if (isset($url[0]) && $url[0]==$this->defC)
 				array_shift($url);
 		}
+		if (count($url)==1 && $url[0]==$this->defC)
+			array_shift($url);
 		return join('/',$url);
 	}
 
