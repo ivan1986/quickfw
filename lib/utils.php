@@ -58,6 +58,33 @@ function getUrl($url, $data=array())
 }
 
 /**
+ * Проверяет урл на корректность
+ *
+ * @link http://php.spb.ru/php/regexp.html
+ * @param string $url Урл, который нужно проверить на корректность
+ * @return false|null|string Урл или ошибка
+ */
+function checkUrl($url)
+{
+	// режем левые символы и крайние пробелы
+	$url = trim(preg_replace('/[^\x20-\xFF]/', '', strval($url)));
+	// если пусто - выход
+	if (strlen($url)==0)
+		return null;
+	//проверяем УРЛ на правильность
+	if (!preg_match('~^(?:(?:https?|ftp)://(?:[a-z0-9_-]{1,32}'.
+	'(?::[a-z0-9_-]{1,32})?@)?)?(?:(?:[a-z0-9-]{1,128}\.)+(?:com|net|'.
+	'org|mil|edu|arpa|gov|biz|info|aero|inc|name|[a-z]{2})|(?!0)(?:(?'.
+	'!0[^.]|255)[0-9]{1,3}\.){3}(?!0|255)[0-9]{1,3})(?:/[a-z0-9.,_@%&'.
+	'?+=\~/-]*)?(?:#[^ \'"&<>]*)?$~i',$url,$ok))
+		return false; // если не правильно - выход
+	// если нет протокала - добавить
+	if (strpos($url, '://') === false)
+		$url='http://'.$url;
+	return $url;
+}
+
+/**
  * Вывод сообщения с разбивкой длинных слов без повреждения тегов
  *
  * @param string $msg собщение, в котором нужно разбить слова
