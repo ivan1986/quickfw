@@ -103,7 +103,7 @@ abstract class ScafoldController extends Controller
 			{
 				if (!isset($this->methods['validator_'.ucfirst($k)]))
 					continue;
-				$res = call_user_method('validator_'.ucfirst($k), $this, $v);
+				$res = call_user_func(array(&$this, 'validator_'.ucfirst($k)), $v);
 				if ($res !== true)
 					$errors[$k] = $res;
 			}
@@ -112,7 +112,7 @@ abstract class ScafoldController extends Controller
 				//Обработка данных после POST
 				foreach ($data as $k=>$v)
 					if (isset($this->methods['proccess_'.ucfirst($k)]))
-						$data[$k] = call_user_method('proccess_'.ucfirst($k), $this, $v);
+						$data[$k] = call_user_func(array(&$this, 'proccess_'.ucfirst($k)), $v);
 				if ($id == -1)
 					QFW::$db->query('INSERT INTO ?#(?#) VALUES(?a)',
 						$this->table, array_keys($data), array_values($data));
@@ -177,7 +177,7 @@ abstract class ScafoldController extends Controller
 		{
 			$row = QFW::$db->selectRow('SELECT * FROM ?# WHERE ?#=?',
 				$this->table, $this->primaryKey, $id);
-			if (!call_user_method('delete', $this, $row))
+			if (!call_user_func(array(&$this, 'delete'), $row))
 				QFW::$router->redirect($this->ControllerUrl.'/index', true);
 		}
 		QFW::$db->query('DELETE FROM ?# WHERE ?#=?',
