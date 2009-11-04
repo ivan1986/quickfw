@@ -5,10 +5,10 @@ require_once 'Controller.php';
 /**
  * Класс для быстрого создания CRUD интерфейса к таблице
  * 
- * <br>По умолчанию наследует себя от класса Controller
+ * <br><br>По умолчанию наследует себя от класса Controller
  * базового класса, который есть в этом модули
- * для того чтобы корректно подхватывать авторизацию и прочее
- * класс предназначен для использования в админках
+ * для того чтобы корректно подхватывать авторизацию и прочее.
+ * <br><br>Класс предназначен для использования в админках
  * преймущественно для редакторивания справочников и
  * подобных им таблиц
  *
@@ -169,21 +169,76 @@ abstract class ScafoldController extends Controller
 	/**
 	 * Удаление строки
 	 *
-	 * @param int $id значение первичного ключа удаляемой строки
+	 * <br>Если нужно обработать удаление как-то нестандартно,
+	 * то функция должна быть перегружена
+	 *
+	 * @param string $id значение первичного ключа удаляемой строки
 	 */
 	public function deleteAction($id=0)
 	{
-		if (isset($this->methods['delete']))
-		{
-			$row = QFW::$db->selectRow('SELECT * FROM ?# WHERE ?#=?',
-				$this->table, $this->primaryKey, $id);
-			if (!call_user_func(array(&$this, 'delete'), $row))
-				QFW::$router->redirect($this->ControllerUrl.'/index', true);
-		}
 		QFW::$db->query('DELETE FROM ?# WHERE ?#=?',
 			$this->table, $this->primaryKey, $id);
-		QFW::$router->redirect($this->ControllerUrl.'/index', true);
+		QFW::$router->redirect('/'.$this->ControllerUrl.'/index', true);
 	}
+
+	////////////////////////////////////////////////////////////
+	//Функции для упращения настройки таблицы - удобные сеттеры
+	////////////////////////////////////////////////////////////
+
+	/**
+	 * Скрывает при выводе и редактировании указанные колонки
+	 *
+	 * @param string|array $colums Колонка или массив колонок, которые нужно скрыть
+	 * @return ScafoldController
+	 */
+	protected function hide($colums)
+	{
+		if (!is_array($colums))
+			$colums = array($colums);
+		foreach ($colums as $col)
+			$this->fields[$col]['hide'] = true;
+		return $this;
+	}
+
+	/**
+	 * Устанавливает поле как зависимое от другой таблицы
+	 *
+	 * @param string $colum Колонка
+	 * @param string $table Связанная таблица
+	 * @param string $id Ссылочный ключ
+	 * @param string $name Значение связанного поля
+	 * @return ScafoldController
+	 */
+	protected function foregen($colum, $table, $id, $name)
+	{
+		$this->fields[$colum]['foregen'] = array(
+			'field' => $name,
+			'table' => $table,
+			'key'   => $id,
+		);
+		return $this;
+	}
+
+	/**
+	 * Устанавливает заголовки для столбцов
+	 *
+	 * @param string|array $colum Колонка<br>
+	 * Или массив ключи - колонки, значения заголовки
+	 * @param string $title Заголовок
+	 * @return ScafoldController
+	 */
+	protected function title($colum, $title='')
+	{
+		if (!is_array($colum))
+			$colum = array($colum => $title);
+		foreach ($colum as $col=>$tit)
+			$this->fields[$col]['title'] = $tit;
+		return $this;
+	}
+
+	////////////////////////////////////////////////////////////
+	//Закрытые функции
+	////////////////////////////////////////////////////////////
 
 	/**
 	 * Получает части запроса для связанных полей
