@@ -212,14 +212,14 @@ abstract class ScafoldController extends Controller
 			$s = str_repeat(', ?s', count($foregen['field']));
 			$args = array_values($foregen['field']);
 			$args = array_merge(array($s), $args);
-			$foregen['field'] = call_user_method_array('subquery', QFW::$db, $args);
+			$foregen['field'] = call_user_func_array(array(&QFW::$db, 'subquery'), $args);
 		}
 		if (isset($foregen['join']))
 		{
 			$s = str_repeat("\n ?s", count($foregen['join']));
 			$args = array_values($foregen['join']);
 			$args = array_merge(array($s), $args);
-			$foregen['join'] = call_user_method_array('subquery', QFW::$db, $args);
+			$foregen['join'] = call_user_func_array(array(&QFW::$db, 'subquery'), $args);
 		}
 		return $foregen;
 	}
