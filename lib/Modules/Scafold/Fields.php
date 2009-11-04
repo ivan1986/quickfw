@@ -49,4 +49,13 @@ class Scafold_Field
 //Классы для различных типов полей
 //Соответствие в функции ScafoldController::getFieldClass
 
+class Scafold_Enum extends Scafold_Field
+{
+	public function display($value)
+	{
+		return parent::display($value);
+	}
+	
+}
+
 ?>

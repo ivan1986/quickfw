@@ -51,7 +51,9 @@ abstract class ScafoldController extends Controller
 		$fields = QFW::$db->select('SHOW FIELDS IN ?#', $this->table);
 		foreach($fields as $field)
 		{
-			$this->fields[$field['Field']]['class'] = $this->getFieldClass($field);
+			$this->fields[$field['Field']]['class'] = $this->getFieldClass($field,
+				isset($this->fields[$field['Field']]['type']) ?
+				$this->fields[$field['Field']]['type'] : false);
 			if ($field['Key'] == 'PRI')
 				$this->primaryKey = $field['Field'];
 		}
@@ -235,7 +237,7 @@ abstract class ScafoldController extends Controller
 	 * @param string $table Связанная таблица
 	 * @param string $id Ссылочный ключ
 	 * @param string $name Значение связанного поля
-	 * @return ScafoldController
+	 * @return &ScafoldController
 	 */
 	protected function foregen($colum, $table, $id, $name)
 	{
@@ -257,7 +259,7 @@ abstract class ScafoldController extends Controller
 	 * @param string|array $colum Колонка<br>
 	 * Или массив ключи - колонки, значения заголовки
 	 * @param string $title Заголовок
-	 * @return ScafoldController
+	 * @return &ScafoldController
 	 */
 	protected function title($colum, $title='')
 	{
@@ -267,6 +269,27 @@ abstract class ScafoldController extends Controller
 			$colum = array($colum => $title);
 		foreach ($colum as $col=>$tit)
 			$this->fields[$col]['title'] = $tit;
+		return $this;
+	}
+
+	/**
+	 * Принудительно устанавливает класс для поля
+	 *
+	 * <br><br> Вызывается только в конструкторе
+	 *
+	 * @param string|array $colum Колонка<br>
+	 * Или массив ключи - колонки, значения имена классов
+	 * @param string $className Имя класса без префикса
+	 * @return &ScafoldController
+	 */
+	protected function type($colum, $className='')
+	{
+		if ($this->setup)
+			throw new Exception('Настройка таблицы закончена', 1);
+		if (!is_array($colum))
+			$colum = array($colum => $className);
+		foreach ($colum as $col=>$t)
+			$this->fields[$col]['type'] = 'Scafold_'.$t;
 		return $this;
 	}
 
@@ -317,10 +340,14 @@ abstract class ScafoldController extends Controller
 	 * Фабрика объектов полей
 	 *
 	 * @param array $fieldInfo Информация о поле из базы данных
+	 * @param string|false $class Жестко указанный класс
 	 * @return Scafold_Field Класс поля
 	 */
-	private function getFieldClass($fieldInfo)
+	private function getFieldClass($fieldInfo, $class = false)
 	{
+		if ($class)
+			return new $class($fieldInfo);
+
 		return new Scafold_Field($fieldInfo);
 	}
 
