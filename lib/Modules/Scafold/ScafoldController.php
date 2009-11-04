@@ -1,5 +1,6 @@
 <?php
 
+require_once LIBPATH.'/Modules/Scafold/Fields.php';
 require_once 'Controller.php';
 
 /**
@@ -33,12 +34,28 @@ abstract class ScafoldController extends Controller
 	private $ControllerUrl;
 	/** @var array Массив методов */
 	private $methods;
+	/** @var boolean Флаг окончания настройки */
+	private $setup = false;
 
+	/**
+	 * Конструктор вызывать только после настройки таблицы
+	 */
 	public function  __construct()
 	{
+		$this->setup = true;
 		parent::__construct();
 		$this->ControllerUrl = QFW::$router->module.'/'.QFW::$router->controller;
 		$this->methods = array_flip(get_class_methods($this));
+
+		//Получаем данные о полях
+		$fields = QFW::$db->select('SHOW FIELDS IN ?#', $this->table);
+		foreach($fields as $field)
+		{
+			$this->fields[$field['Field']]['class'] = $this->getFieldClass($field);
+			if ($field['Key'] == 'PRI')
+				$this->primaryKey = $field['Field'];
+		}
+
 		//Общая информация о таблице
 		QFW::$view->assign(array(
 			'methods' => $this->methods,
@@ -98,21 +115,27 @@ abstract class ScafoldController extends Controller
 		
 		if ($_SERVER['REQUEST_METHOD'] == 'POST' && count($_POST['data'])>0)
 		{
+			//Обработка результата редактирования
 			$data = $_POST['data'];
 			foreach ($data as $k=>$v)
 			{
-				if (!isset($this->methods['validator_'.ucfirst($k)]))
-					continue;
-				$res = call_user_func(array(&$this, 'validator_'.ucfirst($k)), $v);
+				if (isset($this->methods['validator_'.ucfirst($k)]))
+					$res = call_user_func(array(&$this, 'validator_'.ucfirst($k)), $v);
+				else
+					$res = $this->fields[$k]['class']->validator($v);
 				if ($res !== true)
 					$errors[$k] = $res;
 			}
+			//Если ошибок нет, то записываем в базу изменения
 			if (count($errors) == 0)
 			{
 				//Обработка данных после POST
 				foreach ($data as $k=>$v)
 					if (isset($this->methods['proccess_'.ucfirst($k)]))
 						$data[$k] = call_user_func(array(&$this, 'proccess_'.ucfirst($k)), $v);
+					else
+						$data[$k] = $this->fields[$k]['class']->proccess($v);
+
 				if ($id == -1)
 					QFW::$db->query('INSERT INTO ?#(?#) VALUES(?a)',
 						$this->table, array_keys($data), array_values($data));
@@ -140,9 +163,8 @@ abstract class ScafoldController extends Controller
 		{
 			//получение дефолтовых значений для новой записи
 			$data = array();
-			$fields = QFW::$db->select('SHOW FIELDS IN ?#', $this->table);
-			foreach ($fields as $v)
-				$data[$v['Field']]= $v['Default'] == 'CURRENT_TIMESTAMP' ? '' : $v['Default'];
+			foreach ($this->fields as $f=>$info)
+				$data[$f] = $info['class']->def();
 		}
 		else
 			$data = QFW::$db->selectRow('SELECT * FROM ?# WHERE ?#=?',
@@ -188,11 +210,15 @@ abstract class ScafoldController extends Controller
 	/**
 	 * Скрывает при выводе и редактировании указанные колонки
 	 *
+	 * <br><br> Вызывается только в конструкторе
+	 *
 	 * @param string|array $colums Колонка или массив колонок, которые нужно скрыть
 	 * @return ScafoldController
 	 */
 	protected function hide($colums)
 	{
+		if ($this->setup)
+			throw new Exception('Настройка таблицы закончена', 1);
 		if (!is_array($colums))
 			$colums = array($colums);
 		foreach ($colums as $col)
@@ -203,6 +229,8 @@ abstract class ScafoldController extends Controller
 	/**
 	 * Устанавливает поле как зависимое от другой таблицы
 	 *
+	 * <br><br> Вызывается только в конструкторе
+	 *
 	 * @param string $colum Колонка
 	 * @param string $table Связанная таблица
 	 * @param string $id Ссылочный ключ
@@ -211,6 +239,8 @@ abstract class ScafoldController extends Controller
 	 */
 	protected function foregen($colum, $table, $id, $name)
 	{
+		if ($this->setup)
+			throw new Exception('Настройка таблицы закончена', 1);
 		$this->fields[$colum]['foregen'] = array(
 			'field' => $name,
 			'table' => $table,
@@ -222,6 +252,8 @@ abstract class ScafoldController extends Controller
 	/**
 	 * Устанавливает заголовки для столбцов
 	 *
+	 * <br><br> Вызывается только в конструкторе
+	 *
 	 * @param string|array $colum Колонка<br>
 	 * Или массив ключи - колонки, значения заголовки
 	 * @param string $title Заголовок
@@ -229,6 +261,8 @@ abstract class ScafoldController extends Controller
 	 */
 	protected function title($colum, $title='')
 	{
+		if ($this->setup)
+			throw new Exception('Настройка таблицы закончена', 1);
 		if (!is_array($colum))
 			$colum = array($colum => $title);
 		foreach ($colum as $col=>$tit)
@@ -277,6 +311,17 @@ abstract class ScafoldController extends Controller
 			$foregen['join'] = call_user_func_array(array(&QFW::$db, 'subquery'), $args);
 		}
 		return $foregen;
+	}
+
+	/**
+	 * Фабрика объектов полей
+	 *
+	 * @param array $fieldInfo Информация о поле из базы данных
+	 * @return Scafold_Field Класс поля
+	 */
+	private function getFieldClass($fieldInfo)
+	{
+		return new Scafold_Field($fieldInfo);
 	}
 
 }

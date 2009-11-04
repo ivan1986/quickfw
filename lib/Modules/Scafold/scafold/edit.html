@@ -29,16 +29,7 @@
 					if ($id == $v) echo 'selected="selected"';
 					?>><?php echo $this->esc($value) ?></option>
 			<?php } ?></select><?php
-		} else { ?>
-		<input type="text" 
-			   name="data[<?php echo $k ?>]"
-			   default="<?php echo $this->esc($v) ?>"
-			   <?php //добавляем валидатор, если он указан для поля
-			   if (isset($methods['validator_'.ucfirst($k)]))
-					echo 'meta:validator="'.ucfirst($k).'"';
-				?>
-		/>
-		<?php } ?>
+		} else { echo $i['class']->editor($v); } ?>
 	</p>
 <?php } ?>
 	<input type="submit" value="Отправить" name="send" />

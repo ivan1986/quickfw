@@ -133,9 +133,13 @@ class Templater_PlainView
 		return $this->P->HeaderFilter($content);
 	}
 
-	//Функции ескейпинга с учетом utf8
-	public function esc($s) { return htmlspecialchars($s,ENT_QUOTES,'UTF-8');}
-
+	/**
+	 * Функции ескейпинга с учетом utf8
+	 *
+	 * @param string $s Исходная строка 
+	 * @return string htmlspecialchars($s, ENT_QUOTES, 'UTF-8')
+	 */
+	public function esc($s) { return htmlspecialchars($s, ENT_QUOTES, 'UTF-8');}
 
 }
 
