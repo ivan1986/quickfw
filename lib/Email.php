@@ -169,6 +169,30 @@ class Email
 	}
 
 	/**
+	 * Возвращает массив из raw данных, которые подставляются в mail
+	 *
+	 * @return array Хеш subject, message, headers
+	 */
+	public function getRaw()
+	{
+		//Сообщение изменилось - переформируем
+		if (empty($this->message))
+		{
+			if (!empty($this->html))
+				$this->prepareHtml();
+			elseif(!empty($this->files))
+				$this->prepareVsAttache();
+			else
+				$this->prepare();
+		}
+		return array(
+			'subject' => $this->subject,
+			'message' => $this->message,
+			'headers' => $this->headers,
+		);
+	}
+
+	/**
 	 * Собирает сообщение в html формате
 	 *
 	 * @uses headers
