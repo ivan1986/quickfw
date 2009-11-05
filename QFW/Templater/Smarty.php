@@ -143,7 +143,7 @@ class Templater_Smarty
 	public function block($block)
 	{
 		//TODO: убрать ненужную переменную после перехода на php 5.3
-		$args = func_get_args()
+		$args = func_get_args();
 		return call_user_func_array(array(&QFW::$router, 'blockRoute'), $args);
 	}
 
