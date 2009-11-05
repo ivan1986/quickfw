@@ -94,7 +94,9 @@ class Templater_PlainView
 
 	public function block($block)
 	{
-		return call_user_func_array(array(&QFW::$router, 'blockRoute'), func_get_args());
+		//TODO: убрать ненужную переменную после перехода на php 5.3
+		$args = func_get_args()
+		return call_user_func_array(array(&QFW::$router, 'blockRoute'), $args);
 	}
 
 	public function render($tmpl)
