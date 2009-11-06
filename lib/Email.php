@@ -131,25 +131,18 @@ class Email
 	}
 
 	/**
+	 * Отправка письма на указанный адрес или список адресов
 	 *
 	 * @param string|array[]string|array[string]string $to Адреса получателей<br>
-	 * Строка - email | Хеш (Ключ - email, значение - имя) | Массив хешей
+	 * Строка - email | Хеш (Ключ - email, значение - имя) или
+	 * (ключ - число, значение email) | Массив хешей
 	 * @param boolean $join Одно письмо с множеством адресов в to
 	 * @return Email Указатель на себя
 	 */
 	public function send($to, $join = false)
 	{
-		//Сообщение изменилось - переформируем
-		if (empty($this->message))
-		{
-			if (!empty($this->html))
-				$this->prepareHtml();
-			elseif(!empty($this->files))
-				$this->prepareVsAttache();
-			else
-				$this->prepare();
-		}
-
+		$this->prep();
+		
 		if(!is_array($to))
 			$to = array($to);
 		foreach($to as $k=>$v)
@@ -175,21 +168,43 @@ class Email
 	 */
 	public function getRaw()
 	{
-		//Сообщение изменилось - переформируем
-		if (empty($this->message))
-		{
-			if (!empty($this->html))
-				$this->prepareHtml();
-			elseif(!empty($this->files))
-				$this->prepareVsAttache();
-			else
-				$this->prepare();
-		}
+		$this->prep();
+		
 		return array(
 			'subject' => $this->subject,
 			'message' => $this->message,
 			'headers' => $this->headers,
 		);
+	}
+
+	/**
+	 * Переформирует сообщение, если оно изменилось
+	 */
+	private function prep()
+	{
+		if (!empty($this->message))
+			return;
+		//Сообщение изменилось - переформируем
+
+		$headers = '';
+
+		if ($this->from)	$headers.='From: '.$this->from."\r\n";
+		if ($this->cc)		$headers.='Cc: '.$this->cc."\r\n";
+		if ($this->replay)	$headers.='Reply-To: '.$this->replay."\r\n";
+		if ($this->subject)	$headers.='Subject: '.$this->subject."\r\n";
+
+		$headers.='Date: '.date('r')."\r\n";
+		$headers.="X-Mailer: php script\r\n";
+		$headers.="MIME-Version: 1.0\r\n";
+
+		$this->headers = $headers;
+
+		if (!empty($this->html))
+			$this->prepareHtml();
+		elseif(!empty($this->files))
+			$this->prepareWithAttache();
+		else
+			$this->prepare();
 	}
 
 	/**
@@ -205,14 +220,7 @@ class Email
 
 		$headers = '';
 		$message = '';
-		if ($this->from)	$headers.='From: '.$this->from."\r\n";
-		if ($this->cc)		$headers.='Cc: '.$this->cc."\r\n";
-		if ($this->replay)	$headers.='Reply-To: '.$this->replay."\r\n";
-		if ($this->subject) $headers.='Subject: '.$this->subject."\r\n";
-
-		$headers.='Date: '.date('r')."\r\n";
-		$headers.="X-Mailer: php script\r\n";
-		$headers.="MIME-Version: 1.0\r\n";
+		
 		$headers.="Content-Type: multipart/alternative;\r\n";
 		$headers.="  boundary=\"".$baseboundary."\"\r\n";
 		$headers.="This is a multi-part message in MIME format.\r\n";
@@ -247,7 +255,7 @@ class Email
 		$message.="--".$newboundary."--\r\n\r\n";
 		$message.="--".$baseboundary."--\r\n";
 
-		$this->headers = $headers;
+		$this->headers.= $headers;
 		$this->message = $message;
 	}
 
@@ -257,20 +265,13 @@ class Email
 	 * @uses headers
 	 * @uses message
 	 */
-	private function prepareVsAttache()
+	private function prepareWithAttache()
 	{
 		$boundary = "------------".strtoupper(md5(uniqid('file')));
 
 		$headers = '';
 		$message = '';
-		if ($this->from)	$headers.='From: '.$this->from."\r\n";
-		if ($this->cc)		$headers.='Cc: '.$this->cc."\r\n";
-		if ($this->replay)	$headers.='Reply-To: '.$this->replay."\r\n";
-		if ($this->subject) $headers.='Subject: '.$this->subject."\r\n";
 
-		$headers.='Date: '.date('r')."\r\n";
-		$headers.="X-Mailer: php script\r\n";
-		$headers.="MIME-Version: 1.0\r\n";
 		$headers.="Content-Type: multipart/mixed;\r\n";
 		$headers.="  boundary=\"".$boundary."\"\r\n";
 		$headers.="This is a multi-part message in MIME format.\r\n";
@@ -296,7 +297,7 @@ class Email
 
 		$message.="--".$boundary."--\r\n\r\n";
 
-		$this->headers = $headers;
+		$this->headers.= $headers;
 		$this->message = $message;
 	}
 
@@ -312,19 +313,12 @@ class Email
 
 		$headers = '';
 		$message = '';
-		if ($this->from)	$headers.='From: '.$this->from."\r\n";
-		if ($this->cc)		$headers.='Cc: '.$this->cc."\r\n";
-		if ($this->replay)	$headers.='Reply-To: '.$this->replay."\r\n";
-		if ($this->subject) $headers.='Subject: '.$this->subject."\r\n";
 
-		$headers.='Date: '.date('r')."\r\n";
-		$headers.="X-Mailer: php script\r\n";
-		$headers.="MIME-Version: 1.0\r\n";
 		$headers.="Content-Type: text/plain; charset=utf-8\r\n";
 		$headers.="Content-Transfer-Encoding: 8bit\r\n\r\n";
 		$message.=$this->plain."\r\n\r\n";
 
-		$this->headers = $headers;
+		$this->headers.= $headers;
 		$this->message = $message;
 	}
 
