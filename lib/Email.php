@@ -191,7 +191,6 @@ class Email
 		if ($this->from)	$headers.='From: '.$this->from."\r\n";
 		if ($this->cc)		$headers.='Cc: '.$this->cc."\r\n";
 		if ($this->replay)	$headers.='Reply-To: '.$this->replay."\r\n";
-		if ($this->subject)	$headers.='Subject: '.$this->subject."\r\n";
 
 		$headers.='Date: '.date('r')."\r\n";
 		$headers.="X-Mailer: php script\r\n";
