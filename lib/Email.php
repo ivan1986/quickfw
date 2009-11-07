@@ -304,8 +304,6 @@ class Email
 	 */
 	private function prepare()
 	{
-		$boundary = "------------".strtoupper(md5(uniqid('')));
-
 		$headers = '';
 		$message = '';
 
