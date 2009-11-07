@@ -1,6 +1,6 @@
 <?php
 /**
- * Отправка Email С аттачами и в html формате
+ * Отправка Email c аттачами и в html формате
  *
  * @author ivan1986
  */
@@ -26,11 +26,6 @@ class Email
 	/** @var string Заголовки (заполняется функцией build) */
 	private $headers = '';
 
-	public function __construct()
-	{
-		
-	}
-
 	/**
 	 * Устанавливает поле From
 	 *
@@ -41,7 +36,7 @@ class Email
 	public function setFrom($email, $name='')
 	{
 		$this->message = $this->headers = '';
-		$this->from = empty($name) ? $email : '=?utf-8?B?'.base64_encode($name).'?= <'.$email.'>';
+		$this->from = empty($name) ? $email : mb_encode_mimeheader($name, 'utf-8').' <'.$email.'>';
 		return $this;
 	}
 
@@ -55,7 +50,7 @@ class Email
 	public function setCc($email, $name='')
 	{
 		$this->message = $this->headers = '';
-		$this->cc = empty($name) ? $email : '=?utf-8?B?'.base64_encode($name).'?= <'.$email.'>';
+		$this->cc = empty($name) ? $email : mb_encode_mimeheader($name, 'utf-8').' <'.$email.'>';
 		return $this;
 	}
 
@@ -68,7 +63,8 @@ class Email
 	public function setSubject($subject)
 	{
 		$this->message = $this->headers = '';
-		$this->subject = '=?utf-8?B?'.base64_encode($subject).'?=';
+		$this->subject = mb_encode_mimeheader($subject, 'utf-8');
+
 		return $this;
 	}
 	
@@ -82,7 +78,7 @@ class Email
 	public function setReplay($email, $name='')
 	{
 		$this->message = $this->headers = '';
-		$this->replay = empty($name) ? $email : '=?utf-8?B?'.base64_encode($name).'?= <'.$email.'>';
+		$this->replay = empty($name) ? $email : mb_encode_mimeheader($name, 'utf-8').' <'.$email.'>';
 		return $this;
 	}
 
@@ -141,13 +137,13 @@ class Email
 	 */
 	public function send($to, $join = false)
 	{
-		$this->prep();
+		$this->build();
 		
 		if(!is_array($to))
 			$to = array($to);
 		foreach($to as $k=>$v)
 			if (!is_int($k))
-				$to[$k] = '=?utf-8?B?'.base64_encode($v).'?= <'.$k.'>';
+				$to[$k] = mb_encode_mimeheader($v, 'utf-8').' <'.$k.'>';
 		$to = array_values($to);
 
 		if ($join)
@@ -168,7 +164,7 @@ class Email
 	 */
 	public function getRaw()
 	{
-		$this->prep();
+		$this->build();
 		
 		return array(
 			'subject' => $this->subject,
@@ -180,7 +176,7 @@ class Email
 	/**
 	 * Переформирует сообщение, если оно изменилось
 	 */
-	private function prep()
+	private function build()
 	{
 		if (!empty($this->message))
 			return;
