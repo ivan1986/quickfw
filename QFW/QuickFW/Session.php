@@ -146,14 +146,17 @@ class QuickFW_Session
 	 */
 	private function start()
 	{
-		session_set_save_handler(
-			array('QuickFW_Session','open'),
-			array('QuickFW_Session','close'),
-			array('QuickFW_Session','read'),
-			array('QuickFW_Session','write'),
-			array('QuickFW_Session','destroy'),
-			array('QuickFW_Session','gc')
-		);
+		if (QFW::$config['QFW']['cacheSessions'])
+		{
+			session_set_save_handler(
+				array('QuickFW_Session','open'),
+				array('QuickFW_Session','close'),
+				array('QuickFW_Session','read'),
+				array('QuickFW_Session','write'),
+				array('QuickFW_Session','destroy'),
+				array('QuickFW_Session','gc')
+			);
+		}
 		session_start();
 	}
 	
