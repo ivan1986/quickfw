@@ -219,8 +219,7 @@ abstract class ScafoldController extends Controller
 	 */
 	protected function hide($colums)
 	{
-		if ($this->setup)
-			throw new Exception('Настройка таблицы закончена', 1);
+		$this->endTest();
 		if (!is_array($colums))
 			$colums = array($colums);
 		foreach ($colums as $col)
@@ -241,8 +240,7 @@ abstract class ScafoldController extends Controller
 	 */
 	protected function foregen($colum, $table, $id, $name)
 	{
-		if ($this->setup)
-			throw new Exception('Настройка таблицы закончена', 1);
+		$this->endTest();
 		$this->fields[$colum]['foregen'] = array(
 			'field' => $name,
 			'table' => $table,
@@ -263,8 +261,7 @@ abstract class ScafoldController extends Controller
 	 */
 	protected function title($colum, $title='')
 	{
-		if ($this->setup)
-			throw new Exception('Настройка таблицы закончена', 1);
+		$this->endTest();
 		if (!is_array($colum))
 			$colum = array($colum => $title);
 		foreach ($colum as $col=>$tit)
@@ -284,8 +281,7 @@ abstract class ScafoldController extends Controller
 	 */
 	protected function type($colum, $className='')
 	{
-		if ($this->setup)
-			throw new Exception('Настройка таблицы закончена', 1);
+		$this->endTest();
 		if (!is_array($colum))
 			$colum = array($colum => $className);
 		foreach ($colum as $col=>$t)
@@ -349,6 +345,12 @@ abstract class ScafoldController extends Controller
 			return new $class($fieldInfo);
 
 		return new Scafold_Field($fieldInfo);
+	}
+
+	private function endTest()
+	{
+		if ($this->setup)
+			throw new Exception('Ты что творишь, ща руки оторву. Я же уже все данные извлек.', 1);
 	}
 
 }
