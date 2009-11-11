@@ -164,7 +164,7 @@ class HTML_MetaForm extends HTML_SemiParser
 	 */
 	
 	
-	protected function tag_form($tag)
+	function tag_form($tag)
 	{
 		// Unfortunately we MUST process ALL forms (including GET),
 		// because container handlers are called AFTER tag handlers.
