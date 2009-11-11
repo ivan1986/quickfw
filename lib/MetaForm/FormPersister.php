@@ -46,7 +46,7 @@
  * ever think about overhead costs of parsing.
  *
  * @author Dmitry Koterov 
- * @version 1.111
+ * @version 1.112
  * @package HTML 
  */
 require_once dirname(__FILE__).'/SemiParser.php';
@@ -339,7 +339,9 @@ class HTML_FormPersister extends HTML_SemiParser
 			if ($isArrayLike && !is_array($value)) $value = explode(';', $value);
 			$fromForm = false;
 		} else {
-		   $value = '';
+			// If no data is found in GET, POST etc., always return false in boolean mode.
+			if ($isBoolean) return false;
+			$value = '';
 		}
 		/*if ($fromForm) { - magic_quotes_gpc не нужна
 			// Remove slashes on stupid magic_quotes_gpc mode.
@@ -359,7 +361,11 @@ class HTML_FormPersister extends HTML_SemiParser
 			return in_array(strval($attrValue), array_map('strval', $value), true);
 		} else {
 			if ($isBoolean) {
-				// Non-array boolean elements must be equal to values to match.
+				// Non-array boolean elements must be boolean-equal to match, OR
+				// GET-POST-... values must be === true. Why? Because the followind
+				// checkboxes must be turned on:
+				// - $_POST['a'] = true; ... <input type="checkbox" name="a" value="x">
+				// - $_POST['b'] = ""; ...   <input type="checkbox" name="b" value="">
 				return (bool)strval($value) === (bool)$attrValue;
 			} else {
 				// This is not boolean nor array field. Return it now.
