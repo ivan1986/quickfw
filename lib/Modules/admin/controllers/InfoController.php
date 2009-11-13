@@ -25,7 +25,7 @@ class InfoController extends Controller
 
 	public function phpinfoAction()
 	{
-		echo QFW::$view->block('nav/menu/'.$this->userdata['type']);
+		echo QFW::$view->displayMain('');
 		phpinfo();
 		die('');
 	}

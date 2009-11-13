@@ -20,6 +20,11 @@ class QuickFW_Plugs
 		return QFW::$config['redirection']['baseUrl'];
 	}
 
+	public function siteDefUrl($url, $get='')
+	{
+		return $this->siteUrl(QFW::$router->delDef($url), $get);
+	}
+
 	public function siteUrl($url,$get='')
 	{
 		if (QFW::$config['redirection']['useRewrite'])
