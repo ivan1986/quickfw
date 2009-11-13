@@ -141,8 +141,8 @@ class QuickFW_Auth
 			return false;
 		$username = isset($_POST[self::USERNAME_FIELD]) ? $_POST[self::USERNAME_FIELD] : null;
 		$password = isset($_POST[self::PASSWORD_FIELD]) ? $_POST[self::PASSWORD_FIELD] : null;
-		if(	(strcasecmp(QFW::$config['admin']['login'],    trim($username)) == 0)
-		and	(strcasecmp(QFW::$config['admin']['passw'], trim($password)) == 0)
+		if(	(strcasecmp(QFW::$config['admin']['login'], trim($username)) == 0)
+		&&	(strcasecmp(QFW::$config['admin']['passw'], trim($password)) == 0)
 		)
 			return $username;
 		else
