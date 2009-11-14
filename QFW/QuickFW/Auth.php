@@ -39,11 +39,12 @@ class QuickFW_Auth
 			$this->session();
 		
 		$this->name=$name;
-		$this->userdata = $this->authorized = false;
+		QFW::$userdata = $this->userdata = $this->authorized = false;
 		if (isset($_SESSION[$name]))
 		{
 			$this->authorized = true;
 			$this->userdata = & $_SESSION[$name];
+			QFW::$userdata = & $_SESSION[$this->name];
 			return true;
 		}
 		$this->checkPostData();
@@ -123,6 +124,7 @@ class QuickFW_Auth
 		}
 		$this->authorized = true;
 		$this->userdata = & $_SESSION[$this->name];
+		QFW::$userdata = & $_SESSION[$this->name];
 	}
 	
 	/**

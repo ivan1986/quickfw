@@ -25,7 +25,7 @@ class QuickFW_Plugs
 		return $this->siteUrl(QFW::$router->delDef($url), $get);
 	}
 
-	public function siteUrl($url,$get='')
+	public function siteUrl($url, $get='')
 	{
 		if (QFW::$config['redirection']['useRewrite'])
 			$url = QFW::$router->backrewrite($url);

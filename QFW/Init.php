@@ -25,6 +25,9 @@ class QFW
 	/** @var DbSimple_Generic_Database Подключение к базе данных */
 	static public $db;
 
+	/** @var mixed|false Данные о пользователе */
+	static public $userdata;
+
 	private function __construct() {}
 
 	/**
@@ -59,6 +62,8 @@ class QFW
 		self::$libs = array();
 		//глобальный массив
 		self::$globalData = array();
+		//Данные о пользователе
+		self::$userdata = false;
 
 		//Подключаем шаблонизатор
 		$templ = ucfirst(self::$config['templater']['name']);
