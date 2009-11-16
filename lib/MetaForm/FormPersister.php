@@ -112,20 +112,19 @@ class HTML_FormPersister extends HTML_SemiParser
 		}
 		return $attr;
 	}
-	
+
 	/**
 	 * <INPUT> tag handler.
 	 * See HTML_SemiParser.
 	 */
 	function tag_input($attr)
 	{
-		static $uid = 0;
 		if (isset($attr['type'])) switch (strtolower($attr['type'])) {
 			case 'radio':
 				if (!isset($attr['name'])) return;
 				if (isset($attr['checked']) || !isset($attr['value'])) return;
 				if ($attr['value'] == $this->getCurValue($attr)) $attr['checked'] = 'checked';
-				else unSet($attr['checked']);
+				else unset($attr['checked']);
 				break;
 			case 'checkbox':
 				if (!isset($attr['name'])) return;
@@ -137,7 +136,7 @@ class HTML_FormPersister extends HTML_SemiParser
 			case 'submit':
 				if (isset($attr['confirm'])) {
 					$attr['onclick'] = 'return confirm("' . $attr['confirm'] . '")';
-					unSet($attr['confirm']);
+					unset($attr['confirm']);
 				} 
 				break;
 			case 'text': case 'password': case 'hidden': case '':
@@ -147,21 +146,7 @@ class HTML_FormPersister extends HTML_SemiParser
 					$attr['value'] = $this->getCurValue($attr);
 				break;
 		}
-		// Handle label pseudo-attribute. Button is placed RIGHTER
-		// than the text if label text ends with "^". Example:
-		// <input type=checkbox label="hello">   ==>  [x]hello
-		// <input type=checkbox label="hello^">  ==>  hello[x]
-		if (isset($attr['label'])) {
-			$text = $attr['label'];
-			if (!isset($attr['id'])) $attr['id'] = 'FPlab' . ($uid++);
-			$right = 1;
-			if ($text[strlen($text)-1] == '^') {
-				$right = 0;
-				$text = substr($text, 0, -1);
-			} 
-			unSet($attr['label']);
-			$attr[$right? '_right' : '_left'] = '<label for="'.$this->quoteHandler($attr['id']).'">' . $text . '</label>';
-		}
+		$this->proccess_label($attr);
 		// We CANNOT return $orig_attr['_orig'] if attributes are not modified,
 		// because we know nothing about following handlers. They may need
 		// the parsed attributes, not a plain text.
@@ -178,6 +163,7 @@ class HTML_FormPersister extends HTML_SemiParser
 		if (trim($attr['_text']) == '') {
 			$attr['_text'] = $this->quoteHandler($this->getCurValue($attr));
 		}
+		$this->proccess_label($attr);
 		unset($attr['default']);
 		return $attr;
 	} 
@@ -261,7 +247,8 @@ class HTML_FormPersister extends HTML_SemiParser
 			}
 			$body = join('', $parts);
 		}
- 
+ 		$this->proccess_label($attr);
+
 		$attr['_text'] = $body;
 		unset($attr['default']);
 		return $attr;
@@ -271,6 +258,38 @@ class HTML_FormPersister extends HTML_SemiParser
 	 * Other methods.
 	 */
 
+	/**
+	 * Обрабатывает псевдо-атрибут label для всех тегов
+	 *
+	 * <br>Кнопки распологаются справа от текста,
+	 * если последний символ атрибута ^
+	 *
+	 * @param array $attr атрибуты тега (ссылка)
+	 * @example <br>&lt;input type="checkbox" label="hello" /&gt;   ==&gt;  [x]hello
+	 * <br>&lt;input type="checkbox" label="hello^" /&gt;  ==&gt;  hello[x]
+	 */
+	private function proccess_label(&$attr)
+	{
+		if (!isset($attr['label']))
+			return;
+
+		/** @var int текущее значение id */
+		static $uid = 0;
+
+		$text = $attr['label'];
+		if (!isset($attr['id']))
+			$attr['id'] = 'FPlab' . ($uid++);
+		$right = 1;
+		if ($text[strlen($text)-1] == '^')
+		{
+			$right = 0;
+			$text = substr($text, 0, -1);
+		}
+		unset($attr['label']);
+		$attr[$right? '_right' : '_left'] =
+			'<label for="'.$this->quoteHandler($attr['id']).'">' . $text . '</label>';
+	}
+	
 	/**
 	 * Create set of <option> tags from array.
 	 */
@@ -325,7 +344,7 @@ class HTML_FormPersister extends HTML_SemiParser
 		if ($isBoolean && false !== ($p = strpos($name, '[]'))) {
 			$isArrayLike = true;
 			$name = substr($name, 0, $p) . substr($name, $p + 2);
-		} 
+		}
 		// Search for value in ALL arrays,
 		// EXCEPT $_REQUEST, because it also holds Cookies!
 		$fromForm = true;
