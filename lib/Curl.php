@@ -8,6 +8,7 @@ class Curl
 {
 	public $cookies = array();
 	public $cookie_file = '';
+	public $persist_cookie_file = false;
 	public $headers = array();
 	public $options = array();
 	public $referer = '';
@@ -17,16 +18,21 @@ class Curl
 	protected $error = '';
 	protected $clear;
 
-	public function __construct()
+	public function __construct($cookieFile='')
 	{
 		$this->user_agent  = 'Opera/10.00 (X11; Linux i686 ; U; ru) Presto/2.2.0';
 		$this->proxy       = isset(QFW::$config['host']['proxy']) ? QFW::$config['host']['proxy'] : '';
-		$this->cookie_file = tempnam(sys_get_temp_dir(), 'curl_cookie');
+		if ($cookieFile)
+			$this->persist_cookie_file = true;
+		else
+			$cookieFile = tempnam(sys_get_temp_dir(), 'curl_cookie');
+		$this->cookie_file = $cookieFile;
 	}
 
 	public function __destruct()
 	{
-		unlink($this->cookie_file);
+		if (!$this->persist_cookie_file)
+			unlink($this->cookie_file);
 	}
 
 	public function addCookie($name,$value)
