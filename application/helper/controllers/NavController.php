@@ -41,7 +41,7 @@ class NavController
 		if (count($items) == 0)
 			return '';
 		if ($cur == false)
-			$cur = QFW::$router->UriPath;
+			$cur = QFW::$router->RequestUri;
 		$result = '<ul'.($id?' id="'.$id.'"':'').'>';
 		foreach ($items as $k=>$v)
 		{
