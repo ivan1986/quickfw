@@ -8,7 +8,7 @@ olddir=`pwd`
 
 cd ..
 rm -rf $1
-cp -R $olddir/ ./$1
+svn export $olddir/ ./$1
 cd $1
 
 find ./ -name '.svn' | xargs rm -rf $1
@@ -17,12 +17,8 @@ find ./tmp/* -type f | xargs rm -rf $1
 rm -rf addons
 rm -rf lib/datagrid
 rm -rf www/datagrid
-./prem.sh 777
+./perm.sh 777
 rm -f release.sh
-
-rm -f .project
-rm -rf .cache
-rm -rf .settings
 
 cd ..
 rm -f $1.tar.gz
