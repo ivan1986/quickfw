@@ -1,10 +1,5 @@
 <?php
 
-require QFWPATH.'/QuickFW/Cache.php';
-require QFWPATH.'/QuickFW/Plugs.php';
-require QFWPATH.'/QuickFW/AutoDbSimple.php';
-require QFWPATH.'/QuickFW/Router.php';
-
 class QFW
 {
 	/** @var array Глобальный массив данных */
@@ -27,6 +22,9 @@ class QFW
 
 	/** @var mixed|false Данные о пользователе */
 	static public $userdata;
+
+	/** @var JsHttpRequest|false JsHttpRequest, если был выполнени Ajax запрос */
+	static public $ajax = false;
 
 	private function __construct() {}
 
@@ -58,6 +56,9 @@ class QFW
 	{
 		self::$config = self::config();
 
+		require QFWPATH.'/QuickFW/Cache.php';
+		require QFWPATH.'/QuickFW/Plugs.php';
+
 		//Библиотеки
 		self::$libs = array();
 		//глобальный массив
@@ -68,28 +69,37 @@ class QFW
 		//Подключаем шаблонизатор
 		$templ = ucfirst(self::$config['templater']['name']);
 		$class = 'Templater_'.$templ;
-		require (QFWPATH.'/Templater/'.$templ.'.php');
+		require QFWPATH.'/Templater/'.$templ.'.php';
 		self::$view = new $class(APPPATH,
 			isset(self::$config['templater']['def_tpl']) ? self::$config['templater']['def_tpl'] : '');
 
+		//Если запрос через JsHttp, то инициализируем библиотеку
+		//и устанавливаем пустой главный шаблон
+		if (isset($_REQUEST['JsHttpRequest']))
+		{
+			require_once LIBPATH.'/JsHttpRequest.php';
+			//QFW::$libs['JsHttpRequest'] для совместимости	со старым вариантом
+			self::$ajax = QFW::$libs['JsHttpRequest'] = new JsHttpRequest('utf-8');
+			self::$view->mainTemplate = '';
+		}
+
+		require QFWPATH.'/QuickFW/AutoDbSimple.php';
 		//Инициализируем класс базы данных
 		self::$db = new QuickFW_AutoDbSimple(self::$config['database']);
 
 		//выставляем заголовок с нужной кодировкой
-		if (isset(self::$config['host']['encoding']))
+		if (!empty(self::$config['host']['encoding']))
 			header("Content-Type: text/html; charset=".self::$config['host']['encoding']);
 		//Включаем обработку фатальных ошибок, если в конфиге указано
-		if (isset(self::$config['QFW']['catchFE']) && self::$config['QFW']['catchFE'])
+		if (!empty(self::$config['QFW']['catchFE']))
 			require QFWPATH.'/QuickFW/Error.php';
 
+		require QFWPATH.'/QuickFW/Router.php';
 		self::$router = new QuickFW_Router(APPPATH);
 
 	}
 }
 
 QFW::Init();
-
-if (isset($_REQUEST['JsHttpRequest']))
-	require_once LIBPATH.'/JsHttpRequest.php';
 
 ?>
