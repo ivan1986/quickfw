@@ -7,18 +7,15 @@ class Templater_PlainView
 
 	/** @var QuickFW_Plugs Плагины фреймворка */
 	public $P;
+	
+	/** @var String Основной шаблон (путь относительно директории шаблонов)	*/
 	public $mainTemplate;
 
 	public function __construct($tmplPath, $mainTmpl)
 	{
 		$this->_vars = array();
-		if (null !== $tmplPath)
-		{
-			$this->_tmplPath = $tmplPath;
-		}
-
+		$this->_tmplPath = $tmplPath;
 		$this->P = QuickFW_Plugs::getInstance();
-
 		$this->mainTemplate = $mainTmpl;
 	}
 
@@ -28,12 +25,11 @@ class Templater_PlainView
 	* Allows setting a specific key to the specified value, OR passing an array
 	* of key => value pairs to set en masse.
 	*
-	* @see __set()
 	* @param string|array $spec The assignment strategy to use (key or array of key
 	* => value pairs)
 	* @param mixed $value (Optional) If assigning a named variable, use this
 	* as the value.
-	* @return void
+	* @return Templater_PlainView
 	*/
 	public function assign($spec, $value = null)
 	{
@@ -54,9 +50,9 @@ class Templater_PlainView
 	{
 		if (is_array($spec))
 			foreach ($spec as $item)
-				$this->delete($item);
-		elseif (isset($this->_vars[$spec]))
-				unset($this->_vars[$spec]);
+				unset($this->_vars[$item]);
+		else
+			unset($this->_vars[$spec]);
 	}
 
 	/**
@@ -101,13 +97,7 @@ class Templater_PlainView
 
 	public function render($tmpl)
 	{
-		extract($this->_vars, EXTR_OVERWRITE);
-		$P=&$this->P;
-		ob_start();
-		include($this->_tmplPath . '/' . $tmpl);
-		$content = ob_get_contents();
-		ob_end_clean();
-		return $content;
+		return $this->fetch($name);
 	}
 
 	public function fetch($tmpl)

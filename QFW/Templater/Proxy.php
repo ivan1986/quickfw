@@ -4,6 +4,8 @@ class Templater_Proxy
 {
 	/** @var QuickFW_Plugs Плагины фреймворка */
 	public $P;
+
+	/** @var String Основной шаблон (путь относительно директории шаблонов)	*/
 	public $mainTemplate;
 
 	protected $_vars;
@@ -85,9 +87,9 @@ class Templater_Proxy
 		$this->unsyncronize();
 		if (is_array($spec))
 			foreach ($spec as $item)
-				$this->delete($item);
-		elseif (isset($this->_vars[$spec]))
-				unset($this->_vars[$spec]);
+				unset($this->_vars[$item]);
+		else
+			unset($this->_vars[$spec]);
 	}
 
 	/**

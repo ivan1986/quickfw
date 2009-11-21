@@ -2,18 +2,10 @@
 
 class Templater_Templater
 {
-	/**
-	* Плагины фреймворка - необходимо инициализировать
-	*
-	* @var QuickFW_Plugs
-	*/
+	/** @var QuickFW_Plugs Плагины фреймворка */
 	public $P;
 
-	/**
-	* Основной шаблон (путь относительно директории шаблонов)
-	*
-	* @var String
-	*/
+	/** @var String Основной шаблон (путь относительно директории шаблонов)	*/
 	public $mainTemplate;
 
 
@@ -105,6 +97,7 @@ class Templater_Templater
 	*/
 	public function render($name)
 	{
+		return $this->fetch($name);
 	}
 
 	public function fetch($name)
