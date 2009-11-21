@@ -18,11 +18,14 @@ class Templater_Smarty
 	public $mainTemplate;
 
 	/**
-	 * Init - подключение и инициальзация смарти - вынесено так как только по требованию
+	 * Init - подключение и инициальзация смарти
+	 * вынесено так как только по требованию
 	 *
 	 */
 	protected function Init()
 	{
+		if (!is_file(LIBPATH.'/Smarty/Smarty.class.php'))
+			trigger_error('Install Smarty in '.LIBPATH.'/Smarty', E_USER_ERROR);
 		require LIBPATH.'/Smarty/Smarty.class.php';
 		$this->_smarty = new Smarty;
 
@@ -32,9 +35,8 @@ class Templater_Smarty
 		$this->_smarty->config_dir  = TMPPATH . '/configs';
 		$this->_smarty->cache_dir   = TMPPATH . '/cache';
 
-		if (null !== $this->_tmplPath) {
+		if (null !== $this->_tmplPath)
 			$this->setScriptPath($this->_tmplPath);
-		}
 
 		$this->_smarty->register_resource('block', array(&$this,
 													"getTemplate",
@@ -69,14 +71,14 @@ class Templater_Smarty
 		if (!is_readable($path))
 			return false;
 		$this->_tmplPath = $path;
-		if ($this->_smarty)
-		{
-			$p=explode('/',$path);
-			array_pop($p);
-			$p=array_pop($p);
-			$this->_smarty->template_dir = $path;
-			$this->_smarty->compile_dir = TMPPATH . '/templates_c/'.($p!='templates'?$p:'');
-		}
+		if (!$this->_smarty)
+			return true;
+
+		$p=explode('/',$path);
+		array_pop($p);
+		$p=array_pop($p);
+		$this->_smarty->template_dir = $path;
+		$this->_smarty->compile_dir = TMPPATH . '/templates_c/'.($p!='templates'?$p:'');
 		return true;
 	}
 
@@ -189,30 +191,43 @@ class Templater_Smarty
 		return $this->_smarty;
 	}
 
-	//Block Wrapper
+	/**
+	 * @internal Функция для Smarty
+	 */
 	public static function getTemplate($tpl_name, &$tpl_source, &$smarty)
 	{
 		$tpl_source = '{literal}'.QFW::$router->blockRoute($block).'{/literal}';
 		return true;
 	}
 
+	/**
+	 * @internal Функция для Smarty
+	 */
 	public function getTimestamp($tpl_name, &$tpl_timestamp, &$smarty)
 	{
 		$tpl_timestamp = microtime(true);
 		return true;
 	}
 
+	/**
+	 * @internal Функция для Smarty
+	 */
 	public function isSecure($tpl_name, &$smarty)
 	{
 		return true;
 	}
 
+	/**
+	 * @internal Функция для Smarty
+	 */
 	public function isTrusted($tpl_name, &$smarty)
 	{
 		return false;
 	}
 
-	//Plugins Wrapper
+	/**
+	 * Функция регистрирует плагины в Smarty
+	 */
 	protected function regPlugs()
 	{
 		$this->_smarty->register_function('baseUrl',array($this,'s_baseUrl'));
@@ -264,23 +279,34 @@ class Templater_Smarty
 	public function s_gCSS($params, $content, &$smarty) {return $this->P->CSS($content);}
 
 	public function s_gJS($params, $content, &$smarty)
-		{return $this->P->getHead($content,'JavaScript'.isset($params['name'])?$params['name']:'default',true);}
+	{
+		return $this->P->getHead($content,
+				'JavaScript'.(isset($params['name']) ? $params['name'] : 'default'),true);
+	}
+
 	public function s_oJS($params, $content, &$smarty)
-		{return $this->P->outHead('JavaScript'.isset($params['name'])?$params['name']:'default',"<script type=\"text/javascript\"><!--\n","\n--></script>");}
+	{
+		return $this->P->outHead(
+				'JavaScript'.(isset($params['name']) ? $params['name'] : 'default'),
+				"<script type=\"text/javascript\"><!--\n", "\n--></script>");
+	}
 
 	public function s_outHead($params, &$smarty)
 	{
 		return $this->P->outHead(
-			isset($params['name'])?$params['name']:'default',
-			isset($params['pre'])?$params['pre']:'',
-			isset($params['post'])?$params['post']:''
+			isset($params['name']) ? $params['name'] : 'default',
+			isset($params['pre'])  ? $params['pre']  : '',
+			isset($params['post']) ? $params['post'] : ''
 		);
 	}
+
 	public function s_getHead($params, $content, &$smarty)
 	{
 		if ($content===null)
 			return;
-		return $this->P->getHead($content, isset($params['name'])?$params['name']:'default', isset($params['join']));
+		return $this->P->getHead($content, 
+			isset($params['name']) ? $params['name'] : 'default',
+			isset($params['join']));
 	}
 
 }
