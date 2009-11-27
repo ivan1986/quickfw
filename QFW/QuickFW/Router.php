@@ -164,8 +164,12 @@ class QuickFW_Router
 			$MCA['Params']=$this->parseParams($data);
 		}
 		if (isset($MCA['Error']))
+		{
+			if (QFW::$config['QFW']['release'])
+				return '';
 			return "Ошибка подключения блока ".$Uri." адрес был разобран в\t\t ".
 				$MCA['Path']."\n".$MCA['Error'];
+		}
 
 		list($lpPath, $this->ParentPath, $this->CurPath) =
 			array($this->ParentPath, $this->CurPath, $MCA['Path']);
