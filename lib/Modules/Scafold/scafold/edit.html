@@ -9,7 +9,7 @@
 	if ($k==$info['primaryKey'])
 		continue;
 	$i = isset($fields[$k]) ? $fields[$k] : false;
-	if (isset($i['hide']))
+	if (!empty($i['hide']))
 		continue;
 	?>
 	<p>
