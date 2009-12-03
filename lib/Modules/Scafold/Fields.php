@@ -78,6 +78,11 @@ class Scafold_Field
 		return $value;
 	}
 
+	public function action($id, $action='do')
+	{
+		die('Был вызван метод '.$action.' для поля '. $this->name);
+	}
+
 	/**
 	 * Вызывается при заполнениии формы для вставки
 	 *

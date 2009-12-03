@@ -113,8 +113,7 @@ abstract class ScafoldController extends Controller
 	{
 		//инициализация FormPersister
 		require_once LIBPATH.'/MetaForm/FormPersister.php';
-		$FormPersister = new HTML_FormPersister();
-		ob_start(array(&$FormPersister, 'process'));
+		ob_start(array(new HTML_FormPersister(), 'process'));
 		$errors = array();
 		
 		if ($_SERVER['REQUEST_METHOD'] == 'POST' && count($_POST['data'])>0)
@@ -124,7 +123,7 @@ abstract class ScafoldController extends Controller
 			foreach ($data as $k=>$v)
 			{
 				if (isset($this->methods['validator_'.ucfirst($k)]))
-					$res = call_user_func(array(&$this, 'validator_'.ucfirst($k)), $id, $v);
+					$res = call_user_func(array($this, 'validator_'.ucfirst($k)), $id, $v);
 				else
 					$res = $this->fields[$k]['class']->validator($id, $v);
 				if ($res !== true)
@@ -136,7 +135,7 @@ abstract class ScafoldController extends Controller
 				//Обработка данных после POST
 				foreach ($data as $k=>$v)
 					if (isset($this->methods['proccess_'.ucfirst($k)]))
-						$data[$k] = call_user_func(array(&$this, 'proccess_'.ucfirst($k)), $id, $v);
+						$data[$k] = call_user_func(array($this, 'proccess_'.ucfirst($k)), $id, $v);
 					else
 						$data[$k] = $this->fields[$k]['class']->proccess($id, $v);
 
@@ -195,6 +194,15 @@ abstract class ScafoldController extends Controller
 			$v['class']->proccess($id, false);
 		QFW::$db->query('DELETE FROM ?# WHERE ?#=?',
 			$this->table, $this->primaryKey, $id);
+		QFW::$router->redirect('/'.$this->ControllerUrl.'/index', true);
+	}
+
+	public function fieldAction($name, $id)
+	{
+		$args = func_get_args();
+		array_shift($args);
+		if (isset($this->fields[$name]))
+			call_user_func_array(array($this->fields[$name]['class'], 'action'), $args);
 		QFW::$router->redirect('/'.$this->ControllerUrl.'/index', true);
 	}
 
@@ -315,14 +323,14 @@ abstract class ScafoldController extends Controller
 			$s = str_repeat(', ?s', count($foregen['field']));
 			$args = array_values($foregen['field']);
 			$args = array_merge(array($s), $args);
-			$foregen['field'] = call_user_func_array(array(&QFW::$db, 'subquery'), $args);
+			$foregen['field'] = call_user_func_array(array(QFW::$db, 'subquery'), $args);
 		}
 		if (isset($foregen['join']))
 		{
 			$s = str_repeat("\n ?s", count($foregen['join']));
 			$args = array_values($foregen['join']);
 			$args = array_merge(array($s), $args);
-			$foregen['join'] = call_user_func_array(array(&QFW::$db, 'subquery'), $args);
+			$foregen['join'] = call_user_func_array(array(QFW::$db, 'subquery'), $args);
 		}
 		return $foregen;
 	}
