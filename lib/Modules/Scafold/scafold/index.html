@@ -1,7 +1,7 @@
 <?php echo $pager; ?>
 
 <?php if (count($data)>0) { ?>
-<table id="table_<?php echo $table ?>">
+<table id="table_<?php echo $table ?>" class="scafoldTable">
 <tr>
 	<?php foreach($data[0] as $key=>$v) {
 		$i = isset($fields[$key]) ? $fields[$key] : false;
@@ -19,7 +19,7 @@
 <tr>
 	<?php foreach($row as $key=>$v) {
 		$i = isset($fields[$key]) ? $fields[$key] : false;
-		if (isset($i['hide']))
+		if (!empty($i['hide']))
 			continue;
 		?>
 		<td><?php //отображение обычного не связанного поля

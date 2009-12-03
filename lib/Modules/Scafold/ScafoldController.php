@@ -215,7 +215,8 @@ abstract class ScafoldController extends Controller
 	 * <br><br> Вызывается только в конструкторе
 	 *
 	 * @param string|array $colums Колонка или массив колонок, которые нужно скрыть
-	 * @param boolean $hide true - скрыть<br>false - показать
+	 * @param boolean $hide true - скрыть<br>false - показать<br>
+	 * по умолчанию показываются все кромя первичного ключа при редактировании
 	 * @return ScafoldController
 	 */
 	protected function hide($colums, $hide=true)
