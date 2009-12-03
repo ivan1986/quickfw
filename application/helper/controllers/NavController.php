@@ -30,13 +30,14 @@ class NavController
 	/**
 	 * Вывод меню списком с подсветкой текущего элемента
 	 *
-	 * @param array $items Массив элементов: ключ - заголовок, значение адресс
-	 * @param string $cur текущий адресс
+	 * @param array $items Массив элементов:
+	 * <br>ключ - заголовок, значение адресс|false
 	 * @param string $id id для элемента ul - для оформления
+	 * @param string $cur текущий адресс
 	 * @param boolean $delDef Применять к ссылкам функцию QFW::$router->delDef
 	 * @return string Сформированное меню
 	 */
-	public function menuBlock($items, $cur=false, $id='', $delDef = true)
+	public function menuBlock($items, $id='', $cur=false, $delDef = true)
 	{
 		if (count($items) == 0)
 			return '';
@@ -46,7 +47,9 @@ class NavController
 		foreach ($items as $k=>$v)
 		{
 			$result.='<li>';
-			if (QFW::$router->delDef(trim($cur, '/')) == QFW::$router->delDef(trim($v, '/')))
+			if ($v === false)
+				$result.=$k;
+			elseif (QFW::$router->delDef(trim($cur, '/')) == QFW::$router->delDef(trim($v, '/')))
 				$result.='<b>'.$k.'</b>';
 			else
 			{
