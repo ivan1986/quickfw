@@ -15,7 +15,7 @@
 	<th>&nbsp;</th>
 	<?php if (count($actions)) { ?><th>действия</th><?php } ?>
 </tr>
-<?php foreach($data as $row) { ?>
+<?php foreach($data as $id=>$row) { ?>
 <tr>
 	<?php foreach($row as $key=>$v) {
 		$i = isset($fields[$key]) ? $fields[$key] : false;
@@ -24,9 +24,9 @@
 		?>
 		<td><?php //отображение обычного не связанного поля
 			if (isset($methods['display_'.ucfirst($key)]))
-				echo call_user_func($class.'::display_'.ucfirst($key), $v, $row);
+				echo call_user_func($class.'::display_'.ucfirst($key), $id, $v);
 			else
-				echo $i['class']->display($v);
+				echo $i['class']->display($id, $v);
 		?></td>
 	<?php } ?>
 	<td><a href="<?php echo $P->siteUrl($info['ControllerUrl'].

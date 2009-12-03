@@ -1,7 +1,6 @@
 <?php
 
 require_once LIBPATH.'/Modules/Scafold/Fields.php';
-require_once 'Controller.php';
 
 /**
  * Класс для быстрого создания CRUD интерфейса к таблице
@@ -12,6 +11,11 @@ require_once 'Controller.php';
  * <br><br>Класс предназначен для использования в админках
  * преймущественно для редакторивания справочников и
  * подобных им таблиц
+ * <br><br>Пример подключения:
+ * <br><br>require 'Controller.php';
+ * <br>require LIBPATH.'/Modules/Scafold/ScafoldController.php';
+ * <br>.....
+ * <br>class TableController extends ScafoldController
  *
  * @author Ivan1986
  */
@@ -51,9 +55,7 @@ abstract class ScafoldController extends Controller
 		$fields = QFW::$db->select('SHOW FIELDS IN ?#', $this->table);
 		foreach($fields as $field)
 		{
-			$this->fields[$field['Field']]['class'] = $this->getFieldClass($field,
-				isset($this->fields[$field['Field']]['type']) ?
-				$this->fields[$field['Field']]['type'] : false);
+			$this->fields[$field['Field']]['class'] = $this->getFieldClass($field);
 			if ($field['Key'] == 'PRI')
 				$this->primaryKey = $field['Field'];
 		}
@@ -122,9 +124,9 @@ abstract class ScafoldController extends Controller
 			foreach ($data as $k=>$v)
 			{
 				if (isset($this->methods['validator_'.ucfirst($k)]))
-					$res = call_user_func(array(&$this, 'validator_'.ucfirst($k)), $v);
+					$res = call_user_func(array(&$this, 'validator_'.ucfirst($k)), $id, $v);
 				else
-					$res = $this->fields[$k]['class']->validator($v);
+					$res = $this->fields[$k]['class']->validator($id, $v);
 				if ($res !== true)
 					$errors[$k] = $res;
 			}
@@ -134,9 +136,9 @@ abstract class ScafoldController extends Controller
 				//Обработка данных после POST
 				foreach ($data as $k=>$v)
 					if (isset($this->methods['proccess_'.ucfirst($k)]))
-						$data[$k] = call_user_func(array(&$this, 'proccess_'.ucfirst($k)), $v);
+						$data[$k] = call_user_func(array(&$this, 'proccess_'.ucfirst($k)), $id, $v);
 					else
-						$data[$k] = $this->fields[$k]['class']->proccess($v);
+						$data[$k] = $this->fields[$k]['class']->proccess($id, $v);
 
 				if ($id == -1)
 					QFW::$db->query('INSERT INTO ?#(?#) VALUES(?a)',
@@ -172,20 +174,9 @@ abstract class ScafoldController extends Controller
 			$data = QFW::$db->selectRow('SELECT * FROM ?# WHERE ?#=?',
 				$this->table, $this->primaryKey, $id);
 
-		//связанные поля - строим комбобоксы
-		$lookup = array();
-		foreach ($this->fields as $f=>$info)
-		{
-			if (!isset($info['foregen']))
-				continue;
-			$lookup[$f] = QFW::$db->selectCol('SELECT ?# AS ARRAY_KEY_1, ?# FROM ?#',
-				$info['foregen']['key'], $info['foregen']['field'], $info['foregen']['table']);
-		}
-
 		return QFW::$view->assign(array(
 			'id' => $id,
 			'data' => $data,
-			'lookup' => $lookup,
 			'errors' => $errors,
 		))->fetch('scafold/edit.html');
 	}
@@ -200,6 +191,8 @@ abstract class ScafoldController extends Controller
 	 */
 	public function deleteAction($id=0)
 	{
+		foreach($this->fields as $k=>$v)
+			$v['class']->proccess($id, false);
 		QFW::$db->query('DELETE FROM ?# WHERE ?#=?',
 			$this->table, $this->primaryKey, $id);
 		QFW::$router->redirect('/'.$this->ControllerUrl.'/index', true);
@@ -276,18 +269,18 @@ abstract class ScafoldController extends Controller
 	 *
 	 * <br><br> Вызывается только в конструкторе
 	 *
-	 * @param string|array $colum Колонка<br>
-	 * Или массив ключи - колонки, значения имена классов
+	 * @param string $colum Колонка
 	 * @param string $className Имя класса без префикса
+	 * @param mixed $param Второй параметр конструктора класса
 	 * @return &ScafoldController
 	 */
-	protected function type($colum, $className='')
+	protected function type($colum, $className='', $param=false)
 	{
 		$this->endTest();
-		if (!is_array($colum))
-			$colum = array($colum => $className);
-		foreach ($colum as $col=>$t)
-			$this->fields[$col]['type'] = 'Scafold_'.$t;
+		$this->fields[$colum]['type'] = array(
+			'class' => 'Scafold_'.$className,
+			'param' => $param,
+		);
 		return $this;
 	}
 
@@ -338,15 +331,25 @@ abstract class ScafoldController extends Controller
 	 * Фабрика объектов полей
 	 *
 	 * @param array $fieldInfo Информация о поле из базы данных
-	 * @param string|false $class Жестко указанный класс
 	 * @return Scafold_Field Класс поля
 	 */
-	private function getFieldClass($fieldInfo, $class = false)
+	private function getFieldClass($fieldInfo)
 	{
-		if ($class)
-			return new $class($fieldInfo);
+		$info = array(
+			'table' => $this->table,
+			'base' => $fieldInfo,
+			'field' => isset($this->fields[$fieldInfo['Field']]) ?
+				$this->fields[$fieldInfo['Field']] : false,
+		);
 
-		return new Scafold_Field($fieldInfo);
+		if (isset($info['field']['type']))
+			return new $info['field']['type']['class']($info, $info['field']['type']['param']);
+
+		//определяем по типам и прочей известной информации
+		if (isset($this->fields[$fieldInfo['Field']]['foregen']))
+			return new Scafold_Foregen($info);
+
+		return new Scafold_Field($info);
 	}
 
 	private function endTest()
