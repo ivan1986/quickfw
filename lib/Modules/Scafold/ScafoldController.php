@@ -53,12 +53,15 @@ abstract class ScafoldController extends Controller
 
 		//Получаем данные о полях
 		$fields = QFW::$db->select('SHOW FIELDS IN ?#', $this->table);
+		//делаем два цикла, иначе данные о ключе не попадут в классы полей
 		foreach($fields as $field)
-		{
-			$this->fields[$field['Field']]['class'] = $this->getFieldClass($field);
 			if ($field['Key'] == 'PRI')
+			{
 				$this->primaryKey = $field['Field'];
-		}
+				break;
+			}
+		foreach($fields as $field)
+			$this->fields[$field['Field']]['class'] = $this->getFieldClass($field);
 
 		//Общая информация о таблице
 		QFW::$view->assign(array(
@@ -345,6 +348,7 @@ abstract class ScafoldController extends Controller
 	{
 		$info = array(
 			'table' => $this->table,
+			'primaryKey' => $this->primaryKey,
 			'base' => $fieldInfo,
 			'field' => isset($this->fields[$fieldInfo['Field']]) ?
 				$this->fields[$fieldInfo['Field']] : false,
