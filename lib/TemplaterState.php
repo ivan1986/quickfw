@@ -6,7 +6,7 @@
  *
  * @author ivan1986
  */
-class Templater_State
+class TemplaterState
 {
 	/** @var string текущий путь к шаблонам */
 	private $path;

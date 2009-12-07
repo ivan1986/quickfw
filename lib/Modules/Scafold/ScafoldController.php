@@ -62,6 +62,9 @@ abstract class ScafoldController extends Controller
 			}
 		foreach($fields as $field)
 			$this->fields[$field['Field']]['class'] = $this->getFieldClass($field);
+		foreach($this->fields as $k=>$field)
+			if (!isset($field['class']))
+				unset($this->fields[$k]);
 
 		//Общая информация о таблице
 		QFW::$view->assign(array(
@@ -100,6 +103,10 @@ abstract class ScafoldController extends Controller
 		$curUrl = QFW::$view->P->siteUrl($this->ControllerUrl.'/index/$');
 		$pages = ceil($count/$this->pageSize);
 		$pager=QFW::$router->blockRoute('helper.nav.pager('.$curUrl.','.$pages.','.($page+1).')');
+
+		require_once LIBPATH.'/TemplaterState.php';
+		$state = new TemplaterState(QFW::$view);
+		QFW::$view->setScriptPath(dirname(__FILE__));
 
 		return QFW::$view->assign(array(
 			'data' => $data,
@@ -175,6 +182,10 @@ abstract class ScafoldController extends Controller
 		else
 			$data = QFW::$db->selectRow('SELECT * FROM ?# WHERE ?#=?',
 				$this->table, $this->primaryKey, $id);
+
+		require_once LIBPATH.'/TemplaterState.php';
+		$state = new TemplaterState(QFW::$view);
+		QFW::$view->setScriptPath(dirname(__FILE__));
 
 		return QFW::$view->assign(array(
 			'id' => $id,
