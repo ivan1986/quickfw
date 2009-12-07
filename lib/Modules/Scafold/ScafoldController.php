@@ -33,7 +33,7 @@ abstract class ScafoldController extends Controller
 	protected $fields = array();
 	/** @var array Действия, производимые над каждой строчкой */
 	protected $actions = array();
-
+	
 	/** @var string Адрес контроллера */
 	private $ControllerUrl;
 	/** @var array Массив методов */
@@ -267,6 +267,29 @@ abstract class ScafoldController extends Controller
 	}
 
 	/**
+	 * Устанавливает фильтр для поля
+	 *
+	 * <br><br> Вызывается только в конструкторе
+	 *
+	 * @param string|array $colum Колонка<br>
+	 * Или массив ключи - колонки, значения параметры фильтра
+	 * @param mixed|true|false $filter параметр фильтра<br>
+	 * false - выключен<br>
+	 * true - включен по умолчанию<br>
+	 * mixed - произвольный параметр
+	 * @return &ScafoldController
+	 */
+	protected function filter($colum, $filter='')
+	{
+		$this->endTest();
+		if (!is_array($colum))
+			$colum = array($colum => $filter);
+		foreach ($colum as $col=>$f)
+			$this->fields[$col]['filter'] = $f;
+		return $this;
+	}
+
+	/**
 	 * Устанавливает заголовки для столбцов
 	 *
 	 * <br><br> Вызывается только в конструкторе
@@ -309,6 +332,14 @@ abstract class ScafoldController extends Controller
 	////////////////////////////////////////////////////////////
 	//Закрытые функции
 	////////////////////////////////////////////////////////////
+
+	/**
+	 * Генерирует фильтр для запроса
+	 */
+	private function filterGen()
+	{
+		return '';
+	}
 
 	/**
 	 * Получает части запроса для связанных полей
