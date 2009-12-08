@@ -53,17 +53,15 @@ abstract class ScafoldController extends Controller
 
 		//Получаем данные о полях
 		$fields = QFW::$db->select('SHOW FIELDS IN ?#', $this->table);
-		//делаем два цикла, иначе данные о ключе не попадут в классы полей
 		foreach($fields as $field)
-			if ($field['Key'] == 'PRI')
-			{
-				$this->primaryKey = $field['Field'];
-				break;
-			}
-		foreach($fields as $field)
-			$this->fields[$field['Field']]['class'] = $this->getFieldClass($field);
+		{
+			$c = $this->getInfoClass($field['Field']);
+			$c->primaryKey = $field['Key'] == 'PRI';
+			$this->fields[$field['Field']] = 
+				$this->getFieldClass($c, $field);
+		}
 		foreach($this->fields as $k=>$field)
-			if (!isset($field['class']))
+			if (get_class($field) == 'Scafold_Field_Info')
 				unset($this->fields[$k]);
 
 		//Общая информация о таблице
@@ -89,14 +87,18 @@ abstract class ScafoldController extends Controller
 	{
 		// считаем страницы с нуля и убираем отрицательные
 		$page = max($page-1, 0);
-		$count = QFW::$db->selectCell('SELECT count(*) FROM ?# '.$this->where, $this->table);
+		$filter = $this->filterGen();
+		$count = QFW::$db->selectCell('SELECT count(*) FROM ?# 
+			WHERE ?s '.$this->where, $this->table, $filter ? $filter : DBSIMPLE_SKIP);
 
 		$foregen = $this->getForegen();
-		$data = QFW::$db->select('SELECT ?# { ?s } FROM ?# { ?s }'.$this->where.' LIMIT ?d, ?d',
+		$data = QFW::$db->select('SELECT ?# { ?s } FROM ?# { ?s }
+			WHERE ?s '.$this->where.' LIMIT ?d, ?d',
 			array($this->table=>'*'),
 			isset($foregen['field']) ? $foregen['field'] : DBSIMPLE_SKIP,
 			$this->table,
 			isset($foregen['join']) ? $foregen['join'] : DBSIMPLE_SKIP,
+			$filter ? $filter : DBSIMPLE_SKIP,
 			$page*$this->pageSize, $this->pageSize);
 
 		//получаем пагинатор
@@ -135,7 +137,7 @@ abstract class ScafoldController extends Controller
 				if (isset($this->methods['validator_'.ucfirst($k)]))
 					$res = call_user_func(array($this, 'validator_'.ucfirst($k)), $id, $v);
 				else
-					$res = $this->fields[$k]['class']->validator($id, $v);
+					$res = $this->fields[$k]->validator($id, $v);
 				if ($res !== true)
 					$errors[$k] = $res;
 			}
@@ -147,7 +149,7 @@ abstract class ScafoldController extends Controller
 					if (isset($this->methods['proccess_'.ucfirst($k)]))
 						$data[$k] = call_user_func(array($this, 'proccess_'.ucfirst($k)), $id, $v);
 					else
-						$data[$k] = $this->fields[$k]['class']->proccess($id, $v);
+						$data[$k] = $this->fields[$k]->proccess($id, $v);
 
 				if ($id == -1)
 					QFW::$db->query('INSERT INTO ?#(?#) VALUES(?a)',
@@ -157,10 +159,10 @@ abstract class ScafoldController extends Controller
 						$this->table, $data, $this->primaryKey, $id);
 
 				//редирект назад
-				if (!empty($_SESSION['scafold_return']))
+				if (!empty($_SESSION['scafold']['return']))
 				{
-					$url = $_SESSION['scafold_return'];
-					unset($_SESSION['scafold_return']);
+					$url = $_SESSION['scafold']['return'];
+					unset($_SESSION['scafold']['return']);
 					QFW::$router->redirect($url);
 				}
 				else
@@ -170,14 +172,14 @@ abstract class ScafoldController extends Controller
 		}
 		
 		if (isset($_SERVER['HTTP_REFERER']) && strpos($_SERVER['HTTP_REFERER'], 'index'))
-			$_SESSION['scafold_return'] = $_SERVER['HTTP_REFERER'];
+			$_SESSION['scafold']['return'] = $_SERVER['HTTP_REFERER'];
 
 		if ($id == -1)
 		{
 			//получение дефолтовых значений для новой записи
 			$data = array();
 			foreach ($this->fields as $f=>$info)
-				$data[$f] = $info['class']->def();
+				$data[$f] = $info->def();
 		}
 		else
 			$data = QFW::$db->selectRow('SELECT * FROM ?# WHERE ?#=?',
@@ -205,7 +207,7 @@ abstract class ScafoldController extends Controller
 	public function deleteAction($id=0)
 	{
 		foreach($this->fields as $k=>$v)
-			$v['class']->proccess($id, false);
+			$v->proccess($id, false);
 		QFW::$db->query('DELETE FROM ?# WHERE ?#=?',
 			$this->table, $this->primaryKey, $id);
 		QFW::$router->redirect('/'.$this->ControllerUrl.'/index', true);
@@ -216,7 +218,7 @@ abstract class ScafoldController extends Controller
 		$args = func_get_args();
 		array_shift($args);
 		if (isset($this->fields[$name]))
-			call_user_func_array(array($this->fields[$name]['class'], 'action'), $args);
+			call_user_func_array(array($this->fields[$name], 'action'), $args);
 		QFW::$router->redirect('/'.$this->ControllerUrl.'/index', true);
 	}
 
@@ -240,7 +242,7 @@ abstract class ScafoldController extends Controller
 		if (!is_array($colums))
 			$colums = array($colums);
 		foreach ($colums as $col)
-			$this->fields[$col]['hide'] = $hide;
+			$this->getInfoClass($col)->hide = $hide;
 		return $this;
 	}
 
@@ -253,12 +255,12 @@ abstract class ScafoldController extends Controller
 	 * @param string $table Связанная таблица
 	 * @param string $id Ссылочный ключ
 	 * @param string $name Значение связанного поля
-	 * @return &ScafoldController
+	 * @return ScafoldController
 	 */
 	protected function foregen($colum, $table, $id, $name)
 	{
 		$this->endTest();
-		$this->fields[$colum]['foregen'] = array(
+		$this->getInfoClass($colum)->foregen = array(
 			'field' => $name,
 			'table' => $table,
 			'key'   => $id,
@@ -277,7 +279,7 @@ abstract class ScafoldController extends Controller
 	 * false - выключен<br>
 	 * true - включен по умолчанию<br>
 	 * mixed - произвольный параметр
-	 * @return &ScafoldController
+	 * @return ScafoldController
 	 */
 	protected function filter($colum, $filter='')
 	{
@@ -285,7 +287,7 @@ abstract class ScafoldController extends Controller
 		if (!is_array($colum))
 			$colum = array($colum => $filter);
 		foreach ($colum as $col=>$f)
-			$this->fields[$col]['filter'] = $f;
+			$this->getInfoClass($col)->filter = $f;
 		return $this;
 	}
 
@@ -297,7 +299,7 @@ abstract class ScafoldController extends Controller
 	 * @param string|array $colum Колонка<br>
 	 * Или массив ключи - колонки, значения заголовки
 	 * @param string $title Заголовок
-	 * @return &ScafoldController
+	 * @return ScafoldController
 	 */
 	protected function title($colum, $title='')
 	{
@@ -305,7 +307,7 @@ abstract class ScafoldController extends Controller
 		if (!is_array($colum))
 			$colum = array($colum => $title);
 		foreach ($colum as $col=>$tit)
-			$this->fields[$col]['title'] = $tit;
+			$this->getInfoClass($col)->title = $tit;
 		return $this;
 	}
 
@@ -317,15 +319,14 @@ abstract class ScafoldController extends Controller
 	 * @param string $colum Колонка
 	 * @param string $className Имя класса без префикса
 	 * @param mixed $param Второй параметр конструктора класса
-	 * @return &ScafoldController
+	 * @return ScafoldController
 	 */
 	protected function type($colum, $className='', $param=false)
 	{
 		$this->endTest();
-		$this->fields[$colum]['type'] = array(
-			'class' => 'Scafold_'.$className,
-			'param' => $param,
-		);
+		$c = $this->getInfoClass($colum);
+		$c->type = $className;
+		$c->typeParams = $param;
 		return $this;
 	}
 
@@ -334,11 +335,40 @@ abstract class ScafoldController extends Controller
 	////////////////////////////////////////////////////////////
 
 	/**
+	 * Возвращает ссылку на класс заданного поля
+	 *
+	 * @param string $name имя поля
+	 * @return Scafold_Field_Info инфо о классе
+	 */
+	private function getInfoClass($name)
+	{
+		if (empty($this->fields[$name]))
+			$this->fields[$name] = new Scafold_Field_Info();
+		return $this->fields[$name];
+	}
+
+	/**
 	 * Генерирует фильтр для запроса
+	 *
+	 * @return DbSimple_SubQuery сгенерерованное условие с учетом фильтров
 	 */
 	private function filterGen()
 	{
-		return '';
+		$where = array();
+		foreach($this->fields as $name => $field)
+		{
+			if (!$field->filter)
+				continue;
+			$this->session();
+			if (empty($_SESSION['scafold']['filter'][$name]))
+				continue;
+			$where[$name] = $field->filter($_SESSION['scafold']['filter'][$name]);
+		}
+		if (count($where) == 0)
+			return QFW::$db->subquery('1');
+		$s = '1'.str_repeat(' AND ?s', count($where));
+		$args = array_merge(array($s), array_values($where));
+		return call_user_func_array(array(QFW::$db, 'subquery'), $args);
 	}
 
 	/**
@@ -351,30 +381,28 @@ abstract class ScafoldController extends Controller
 		$foregen = array();
 		foreach ($this->fields as $f=>$info)
 		{
-			if (!isset($info['foregen']))
+			if (!$info->foregen)
 				continue;
 			$foregen['field'][$f] = QFW::$db->subquery('?# AS ?#', array(
-				$f.'_table' => $info['foregen']['field']),
+				$f.'_table' => $info->foregen['field']),
 				$f);
 			$foregen['join'][$f] = QFW::$db->subquery('LEFT JOIN ?# AS ?# ON ?# = ?#',
-				$info['foregen']['table'],
+				$info->foregen['table'],
 				$f.'_table',
-				array($f.'_table' => $info['foregen']['key']),
+				array($f.'_table' => $info->foregen['key']),
 				array($this->table => $f)
 			);
 		}
 		if (isset($foregen['field']))
 		{
 			$s = str_repeat(', ?s', count($foregen['field']));
-			$args = array_values($foregen['field']);
-			$args = array_merge(array($s), $args);
+			$args = array_merge(array($s), array_values($foregen['field']));
 			$foregen['field'] = call_user_func_array(array(QFW::$db, 'subquery'), $args);
 		}
 		if (isset($foregen['join']))
 		{
 			$s = str_repeat("\n ?s", count($foregen['join']));
-			$args = array_values($foregen['join']);
-			$args = array_merge(array($s), $args);
+			$args = array_merge(array($s), array_values($foregen['join']));
 			$foregen['join'] = call_user_func_array(array(QFW::$db, 'subquery'), $args);
 		}
 		return $foregen;
@@ -383,27 +411,27 @@ abstract class ScafoldController extends Controller
 	/**
 	 * Фабрика объектов полей
 	 *
+	 * @param Scafold_Field_Info $infoClass Информация указанная пользователем
 	 * @param array $fieldInfo Информация о поле из базы данных
 	 * @return Scafold_Field Класс поля
 	 */
-	private function getFieldClass($fieldInfo)
+	private function getFieldClass($infoClass, $fieldInfo)
 	{
-		$info = array(
-			'table' => $this->table,
-			'primaryKey' => $this->primaryKey,
-			'base' => $fieldInfo,
-			'field' => isset($this->fields[$fieldInfo['Field']]) ?
-				$this->fields[$fieldInfo['Field']] : false,
-		);
+		$infoClass->fiendInfo = $fieldInfo;
+		$infoClass->table = $this->table;
+		$infoClass->primaryKey = $this->primaryKey;
 
-		if (isset($info['field']['type']))
-			return new $info['field']['type']['class']($info, $info['field']['type']['param']);
+		if ($infoClass->type)
+		{
+			$class = 'Scafold_'.$infoClass->type;
+			return new $class($infoClass, $infoClass->typeParams);
+		}
 
 		//определяем по типам и прочей известной информации
-		if (isset($this->fields[$fieldInfo['Field']]['foregen']))
-			return new Scafold_Foregen($info);
+		if ($infoClass->foregen)
+			return new Scafold_Foregen($infoClass);
 
-		return new Scafold_Field($info);
+		return new Scafold_Field($infoClass);
 	}
 
 	private function endTest()

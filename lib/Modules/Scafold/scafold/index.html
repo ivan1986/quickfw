@@ -4,11 +4,11 @@
 <table id="table_<?php echo $table ?>" class="scafoldTable">
 <tr>
 	<?php foreach($data[0] as $key=>$v) {
-		$i = isset($fields[$key]) ? $fields[$key] : false;
-		if (!empty($i['hide']))
+		$i = $fields[$key];
+		if ($i->hide)
 			continue;
 		?>
-		<th><?php echo isset($i['title']) ? $i['title'] : $key ?></th>
+		<th><?php echo $i->title ?></th>
 	<?php } ?>
 	<th><a href="<?php echo $P->siteUrl($info['ControllerUrl'].
 		'/edit/-1') ?>">доб.</a></th>
@@ -18,15 +18,15 @@
 <?php foreach($data as $id=>$row) { ?>
 <tr>
 	<?php foreach($row as $key=>$v) {
-		$i = isset($fields[$key]) ? $fields[$key] : false;
-		if (!empty($i['hide']))
+		$i = $fields[$key];
+		if ($i->hide)
 			continue;
 		?>
 		<td><?php //отображение обычного не связанного поля
 			if (isset($methods['display_'.ucfirst($key)]))
 				echo call_user_func($class.'::display_'.ucfirst($key), $id, $v);
 			else
-				echo $i['class']->display($id, $v);
+				echo $i->display($id, $v);
 		?></td>
 	<?php } ?>
 	<td><a href="<?php echo $P->siteUrl($info['ControllerUrl'].

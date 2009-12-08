@@ -1,33 +1,62 @@
 <?php
 
 /**
+ * Класс, на основе которого создаются остальные<br>
+ * Содержит набор полей для заполнения пользователем
+ *
+ */
+class Scafold_Field_Info
+{
+	/** @var boolean скрытое поле */
+	public $hide = null;
+	/** @var string класс поля */
+	public $type = false;
+	/** @var string параметры класса */
+	public $typeParams = false;
+	/** @var string фильтр */
+	public $filter = false;
+	/** @var array настройки зависимостей */
+	public $foregen = false;
+
+	/** @var array Данные из базы */
+	public $fiendInfo;
+
+	/** @var string Имя таблицы */
+	public $table;
+	/** @var string Имя первичного ключа */
+	public $primaryKey;
+
+	/** @var string Имя поля */
+	public $name = '';
+	/** @var string Дефолтовое значение */
+	public $default = '';
+	/** @var string Заголовок колонки */
+	public $title = '';
+
+}
+
+/**
  * Базовый класс для всех типов полей
  * Не содержит никаких проверок, оформлений, преобразований
  *
  */
-class Scafold_Field
+class Scafold_Field extends Scafold_Field_Info
 {
-	/** @var string Имя поля */
-	protected $name;
-	/** @var string Дефолтовое значение */
-	protected $default;
-	/** @var string Заголовок колонки */
-	protected $title;
 
 	/**
-	 * Получает массив данных о поле
+	 * Создает полноценное поле из данных о пользователе
 	 *
-	 * @param array $info array(<br>
-	 * 'table' => имя таблицы,<br>
-	 * 'base' => результат SHOW FIELDS IN table (для этого поля),<br>
-	 * 'field' => подмасиив fields (для этого поля),<br>
-	 * )
+	 * @param Scafold_Field_Info $info класс с данными от пользователя
 	 */
 	public function __construct($info)
 	{
-		$this->name = $info['base']['Field'];
-		$this->default = $info['base']['Default'];
-		$this->title = empty($info['field']['title']) ? $this->name : $info['field']['title'];
+		$vars = get_class_vars('Scafold_Field_Info');
+		foreach ($vars as $k=>$v)
+			$this->$k = $info->$k;
+		$this->name = $info->fiendInfo['Field'];
+		$this->default = $info->fiendInfo['Default'];
+		if (!$this->title)
+			$this->title = $this->name;
 	}
 
 	/**
@@ -67,6 +96,17 @@ class Scafold_Field
 	public function validator($id, $value)
 	{
 		return true;
+	}
+
+	/**
+	 * Часть условия WHERE для данного фильтра
+	 *
+	 * @param mixed $session сохраненное в сессии значение
+	 * @return DbSimple_SubQuery часть запроса к базе данных
+	 */
+	public function filter($session)
+	{
+		return QFW::$db->subquery('?# LIKE ?', array($this->table=>$this->name), $session.'%');
 	}
 
 	/**
@@ -113,9 +153,8 @@ class Scafold_Foregen extends Scafold_Field
 	public function __construct($info)
 	{
 		parent::__construct($info);
-		$f = $info['field']['foregen'];
 		$this->lookup = QFW::$db->selectCol('SELECT ?# AS ARRAY_KEY_1, ?# FROM ?#',
-			$f['key'], $f['field'], $f['table']);
+			$info->foregen['key'], $info->foregen['field'], $info->foregen['table']);
 	}
 
 	public function editor($id, $value)
@@ -157,8 +196,6 @@ class Scafold_File extends Scafold_Field
 	private $path;
 	/** @var string Первичный ключ таблицы */
 	private $prim;
-	/** @var string Таблица */
-	private $table;
 	/** @var bool Скачиваемый (доступен извне) */
 	private $download;
 
@@ -172,8 +209,7 @@ class Scafold_File extends Scafold_Field
 		if (!is_writable($params['path']))
 			throw new Exception('Нельзя писать в директорию файлов '.$params['path'], 1);
 		$this->path = $params['path'];
-		$this->prim = $info['primaryKey'];
-		$this->table = $info['table'];
+		$this->prim = $info->primaryKey;
 		if (strpos($params['path'], DOC_ROOT) === 0)
 			$this->download = substr($params['path'], strlen(DOC_ROOT) );
 		else
