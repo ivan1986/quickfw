@@ -1,0 +1,10 @@
+Фильтр
+<form action="<?php echo $P->siteUrl($info['ControllerUrl'].'/filter') ?>" 
+	  method="post" id="filter_<?php echo $table ?>" class="scafoldFilter">
+<?php foreach ($filter as $v) {?>
+	<?php echo $v; ?>
+<?php } ?>
+	<br />
+	<input type="submit" name="apply" value="Применить" />
+	<input type="submit" name="clear" value="Сбросить" />
+</form>

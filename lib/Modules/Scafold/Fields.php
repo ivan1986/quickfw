@@ -104,9 +104,22 @@ class Scafold_Field extends Scafold_Field_Info
 	 * @param mixed $session сохраненное в сессии значение
 	 * @return DbSimple_SubQuery часть запроса к базе данных
 	 */
-	public function filter($session)
+	public function filterWhere($session)
 	{
-		return QFW::$db->subquery('?# LIKE ?', array($this->table=>$this->name), $session.'%');
+		return QFW::$db->subquery('?# LIKE ?', 
+			array($this->table=>$this->name), $session.'%');
+	}
+
+	/**
+	 * Формирует поле ввода для фильтра
+	 *
+	 * @param mixed $session сохраненные в сесии данные
+	 * @return string часть формы для фильтра
+	 */
+	public function filterForm($session)
+	{
+		return '<input type="text" name="filter['.$this->name.']" '.
+			'default="'.$session.'" label="'.$this->title.': ^" />';
 	}
 
 	/**

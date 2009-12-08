@@ -24,6 +24,7 @@ class TableController extends ScafoldController
 			'file' => 'Файл',
 		));
 		$this->filter('text', true);
+		$this->filter('char', true);
 		$this->type('enum', 'Enum');
 		$this->type('file', 'File', array(
 			'path' => DOC_ROOT.'/upload',

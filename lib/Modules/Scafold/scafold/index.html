@@ -1,5 +1,9 @@
 <?php echo $pager; ?>
 
+<?php if (isset($filter)) {
+	include 'filterForm.html';
+} ?>
+
 <?php if (count($data)>0) { ?>
 <table id="table_<?php echo $table ?>" class="scafoldTable">
 <tr>

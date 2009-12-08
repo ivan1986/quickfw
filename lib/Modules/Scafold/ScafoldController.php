@@ -89,7 +89,7 @@ abstract class ScafoldController extends Controller
 		$page = max($page-1, 0);
 		$filter = $this->filterGen();
 		$count = QFW::$db->selectCell('SELECT count(*) FROM ?# 
-			WHERE ?s '.$this->where, $this->table, $filter ? $filter : DBSIMPLE_SKIP);
+			WHERE ?s '.$this->where, $this->table, $filter['where']);
 
 		$foregen = $this->getForegen();
 		$data = QFW::$db->select('SELECT ?# { ?s } FROM ?# { ?s }
@@ -98,9 +98,14 @@ abstract class ScafoldController extends Controller
 			isset($foregen['field']) ? $foregen['field'] : DBSIMPLE_SKIP,
 			$this->table,
 			isset($foregen['join']) ? $foregen['join'] : DBSIMPLE_SKIP,
-			$filter ? $filter : DBSIMPLE_SKIP,
-			$page*$this->pageSize, $this->pageSize);
+			$filter['where'], $page*$this->pageSize, $this->pageSize);
 
+		if (count($filter['form']))
+		{
+			require_once LIBPATH.'/MetaForm/FormPersister.php';
+			ob_start(array(new HTML_FormPersister(), 'process'));
+			QFW::$view->assign('filter', $filter['form']);
+		}
 		//получаем пагинатор
 		$curUrl = QFW::$view->P->siteUrl($this->ControllerUrl.'/index/$');
 		$pages = ceil($count/$this->pageSize);
@@ -213,12 +218,36 @@ abstract class ScafoldController extends Controller
 		QFW::$router->redirect('/'.$this->ControllerUrl.'/index', true);
 	}
 
+	/**
+	 * Вызывает действие, привязанное к определенному полю
+	 *
+	 * @param string $name имя поля
+	 * @param string $id значение первичного ключа
+	 */
 	public function fieldAction($name, $id)
 	{
 		$args = func_get_args();
 		array_shift($args);
 		if (isset($this->fields[$name]))
 			call_user_func_array(array($this->fields[$name], 'action'), $args);
+		QFW::$router->redirect('/'.$this->ControllerUrl.'/index', true);
+	}
+
+	/**
+	 * обработка смены фильтра
+	 */
+	public function filterAction()
+	{
+		$this->session();
+		if (!empty($_POST['clear']))
+		{
+			$_SESSION['scafold']['filter'] = array();
+			QFW::$router->redirect('/'.$this->ControllerUrl.'/index', true);
+		}
+		if (empty($_POST['filter']) || empty($_POST['apply']))
+			QFW::$router->redirect('/'.$this->ControllerUrl.'/index', true);
+		$_SESSION['scafold']['filter'] = $_POST['filter'];
+		
 		QFW::$router->redirect('/'.$this->ControllerUrl.'/index', true);
 	}
 
@@ -350,25 +379,39 @@ abstract class ScafoldController extends Controller
 	/**
 	 * Генерирует фильтр для запроса
 	 *
-	 * @return DbSimple_SubQuery сгенерерованное условие с учетом фильтров
+	 * @return array(<br>
+	 *	'where' => DbSimple_SubQuery сгенерерованное условие с учетом фильтров<br>
+	 *  'form' => array инпуты формы<br>
+	 * );
 	 */
 	private function filterGen()
 	{
 		$where = array();
+		$form = array();
 		foreach($this->fields as $name => $field)
 		{
 			if (!$field->filter)
 				continue;
 			$this->session();
-			if (empty($_SESSION['scafold']['filter'][$name]))
+			$data = !empty($_SESSION['scafold']['filter'][$name]) ?
+				$_SESSION['scafold']['filter'][$name] : false;
+
+			$form[$name] = $field->filterForm($data);
+			if ($data === false)
 				continue;
-			$where[$name] = $field->filter($_SESSION['scafold']['filter'][$name]);
+			$where[$name] = $field->filterWhere($_SESSION['scafold']['filter'][$name]);
 		}
 		if (count($where) == 0)
-			return QFW::$db->subquery('1');
+			return array(
+				'where' => QFW::$db->subquery('1'),
+				'form' => $form,
+			);
 		$s = '1'.str_repeat(' AND ?s', count($where));
 		$args = array_merge(array($s), array_values($where));
-		return call_user_func_array(array(QFW::$db, 'subquery'), $args);
+		return array(
+			'where' => call_user_func_array(array(QFW::$db, 'subquery'), $args),
+			'form' => $form,
+		);
 	}
 
 	/**
