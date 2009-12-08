@@ -21,6 +21,7 @@
 			echo call_user_func($class.'::editor_'.ucfirst($k), $id, $v);
 		else
 			echo $i->editor($id, $v); ?>
+		<?php if ($i->desc) {?><small><?php echo $i->desc ?></small><?php } ?>
 	</p>
 <?php } ?>
 	<input type="submit" value="Отправить" name="send" />

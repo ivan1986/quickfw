@@ -32,6 +32,8 @@ class Scafold_Field_Info
 	public $default = '';
 	/** @var string Заголовок колонки */
 	public $title = '';
+	/** @var string Описание колонки */
+	public $desc = '';
 
 }
 
@@ -264,6 +266,8 @@ class Scafold_File extends Scafold_Field
 			return '';
 		//генерим новое имя
 		$info = pathinfo($_FILES['file']['name'][$this->name]);
+		if ($id == -1)
+			$id = time();
 		$new_name = $this->name.'_'.$id.'.'.$info['extension'];
 		move_uploaded_file($_FILES['file']['tmp_name'][$this->name], $this->path.'/'.$new_name);
 		return $new_name;

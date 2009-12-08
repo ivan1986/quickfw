@@ -33,7 +33,7 @@ abstract class ScafoldController extends Controller
 	protected $fields = array();
 	/** @var array Действия, производимые над каждой строчкой */
 	protected $actions = array();
-	
+
 	/** @var string Адрес контроллера */
 	private $ControllerUrl;
 	/** @var array Массив методов */
@@ -256,26 +256,6 @@ abstract class ScafoldController extends Controller
 	////////////////////////////////////////////////////////////
 
 	/**
-	 * Скрывает при выводе и редактировании указанные колонки
-	 *
-	 * <br><br> Вызывается только в конструкторе
-	 *
-	 * @param string|array $colums Колонка или массив колонок, которые нужно скрыть
-	 * @param boolean $hide true - скрыть<br>false - показать<br>
-	 * по умолчанию показываются все кромя первичного ключа при редактировании
-	 * @return ScafoldController
-	 */
-	protected function hide($colums, $hide=true)
-	{
-		$this->endTest();
-		if (!is_array($colums))
-			$colums = array($colums);
-		foreach ($colums as $col)
-			$this->getInfoClass($col)->hide = $hide;
-		return $this;
-	}
-
-	/**
 	 * Устанавливает поле как зависимое от другой таблицы
 	 *
 	 * <br><br> Вызывается только в конструкторе
@@ -284,17 +264,38 @@ abstract class ScafoldController extends Controller
 	 * @param string $table Связанная таблица
 	 * @param string $id Ссылочный ключ
 	 * @param string $name Значение связанного поля
+	 * @param bool $notNull Не допускать пустого значения
 	 * @return ScafoldController
 	 */
-	protected function foregen($colum, $table, $id, $name)
+	protected function foregen($colum, $table, $id, $name, $notNull=false)
 	{
 		$this->endTest();
 		$this->getInfoClass($colum)->foregen = array(
 			'field' => $name,
 			'table' => $table,
 			'key'   => $id,
+			'null'  => !$notNull,
 		);
 		return $this;
+	}
+
+	////////////////////////////////////////////////////////////
+	// Сеттеры
+	////////////////////////////////////////////////////////////
+
+	/**
+	 * Скрывает при выводе и редактировании указанные колонки
+	 *
+	 * <br><br> Вызывается только в конструкторе
+	 *
+	 * @param string|array $colum Колонка или массив колонок, которые нужно скрыть
+	 * @param boolean $hide true - скрыть<br>false - показать<br>
+	 * по умолчанию показываются все кромя первичного ключа при редактировании
+	 * @return ScafoldController
+	 */
+	protected function hide($colum, $hide=true)
+	{
+		return $this->setColumOpt('hide', $colum, $hide);
 	}
 
 	/**
@@ -312,12 +313,22 @@ abstract class ScafoldController extends Controller
 	 */
 	protected function filter($colum, $filter='')
 	{
-		$this->endTest();
-		if (!is_array($colum))
-			$colum = array($colum => $filter);
-		foreach ($colum as $col=>$f)
-			$this->getInfoClass($col)->filter = $f;
-		return $this;
+		return $this->setColumOpt('filter', $colum, $filter);
+	}
+
+	/**
+	 * Устанавливает описание для поля
+	 *
+	 * <br><br> Вызывается только в конструкторе
+	 *
+	 * @param string|array $colum Колонка<br>
+	 * Или массив ключи - колонки, значения описания
+	 * @param string $desc описание
+	 * @return ScafoldController
+	 */
+	protected function desc($colum, $desc='')
+	{
+		return $this->setColumOpt('desc', $colum, $desc);
 	}
 
 	/**
@@ -332,12 +343,7 @@ abstract class ScafoldController extends Controller
 	 */
 	protected function title($colum, $title='')
 	{
-		$this->endTest();
-		if (!is_array($colum))
-			$colum = array($colum => $title);
-		foreach ($colum as $col=>$tit)
-			$this->getInfoClass($col)->title = $tit;
-		return $this;
+		return $this->setColumOpt('title', $colum, $title);
 	}
 
 	/**
@@ -362,6 +368,26 @@ abstract class ScafoldController extends Controller
 	////////////////////////////////////////////////////////////
 	//Закрытые функции
 	////////////////////////////////////////////////////////////
+
+	/**
+	 * Устанавливает что-то для столбцов
+	 *
+	 * <br><br> Вызывается только в конструкторе
+	 *
+	 * @param string|array $colum Колонка<br>
+	 * Или массив ключи - колонки => значения
+	 * @param string $value значение
+	 * @return ScafoldController
+	 */
+	private function setColumOpt($name, $colum, $value='')
+	{
+		$this->endTest();
+		if (!is_array($colum))
+			$colum = array($colum => $value);
+		foreach ($colum as $col=>$val)
+			$this->getInfoClass($col)->$name = $val;
+		return $this;
+	}
 
 	/**
 	 * Возвращает ссылку на класс заданного поля
@@ -466,7 +492,7 @@ abstract class ScafoldController extends Controller
 
 		if ($infoClass->type)
 		{
-			$class = 'Scafold_'.$infoClass->type;
+			$class = 'Scafold_'.ucfirst($infoClass->type);
 			return new $class($infoClass, $infoClass->typeParams);
 		}
 
