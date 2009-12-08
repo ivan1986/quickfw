@@ -140,7 +140,7 @@ abstract class ScafoldController extends Controller
 			foreach ($data as $k=>$v)
 			{
 				if (isset($this->methods['validator_'.ucfirst($k)]))
-					$res = call_user_func(array($this, 'validator_'.ucfirst($k)), $id, $v);
+					$res = call_user_func(array($this, 'validator_'.ucfirst($k)), $v, $id);
 				else
 					$res = $this->fields[$k]->validator($id, $v);
 				if ($res !== true)
@@ -150,11 +150,13 @@ abstract class ScafoldController extends Controller
 			if (count($errors) == 0)
 			{
 				//Обработка данных после POST
-				foreach ($data as $k=>$v)
+				foreach ($this->fields as $k=>$class)
 					if (isset($this->methods['proccess_'.ucfirst($k)]))
-						$data[$k] = call_user_func(array($this, 'proccess_'.ucfirst($k)), $id, $v);
+						$data[$k] = call_user_func(array($this, 'proccess_'.ucfirst($k)), 
+							isset($data[$k]) ? $data[$k] : $class->def(), $id);
 					else
-						$data[$k] = $this->fields[$k]->proccess($id, $v);
+						$data[$k] = $class->proccess($id,
+							isset($data[$k]) ? $data[$k] : $class->def());
 
 				if ($id == -1)
 					QFW::$db->query('INSERT INTO ?#(?#) VALUES(?a)',
