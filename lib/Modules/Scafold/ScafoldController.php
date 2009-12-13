@@ -33,6 +33,8 @@ abstract class ScafoldController extends Controller
 	protected $fields = array();
 	/** @var array Действия, производимые над каждой строчкой */
 	protected $actions = array();
+	/** @var array Эта таблица зависимая - данные о родительской */
+	protected $parentData = false;
 
 	/** @var string Адрес контроллера */
 	private $ControllerUrl;
@@ -87,18 +89,45 @@ abstract class ScafoldController extends Controller
 	{
 		// считаем страницы с нуля и убираем отрицательные
 		$page = max($page-1, 0);
+		require_once LIBPATH.'/TemplaterState.php';
+		$state = new TemplaterState(QFW::$view);
+		QFW::$view->setScriptPath(dirname(__FILE__));
+
+		$parentWhere = DBSIMPLE_SKIP;
+		//Устанавливаем фильтр
+		if ($this->parentData)
+		{
+			$parent = QFW::$db->selectCol('SELECT ?# AS ARRAY_KEY, ?# FROM ?#',
+				$this->parentData['key'], $this->parentData['field'], $this->parentData['table']);
+			$this->session();
+			if (isset($_POST['parent']))
+			{
+				$_SESSION['scafold'][$this->table]['parent'] = $_POST['parent'];
+				QFW::$router->redirectMCA(QFW::$router->module.'/'.QFW::$router->controller.'/index');
+			}
+			if (empty($_SESSION['scafold'][$this->table]['parent']))
+				$_SESSION['scafold'][$this->table]['parent'] = count($parent) ? key($parent) : 0;
+
+			QFW::$view->assign('parent', QFW::$view->assign('parent', array(
+				'list' => $parent,
+				'current' => $_SESSION['scafold'][$this->table]['parent'],
+			))->fetch('scafold/parent.html'));
+			$parentWhere = QFW::$db->subquery('AND ?#=?',
+					array($this->table => $this->parentData['colum']),
+					$_SESSION['scafold'][$this->table]['parent']);
+		}
+
 		$filter = $this->filterGen();
 		$count = QFW::$db->selectCell('SELECT count(*) FROM ?# 
-			WHERE ?s '.$this->where, $this->table, $filter['where']);
+			WHERE ?s ?s '.$this->where, $this->table, $filter['where'], $parentWhere);
 
 		$foregen = $this->getForegen();
-		$data = QFW::$db->select('SELECT ?# { ?s } FROM ?# { ?s }
-			WHERE ?s '.$this->where.' LIMIT ?d, ?d',
+		$data = QFW::$db->select('SELECT ?# ?s FROM ?# ?s
+			WHERE ?s ?s '.$this->where.' LIMIT ?d, ?d',
 			array($this->table=>'*'),
-			isset($foregen['field']) ? $foregen['field'] : DBSIMPLE_SKIP,
-			$this->table,
-			isset($foregen['join']) ? $foregen['join'] : DBSIMPLE_SKIP,
-			$filter['where'], $page*$this->pageSize, $this->pageSize);
+			$foregen['field'], $this->table, $foregen['join'],
+			$filter['where'], $parentWhere,
+			$page*$this->pageSize, $this->pageSize);
 
 		if (count($filter['form']))
 		{
@@ -110,10 +139,6 @@ abstract class ScafoldController extends Controller
 		$curUrl = QFW::$view->P->siteUrl($this->ControllerUrl.'/index/$');
 		$pages = ceil($count/$this->pageSize);
 		$pager=QFW::$router->blockRoute('helper.nav.pager('.$curUrl.','.$pages.','.($page+1).')');
-
-		require_once LIBPATH.'/TemplaterState.php';
-		$state = new TemplaterState(QFW::$view);
-		QFW::$view->setScriptPath(dirname(__FILE__));
 
 		return QFW::$view->assign(array(
 			'data' => $data,
@@ -256,6 +281,30 @@ abstract class ScafoldController extends Controller
 	////////////////////////////////////////////////////////////
 	//Функции для упращения настройки таблицы - удобные сеттеры
 	////////////////////////////////////////////////////////////
+
+	/**
+	 * Устанавливает таблицу как подчиненную
+	 *
+	 * <br><br> Вызывается только в конструкторе
+	 *
+	 * @param string $colum Колонка зависимости
+	 * @param string $table Главная таблица
+	 * @param string $id Ключ в главной таблице
+	 * @param string $name Заголовок в главной таблице
+	 * @return ScafoldController
+	 */
+	protected function parent($colum, $table, $id, $name)
+	{
+		$this->parentData = array(
+			'colum' => $colum,
+			'field' => $name,
+			'table' => $table,
+			'key'   => $id,
+		);
+		$this->getInfoClass($colum)->type = 'parent';
+		$this->getInfoClass($colum)->hide = true;
+		return $this;
+	}
 
 	/**
 	 * Устанавливает поле как зависимое от другой таблицы
@@ -421,13 +470,13 @@ abstract class ScafoldController extends Controller
 			if (!$field->filter)
 				continue;
 			$this->session();
-			$data = !empty($_SESSION['scafold']['filter'][$name]) ?
-				$_SESSION['scafold']['filter'][$name] : false;
+			$data = !empty($_SESSION['scafold'][$this->table]['filter'][$name]) ?
+				$_SESSION['scafold'][$this->table]['filter'][$name] : false;
 
 			$form[$name] = $field->filterForm($data);
 			if ($data === false)
 				continue;
-			$where[$name] = $field->filterWhere($_SESSION['scafold']['filter'][$name]);
+			$where[$name] = $field->filterWhere($_SESSION['scafold'][$this->table]['filter'][$name]);
 		}
 		if (count($where) == 0)
 			return array(
@@ -469,13 +518,13 @@ abstract class ScafoldController extends Controller
 			$s = str_repeat(', ?s', count($foregen['field']));
 			$args = array_merge(array($s), array_values($foregen['field']));
 			$foregen['field'] = call_user_func_array(array(QFW::$db, 'subquery'), $args);
-		}
+		} else $foregen['field'] = DBSIMPLE_SKIP;
 		if (isset($foregen['join']))
 		{
 			$s = str_repeat("\n ?s", count($foregen['join']));
 			$args = array_merge(array($s), array_values($foregen['join']));
 			$foregen['join'] = call_user_func_array(array(QFW::$db, 'subquery'), $args);
-		}
+		} else $foregen['join'] = DBSIMPLE_SKIP;
 		return $foregen;
 	}
 

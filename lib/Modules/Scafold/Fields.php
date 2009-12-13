@@ -153,6 +153,18 @@ class Scafold_Field extends Scafold_Field_Info
 
 }
 
+class Scafold_Parent extends Scafold_Field
+{
+	public function proccess($id, $value)
+	{
+		return $_SESSION['scafold'][$this->table]['parent'];
+	}
+	public function filterForm($session)
+	{
+		return '';
+	}
+}
+
 //Классы для различных типов полей
 //Соответствие в функции ScafoldController::getFieldClass
 
