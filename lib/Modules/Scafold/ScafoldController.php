@@ -176,8 +176,8 @@ abstract class ScafoldController extends Controller
 			{
 				//Обработка данных после POST
 				foreach ($this->fields as $k=>$class)
-					if ($k == $this->primaryKey)
-						continue;
+					if ($k == $this->primaryKey && !isset($data[$k]))
+						continue; //не трогаем первичный ключ
 					elseif (isset($this->methods['proccess_'.ucfirst($k)]))
 						$data[$k] = call_user_func(array($this, 'proccess_'.ucfirst($k)), 
 							isset($data[$k]) ? $data[$k] : $class->def(), $id);
