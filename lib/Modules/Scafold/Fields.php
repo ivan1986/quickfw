@@ -1,5 +1,7 @@
 <?php
 
+require_once LIBPATH.'/utils.php';
+
 /**
  * Класс, на основе которого создаются остальные<br>
  * Содержит набор полей для заполнения пользователем
@@ -48,7 +50,7 @@ class Scafold_Field extends Scafold_Field_Info
 	/**
 	 * Создает полноценное поле из данных о пользователе
 	 *
-	 * @param Scafold_Field_Info $info класс с данными от пользователя
+	 * @param Scafold_Field_Info $info Информация о поле
 	 */
 	public function __construct($info)
 	{
@@ -151,22 +153,47 @@ class Scafold_Field extends Scafold_Field_Info
 		return $this->default;
 	}
 
+	/**
+	 * Строит стандартный селект
+	 *
+	 * @param array $data массив ключ=>значение
+	 * @param scalar $cur текущий элемент
+	 * @return string блок селекта
+	 */
+	protected function selectBuild($data, $cur, $null=true)
+	{
+		$text = '<select name="data['.$this->name.']">';
+		if ($null)
+			$text.= '<option value="0"'.
+				(!isset($data[$cur]) ? ' selected="selected"' : '').
+					'> -- Не указано -- </option>';
+		foreach ($data as $i=>$v)
+			$text.= '<option value="'.$i.'"'.
+				($i == $cur ? ' selected="selected"' : '').
+				'>'.QFW::$view->esc($v).'</option>';
+		$text.= '</select>';
+		return $text;
+	}
+
 }
 
+//Сервисные классы
+
+/**
+ * Класс для главного поля
+ */
 class Scafold_Parent extends Scafold_Field
 {
 	public function proccess($id, $value)
 	{
 		return $_SESSION['scafold'][$this->table]['parent'];
 	}
+	
 	public function filterForm($session)
 	{
 		return '';
 	}
 }
-
-//Классы для различных типов полей
-//Соответствие в функции ScafoldController::getFieldClass
 
 /**
  * Класс для зависимых полей
@@ -186,32 +213,84 @@ class Scafold_Foregen extends Scafold_Field
 
 	public function editor($id, $value)
 	{
-		$text = '<select name="data['.$this->name.']">'.
-				'<option value="0"'.
-				(!isset($this->lookup[$value]) ? ' selected="selected"' : '').
-					'> -- Не указано -- </option>';
-		foreach ($this->lookup as $i=>$v)
-			$text.= '<option value="'.$i.'"'.
-				($i == $value ? ' selected="selected"' : '').
-				'>'.QFW::$view->esc($v).'</option>';
-		$text.= '</select>';
-		return $text;
+		return $this->selectBuild($this->lookup, $value);
 	}
 
 }
 
 /**
- * Пока тестовый класс для enum
+ * Сервисный классс для полей, вводимых пользователем
+ * <br>пока только обрезка при выводе, так как обязательно нагадят :)
+ */
+abstract class Scafold_UserInput extends Scafold_Field
+{
+	/** @var integer До скольки обрезать */
+	private $trim;
+	
+	public function __construct($info)
+	{
+		parent::__construct($info);
+		$this->trim = isset($info->typeParams['trim']) ? $info->typeParams['trim'] : 80;
+	}
+
+	public function display($id, $value)
+	{
+		return QFW::$view->esc(my_trim($value, $this->trim));
+	}
+}
+
+//Классы для различных типов полей из базы данных
+//Соответствие в функции ScafoldController::getFieldClass
+
+
+/**
+ * Пока тестовый класс для типа TEXT
+ */
+class Scafold_Text extends Scafold_UserInput
+{
+	/** @var integer Сколько строк */
+	private $rows;
+	/** @var integer Сколько колонок */
+	private $cols;
+
+	public function __construct($info)
+	{
+		parent::__construct($info);
+		$this->rows = isset($info->typeParams['rows']) ? $info->typeParams['rows'] : 10;
+		$this->cols = isset($info->typeParams['cols']) ? $info->typeParams['cols'] : 80;
+	}
+
+	public function editor($id, $value)
+	{
+		return '<textarea name="data['.$this->name.']" '.
+			'rows="'.$this->rows.'" cols="'.$this->cols.'">'.
+			QFW::$view->esc($value).'</textarea>';
+	}
+}
+
+/**
+ * Класс для типа ENUM
  */
 class Scafold_Enum extends Scafold_Field
 {
-	
-	public function display($id, $value)
+	/** @var array что в перечислении */
+	private $items;
+
+	public function __construct($info, $items)
 	{
-		return '111111';
+		parent::__construct($info);
+		$items = str_getcsv($items, ',', "'");
+		$this->items = array_combine($items, $items);
+	}
+
+	public function editor($id, $value)
+	{
+		return $this->selectBuild($this->items, $value, false);
 	}
 
 }
+
+//Классы для других типов полей, указываемых пользователем
 
 /**
  * Класс для поля, в котором хранится имя файла,
@@ -226,19 +305,24 @@ class Scafold_File extends Scafold_Field
 	/** @var bool Скачиваемый (доступен извне) */
 	private $download;
 
-	public function __construct($info, $params)
+	/**
+	 * Проверяет параметры для файлового поля
+	 *
+	 * @param Scafold_Field_Info $info Информация о поле
+	 */
+	public function __construct($info)
 	{
 		parent::__construct($info);
-		if (empty ($params['path']))
+		if (empty ($info->typeParams['path']))
 			throw new Exception('Не указана директория для фалов', 1);
-		if (!is_dir($params['path']))
-			throw new Exception('Неверная директория для файлов '.$params['path'], 1);
-		if (!is_writable($params['path']))
-			throw new Exception('Нельзя писать в директорию файлов '.$params['path'], 1);
-		$this->path = $params['path'];
+		if (!is_dir($info->typeParams['path']))
+			throw new Exception('Неверная директория для файлов '.$info->typeParams['path'], 1);
+		if (!is_writable($info->typeParams['path']))
+			throw new Exception('Нельзя писать в директорию файлов '.$info->typeParams['path'], 1);
+		$this->path = $info->typeParams['path'];
 		$this->prim = $info->primaryKey;
-		if (strpos($params['path'], DOC_ROOT) === 0)
-			$this->download = substr($params['path'], strlen(DOC_ROOT) );
+		if (strpos($info->typeParams['path'], DOC_ROOT) === 0)
+			$this->download = substr($info->typeParams['path'], strlen(DOC_ROOT) );
 		else
 			$this->download = false;
 	}

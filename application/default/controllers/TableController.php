@@ -25,7 +25,10 @@ class TableController extends ScafoldController
 		));
 		$this->filter('text', true);
 		$this->filter('char', true);
-		$this->type('enum', 'Enum');
+		$this->type('text', 'Text', array(
+			'cols' => 120,
+			'trim' => 10,
+		));
 		$this->type('file', 'File', array(
 			'path' => DOC_ROOT.'/upload',
 		));

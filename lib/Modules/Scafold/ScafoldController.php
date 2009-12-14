@@ -546,12 +546,17 @@ abstract class ScafoldController extends Controller
 		if ($infoClass->type)
 		{
 			$class = 'Scafold_'.ucfirst($infoClass->type);
-			return new $class($infoClass, $infoClass->typeParams);
+			return new $class($infoClass);
 		}
 
 		//определяем по типам и прочей известной информации
 		if ($infoClass->foregen)
 			return new Scafold_Foregen($infoClass);
+
+		$match = array();
+		if (preg_match('#(.*?)(?:\((.+?)\)|$)#', $fieldInfo['Type'], $match))
+			if (class_exists($class = 'Scafold_'.ucfirst($match[1])))
+				return new $class($infoClass, isset($match[2]) ? $match[2] : false );
 
 		return new Scafold_Field($infoClass);
 	}
