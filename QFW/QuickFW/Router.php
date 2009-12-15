@@ -10,7 +10,7 @@
 class QuickFW_Router
 {
 	/**
-	 * @var string Символ разделитель компонентов в запросе
+	 * @var string	Символ разделитель компонентов в запросе
 	 * @example Бывает очень полезно в случае переписывании на движок
 	 * с какой-то поделки в случае кривой относительной адресации
 	 */
@@ -253,6 +253,7 @@ class QuickFW_Router
 		$base   = QFW::$config['redirection']['baseUrl'];
 		$index  = QFW::$config['redirection']['useIndex']?'index.php/':'';
 		$url    = QFW::$config['redirection']['useRewrite']?$this->backrewrite($MCA):$MCA;
+		$url    = strtr($url, '/', self::PATH_SEPARATOR);
 		$defext = QFW::$config['redirection']['defExt'];
 		if (is_array($get) && count($get))
 			$get = '?'.http_build_query($get);
@@ -498,7 +499,7 @@ SREG;
 				$uri = substr($uri,0,$l);
 		}
 		
-		return trim($uri, '/');
+		return trim($uri, self::PATH_SEPARATOR.'/');
 	}
 
 }
