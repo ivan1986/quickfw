@@ -97,7 +97,7 @@ class Templater_PlainView
 
 	public function render($tmpl)
 	{
-		return $this->fetch($name);
+		return $this->fetch($tmpl);
 	}
 
 	public function fetch($tmpl)
