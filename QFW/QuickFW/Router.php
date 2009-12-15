@@ -9,6 +9,13 @@
  */
 class QuickFW_Router
 {
+	/**
+	 * @var string Символ разделитель компонентов в запросе
+	 * @example Бывает очень полезно в случае переписывании на движок
+	 * с какой-то поделки в случае кривой относительной адресации
+	 */
+	const PATH_SEPARATOR = '/';
+
 	protected $classes=array();
 
 	protected $baseDir;
@@ -92,10 +99,10 @@ class QuickFW_Router
 		$requestUri = $this->filterUri($requestUri);
 		$requestUri = $this->rewrite($requestUri);
 
-		$data = explode('/', $requestUri);
+		$data = explode(self::PATH_SEPARATOR, $requestUri);
 		$data = array_map('urldecode', $data);
 
-		$MCA = $this->loadMCA($data,$type);
+		$MCA = $this->loadMCA($data, $type);
 		if (isset($MCA['Error']))
 		{
 			if (QFW::$config['QFW']['release'])
@@ -111,7 +118,7 @@ class QuickFW_Router
 		$this->cController = $this->controller = $MCA['Controller'];
 		$this->action = $MCA['Action'];
 		$this->CurPath = $this->UriPath = $MCA['Path'];
-		$this->Uri = $MCA['Path'].'/'.join('/',$data);
+		$this->Uri = $MCA['Path'] . self::PATH_SEPARATOR . join(self::PATH_SEPARATOR, $data);
 		$this->RequestUri = $requestUri;
 		$this->ParentPath = null;
 		
@@ -159,7 +166,7 @@ class QuickFW_Router
 			if (QFW::$config['redirection']['useBlockRewrite'])
 				$Uri = $this->rewrite($Uri);
 			// module/controller/action/p1/p2/p3/...
-			$data = explode('/', $Uri);
+			$data = explode(self::PATH_SEPARATOR, $Uri);
 			$MCA = $this->loadMCA($data,'Block');
 			$MCA['Params']=$this->parseParams($data);
 		}
@@ -216,12 +223,12 @@ class QuickFW_Router
 	 */
 	public function delDef($url)
 	{
-		$url = explode('/',$url);
+		$url = explode(self::PATH_SEPARATOR, $url);
 		$n = min(3, count($url));
 		if (isset($url[0]) && $url[0]==$this->defM && $n--)
 			array_shift($url);
 		if (count($url)>$n)
-			return join('/',$url);
+			return join(self::PATH_SEPARATOR, $url);
 		$i = $n - 1;
 		if (count($url)<=$n && isset($url[$i]) && $url[$i]==$this->defA)
 		{
@@ -231,7 +238,7 @@ class QuickFW_Router
 		}
 		if (count($url)==1 && $url[0]==$this->defC)
 			array_shift($url);
-		return join('/',$url);
+		return join(self::PATH_SEPARATOR, $url);
 	}
 
 	/**
