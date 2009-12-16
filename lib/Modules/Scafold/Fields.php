@@ -292,6 +292,22 @@ class Scafold_Enum extends Scafold_Field
 
 //Классы для других типов полей, указываемых пользователем
 
+class Scafold_Checkbox extends Scafold_Field
+{
+
+	public function display($id, $value)
+	{
+		return $value ? 'Да' : 'Нет';
+	}
+
+	public function editor($id, $value)
+	{
+		return '<input type="hidden" name="data['.$this->name.']" value="0" />
+			<input type="checkbox" name="data['.$this->name.']" value="1" label="'.$this->title.'" />';
+	}
+
+}
+
 /**
  * Класс для поля, в котором хранится имя файла,
  * загружаемого на сервер
@@ -353,7 +369,7 @@ class Scafold_File extends Scafold_Field
 			unlink($this->path.'/'.$old);
 		//оставляем старое значение
 		if ($_FILES['file']['error'][$this->name] == 4 && !$value)
-			return $old;
+			return $old ? $old : '';
 		//удяляем старый
 		if (is_file($this->path.'/'.$old))
 			unlink($this->path.'/'.$old);
