@@ -407,7 +407,7 @@ SREG;
 
 		if (!isset($this->classes[$class_key]))
 		{
-			require($fullname);
+			require_once($fullname);
 			if (!class_exists($class))
 			{
 				//Смотрим, а не в неймспейсе ли он случайно
