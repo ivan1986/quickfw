@@ -37,18 +37,18 @@ class Log
 			self::f($str, $to);
 	}
 
-	private function jabber($str, $to) { self::$messages['jabber'][$to][]=$str; }
-	private function email($str, $to) { self::$messages['email'][$to][]=$str; }
-	private static function f($str, $to)
-	{
-		error_log(date('Y-m-d H:i:s').': '.$str."\n", 3, QFW::$config['host']['logpath'].'/'.$to.'.log');
-	}
-
-	public function __destruct()
+	/**
+	 * Отправляет очередь сообщений
+	 * <br>нужно в случае длительной работы и отправке в jabber
+	 */
+	public static function sendQuery()
 	{
 		if (isset(self::$messages['email']))
+		{
 			foreach (self::$messages['email'] as $k=>$msg)
 				error_log(join("\n",$msg), 1, $k);
+			unset(self::$messages['email']);
+		}
 		if (isset(self::$messages['jabber']))
 		{
 			if (!isset(QFW::$config['jabber']))
@@ -67,7 +67,20 @@ class Log
 					$J->message($k, join("\n",$msg));
 				$J->disconnect();
 			}
+			unset(self::$messages['jabber']);
 		}
+	}
+
+	private function jabber($str, $to) { self::$messages['jabber'][$to][]=$str; }
+	private function email($str, $to) { self::$messages['email'][$to][]=$str; }
+	private static function f($str, $to)
+	{
+		error_log(date('Y-m-d H:i:s').': '.$str."\n", 3, QFW::$config['host']['logpath'].'/'.$to.'.log');
+	}
+
+	public function __destruct()
+	{
+		self::sendQuery();
 	}
 
 }

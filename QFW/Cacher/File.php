@@ -35,7 +35,6 @@ class Cacher_File implements Zend_Cache_Backend_Interface
  *     'automaticCleaningFactor' => distable / tune automatic cleaning process (int),
  *     'hashedDirectoryLevel' => level of the hashed directory system (int),
  *     'hashedDirectoryUmask' => umask for hashed directory structure (int),
- *     'errorHandlingAPIBreak' => API break for better error handling ? (boolean)
  * );
  *
  * @param array $options options
@@ -101,7 +100,7 @@ class Cacher_File implements Zend_Cache_Backend_Interface
 
 	public function clean($mode = CACHE_CLR_ALL, $tags = array())
 	{
-		return $this->cleanDir($this->options['cacheDir'],$mode);
+		return $this->cleanDir($this->options['cacheDir'], $mode);
 	}
 
 	public function test($id)
@@ -123,7 +122,7 @@ class Cacher_File implements Zend_Cache_Backend_Interface
 		$result = true;
 		while ($file = readdir($dh))
 		{
-			if (($file == '.') || ($file == '..') || (substr($file, 0, 6)==$this->options['prefix']))
+			if (($file == '.') || ($file == '..') || (substr($file, 0, 6)!=$this->options['prefix']))
 				continue;
 			$file2 = $dir . $file;
 			if (strpos($file2, $this->options['prefix']) === false)
@@ -134,10 +133,7 @@ class Cacher_File implements Zend_Cache_Backend_Interface
 
 			if (!is_file($file2))
 				continue;
-			if ($mode == CACHE_CLR_OLD &&
-				is_null($this->options['lifeTime']) ||
-				filemtime($file2) > time() - $this->options['lifeTime']
-				)
+			if ($mode == CACHE_CLR_OLD && filemtime($file2) > time())
 				continue;
 			$result = $result && $this->unlink($file2);
 		}
@@ -153,7 +149,7 @@ class Cacher_File implements Zend_Cache_Backend_Interface
 	protected function fileName($id,$createDirs=false)
 	{
 		//слеш у нас являются разделителем
-		//А если всякие операционные системы не понимают двуеточия, две точки подрят
+		//А если всякие операционные системы не понимают двоеточия, две точки подрят
 		//кавычки и прочие извращения, то это личная сексуальная драмма их пользователей
 		$fname = $this->options['fileNameProtection'] ? md5($id) : strtr($id, '/', '-');
 		$suffix = $this->options['prefix'].$fname;
