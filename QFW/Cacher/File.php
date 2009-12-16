@@ -14,7 +14,7 @@ class Cacher_File implements Zend_Cache_Backend_Interface
 		'fileLocking' => true,
 		'writeControl' => false,
 		'readControl' => false,
-		'fileNameProtection' => true,
+		'fileNameProtection' => false,
 		'automaticCleaningFactor' => 0,
 		'hashedDirectoryLevel' => 0,
 		'hashedDirectoryUmask' => 0777,
@@ -152,7 +152,11 @@ class Cacher_File implements Zend_Cache_Backend_Interface
 	 */
 	protected function fileName($id,$createDirs=false)
 	{
-		$suffix = $this->options['prefix'].($this->options['fileNameProtection']?md5($id):$id);
+		//слеш у нас являются разделителем
+		//А если всякие операционные системы не понимают двуеточия, две точки подрят
+		//кавычки и прочие извращения, то это личная сексуальная драмма их пользователей
+		$fname = $this->options['fileNameProtection'] ? md5($id) : strtr($id, '/', '-');
+		$suffix = $this->options['prefix'].$fname;
 		$root = $this->options['cacheDir'];
 		if ($this->options['hashedDirectoryLevel']>0)
 		{
