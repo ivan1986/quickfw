@@ -39,7 +39,6 @@ class QuickFW_Auth
 			$this->session();
 		
 		$this->name=$name;
-		QFW::$userdata = $this->userdata = $this->authorized = false;
 		if (!empty($_SESSION[$this->name]))
 		{
 			$this->authorized = true;
@@ -47,13 +46,14 @@ class QuickFW_Auth
 			QFW::$userdata = & $_SESSION[$this->name];
 			return true;
 		}
+		else
+			QFW::$userdata = $this->userdata = $this->authorized = false;
 		$this->checkPostData();
 		if ($this->authorized)
 			return true;
 		if ($redir===false)
 			return false;
-		QFW::$router->route($redir);
-		die();
+		QFW::$router->redirect($redir);
 	}
 	
 	/**

@@ -385,15 +385,15 @@ SREG;
 		//Определяем контроллер
 		$cname = isset($data[0]) ? $data[0] : ($type=='Block' ? $this->cController : $this->defC);
 
-		$class=ucfirst($cname).'Controller';
+		$class = ucfirst($cname).'Controller';
 		$fullname = $path . '/controllers/' . strtr($class,'_','/') . '.php';
 
 		if (is_file($fullname))
 			array_shift($data);
 		else
 		{
-			$cname=$this->defC;
-			$class=ucfirst($cname).'Controller';
+			$cname = $type=='Block' ? $this->cController : $this->defC;
+			$class = ucfirst($cname).'Controller';
 			$fullname = $path . '/controllers/' . $class . '.php';
 			if (!is_file($fullname))
 			{
