@@ -40,10 +40,10 @@ class QuickFW_Auth
 		
 		$this->name=$name;
 		QFW::$userdata = $this->userdata = $this->authorized = false;
-		if (isset($_SESSION[$name]))
+		if (!empty($_SESSION[$this->name]))
 		{
 			$this->authorized = true;
-			$this->userdata = & $_SESSION[$name];
+			$this->userdata = & $_SESSION[$this->name];
 			QFW::$userdata = & $_SESSION[$this->name];
 			return true;
 		}
