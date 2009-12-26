@@ -255,7 +255,10 @@ class CurlResponse
 			{
 				$r = $this->parceTagParams($field);
 				if (isset($r['name']))
-					$fields[$r['name']] = isset($r['value'])?$r['value']:null;
+					if (($p = strpos($r['name'], '[]')) === false)
+						$fields[$r['name']] = isset($r['value'])?$r['value']:null;
+					else
+						$fields[substr($r['name'], 0, $p)][] = isset($r['value'])?$r['value']:null;
 			}
 			$forms[$k]['fields'] = $fields;
 		}

@@ -6,6 +6,9 @@ RewriteBase /
 
 RewriteRule \.svn - [F]
 
+#RewriteRule ^.+(/(css|img|js).*)$ /$1 [L]
+
 RewriteCond %{SCRIPT_FILENAME} !-f
 RewriteCond %{SCRIPT_FILENAME} !-d
-RewriteRule ^(.*)$ index.php/$1
+RewriteRule ^(.*)$ index.phpi [L]
+
