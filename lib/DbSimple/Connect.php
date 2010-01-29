@@ -32,7 +32,7 @@ define('DBSIMPLE_PARENT_KEY', 'PARENT_KEY'); // forrest-based resultset support
  * @method string setIdentPrefix($prx)
  * @method string setCachePrefix($prx)
  */
-class QuickFW_AutoDbSimple
+class DbSimple_Connect
 {
 	protected $DbSimple, $DSN;
 
@@ -91,15 +91,14 @@ class QuickFW_AutoDbSimple
 		$parsed = $this->parseDSN($dsn);
 		if (!$parsed)
 			$this->errorHandler('Ошибка разбора строки DSN',$dsn);
-		if (!isset($parsed['scheme']) || !is_file(LIBPATH.'/DbSimple/'.ucfirst($parsed['scheme']).'.php'))
+		if (!isset($parsed['scheme']) || !is_file(dirname(__FILE__).'/'.ucfirst($parsed['scheme']).'.php'))
 			$this->errorHandler('Невозможно загрузить драйвер базы данных',$parsed);
-		require_once LIBPATH.'/DbSimple/'.ucfirst($parsed['scheme']).'.php';
+		require_once dirname(__FILE__).'/'.ucfirst($parsed['scheme']).'.php';
 		$class = 'DbSimple_'.ucfirst($parsed['scheme']);
 		$this->DbSimple = new $class($parsed);
 		if (isset($parsed['prefix']))
 			$this->DbSimple->setIdentPrefix($parsed['prefix']);
 		$this->DbSimple->setCachePrefix('db_'.md5($parsed['dsn']).'_');
-		//$this->DbSimple->addIgnoreInTrace('QuickFW_AutoDbSimple::.*');
 		$this->DbSimple->setErrorHandler(array(&$this, 'errorHandler'), QFW::$config['QFW']['ErrorStack']);
 	}
 

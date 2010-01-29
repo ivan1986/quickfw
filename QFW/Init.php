@@ -83,9 +83,9 @@ class QFW
 			self::$view->mainTemplate = '';
 		}
 
-		require QFWPATH.'/QuickFW/AutoDbSimple.php';
+		require LIBPATH.'/DbSimple/Connect.php';
 		//Инициализируем класс базы данных
-		self::$db = new QuickFW_AutoDbSimple(self::$config['database']);
+		self::$db = new DbSimple_Connect(self::$config['database']);
 
 		//выставляем заголовок с нужной кодировкой
 		if (!empty(self::$config['host']['encoding']))
