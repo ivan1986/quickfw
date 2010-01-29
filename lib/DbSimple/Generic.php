@@ -1245,7 +1245,7 @@ abstract class DbSimple_Generic_LastError
 	 * - error message
 	 * - full error context information (last query etc.)
 	 */
-	public function setErrorHandler($handler, $stack)
+	public function setErrorHandler($handler, $stack=false)
 	{
 		$prev = $this->errorHandler;
 		$this->errorHandler = $handler;
@@ -1312,6 +1312,7 @@ abstract class DbSimple_Generic_LastError
 				$t['over_function'] = $trace[$i+1]['function'];
 				$t = $t + $trace[$i+1];
 				$trace[$i+1] = null; // skip call_user_func on next iteration
+				$next = isset($trace[$i+2])? $trace[$i+2] : null; // Correct Next frame.
 			}
 
 			// Skip myself frame.
