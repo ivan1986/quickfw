@@ -16,7 +16,7 @@ define('DBSIMPLE_PARENT_KEY', 'PARENT_KEY'); // forrest-based resultset support
  *
  * <br>нужен для ленивой инициализации коннекта к базе
  *
- * @package QFW
+ * @package DbSimple
  * @method mixed transaction(string $mode=null)
  * @method mixed commit()
  * @method mixed rollback()
@@ -52,7 +52,7 @@ class DbSimple_Connect
 	 * Взять базу из пула коннектов
 	 *
 	 * @param string $dsn DSN строка БД
-	 * @return QuickFW_AutoDbSimple
+	 * @return DbSimple_Connect
 	 */
 	public static function get($dsn)
 	{
