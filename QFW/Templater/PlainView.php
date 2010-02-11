@@ -65,6 +65,12 @@ class Templater_PlainView
 		$this->_vars=array();
 	}
 
+	/**
+	 * Возвращает значения переменных в шаблоне
+	 *
+	 * @param string $var имя переменной
+	 * @return mixed значение
+	 */
 	public function getTemplateVars($var = null)
 	{
 		if ($var === null)
@@ -75,11 +81,22 @@ class Templater_PlainView
 			return null;
 	}
 
+	/**
+	 * Возвращает путь к шаблонам
+	 *
+	 * @return string путь
+	 */
 	public function getScriptPath()
 	{
 		return $this->_tmplPath;
 	}
 
+	/**
+	 * Устанавливает путь к шаблонам
+	 *
+	 * @param string $path новый путь
+	 * @return boolean корректный ли путь
+	 */
 	public function setScriptPath($path)
 	{
 		if (!is_readable($path))
