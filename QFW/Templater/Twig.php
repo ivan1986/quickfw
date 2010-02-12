@@ -77,7 +77,11 @@ class Templater_Twig
 		array_pop($p);
 		$p=array_pop($p);
 		$this->_TE = new Twig_Environment(new Twig_Loader_Filesystem($this->_tmplPath),
-			array( 'cache' => TMPPATH . '/templates_c/'.($p!='templates'?$p:'') ));
+			array(
+				'cache' => TMPPATH . '/templates_c/'.($p!='templates'?$p:''),
+				'debug' => !QFW::$config['QFW']['release'],
+				//'auto_reload' => !QFW::$config['QFW']['release'],
+			));
 		return true;
 	}
 
@@ -169,6 +173,7 @@ class Templater_Twig
 	public function fetch($name)
 	{
 		$template = $this->getEngine()->loadTemplate($name);
+		$this->assign('P', $this->P);
 		return $template->render($this->_vars);
 	}
 
@@ -189,47 +194,13 @@ class Templater_Twig
 	/**
 	 * Return the template engine object
 	 *
-	 * @return Smarty
+	 * @return Twig_Environment
 	 */
 	private function getEngine()
 	{
 		if (!$this->_TE)
 			$this->Init();
 		return $this->_TE;
-	}
-
-	/**
-	 * @internal Функция для Smarty
-	 */
-	public static function getTemplate($tpl_name, &$tpl_source, &$smarty)
-	{
-		$tpl_source = '{literal}'.QFW::$router->blockRoute($block).'{/literal}';
-		return true;
-	}
-
-	/**
-	 * @internal Функция для Smarty
-	 */
-	public function getTimestamp($tpl_name, &$tpl_timestamp, &$smarty)
-	{
-		$tpl_timestamp = microtime(true);
-		return true;
-	}
-
-	/**
-	 * @internal Функция для Smarty
-	 */
-	public function isSecure($tpl_name, &$smarty)
-	{
-		return true;
-	}
-
-	/**
-	 * @internal Функция для Smarty
-	 */
-	public function isTrusted($tpl_name, &$smarty)
-	{
-		return false;
 	}
 
 	/**
