@@ -87,7 +87,7 @@ class HTML_FormPersister extends HTML_SemiParser
 	 */
 	static function ob_formPersisterHandler($st)
 	{
-		$fp =& new HTML_FormPersister();
+		$fp = new HTML_FormPersister();
 		$r = $fp->process($st);
 		return $r;
 	} 
