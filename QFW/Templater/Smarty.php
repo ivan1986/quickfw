@@ -1,21 +1,14 @@
 <?php
 
+require_once 'Templater.php';
 /**
  * Обертка для смарти
  *
  */
-class Templater_Smarty
+class Templater_Smarty extends Templater
 {
 	/** @var Smarty */
 	protected $_smarty;
-
-	/** @var QuickFW_Plugs Плагины фреймворка */
-	public $P;
-
-	protected $_tmplPath;
-	
-	/** @var string Template file in which is all content */
-	public $mainTemplate;
 
 	/**
 	 * Init - подключение и инициальзация смарти
@@ -47,20 +40,6 @@ class Templater_Smarty
 	}
 
 	/**
-	 * Constructor
-	 *
-	 * @param string $tmplPath
-	 * @param string $mainTpl
-	 * @return void
-	 */
-	public function __construct($tmplPath, $mainTpl)
-	{
-		$this->_tmplPath = $tmplPath;
-		$this->mainTemplate = $mainTpl;
-		$this->P = QuickFW_Plugs::getInstance();
-	}
-
-	/**
 	 * Set the path to the templates
 	 *
 	 * @param string $path The directory to set as the path.
@@ -80,16 +59,6 @@ class Templater_Smarty
 		$this->_smarty->template_dir = $path;
 		$this->_smarty->compile_dir = TMPPATH . '/templates_c/'.($p!='templates'?$p:'');
 		return true;
-	}
-
-	/**
-	 * Retrieve the current template directory
-	 *
-	 * @return string
-	 */
-	public function getScriptPath()
-	{
-		return $this->_tmplPath;
 	}
 
 	/**
@@ -142,41 +111,9 @@ class Templater_Smarty
 		return $this->getEngine()->get_template_vars($var);
 	}
 
-	public function block($block)
-	{
-		//TODO: убрать ненужную переменную после перехода на php 5.3
-		$args = func_get_args();
-		return call_user_func_array(array(&QFW::$router, 'blockRoute'), $args);
-	}
-
-	/**
-	 * Processes a template and returns the output.
-	 *
-	 * @param string $name The template to process.
-	 * @return string The output.
-	 */
-	public function render($name)
-	{
-		return $this->getEngine()->fetch($name);
-	}
-
 	public function fetch($name)
 	{
 		return $this->getEngine()->fetch($name);
-	}
-
-	public function displayMain($content)
-	{
-		if (isset($this->mainTemplate) && $this->mainTemplate!="")
-		{
-			//Необходимо для установки флага CSS
-			$this->P->startDisplayMain();
-			$this->getEngine()->assign('content',$content);
-			$content = $this->getEngine()->fetch($this->mainTemplate);
-		}
-		//Необходимо для вызовов всех деструкторов
-		QFW::$router->startDisplayMain();
-		return $this->P->HeaderFilter($content);
 	}
 
 	/**
