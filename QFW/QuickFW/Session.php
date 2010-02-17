@@ -7,6 +7,7 @@
  */
 class QuickFW_Session
 {
+	/** @var Cacher_File кешер, если включены сессии в кеше */
 	private static $cache;
 
 	/**
