@@ -2,7 +2,9 @@
 
 abstract class Templater
 {
+	/** @var array переменные, установленные в шаблоне */
 	protected $_vars;
+	/** @var string путь к шаблонам */
 	protected $_tmplPath;
 
 	/** @var QuickFW_Plugs Плагины фреймворка */

@@ -65,10 +65,10 @@ $config['QFW'] = array(
 );
 
 /* Шаблонизатор - имя класса + дефолтовый шаблон */
-$config['templater']= array(
+/*$config['templater']= array(
 	'name'      => 'PlainView',
 	'def_tpl'   => 'main.html',
-);
+);*/
 
 $config['templater']= array(
 	'name'      => 'Proxy',

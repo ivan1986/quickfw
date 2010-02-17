@@ -1,32 +1,12 @@
 <?php
 
-class Templater_Proxy
+require_once 'Templater.php';
+
+class Templater_Proxy extends Templater
 {
-	/** @var QuickFW_Plugs Плагины фреймворка */
-	public $P;
 
-	/** @var String Основной шаблон (путь относительно директории шаблонов)	*/
-	public $mainTemplate;
-
-	protected $_vars;
-	protected $_tmplPath;
-
-	protected $templates;
-
-	/**
-	* Constructor
-	*
-	* @param string $tmplPath - директория шаблонов
-	* @param string $mainTpl - основной шаблон
-	* @return void
-	*/
-	public function __construct($tmplPath, $mainTpl)
-	{
-		$this->_vars = array();
-		$this->mainTemplate = $mainTpl;
-		$this->P = QuickFW_Plugs::getInstance();
-		$this->templates = array();
-	}
+	/** @var array доступные шаблонизаторы */
+	protected $templates = array();
 
 	/**
 	* Set the path to the templates
@@ -36,21 +16,8 @@ class Templater_Proxy
 	*/
 	public function setScriptPath($path)
 	{
-		if (!is_readable($path))
-			return false;
 		$this->unsyncronize();
-		$this->_tmplPath = $path;
-		return true;
-	}
-
-	/**
-	* Retrieve the current template directory
-	*
-	* @return string
-	*/
-	public function getScriptPath()
-	{
-		return $this->_tmplPath;
+		return parent::setScriptPath($path);
 	}
 
 	/**
@@ -69,10 +36,7 @@ class Templater_Proxy
 	public function assign($spec, $value = null)
 	{
 		$this->unsyncronize();
-		if (is_array($spec))
-			$this->_vars = array_merge($this->_vars, $spec);
-		else
-			$this->_vars[$spec] = $value;
+		parent::assign($spec, $value);
 		return $this;
 	}
 
@@ -85,50 +49,7 @@ class Templater_Proxy
 	public function delete($spec)
 	{
 		$this->unsyncronize();
-		if (is_array($spec))
-			foreach ($spec as $item)
-				unset($this->_vars[$item]);
-		else
-			unset($this->_vars[$spec]);
-	}
-
-	/**
-	* Clear all assigned variables
-	*
-	* @return void
-	*/
-	public function clearVars()
-	{
-		$this->unsyncronize();
-		$this->_vars=array();
-	}
-
-	public function getTemplateVars($var = null)
-	{
-		if ($var === null)
-			return $this->_vars;
-		elseif (isset($this->_vars[$var]))
-			return $this->_vars[$var];
-		else
-			return null;
-	}
-
-	public function block($block)
-	{
-		//TODO: убрать ненужную переменную после перехода на php 5.3
-		$args = func_get_args();
-		return call_user_func_array(array(&QFW::$router, 'blockRoute'), $args);
-	}
-
-	/**
-	* Processes a template and returns the output.
-	*
-	* @param string $name The template to process.
-	* @return string The output.
-	*/
-	public function render($name)
-	{
-		return $this->fetch($name);
+		parent::delete($spec);
 	}
 
 	public function fetch($name)
@@ -158,12 +79,20 @@ class Templater_Proxy
 		return $this->templates[$T]['c']->fetch($name);
 	}
 
+	/**
+	 * Сброс флага синхронизации
+	 */
 	protected function unsyncronize()
 	{
 		foreach ($this->templates as $k=>$v)
 			$this->templates[$k]['s']=false;
 	}
 
+	/**
+	 * Синхронизация проксируемого шаблонизатора
+	 *
+	 * @param Templater $tpl шаблонизатор
+	 */
 	protected function syncronize($tpl)
 	{
 		$tpl->mainTemplate=$this->mainTemplate;
@@ -171,34 +100,6 @@ class Templater_Proxy
 		$tpl->clearVars();
 		$tpl->assign($this->_vars);
 	}
-
-	/**
-	* Выводит основной шаблон, обрабатывает функцией HeaderFilter
-	*
-	* @param string $name The template to process.
-	* @return string The output.
-	*/
-	public function displayMain($content)
-	{
-		if (isset($this->mainTemplate) && $this->mainTemplate!="")
-		{
-			//Необходимо для установки флага CSS
-			$this->P->startDisplayMain();
-			$this->assign('content',$content);
-			$content = $this->fetch($this->mainTemplate);
-		}
-		//Необходимо для вызовов всех деструкторов
-		QFW::$router->startDisplayMain();
-		return $this->P->HeaderFilter($content);
-	}
-
-	/**
-	 * Функции ескейпинга с учетом utf8
-	 *
-	 * @param string $s Исходная строка
-	 * @return string htmlspecialchars($s, ENT_QUOTES, 'UTF-8')
-	 */
-	public function esc($s) { return htmlspecialchars($s, ENT_QUOTES, 'UTF-8');}
 
 }
 ?>

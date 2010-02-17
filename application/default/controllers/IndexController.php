@@ -11,7 +11,7 @@ class IndexController extends QuickFW_Auth
 
 	public function indexAction()
 	{
-		print_r($_POST);
+		/*print_r($_POST);
 		require_once LIBPATH.'/MetaForm/MetaFormAction.php';
 		require_once LIBPATH.'/MetaForm/MetaForm.php';
 		require_once LIBPATH.'/MetaForm/FormPersister.php';
@@ -27,7 +27,7 @@ class IndexController extends QuickFW_Auth
 		$metaFormAction = new HTML_MetaFormAction($MetaForm);
 		print_r($metaFormAction->process());
 		print_r($metaFormAction->getErrors());
-		print_r($MetaForm->getFormMeta());
+		print_r($MetaForm->getFormMeta());*/
 
 		//$x = Cache::slot('Test',1);
 		return QFW::$view->fetch('b.html');
