@@ -130,7 +130,6 @@ class QuickFW_Session
 	 */
 	public function __construct($sid = '')
 	{
-		self::$cache = Cache::get();
 		call_user_func_array('session_set_cookie_params', QFW::$config['session']);
 		if (!empty($sid))
 			session_id($sid);
@@ -148,6 +147,7 @@ class QuickFW_Session
 	{
 		if (QFW::$config['QFW']['cacheSessions'])
 		{
+			self::$cache = Cache::get();
 			session_set_save_handler(
 				array('QuickFW_Session','open'),
 				array('QuickFW_Session','close'),
