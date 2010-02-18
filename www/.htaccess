@@ -10,5 +10,4 @@ RewriteRule \.svn - [F]
 
 RewriteCond %{SCRIPT_FILENAME} !-f
 RewriteCond %{SCRIPT_FILENAME} !-d
-RewriteRule ^(.*)$ index.phpi [L]
-
+RewriteRule ^(.*)$ index.php [L]
