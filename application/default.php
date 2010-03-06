@@ -1,5 +1,6 @@
 <?php
 
+setlocale(LC_ALL, '');
 mb_internal_encoding("UTF-8");
 
 /* настройки хоста - установка Content-Type: text/html; charset=encoding */

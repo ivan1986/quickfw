@@ -207,7 +207,11 @@ class QuickFW_Router
 	public function show404()
 	{
 		$GLOBALS['DONE'] = 1;
-		//TODO: php_sapi_name если через nginx, то Status:
+		//php_sapi_name если через nginx, то Status
+		//а надо ли? - nginx и так понимает
+		/*if (substr(PHP_SAPI, 0, 3) == 'cgi')
+			header ('Status: 404 Not Found');
+		else*/
 		header($_SERVER['SERVER_PROTOCOL'].' 404 Not Found');
 		QFW::$view->setScriptPath(APPPATH.'/default/templates/');
 		die(QFW::$view->render('404.html'));

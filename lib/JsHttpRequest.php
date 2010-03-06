@@ -367,11 +367,11 @@ class JsHttpRequest
 		// termination, do not modify the status (""HTTP/1.1 ..." header seems to be not
 		// too cross-platform).
 		if ($this->RESULT === null) {
-			if (php_sapi_name() == "cgi") {
-				header("Status: $status");
-			} else {
-				header("HTTP/1.1 $status");
-			}
+			//начиная с php 5.3 только cgi-fcgi, nginx запрашивает HTTP/1.0 у апача
+			if (substr(PHP_SAPI, 0, 3) == 'cgi')
+				header ('Status: '.$status);
+			else
+				header($_SERVER['SERVER_PROTOCOL'].' '.$status);
 		}
 
 		// In XMLHttpRequest mode we must return text/plain - damned stupid Opera 8.0. :(
