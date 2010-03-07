@@ -274,4 +274,23 @@ function array2xml($array,$attrName='attr',$arrFlar='array')
 	return $xml;
 }
 
+/**
+ * Вывод окончаний русских слов с учетом числительных (например сообщение сообщения сообщений)
+ *
+ * @param intereg $n число
+ * @param string $form1 единственное
+ * @param string $form2 форма для 2-4
+ * @param string $form5 форма для 5 и более
+ * @return string нужная форма
+ */
+function pluralForm($n, $form1, $form2, $form5)
+{
+	$n = abs($n) % 100;
+	$n1 = $n % 10;
+	if ($n > 10 && $n < 20) return $form5;
+	if ($n1 > 1 && $n1 < 5) return $form2;
+	if ($n1 == 1) return $form1;
+	return $form5;
+}
+
 ?>
