@@ -1,6 +1,6 @@
 <?php
 
-setlocale(LC_ALL, '');
+setlocale(LC_ALL, 'ru_RU.UTF-8');
 mb_internal_encoding("UTF-8");
 
 /* настройки хоста - установка Content-Type: text/html; charset=encoding */
@@ -19,7 +19,7 @@ $config['default']=array(
 
 /*
  * Настройки коннекта к базе данных в формате
- * driver:[//[user[:pass]@]host[:port]]base[?enc=codepage][&persist=(0|1)][&timeout=(sec|0)]
+ * driver:[//[user[:pass]@]host[:port]]/base[?enc=codepage][&persist=(0|1)][&timeout=(sec|0)]
  */
 $config['database']='mypdo://root@localhost/smspr?enc=utf8';
 
