@@ -4,7 +4,6 @@ require_once 'Templater.php';
 
 /**
  * Делегат отложенного вызова функции или метода
- * с дополнительным первым параметром
  */
 class PlainView_Delegate
 {
@@ -14,12 +13,21 @@ class PlainView_Delegate
 	private $m;
 	/** @var mixed[] параметры */
 	private $args;
+	/** @var bool флаг замены */
+	private $replase;
 
-	public function  __construct($obj = false)
+	/**
+	 *
+	 * @param object|string|false $obj объект, или имя класса
+	 * @param bool $replase заменять первый параметр
+	 *        или просто добавлять в начало
+	 */
+	public function  __construct($obj, $replase)
 	{
 		$this->obj = $obj;
 		$this->m = false;
 		$this->args = array();
+		$this->replase = $replase;
 	}
 
 	public function __call($m, $args)
@@ -49,7 +57,10 @@ class PlainView_Delegate
 		if (!$this->m)
 			return false;
 		$m = $this->obj ? array($this->obj, $this->m) : $this->m;
-		array_unshift($this->args, $data);
+		if ($this->replase)
+			$this->args[0] = $data;
+		else
+			array_unshift($this->args, $data);
 		return call_user_func_array($m, $this->args);
 	}
 
@@ -70,9 +81,15 @@ class Templater_PlainView extends Templater
 	/** @var PlainView_Delegate[] */
 	private $callers = array();
 
-	private function begin($obj = false)
+	/**
+	 *
+	 * @param object|string|false $obj объект, или имя класса
+	 * @param bool $replase заменять первый параметр или просто добавлять
+	 * @return PlainView_Delegate
+	 */
+	private function begin($obj = false, $replase = false)
 	{
-		$caller = new PlainView_Delegate($obj);
+		$caller = new PlainView_Delegate($obj, $replase);
 		$this->callers[] = $caller;
 		ob_start();
 		return $caller;
