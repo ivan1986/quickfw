@@ -1,7 +1,11 @@
-all: quickfw.pdf
+all: pdf html-all
 
-quickfw.pdf: general quickstart directory mvc blocks  cache  auth  features quickfw.txt
+pdf: quickfw
 	a2x -v quickfw.txt --dblatex-opts='--backend=xetex -o quickfw.pdf'
+html-all: quickfw
+	a2x -f xhtml -v quickfw.txt
+
+quickfw: general quickstart directory mvc blocks  cache  auth  features quickfw.txt
 
 general: general.txt
 quickstart: quickstart.txt
@@ -18,5 +22,6 @@ features: features.txt
 
 clean:
 	rm -rf quickfw.pdf
+	rm -rf quickfw.html docbook-xsl.css
 
 .PHONY: all clean
