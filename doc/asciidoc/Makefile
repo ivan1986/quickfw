@@ -1,24 +1,15 @@
-all: pdf html-all
+all: quickfw.pdf quickfw.html
 
-pdf: quickfw
+quickfw.pdf: quickfw.txt
 	a2x -v quickfw.txt --dblatex-opts='--backend=xetex -o quickfw.pdf'
-html-all: quickfw
+
+quickfw.html: quickfw.txt 
 	a2x -f xhtml -v quickfw.txt
 
-quickfw: general quickstart directory mvc blocks  cache  auth  features quickfw.txt
+FILES = general quickstart directory mvc blocks cache auth features
 
-general: general.txt
-quickstart: quickstart.txt
-directory: directory.txt
-mvc: mvc.txt
-blocks: blocks.txt
-
-cache: cache.txt
-
-auth: auth.txt
-
-features: features.txt
-
+quickfw.txt: $(addsuffix .txt, $(FILES))
+	touch $@
 
 clean:
 	rm -rf quickfw.pdf
