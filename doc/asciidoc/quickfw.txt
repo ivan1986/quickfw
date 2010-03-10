@@ -11,4 +11,10 @@ include::mvc.txt[]
 
 include::blocks.txt[]
 
+
+include::cache.txt[]
+
+include::auth.txt[]
+
+
 include::features.txt[]
