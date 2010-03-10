@@ -11,8 +11,16 @@ FILES = general quickstart directory mvc blocks cache auth features
 quickfw.txt: $(addsuffix .txt, $(FILES))
 	touch $@
 
+site: ../../tmp/doc/quickfw.html
+
+../../tmp/doc/quickfw.html: quickfw.txt $(addsuffix .txt, $(FILES))
+	rm -rf ../../tmp/doc
+	mkdir -p ../../tmp/doc
+	a2x -f xhtml -v quickfw.txt -D ../../tmp/doc
+
 clean:
 	rm -rf quickfw.pdf
 	rm -rf quickfw.html docbook-xsl.css
+	rm -rf ../../tmp/doc
 
 .PHONY: all clean
