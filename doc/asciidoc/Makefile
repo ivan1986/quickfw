@@ -1,19 +1,17 @@
 all: quickfw.pdf quickfw.html
 
-quickfw.pdf: quickfw.txt
+FILES = quickfw general quickstart directory mvc blocks cache auth features
+TEXTS = $(addsuffix .txt, $(FILES) )
+
+quickfw.pdf: $(TEXTS)
 	a2x -v quickfw.txt --dblatex-opts='--backend=xetex -o quickfw.pdf'
 
-quickfw.html: quickfw.txt 
+quickfw.html: $(TEXTS)
 	a2x -f xhtml -v quickfw.txt
 
-FILES = general quickstart directory mvc blocks cache auth features
+site: ../../tmp/doc/quickfw.html $(TEXTS)
 
-quickfw.txt: $(addsuffix .txt, $(FILES))
-	touch $@
-
-site: ../../tmp/doc/quickfw.html
-
-../../tmp/doc/quickfw.html: quickfw.txt $(addsuffix .txt, $(FILES))
+../../tmp/doc/quickfw.html: $(TEXTS)
 	rm -rf ../../tmp/doc
 	mkdir -p ../../tmp/doc
 	a2x -f xhtml -v quickfw.txt -D ../../tmp/doc
