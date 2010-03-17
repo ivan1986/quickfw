@@ -30,7 +30,7 @@ class Cacher_Memcached implements Zend_Cache_Backend_Interface
 
 	public function save($data, $id, $tags = array(), $specificLifetime = 3600)
 	{
-		$this->mc->set($id, $data, $specificLifetime);
+		return $this->mc->set($id, $data, $specificLifetime);
 	}
 
 	public function load($id, $doNotTest = false)
@@ -58,6 +58,24 @@ class Cacher_Memcached implements Zend_Cache_Backend_Interface
 		if ($mode == CACHE_CLR_ALL)
 			$this->mc->flush();
 	}
+
+	/**
+	 * Increment record value
+	 *
+	 * @param string $key
+	 * @param int $value (optional)
+	 * @return int new item's value
+	 */
+	public function inc($id, $value=1, $specificLifetime=3600)
+	{
+		return $this->mc->increment($id, $value);
+	}
+
+	public function add($data, $id, $tags = array(), $specificLifetime = 3600)
+	{
+		return $this->mc->add($id, $data, $specificLifetime);
+	}
+
 }
 
 ?>
