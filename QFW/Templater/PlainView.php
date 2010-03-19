@@ -103,6 +103,30 @@ class Templater_PlainView extends Templater
 		echo $caller->callable() ? $caller->run($data) : $data;
 	}
 
+	public function extend($tpl)
+	{
+		return $this->begin($this, false)->extend_call($tpl);
+	}
+	public function extend_call($data, $tpl)
+	{
+		return $this->fetch($tpl);
+	}
+	private $_blocks = array();
+	public function bl($name)
+	{
+		return $this->begin($this, false)->bl_call($name);
+	}
+	public function bl_call($data, $name)
+	{
+        if (array_key_exists($name, $this->_blocks) === false)
+            $this->_blocks[$name] = array();
+
+        if (in_array($data, $this->_blocks[$name]) === false)
+            array_push($this->_blocks[$name], $data);
+
+		return $this->_blocks[$name][0];
+	}
+
 }
 
 ?>
