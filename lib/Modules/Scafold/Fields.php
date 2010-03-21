@@ -18,7 +18,7 @@ class Scafold_Field_Info
 	/** @var string фильтр */
 	public $filter = false;
 	/** @var array настройки зависимостей */
-	public $foregen = false;
+	public $foreign = false;
 
 	/** @var array Данные из базы */
 	public $fiendInfo;
@@ -199,7 +199,7 @@ class Scafold_Parent extends Scafold_Field
  * Класс для зависимых полей
  * формирует select со значениями из другой таблицы
  */
-class Scafold_Foregen extends Scafold_Field
+class Scafold_Foreign extends Scafold_Field
 {
 	/** @var array Зависимые поля */
 	protected $lookup;
@@ -208,7 +208,7 @@ class Scafold_Foregen extends Scafold_Field
 	{
 		parent::__construct($info);
 		$this->lookup = QFW::$db->selectCol('SELECT ?# AS ARRAY_KEY_1, ?# FROM ?#',
-			$info->foregen['key'], $info->foregen['field'], $info->foregen['table']);
+			$info->foreign['key'], $info->foreign['field'], $info->foreign['table']);
 	}
 
 	public function editor($id, $value)

@@ -12,12 +12,12 @@ class TableController extends ScafoldController
     public function __construct()
 	{
 		QFW::$view->mainTemplate = '';
-		QFW::$db = new QuickFW_AutoDbSimple('mypdo://root@localhost/test?enc=utf8');
+		QFW::$db = new DbSimple_Connect('mypdo://root@localhost/test?enc=utf8');
 		$this->table = '?_posts';
 
 		$this->hide('id');
-		$this->foregen('user_id', '?_users', 'id', 'name');
-		$this->foregen('modered_by', '?_users', 'id', 'name');
+		$this->foreign('user_id', '?_users', 'id', 'name');
+		$this->foreign('modered_by', '?_users', 'id', 'name');
 		$this->title('user_id', 'Пользователь')->title(array(
 			'modered_by' => 'Отмодерировал',
 			'text' => 'Сообщение',

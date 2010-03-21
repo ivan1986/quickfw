@@ -6,10 +6,10 @@ require_once LIBPATH.'/Modules/Scafold/Fields.php';
  * Класс для быстрого создания CRUD интерфейса к таблице
  * 
  * <br><br>По умолчанию наследует себя от класса Controller
- * базового класса, который есть в этом модули
+ * базового класса, который есть в этом модуле
  * для того чтобы корректно подхватывать авторизацию и прочее.
  * <br><br>Класс предназначен для использования в админках
- * преймущественно для редакторивания справочников и
+ * преимущественно для редакторивания справочников и
  * подобных им таблиц
  * <br><br>Пример подключения:
  * <br><br>require 'Controller.php';
@@ -121,11 +121,11 @@ abstract class ScafoldController extends Controller
 		$count = QFW::$db->selectCell('SELECT count(*) FROM ?# 
 			WHERE ?s ?s '.$this->where, $this->table, $filter['where'], $parentWhere);
 
-		$foregen = $this->getForegen();
+		$foreign = $this->getForeign();
 		$data = QFW::$db->select('SELECT ?# ?s FROM ?# ?s
 			WHERE ?s ?s '.$this->where.' LIMIT ?d, ?d',
 			array($this->table=>'*'),
-			$foregen['field'], $this->table, $foregen['join'],
+			$foreign['field'], $this->table, $foreign['join'],
 			$filter['where'], $parentWhere,
 			$page*$this->pageSize, $this->pageSize);
 
@@ -320,10 +320,10 @@ abstract class ScafoldController extends Controller
 	 * @param bool $notNull Не допускать пустого значения
 	 * @return ScafoldController
 	 */
-	protected function foregen($colum, $table, $id, $name, $notNull=false)
+	protected function foreign($colum, $table, $id, $name, $notNull=false)
 	{
 		$this->endTest();
-		$this->getInfoClass($colum)->foregen = array(
+		$this->getInfoClass($colum)->foreign = array(
 			'field' => $name,
 			'table' => $table,
 			'key'   => $id,
@@ -498,36 +498,36 @@ abstract class ScafoldController extends Controller
 	 *
 	 * @return array два объекта subQuery - список полей и список join
 	 */
-	private function getForegen()
+	private function getForeign()
 	{
-		$foregen = array();
+		$foreign = array();
 		foreach ($this->fields as $f=>$info)
 		{
-			if (!$info->foregen)
+			if (!$info->foreign)
 				continue;
-			$foregen['field'][$f] = QFW::$db->subquery('?# AS ?#', array(
-				$f.'_table' => $info->foregen['field']),
+			$foreign['field'][$f] = QFW::$db->subquery('?# AS ?#', array(
+				$f.'_table' => $info->foreign['field']),
 				$f);
-			$foregen['join'][$f] = QFW::$db->subquery('LEFT JOIN ?# AS ?# ON ?# = ?#',
-				$info->foregen['table'],
+			$foreign['join'][$f] = QFW::$db->subquery('LEFT JOIN ?# AS ?# ON ?# = ?#',
+				$info->foreign['table'],
 				$f.'_table',
-				array($f.'_table' => $info->foregen['key']),
+				array($f.'_table' => $info->foreign['key']),
 				array($this->table => $f)
 			);
 		}
-		if (isset($foregen['field']))
+		if (isset($foreign['field']))
 		{
-			$s = str_repeat(', ?s', count($foregen['field']));
-			$args = array_merge(array($s), array_values($foregen['field']));
-			$foregen['field'] = call_user_func_array(array(QFW::$db, 'subquery'), $args);
-		} else $foregen['field'] = DBSIMPLE_SKIP;
-		if (isset($foregen['join']))
+			$s = str_repeat(', ?s', count($foreign['field']));
+			$args = array_merge(array($s), array_values($foreign['field']));
+			$foreign['field'] = call_user_func_array(array(QFW::$db, 'subquery'), $args);
+		} else $foreign['field'] = DBSIMPLE_SKIP;
+		if (isset($foreign['join']))
 		{
-			$s = str_repeat("\n ?s", count($foregen['join']));
-			$args = array_merge(array($s), array_values($foregen['join']));
-			$foregen['join'] = call_user_func_array(array(QFW::$db, 'subquery'), $args);
-		} else $foregen['join'] = DBSIMPLE_SKIP;
-		return $foregen;
+			$s = str_repeat("\n ?s", count($foreign['join']));
+			$args = array_merge(array($s), array_values($foreign['join']));
+			$foreign['join'] = call_user_func_array(array(QFW::$db, 'subquery'), $args);
+		} else $foreign['join'] = DBSIMPLE_SKIP;
+		return $foreign;
 	}
 
 	/**
@@ -550,8 +550,8 @@ abstract class ScafoldController extends Controller
 		}
 
 		//определяем по типам и прочей известной информации
-		if ($infoClass->foregen)
-			return new Scafold_Foregen($infoClass);
+		if ($infoClass->foreign)
+			return new Scafold_Foreign($infoClass);
 
 		$match = array();
 		if (preg_match('#(.*?)(?:\((.+?)\)|$)#', $fieldInfo['Type'], $match))
