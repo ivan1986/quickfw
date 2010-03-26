@@ -10,7 +10,7 @@ abstract class Templater
 	/** @var QuickFW_Plugs Плагины фреймворка */
 	public $P;
 	
-	/** @var String Основной шаблон (путь относительно директории шаблонов)	*/
+	/** @var String Основной шаблон (путь относительно директории шаблонов) */
 	public $mainTemplate;
 
 	public function __construct($tmplPath, $mainTmpl)

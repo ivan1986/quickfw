@@ -1,6 +1,6 @@
 all: quickfw.pdf quickfw.html
 
-FILES = quickfw general quickstart directory mvc blocks cache auth features
+FILES = quickfw general quickstart directory mvc blocks templates cache auth features
 TEXTS = $(addsuffix .txt, $(FILES) )
 
 quickfw.pdf: $(TEXTS)

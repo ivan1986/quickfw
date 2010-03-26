@@ -118,11 +118,11 @@ class Templater_PlainView extends Templater
 	}
 	public function bl_call($data, $name)
 	{
-        if (array_key_exists($name, $this->_blocks) === false)
-            $this->_blocks[$name] = array();
+		if (array_key_exists($name, $this->_blocks) === false)
+			$this->_blocks[$name] = array();
 
-        if (in_array($data, $this->_blocks[$name]) === false)
-            array_push($this->_blocks[$name], $data);
+		if (in_array($data, $this->_blocks[$name]) === false)
+			array_push($this->_blocks[$name], $data);
 
 		return $this->_blocks[$name][0];
 	}
