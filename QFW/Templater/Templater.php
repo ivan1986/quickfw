@@ -22,32 +22,29 @@ abstract class Templater
 	}
 
 	/**
-	* Assign variables to the template
-	*
-	* Allows setting a specific key to the specified value, OR passing an array
-	* of key => value pairs to set en masse.
-	*
-	* @param string|array $spec The assignment strategy to use (key or array of key
-	* => value pairs)
-	* @param mixed $value (Optional) If assigning a named variable, use this
-	* as the value.
-	* @return Templater_PlainView
-	*/
-	public function assign($spec, $value = null)
+	 * Присваение значения переменной шаблона
+	 *
+	 * Allows setting a specific key to the specified value, OR passing an array
+	 * of key => value pairs to set en masse.
+	 *
+	 * @param string|array $name Имя переменной или массив (ключ => значение)
+	 * @param mixed $value Значение переменной, если первый параметр не массив
+	 * @return Templater_PlainView Ссылка на себя
+	 */
+	public function assign($name, $value = null)
 	{
-		if (is_array($spec))
-			$this->_vars = array_merge($this->_vars, $spec);
+		if (is_array($name))
+			$this->_vars = array_merge($this->_vars, $name);
 		else
-			$this->_vars[$spec] = $value;
+			$this->_vars[$name] = $value;
 		return $this;
 	}
 
 	/**
-	* Clear assigned variable
-	*
-	* @param string|array
-	* @return void
-	*/
+	 * Удаляет указанную переменную из шаблона
+	 *
+	 * @param string|array имя переменной или массив имен
+	 */
 	public function delete($spec)
 	{
 		if (is_array($spec))
@@ -58,10 +55,9 @@ abstract class Templater
 	}
 
 	/**
-	* Clear all assigned variables
-	*
-	* @return void
-	*/
+	 * Очистка всех установленных переменных
+	 *
+	 */
 	public function clearVars()
 	{
 		$this->_vars=array();
