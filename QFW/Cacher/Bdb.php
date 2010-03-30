@@ -26,29 +26,18 @@ class Cacher_Bdb implements Zend_Cache_Backend_Interface
 	public function save($data, $id, $tags = array(), $specificLifetime = 3600)
 	{
 		if (!$this->file) $this->conn();
-		return dba_replace($id,serialize(array(time()+$specificLifetime,$data)),$this->file);
+		return dba_replace($id,serialize($data),$this->file);
 	}
 
 	public function load($id, $doNotTest = false)
 	{
 		if (!$this->file) $this->conn();
-		if (is_array($id))
-		{
-			$x = array();
-			foreach($id as $v)
-				$x[$v] = $this->load($v);
-			return $x;
-		}
-		$data=dba_fetch($id,$this->file);
-		if (!$data)
-			return false;
-		$data=unserialize($data);
-		if ($data[0]<time())
-		{
-			dba_delete($id,$this->file);
-			return false;
-		}
-		return $data[1];
+		if (!is_array($id))
+			return unserialize(dba_fetch($id,$this->file));
+		$x = array();
+		foreach($id as $v)
+			$x[$v] = $this->load($v);
+		return $x;
 	}
 
 	public function test($id)
