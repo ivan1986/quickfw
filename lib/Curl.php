@@ -35,13 +35,19 @@ class Curl
 			unlink($this->cookie_file);
 	}
 
+	/**
+	 * Добавляет новую куку
+	 *
+	 * @param string $name имя
+	 * @param string $value значение
+	 */
 	public function addCookie($name,$value)
 	{
 		$this->cookies[$name] = $name.'='.$value.'; path=/';
 	}
 
 	/**
-	 * POST запрос по адресу
+	 * Очистка печенек
 	 */
 	public function clearCookeis()
 	{
@@ -49,6 +55,11 @@ class Curl
 		$this->cookies = array();
 	}
 
+	/**
+	 * Возвращает последнюю ошибку
+	 *
+	 * @return string строка ошибки
+	 */
 	public function error()
 	{
 		return $this->error;
@@ -108,7 +119,6 @@ class Curl
 			CURLOPT_REFERER => $this->referer,
 
 			CURLOPT_URL => $url,
-
 		));
 		curl_setopt($handle, CURLOPT_COOKIEFILE, $this->cookie_file);
 		curl_setopt($handle, CURLOPT_COOKIEJAR, $this->cookie_file);
@@ -140,9 +150,8 @@ class Curl
 
 		//Set any custom CURL options
 		foreach ( $this->options as $option => $value )
-		{
-			curl_setopt($handle, constant('CURLOPT_' . str_replace('CURLOPT_', '', strtoupper($option))), $value);
-		}
+			curl_setopt($handle, constant('CURLOPT_' .
+				str_replace('CURLOPT_', '', strtoupper($option))), $value);
 
 		$response = curl_exec($handle);
 		$header_size = curl_getinfo($handle,CURLINFO_HEADER_SIZE);
@@ -170,19 +179,13 @@ class Curl
  */
 class CurlResponse
 {
-	/**
-	 * тело ответа
-	 *
-	 * @var string
-	 */
+	/** @var string тело ответа */
 	public $body = '';
 	
-	/**
-	 * заголовки ответа
-	 *
-	 * @var array
-	 */
+	/** @var array заголовки ответа */
 	public $headers = array ();
+
+	/** @var boolean Флаг для перекодировки */
 	private $win=false;
 
 	public function __construct($response)
@@ -209,7 +212,7 @@ class CurlResponse
 	/**
 	 * Преобразовывает запрос из Win1251 в UTF-8
 	 * 
-	 * Очень часто требуется, так как виндузятников развелось немеряно
+	 * <br>Очень часто требуется, так как виндузятников развелось немеряно
 	 * 
 	 * @return string преобразованная строка
 	 */
@@ -224,7 +227,7 @@ class CurlResponse
 	/**
 	 * Просто тело запроса
 	 * 
-	 * @return string
+	 * @return string результат запроса
 	 */
 	public function __toString()
 	{
@@ -265,12 +268,18 @@ class CurlResponse
 		return $num===false ? $forms : $forms[$num];
 	}
 
+	/**
+	 * Извлекает параметры из тега
+	 *
+	 * @param string $str тег
+	 * @return array массив параметров
+	 */
 	protected function parceTagParams($str)
 	{
 		$t = $x = array();
-		preg_match_all('|([a-z]+)=([\'"]?)(.*?)\2|si',$str,$t);
-		for($i=0;$i<count($t[1]);$i++)
-				$x[$t[1][$i]] = $t[3][$i];
+		preg_match_all('|([a-z]+)=([\'"]?)(.*?)\2|si', $str, $t);
+		for($i=0; $i<count($t[1]); $i++)
+			$x[$t[1][$i]] = $t[3][$i];
 		return $x;
 	}
 
