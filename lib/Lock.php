@@ -15,10 +15,10 @@ class Lock
 	static public function doubleRun($name, $message='')
 	{
 		static $lockfiles;
-		if (!isset($lockfiles['name']))
-			$lockfiles['name'] = fopen(TMPPATH.'/'.$name.'.run', 'w');
-		if (!$lockfiles['name'] ||
-			!flock($lockfiles['name'], LOCK_EX | LOCK_NB)
+		if (!isset($lockfiles[$name]))
+			$lockfiles[$name] = fopen(TMPPATH.'/'.$name.'.run', 'w');
+		if (!$lockfiles[$name] ||
+			!flock($lockfiles[$name], LOCK_EX | LOCK_NB)
 			)
 			die($message);
 	}
