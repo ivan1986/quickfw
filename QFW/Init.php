@@ -79,7 +79,8 @@ class QFW
 		{
 			require_once LIBPATH.'/JsHttpRequest.php';
 			//QFW::$libs['JsHttpRequest'] для совместимости	со старым вариантом
-			self::$ajax = QFW::$libs['JsHttpRequest'] = new JsHttpRequest('utf-8');
+			self::$ajax = QFW::$libs['JsHttpRequest'] = new
+				JsHttpRequest(self::$config['host']['encoding']);
 			self::$view->mainTemplate = '';
 		}
 
