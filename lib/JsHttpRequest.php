@@ -80,7 +80,8 @@ class JsHttpRequest
 				$_REQUEST['JsHttpRequest']
 			);
 			// Detect Unicode conversion method.
-			$this->_unicodeConvMethod = function_exists('mb_convert_encoding')? 'mb' : (function_exists('iconv')? 'iconv' : null);
+			$this->_unicodeConvMethod = function_exists('mb_convert_encoding')? 'mb' : (function_exists('iconv')? 'iconv' : 
+				trigger_error('Install mb_string or iconv', E_USER_ERROR));
 
 			// Fill an emergency buffer. We erase it at the first line of OB processor
 			// to free some memory. This memory may be used on memory_limit error.
@@ -329,7 +330,7 @@ class JsHttpRequest
 		$text = null; // to be on a safe side
 
 		// Try to use very fast json_encode: 3-4 times faster than a manual encoding.
-		if (function_exists('array_walk_recursive') && function_exists('json_encode') && $this->_unicodeConvMethod) {
+		if (function_exists('array_walk_recursive') && function_exists('json_encode')) {
 			$this->_nonAsciiChars = join("", array_map('chr', range(128, 255)));
 			$this->_toUtfFailed = false;
 			$resultUtf8 = $result;
@@ -430,11 +431,7 @@ class JsHttpRequest
 			// Process "&" separately in "entities" decode mode.
 			$c = "&amp;";
 		} else {
-			if ($this->_unicodeConvMethod) {
-				$c = @$this->_unicodeConv('UCS-2BE', $this->SCRIPT_ENCODING, pack('n', $dec));
-			} else {
-				$c = $this->_decUcs2Decode($dec, $this->SCRIPT_ENCODING);
-			}
+			$c = @$this->_unicodeConv('UCS-2BE', $this->SCRIPT_ENCODING, pack('n', $dec));
 			if (!strlen($c)) {
 				if ($this->SCRIPT_DECODE_MODE == 'entities') {
 					$c = '&#' . $dec . ';';
@@ -455,92 +452,11 @@ class JsHttpRequest
 	 */
 	function _unicodeConv($fromEnc, $toEnc, $v)
 	{
-		if ($this->_unicodeConvMethod == 'iconv') {
+		if ($this->_unicodeConvMethod == 'iconv')
 			return iconv($fromEnc, $toEnc, $v);
-		}
 		return mb_convert_encoding($v, $toEnc, $fromEnc);
 	}
 
-
-	/**
-	 * If there is no ICONV, try to decode 1-byte characters and UTF-8 manually
-	 * (for most popular charsets only).
-	 */
-
-	/**
-	 * @todo Проверить функцию
-	 * Необходимость этой функции под большим вопросом,
-	 * Похоже вызывается из мертвой ветки, так как фреймворк 
-	 * подразумевает использование mb_convert_encoding
-	 *
-	 * Convert from UCS-2BE decimal to $toEnc.
-	 */
-	function _decUcs2Decode($code, $toEnc)
-	{
-		// Little speedup by using array_flip($this->_encTables) and later hash access.
-		static $flippedTable = null;
-		if ($code < 128) return chr($code);
-
-		if (isset($this->_encTables[$toEnc])) {
-			if (!$flippedTable) $flippedTable = array_flip($this->_encTables[$toEnc]);
-			if (isset($flippedTable[$code])) return chr(128 + $flippedTable[$code]);
-		} else if ($toEnc == 'utf-8' || $toEnc == 'utf8') {
-			// UTF-8 conversion rules: http://www.cl.cam.ac.uk/~mgk25/unicode.html
-			if ($code < 0x800) {
-				return chr(0xC0 + ($code >> 6)) .
-					chr(0x80 + ($code & 0x3F));
-			} else { // if ($code <= 0xFFFF) -- it is almost always so for UCS2-BE
-				return chr(0xE0 + ($code >> 12)) .
-					chr(0x80 + (0x3F & ($code >> 6))) .
-					chr(0x80 + ($code & 0x3F));
-			}
-		}
-
-		return "";
-	}
-
-
-	/**
-	 * UCS-2BE -> 1-byte encodings (from #128).
-	 */
-	var $_encTables = array(
-		'windows-1251' => array(
-			0x0402, 0x0403, 0x201A, 0x0453, 0x201E, 0x2026, 0x2020, 0x2021,
-			0x20AC, 0x2030, 0x0409, 0x2039, 0x040A, 0x040C, 0x040B, 0x040F,
-			0x0452, 0x2018, 0x2019, 0x201C, 0x201D, 0x2022, 0x2013, 0x2014,
-			0x0098, 0x2122, 0x0459, 0x203A, 0x045A, 0x045C, 0x045B, 0x045F,
-			0x00A0, 0x040E, 0x045E, 0x0408, 0x00A4, 0x0490, 0x00A6, 0x00A7,
-			0x0401, 0x00A9, 0x0404, 0x00AB, 0x00AC, 0x00AD, 0x00AE, 0x0407,
-			0x00B0, 0x00B1, 0x0406, 0x0456, 0x0491, 0x00B5, 0x00B6, 0x00B7,
-			0x0451, 0x2116, 0x0454, 0x00BB, 0x0458, 0x0405, 0x0455, 0x0457,
-			0x0410, 0x0411, 0x0412, 0x0413, 0x0414, 0x0415, 0x0416, 0x0417,
-			0x0418, 0x0419, 0x041A, 0x041B, 0x041C, 0x041D, 0x041E, 0x041F,
-			0x0420, 0x0421, 0x0422, 0x0423, 0x0424, 0x0425, 0x0426, 0x0427,
-			0x0428, 0x0429, 0x042A, 0x042B, 0x042C, 0x042D, 0x042E, 0x042F,
-			0x0430, 0x0431, 0x0432, 0x0433, 0x0434, 0x0435, 0x0436, 0x0437,
-			0x0438, 0x0439, 0x043A, 0x043B, 0x043C, 0x043D, 0x043E, 0x043F,
-			0x0440, 0x0441, 0x0442, 0x0443, 0x0444, 0x0445, 0x0446, 0x0447,
-			0x0448, 0x0449, 0x044A, 0x044B, 0x044C, 0x044D, 0x044E, 0x044F,
-		),
-		'koi8-r' => array(
-			0x2500, 0x2502, 0x250C, 0x2510, 0x2514, 0x2518, 0x251C, 0x2524,
-			0x252C, 0x2534, 0x253C, 0x2580, 0x2584, 0x2588, 0x258C, 0x2590,
-			0x2591, 0x2592, 0x2593, 0x2320, 0x25A0, 0x2219, 0x221A, 0x2248,
-			0x2264, 0x2265, 0x00A0, 0x2321, 0x00B0, 0x00B2, 0x00B7, 0x00F7,
-			0x2550, 0x2551, 0x2552, 0x0451, 0x2553, 0x2554, 0x2555, 0x2556,
-			0x2557, 0x2558, 0x2559, 0x255A, 0x255B, 0x255C, 0x255d, 0x255E,
-			0x255F, 0x2560, 0x2561, 0x0401, 0x2562, 0x2563, 0x2564, 0x2565,
-			0x2566, 0x2567, 0x2568, 0x2569, 0x256A, 0x256B, 0x256C, 0x00A9,
-			0x044E, 0x0430, 0x0431, 0x0446, 0x0434, 0x0435, 0x0444, 0x0433,
-			0x0445, 0x0438, 0x0439, 0x043A, 0x043B, 0x043C, 0x043d, 0x043E,
-			0x043F, 0x044F, 0x0440, 0x0441, 0x0442, 0x0443, 0x0436, 0x0432,
-			0x044C, 0x044B, 0x0437, 0x0448, 0x044d, 0x0449, 0x0447, 0x044A,
-			0x042E, 0x0410, 0x0411, 0x0426, 0x0414, 0x0415, 0x0424, 0x0413,
-			0x0425, 0x0418, 0x0419, 0x041A, 0x041B, 0x041C, 0x041d, 0x041E,
-			0x041F, 0x042F, 0x0420, 0x0421, 0x0422, 0x0423, 0x0416, 0x0412,
-			0x042C, 0x042B, 0x0417, 0x0428, 0x042d, 0x0429, 0x0427, 0x042A
-		),
-	);
 }
 
 ?>
