@@ -21,7 +21,6 @@
 class JsHttpRequest
 {
 	var $SCRIPT_ENCODING = "utf-8";
-	var $SCRIPT_DECODE_MODE = '';
 	var $LOADER = null;
 	var $ID = null;
 	var $RESULT = null;
@@ -142,17 +141,10 @@ class JsHttpRequest
 	 * Examples:
 	 *   "windows-1251"          - set plain encoding (non-windows characters,
 	 *                             e.g. hieroglyphs, are totally ignored)
-	 *   "windows-1251 entities" - set windows encoding, BUT additionally replace:
-	 *                             "&"         ->  "&amp;"
-	 *                             hieroglyph  ->  &#XXXX; entity
 	 */
 	function setEncoding($enc)
 	{
-		// Parse an encoding.
-		preg_match('/^(\S*)(?:\s+(\S*))$/', $enc, $p);
-		$this->SCRIPT_ENCODING    = strtolower(!empty($p[1])? $p[1] : $enc);
-		$this->SCRIPT_DECODE_MODE = !empty($p[2])? $p[2] : '';
-		// Manually parse QUERY_STRING because of damned Unicode's %uXXXX.
+		$this->SCRIPT_ENCODING    = strtolower($enc);
 		$this->_correctSuperglobals();
 	}
 
@@ -382,34 +374,11 @@ class JsHttpRequest
 			return $d;
 		} else {
 			if (strpos($data, '%u') !== false) { // improve speed
-				$data = preg_replace_callback('/%u([0-9A-F]{1,4})/si', array(&$this, '_ucs2EntitiesDecodeCallback'), $data);
+				$data = json_decode(str_replace('%', '\\', sprintf('"%s"',addslashes($data))));
+				$data = $this->_unicodeConv('UTF-8', $this->SCRIPT_ENCODING, $data);
 			}
 			return $data;
 		}
-	}
-
-
-	/**
-	 * Decode one %uXXXX entity (RE callback).
-	 */
-	function _ucs2EntitiesDecodeCallback($p)
-	{
-		$hex = $p[1];
-		$dec = hexdec($hex);
-		if ($dec === "38" && $this->SCRIPT_DECODE_MODE == 'entities') {
-			// Process "&" separately in "entities" decode mode.
-			$c = "&amp;";
-		} else {
-			$c = @$this->_unicodeConv('UCS-2BE', $this->SCRIPT_ENCODING, pack('n', $dec));
-			if (!strlen($c)) {
-				if ($this->SCRIPT_DECODE_MODE == 'entities') {
-					$c = '&#' . $dec . ';';
-				} else {
-					$c = '?';
-				}
-			}
-		}
-		return $c;
 	}
 
 
