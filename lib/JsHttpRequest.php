@@ -136,17 +136,6 @@ class JsHttpRequest
 
 
 	/**
-	 * string getJsCode()
-	 *
-	 * Return JavaScript part of the library.
-	 */
-	function getJsCode()
-	{
-		return file_get_contents(dirname(__FILE__) . '/JsHttpRequest.js');
-	}
-
-
-	/**
 	 * void setEncoding(string $encoding)
 	 *
 	 * Set an active script encoding & correct QUERY_STRING according to it.
@@ -165,26 +154,6 @@ class JsHttpRequest
 		$this->SCRIPT_DECODE_MODE = !empty($p[2])? $p[2] : '';
 		// Manually parse QUERY_STRING because of damned Unicode's %uXXXX.
 		$this->_correctSuperglobals();
-	}
-
-
-	/**
-	 * string quoteInput(string $input)
-	 *
-	 * Quote a string according to the input decoding mode.
-	 * If entities are used (see setEncoding()), no '&' character is quoted,
-	 * only '"', '>' and '<' (we presume that '&' is already quoted by
-	 * an input reader function).
-	 *
-	 * Use this function INSTEAD of htmlspecialchars() for $_GET data
-	 * in your scripts.
-	 */
-	function quoteInput($s)
-	{
-		if ($this->SCRIPT_DECODE_MODE == 'entities')
-			return str_replace(array('"', '<', '>'), array('&quot;', '&lt;', '&gt;'), $s);
-		else
-			return htmlspecialchars($s);
 	}
 
 
