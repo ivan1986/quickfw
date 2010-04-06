@@ -26,26 +26,26 @@ class JsHttpRequest
 	var $RESULT = null;
 
 	// Internal; uniq value.
-	var $_uniqHash;
+	private $_uniqHash;
 	// Magic number for display_error checking.
-	var $_magic = 14623;
+	private $_magic = 14623;
 	// Previous display_errors value.
-	var $_prevDisplayErrors = null;
+	private $_prevDisplayErrors = null;
 	// Internal: response content-type depending on loader type.
-	var $_contentTypes = array(
+	private $_contentTypes = array(
 		"script" => "text/javascript",
 		"xml"    => "text/plain", // In XMLHttpRequest mode we must return text/plain - stupid Opera 8.0. :(
 		"form"   => "text/html",
 		""       => "text/plain", // for unknown loader
 	);
 	// Internal: conversion to UTF-8 JSON cancelled because of non-ascii key.
-	var $_toUtfFailed = false;
+	private $_toUtfFailed = false;
 	// Internal: list of characters 128...255 (for strpbrk() ASCII check).
-	var $_nonAsciiChars = '';
+	private $_nonAsciiChars = '';
 	// Which Unicode conversion function is available?
-	var $_unicodeConvMethod = null;
+	private $_unicodeConvMethod = null;
 	// Emergency memory buffer to be freed on memory_limit error.
-	var $_emergBuffer = null;
+	private $_emergBuffer = null;
 
 
 	/**
@@ -128,7 +128,7 @@ class JsHttpRequest
 	 *
 	 * @return boolean    True if the library is active, false otherwise.
 	 */
-	function isActive()
+	static function isActive()
 	{
 		return !empty($GLOBALS['JsHttpRequest_Active']);
 	}
@@ -144,7 +144,7 @@ class JsHttpRequest
 	 */
 	function setEncoding($enc)
 	{
-		$this->SCRIPT_ENCODING    = strtolower($enc);
+		$this->SCRIPT_ENCODING = strtolower($enc);
 		$this->_correctSuperglobals();
 	}
 
@@ -157,7 +157,7 @@ class JsHttpRequest
 	 * @param mixed $a   Any structure to convert to JS.
 	 * @return string    JavaScript equivalent structure.
 	 */
-	function php2js($a=false)
+	private function php2js($a=false)
 	{
 		if (is_null($a)) return 'null';
 		if ($a === false) return 'false';
@@ -207,7 +207,7 @@ class JsHttpRequest
 	/**
 	 * Parse & decode QUERY_STRING.
 	 */
-	function _correctSuperglobals()
+	private function _correctSuperglobals()
 	{
 		// In case of FORM loader we may go to nirvana, everything is already parsed by PHP.
 		if ($this->LOADER == 'form') return;
@@ -364,7 +364,7 @@ class JsHttpRequest
 	 * Decode all %uXXXX entities in string or array (recurrent).
 	 * String must not contain %XX entities - they are ignored!
 	 */
-	function _ucs2EntitiesDecode($data)
+	private function _ucs2EntitiesDecode($data)
 	{
 		if (is_array($data)) {
 			$d = array();
@@ -388,7 +388,7 @@ class JsHttpRequest
 	 *
 	 * @see iconv()
 	 */
-	function _unicodeConv($fromEnc, $toEnc, $v)
+	private function _unicodeConv($fromEnc, $toEnc, $v)
 	{
 		if ($this->_unicodeConvMethod == 'iconv')
 			return iconv($fromEnc, $toEnc, $v);
