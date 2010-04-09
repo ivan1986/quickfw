@@ -140,9 +140,10 @@ class Cache
 		}
 
 		// если у нас не пустое пространство имен - юзаем проксирующий класс
-		if ($n = (isset($data['namespace']) ? $data['namespace'] : '').$ns)
+		$n = (isset($data['namespace']) ? $data['namespace'] : '').$ns;
+		if ($n)
 			$c=self::ns($c,$n);
-		if (isset($data['tags']) && $data['tags'])
+		if (!empty($data['tags']))
 		{
 			require_once(QFWPATH.'/QuickFW/Cacher/TagEmu.php');
 			$c=new Dklab_Cache_Backend_TagEmuWrapper($c);
