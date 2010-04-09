@@ -25,12 +25,6 @@ class JsHttpRequest
 	var $ID = null;
 	var $RESULT = null;
 
-	// Internal; uniq value.
-	private $_uniqHash;
-	// Magic number for display_error checking.
-	private $_magic = 14623;
-	// Previous display_errors value.
-	private $_prevDisplayErrors = null;
 	// Internal: response content-type depending on loader type.
 	private $_contentTypes = array(
 		"script" => "text/javascript",
@@ -85,14 +79,6 @@ class JsHttpRequest
 			// Fill an emergency buffer. We erase it at the first line of OB processor
 			// to free some memory. This memory may be used on memory_limit error.
 			$this->_emergBuffer = str_repeat('a', 1024 * 200);
-
-			// Intercept fatal errors via display_errors (seems it is the only way).
-			$this->_uniqHash = md5('JsHttpRequest' . microtime() . getmypid());
-			$this->_prevDisplayErrors = ini_get('display_errors');
-			ini_set('display_errors', $this->_magic); //
-			ini_set('error_prepend_string', $this->_uniqHash . ini_get('error_prepend_string'));
-			ini_set('error_append_string',  ini_get('error_append_string') . $this->_uniqHash);
-			if (function_exists('xdebug_disable')) xdebug_disable(); // else Fatal errors are not catched
 
 			// Start OB handling early.
 			ob_start(array(&$this, "_obHandler"));
@@ -246,42 +232,8 @@ class JsHttpRequest
 		unset($this->_emergBuffer); // free a piece of memory for memory_limit error
 		unset($GLOBALS['JsHttpRequest_Active']);
 
-		// Check for error & fetch a resulting data.
-		$wasFatalError = false;
-		if (preg_match_all("/{$this->_uniqHash}(.*?){$this->_uniqHash}/sx", $text, $m)) {
-			// Display_errors:
-			// 1. disabled manually after the library initialization, or
-			// 2. was initially disabled and is not changed
-			$needRemoveErrorMessages = !ini_get('display_errors') || (!$this->_prevDisplayErrors && ini_get('display_errors') == $this->_magic);
-			foreach ($m[0] as $error) {
-				if (preg_match('/\bFatal error(<.*?>)?:/i', $error)) {
-					$wasFatalError = true;
-				}
-				if ($needRemoveErrorMessages) {
-					$text = str_replace($error, '', $text); // strip the whole error message
-				} else {
-					$text = str_replace($this->_uniqHash, '', $text);
-				}
-			}
-		}
-		if ($wasFatalError) {
-			// On fatal errors - force "null" result. This is needed, because $_RESULT
-			// may not be fully completed at the moment of the error.
-			$this->RESULT = null;
-		} else {
-			// Read the result from globals if not set directly.
-			if (!isset($this->RESULT)) {
-				global $_RESULT;
-				$this->RESULT = $_RESULT;
-			}
-			// Avoid manual NULLs in the result (very important!).
-			if ($this->RESULT === null) {
-				$this->RESULT = false;
-			}
-		}
-
 		// Note that 500 error is generated when a PHP error occurred.
-		$status = $this->RESULT === null? 500 : 200;
+		$status = 200;
 		$result = array(
 			'id'   => $this->ID,
 			'js'   => $this->RESULT,  // null always means a fatal error...
