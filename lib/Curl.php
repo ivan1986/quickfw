@@ -253,7 +253,7 @@ class CurlResponse
 				continue;
 			$forms[$k] = $this->parceTagParams($f[1]);
 			$fields = array();
-			preg_match_all('|<input.*?>|si',$f[0],$m);
+			preg_match_all('#<(input|textarea|select).*?>#si',$f[0],$m);
 			foreach ($m[0] as $field)
 			{
 				$r = $this->parceTagParams($field);
