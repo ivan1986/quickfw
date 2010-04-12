@@ -6,14 +6,23 @@
  */
 class Curl
 {
+	/** @var array Массив кук */
 	public $cookies = array();
+	/** @var string файл, в котором хранятся куки */
 	public $cookie_file = '';
+	/** @var boolean сохранять файл с куками постоянно */
 	public $persist_cookie_file = false;
+	/** @var array массив заголовков запроса */
 	public $headers = array();
+	/** @var array массив дополнительных опций Curl */
 	public $options = array();
+	/** @var string заголовок referer */
 	public $referer = '';
+	/** @var string заголовок USER_AGENT */
 	public $user_agent = '';
+	/** @var string адрес прокси */
 	public $proxy = '';
+	/** @var integer таймаут в секундах */
 	public $timeout = 0;
 
 	protected $error = '';
