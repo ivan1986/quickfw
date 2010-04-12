@@ -14,6 +14,7 @@ class Curl
 	public $referer = '';
 	public $user_agent = '';
 	public $proxy = '';
+	public $timeout = 0;
 
 	protected $error = '';
 	protected $clear;
@@ -114,6 +115,12 @@ class Curl
 			CURLOPT_HEADER => true,
 			CURLOPT_RETURNTRANSFER => true,
 			CURLOPT_PROXY => $this->proxy,
+
+			CURLOPT_CONNECTTIMEOUT => $this->timeout,
+			CURLOPT_TIMEOUT => $this->timeout,
+
+			CURLOPT_SSL_VERIFYPEER => 0,
+			CURLOPT_SSL_VERIFYHOST => 0,
 
 			CURLOPT_USERAGENT => $this->user_agent,
 			CURLOPT_REFERER => $this->referer,
