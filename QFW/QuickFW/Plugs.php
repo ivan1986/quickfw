@@ -179,11 +179,15 @@ class QuickFW_Plugs
 	}
 
 	/**
-	 * Функции ескейпинга с учетом utf8
+	 * Функции ескейпинга в нужной кодировке
+	 *
+	 * @param string $s Исходная строка
+	 * @return string htmlspecialchars($s, ENT_QUOTES, $encoding)
 	 */
 	public function esc($s)
 	{
-		return htmlspecialchars($s,ENT_QUOTES,'UTF-8');
+		return htmlspecialchars($s, ENT_QUOTES,
+			QFW::$config['host']['encoding']);
 	}
 
 }

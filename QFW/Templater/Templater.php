@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * Общий предок шаблонов
+ */
 abstract class Templater
 {
 	/** @var array переменные, установленные в шаблоне */
@@ -103,6 +106,12 @@ abstract class Templater
 		return true;
 	}
 
+	/**
+	 * Вызывает выполнение блока и возвращает результат
+	 *
+	 * @param string $block имя блока (MCA)
+	 * @return string результат работы блока
+	 */
 	public function block($block)
 	{
 		//TODO: убрать ненужную переменную после перехода на php 5.3
@@ -110,6 +119,9 @@ abstract class Templater
 		return call_user_func_array(array(&QFW::$router, 'blockRoute'), $args);
 	}
 
+	/**
+	 * Синоним fetch
+	 */
 	public function render($tmpl)
 	{
 		return $this->fetch($tmpl);
@@ -117,6 +129,13 @@ abstract class Templater
 
 	abstract public function fetch($tmpl);
 
+	/**
+	 * Генерирует полный вывод, обрабатывает фильтрами
+	 *
+	 * @param <type> $content основной контент страницы
+	 * @return string вся страница с главным шаблоном
+	 * @internal
+	 */
 	public function displayMain($content)
 	{
 		if (isset($this->mainTemplate) && $this->mainTemplate!="")
@@ -132,12 +151,16 @@ abstract class Templater
 	}
 
 	/**
-	 * Функции ескейпинга с учетом utf8
+	 * Функции ескейпинга в нужной кодировке
 	 *
 	 * @param string $s Исходная строка 
-	 * @return string htmlspecialchars($s, ENT_QUOTES, 'UTF-8')
+	 * @return string htmlspecialchars($s, ENT_QUOTES, $encoding)
 	 */
-	public function esc($s) { return htmlspecialchars($s, ENT_QUOTES, 'UTF-8');}
+	public function esc($s)
+	{
+		return htmlspecialchars($s, ENT_QUOTES,
+			QFW::$config['host']['encoding']);
+	}
 
 }
 
