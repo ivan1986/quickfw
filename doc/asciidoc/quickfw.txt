@@ -19,5 +19,6 @@ include::cache.txt[]
 
 include::auth.txt[]
 
+include::autoload.txt[]
 
 include::features.txt[]
