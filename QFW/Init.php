@@ -95,6 +95,13 @@ class QFW
 		if (!empty(self::$config['QFW']['catchFE']))
 			require QFWPATH.'/QuickFW/Error.php';
 
+		//автолоад
+		if (!empty(self::$config['QFW']['autoload']))
+		{
+			require QFWPATH.'/QuickFW/Autoload.php';
+			Autoload::Init(self::$config['QFW']['autoload']);
+		}
+
 		//JsHttpRequest
 		if (isset($_REQUEST['JsHttpRequest']))
 		{
