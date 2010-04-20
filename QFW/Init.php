@@ -3,7 +3,7 @@
 class QFW
 {
 	/** @var array Глобальный массив данных */
-	static public $globalData;
+	static public $globalData = array();
 
 	/** @var QuickFW_Router Роутер */
 	static public $router;
@@ -15,13 +15,13 @@ class QFW
 	static public $view;
 
 	/** @var array Подключенные глобальные библиотеки */
-	static public $libs;
+	static public $libs = array();
 
-	/** @var DbSimple_Generic_Database Подключение к базе данных */
-	static public $db;
+	/** @var DbSimple_Generic_Database|false Подключение к базе данных */
+	static public $db = false;
 
 	/** @var mixed|false Данные о пользователе */
-	static public $userdata;
+	static public $userdata = false;
 
 	/** @var JsHttpRequest|false JsHttpRequest, если был выполнени Ajax запрос */
 	static public $ajax = false;
@@ -59,12 +59,9 @@ class QFW
 		require QFWPATH.'/QuickFW/Cache.php';
 		require QFWPATH.'/QuickFW/Plugs.php';
 
-		//Библиотеки
-		self::$libs = array();
-		//глобальный массив
-		self::$globalData = array();
-		//Данные о пользователе
-		self::$userdata = false;
+		//выставляем заголовок с нужной кодировкой
+		if (!empty(self::$config['host']['encoding']))
+			header("Content-Type: text/html; charset=".self::$config['host']['encoding']);
 
 		//Подключаем шаблонизатор
 		$templ = ucfirst(self::$config['templater']['name']);
@@ -73,31 +70,41 @@ class QFW
 		self::$view = new $class(APPPATH,
 			isset(self::$config['templater']['def_tpl']) ? self::$config['templater']['def_tpl'] : '');
 
-		//Если запрос через JsHttp, то инициализируем библиотеку
-		//и устанавливаем пустой главный шаблон
+		//подключаем модули и библиотеки
+		self::modules();
+
+		require QFWPATH.'/QuickFW/Router.php';
+		self::$router = new QuickFW_Router(APPPATH);
+
+	}
+
+	/**
+	 * Инициализирует необязательные модули
+	 * <br>в зависимости от настроек конфигов
+	 */
+	static public function modules()
+	{
+		//Инициализируем класс базы данных
+		if (!empty(self::$config['database']))
+		{
+			require LIBPATH.'/DbSimple/Connect.php';
+			self::$db = new DbSimple_Connect(self::$config['database']);
+		}
+
+		//Включаем обработку фатальных ошибок, если в конфиге указано
+		if (!empty(self::$config['QFW']['catchFE']))
+			require QFWPATH.'/QuickFW/Error.php';
+
+		//JsHttpRequest
 		if (isset($_REQUEST['JsHttpRequest']))
 		{
 			require_once LIBPATH.'/JsHttpRequest.php';
 			//QFW::$libs['JsHttpRequest'] для совместимости	со старым вариантом
 			self::$ajax = QFW::$libs['JsHttpRequest'] = new
 				JsHttpRequest(self::$config['host']['encoding']);
+			//устанавливаем пустой главный шаблон
 			self::$view->mainTemplate = '';
 		}
-
-		require LIBPATH.'/DbSimple/Connect.php';
-		//Инициализируем класс базы данных
-		self::$db = new DbSimple_Connect(self::$config['database']);
-
-		//выставляем заголовок с нужной кодировкой
-		if (!empty(self::$config['host']['encoding']))
-			header("Content-Type: text/html; charset=".self::$config['host']['encoding']);
-		//Включаем обработку фатальных ошибок, если в конфиге указано
-		if (!empty(self::$config['QFW']['catchFE']))
-			require QFWPATH.'/QuickFW/Error.php';
-
-		require QFWPATH.'/QuickFW/Router.php';
-		self::$router = new QuickFW_Router(APPPATH);
-
 	}
 }
 
