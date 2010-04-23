@@ -24,7 +24,7 @@ class QuickFW_Router
 
 	//модуль и контроллер в контексте которого выполняется,
 	//необходимо для роутинга компонентов
-	protected $cModule, $cController;
+	protected $curModule, $curController;
 
 	/** @var string модуль, в контексте которого выполняется текущий запрос */
 	public $module;
@@ -35,43 +35,37 @@ class QuickFW_Router
 	/** @var string экшен, в контексте которого выполняется текущий запрос */
 	public $action;
 
-	/** 
-	 * Uri который был вызван для исполнения
-	 * Без учета параметров - только модуль, контроллер и экшен
-	 *
-	 * @var string 
+	/** @var string тип, в контексте которого выполняется текущий запрос */
+	public $type;
+
+	/** @var string текущий модуль */
+	public $cModule;
+
+	/** @var string текущий контроллер */
+	public $cController;
+
+	/** @var string текущий экшен */
+	public $cAction;
+
+	/**
+	 * @var string Uri который был вызван для исполнения
+	 * <br>Без учета параметров - только модуль, контроллер и экшен
 	 */
 	public $UriPath;
 
 	/**
-	 * Uri который выполняется в данный момент
-	 * (отличается от вызванного в подключаемых модулях)
-	 * 
-	 * @var string
+	 * @var string Uri который выполняется в данный момент
+	 * <br>(отличается от вызванного в подключаемых модулях)
 	 */
 	public $CurPath;
 
-	/**
-	 * Uri из которого был вызван выполняемый модуль
-	 *
-	 * @var string
-	 */
+	/** @var string Uri из которого был вызван выполняемый модуль */
 	public $ParentPath;
 
-	/**
-	 * Uri который был вызван для исполнения
-	 * модуль, контроллер, экшен и параметры
-	 *
-	 * @var string
-	 */
+	/** @var string Uri который был вызван для исполнения модуль, контроллер, экшен и параметры */
 	public $Uri;
 
-	/**
-	 * Uri который был вызван для исполнения
-	 * после фильтрации переменных и реврайта
-	 *
-	 * @var string
-	 */
+	/** @var string Uri который был вызван для исполнения после фильтрации переменных и реврайта */
 	public $RequestUri;
 
 	public function __construct($baseDir)
@@ -114,15 +108,15 @@ class QuickFW_Router
 		}
 		$params = $this->parseParams($data);
 
-		$this->cModule = $this->module = $MCA['Module'];
-		$this->cController = $this->controller = $MCA['Controller'];
-		$this->action = $MCA['Action'];
+		$this->curModule = $this->cModule = $this->module = $MCA['Module'];
+		$this->curController = $this->cController = $this->controller = $MCA['Controller'];
+		$this->cAction = $this->action = $MCA['Action'];
 		$this->CurPath = $this->UriPath = $MCA['Path'];
 		$this->Uri = $MCA['Path'] . self::PATH_SEPARATOR . join(self::PATH_SEPARATOR, $data);
 		$this->RequestUri = $requestUri;
 		$this->ParentPath = null;
 		
-		$result = call_user_func_array(array($MCA['Class'], $this->action), $params);
+		$result = call_user_func_array(array($MCA['Class'], $MCA['Action'].$MCA['Type']), $params);
 		
 		QFW::$view->setScriptPath($this->baseDir.'/'.$MCA['Module'].'/templates');
 
@@ -178,11 +172,24 @@ class QuickFW_Router
 				$MCA['Path']."\n".$MCA['Error'];
 		}
 
+		//сохраняем пути вызова
 		list($lpPath, $this->ParentPath, $this->CurPath) =
 			array($this->ParentPath, $this->CurPath, $MCA['Path']);
 
-		$result = call_user_func_array(array($MCA['Class'], $MCA['Action']), $MCA['Params']);
+		//сохраняем прошлый MCA
+		list ($oModule, $oController, $oAction) =
+			array($this->cModule, $this->cController, $this->cAction);
+		//устанавливаем текущий
+		list ($this->cModule, $this->cController, $this->cAction) =
+			array($MCA['Module'], $MCA['Controller'], $MCA['Action']);
 
+		$result = call_user_func_array(array($MCA['Class'], $MCA['Action'].$MCA['Type']), $MCA['Params']);
+
+		//восстанавливаем MCA
+		list ($this->cModule, $this->cController, $this->cAction) =
+			array($oModule, $oController, $oAction);
+
+		//восстанавливаем пути вызова
 		list($this->CurPath, $this->ParentPath) =
 			array($this->ParentPath, $lpPath);
 
@@ -370,13 +377,13 @@ SREG;
 		if (isset($data[0]) && (is_dir($this->baseDir . '/' . $data[0])))
 			$MCA['Module'] = array_shift($data);
 		else
-			$MCA['Module'] = $type=='Block' ? $this->cModule : $this->defM;
+			$MCA['Module'] = $type=='Block' ? $this->curModule : $this->defM;
 		$path = $this->baseDir.'/'.$MCA['Module'];
 		QFW::$view->setScriptPath($path.'/templates');
 
 		$c=count($data); // Количество элементов URI исключая модуль
 		//Определяем контроллер
-		$cname = isset($data[0]) ? $data[0] : ($type=='Block' ? $this->cController : $this->defC);
+		$cname = isset($data[0]) ? $data[0] : ($type=='Block' ? $this->curController : $this->defC);
 
 		$class = ucfirst($cname).'Controller';
 		$fullname = $path . '/controllers/' . strtr($class,'_','/') . '.php';
@@ -385,7 +392,7 @@ SREG;
 			array_shift($data);
 		else
 		{
-			$cname = $type=='Block' ? $this->cController : $this->defC;
+			$cname = $type=='Block' ? $this->curController : $this->defC;
 			$class = ucfirst($cname).'Controller';
 			$fullname = $path . '/controllers/' . $class . '.php';
 			if (!is_file($fullname))
@@ -422,14 +429,14 @@ SREG;
 			{
 				$aname = isset($data[0]) ? $data[0] :
 					(isset($vars['defA']) ? $vars['defA'] : $this->defA);
-				$fname = strtr($aname,'.','_').$type;
-				if (!in_array($fname,$acts))
-					$fname = (isset($vars['defA']) ? $vars['defA'] : $this->defA).$type;
+				if (!in_array(strtr($aname,'.','_').$type, $acts))
+					$aname = (isset($vars['defA']) ? $vars['defA'] : $this->defA);
 				//Инициализируем значения, чтобы можно было узнать
 				//как нас вызвали в конструкторе
-				$this->module = $MCA['Module'];
-				$this->controller = $MCA['Controller'];
-				$this->action = $fname;
+				$this->cModule = $this->module = $MCA['Module'];
+				$this->cController = $this->controller = $MCA['Controller'];
+				$this->cAction = $this->action = $aname;
+				$this->type = $type;
 			}
 			
 			$this->classes[$class_key] = array(
@@ -441,18 +448,20 @@ SREG;
 		$MCA['Class'] = $this->classes[$class_key]['i'];
 		
 		$aname = isset($data[0]) ? $data[0] : $this->classes[$class_key]['defA'];
-		$MCA['Action'] = strtr($aname,'.','_').$type;
+		$MCA['Action'] = strtr($aname,'.','_');
+		$MCA['Type'] = $type;
 		
 		if (in_array($MCA['Action'], $this->classes[$class_key]['a']))
 			array_shift($data);
 		else
 		{
 			$aname = $this->classes[$class_key]['defA'];
-			$MCA['Action'] = $aname.$type;
-			if (!in_array($MCA['Action'],$this->classes[$class_key]['a']))
+			$MCA['Action'] = $aname;
+			$MCA['Type'] = $type;
+			if (!in_array($aname.$type,$this->classes[$class_key]['a']))
 			{
 				$MCA['Error']="в классе \t\t\t".$class." \nне найдена функция \t\t".
-				$MCA['Action']."\nМетод не найден шоб его";
+				$MCA['Action'].$MCA['Type']."\nМетод не найден шоб его";
 				$MCA['Path']=$MCA['Module'].'/'.$MCA['Controller'].'/'.$aname;
 				return $MCA;
 			}
