@@ -451,7 +451,7 @@ SREG;
 		$MCA['Action'] = strtr($aname,'.','_');
 		$MCA['Type'] = $type;
 		
-		if (in_array($MCA['Action'], $this->classes[$class_key]['a']))
+		if (in_array($MCA['Action'].$MCA['Type'], $this->classes[$class_key]['a']))
 			array_shift($data);
 		else
 		{
