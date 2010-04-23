@@ -294,9 +294,9 @@ class QuickFW_Router
 	}
 
 	/** @var array Массив прямых преобразований Uri */
-	protected $rewrite = array();
+	protected $rewrite = false;
 	/** @var array Массив обратных преобразований Uri */
-	protected $backrewrite = array();
+	protected $backrewrite = false;
 	
 	/**
 	 * Функция производит преобразования урла для вывода на страницу
@@ -309,7 +309,7 @@ class QuickFW_Router
 	{
 		if (!QFW::$config['redirection']['useRewrite'])
 			return $uri;
-		if (!$this->backrewrite)
+		if ($this->backrewrite == false)
 		{
 			$backrewrite = array();
 			require APPPATH . '/rewrite.php';
@@ -329,7 +329,7 @@ class QuickFW_Router
 	{
 		if (!QFW::$config['redirection']['useRewrite'])
 			return $uri;
-		if (!$this->rewrite)
+		if ($this->rewrite == false)
 		{
 			$rewrite = array();
 			require APPPATH . '/rewrite.php';
