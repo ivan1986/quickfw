@@ -120,6 +120,7 @@ class Curl
 
 		//Set some default CURL options
 		curl_setopt_array($handle, array(
+			CURLOPT_AUTOREFERER => true,
 			CURLOPT_FOLLOWLOCATION => true,
 			CURLOPT_HEADER => true,
 			CURLOPT_RETURNTRANSFER => true,
