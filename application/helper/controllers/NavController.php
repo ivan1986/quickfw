@@ -31,6 +31,38 @@ class NavController
 	 * Вывод меню списком с подсветкой текущего элемента
 	 *
 	 * @param array $items Массив элементов:
+	 * <br>ключ - заголовок, значение Url|false
+	 * @param string $id id для элемента ul - для оформления
+	 * @param Url $cur текущий адресс
+	 * @param boolean $delDef Применять к ссылкам функцию QFW::$router->delDef
+	 * @return string Сформированное меню
+	 */
+	public function menuNewBlock($items, $id='', $cur=false)
+	{
+		if (count($items) == 0)
+			return '';
+		if ($cur == false)
+			$cur = QFW::$router->RequestUri;
+		$result = '<ul'.($id?' id="'.$id.'"':'').'>';
+		foreach ($items as $k=>$v)
+		{
+			$result.='<li>';
+			if ($v === false)
+				$result.=$k;
+			elseif ($cur == $v)
+				$result.='<b>'.$k.'</b>';
+			else
+				$result.='<a href="'.$v.'">'.$k.'</a>';
+			$result.="</li>\n";
+		}
+		$result.= '</ul>';
+		return $result;
+	}
+
+	/**
+	 * Вывод меню списком с подсветкой текущего элемента
+	 *
+	 * @param array $items Массив элементов:
 	 * <br>ключ - заголовок, значение адресс|false
 	 * @param string $id id для элемента ul - для оформления
 	 * @param string $cur текущий адресс
