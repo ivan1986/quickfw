@@ -114,6 +114,8 @@ class Url
 		$this->u = $begin.trim($url, QuickFW_Router::PATH_SEPARATOR);
 		$this->get = $get;
 		$this->ancor = ltrim($ancor, '#');
+		if (self::$config['delDef'])
+			$this->u = QFW::$router->delDef($this->u);
 	}
 
 	/** @var string внутреннее представление адреса */

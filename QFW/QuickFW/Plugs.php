@@ -27,6 +27,8 @@ class QuickFW_Plugs
 
 	public function siteUrl($url, $get='')
 	{
+		if (QFW::$config['redirection']['delDef'])
+			$url = QFW::$router->delDef($url);
 		if (QFW::$config['redirection']['useRewrite'])
 			$url = QFW::$router->backrewrite($url);
 		if (is_array($get) && count($get))

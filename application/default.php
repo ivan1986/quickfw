@@ -30,6 +30,7 @@ $config['redirection']=array(
 	'defExt'           => '',	//или пусто или .html например
 	'useRewrite'       => true,
 	'useBlockRewrite'  => false,
+	'delDef'           => true,
 );
 
 /**

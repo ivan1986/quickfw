@@ -26,6 +26,7 @@ $config['redirection']=array(
 	'defExt'           => '',
 	'useRewrite'       => true,
 	'useBlockRewrite'  => false,
+	'delDef'           => true,
 );
 
 /**
