@@ -24,7 +24,7 @@ class NavController
 			'url'=>$url,
 			'size'=>$size,
 		));
-		return QFW::$view->fetch($name.'.html');
+		return QFW::$view->fetch('pager/'.$name.'.html');
 	}
 
 	/**
