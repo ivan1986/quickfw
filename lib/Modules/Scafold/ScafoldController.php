@@ -89,7 +89,6 @@ abstract class ScafoldController extends Controller
 	{
 		// считаем страницы с нуля и убираем отрицательные
 		$page = max($page-1, 0);
-		require_once LIBPATH.'/TemplaterState.php';
 		$state = new TemplaterState(QFW::$view);
 		QFW::$view->setScriptPath(dirname(__FILE__));
 
@@ -219,7 +218,6 @@ abstract class ScafoldController extends Controller
 			$data = QFW::$db->selectRow('SELECT * FROM ?# WHERE ?#=?',
 				$this->table, $this->primaryKey, $id);
 
-		require_once LIBPATH.'/TemplaterState.php';
 		$state = new TemplaterState(QFW::$view);
 		QFW::$view->setScriptPath(dirname(__FILE__));
 
