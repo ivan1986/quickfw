@@ -59,6 +59,10 @@ class QFW
 		require QFWPATH.'/QuickFW/Cache.php';
 		require QFWPATH.'/QuickFW/Plugs.php';
 
+		//хелпер для урлов
+		require QFWPATH.'/QuickFW/Url.php';
+		Url::Init();
+
 		//выставляем заголовок с нужной кодировкой
 		if (!empty(self::$config['host']['encoding']))
 			header("Content-Type: text/html; charset=".self::$config['host']['encoding']);
