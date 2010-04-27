@@ -72,7 +72,8 @@ class Scafold_Field extends Scafold_Field_Info
 	 */
 	public function display($id, $value)
 	{
-		return $value===null ? '-' : QFW::$view->esc($value);
+		return $value===null ? ( $this->fiendInfo['Null'] == 'YES' ? 'NULL' : '-')
+			: QFW::$view->esc($value);
 	}
 
 	/**
@@ -135,6 +136,8 @@ class Scafold_Field extends Scafold_Field_Info
 	 */
 	public function proccess($id, $value)
 	{
+		if ($this->fiendInfo['Null'] == 'YES' && $value=='')
+			return null;
 		return $value;
 	}
 
