@@ -456,7 +456,7 @@ SREG;
 		else
 		{
 			$aname = $this->classes[$class_key]['defA'];
-			$MCA['Action'] = $aname;
+			$MCA['Action'] = strtr($aname,'.','_');
 			$MCA['Type'] = $type;
 			if (!in_array($aname.$type,$this->classes[$class_key]['a']))
 			{
