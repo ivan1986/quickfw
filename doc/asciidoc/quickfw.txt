@@ -21,4 +21,6 @@ include::auth.txt[]
 
 include::autoload.txt[]
 
+include::helpers.txt[]
+
 include::features.txt[]

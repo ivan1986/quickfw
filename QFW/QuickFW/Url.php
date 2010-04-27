@@ -68,9 +68,9 @@ class Url
 	 * @param string $ancor якорь
 	 * @return self адрес на сайте
 	 */
-	public static function A($get='', $ancor='')
+	public static function A($url, $get='', $ancor='')
 	{
-		return new self('', $get, $ancor, QFW::$router->cModule.
+		return new self($url, $get, $ancor, QFW::$router->cModule.
 				QuickFW_Router::PATH_SEPARATOR.
 			QFW::$router->cController.
 				QuickFW_Router::PATH_SEPARATOR.
