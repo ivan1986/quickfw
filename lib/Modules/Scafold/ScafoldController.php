@@ -97,8 +97,9 @@ abstract class ScafoldController extends Controller
 		//Устанавливаем фильтр
 		if ($this->parentData)
 		{
-			$parent = QFW::$db->selectCol('SELECT ?# AS ARRAY_KEY, ?# FROM ?#',
-				$this->parentData['key'], $this->parentData['field'], $this->parentData['table']);
+			$parent = QFW::$db->selectCol('SELECT ?# AS ARRAY_KEY, ?# FROM ?# '.$this->parentData['other'],
+				$this->parentData['key'], $this->parentData['field'], 
+				$this->parentData['table']);
 			$this->session();
 			if (isset($_POST['parent']))
 			{
@@ -288,19 +289,21 @@ abstract class ScafoldController extends Controller
 	 *
 	 * <br><br> Вызывается только в конструкторе
 	 *
-	 * @param string $colum Колонка зависимости
-	 * @param string $table Главная таблица
-	 * @param string $id Ключ в главной таблице
-	 * @param string $name Заголовок в главной таблице
+	 * @param string|DbSimple_SubQuery $colum Колонка зависимости
+	 * @param string|DbSimple_SubQuery $table Главная таблица
+	 * @param string|DbSimple_SubQuery $id Ключ в главной таблице
+	 * @param string|DbSimple_SubQuery $name Заголовок в главной таблице
+	 * @param string $other Дополнительные условия
 	 * @return ScafoldController
 	 */
-	protected function parent($colum, $table, $id, $name)
+	protected function parent($colum, $table, $id, $name, $other='')
 	{
 		$this->parentData = array(
 			'colum' => $colum,
 			'field' => $name,
 			'table' => $table,
 			'key'   => $id,
+			'other' => $other,
 		);
 		$this->getInfoClass($colum)->type = 'parent';
 		$this->getInfoClass($colum)->hide = true;
