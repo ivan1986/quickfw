@@ -740,6 +740,8 @@ abstract class DbSimple_Generic_Database extends DbSimple_Generic_LastError
 					// Identifier.
 					if (!is_array($value))
 					{
+						if ($value instanceof DbSimple_SubQuery)
+							return $value->get($this->_placeholderNativeArgs);
 						if (substr($value, 0, 2) == '?_')
 							$value = $this->_identPrefix . substr($value, 2);
 						return $this->escape($value, true);
