@@ -191,6 +191,12 @@ class Scafold_Parent extends Scafold_Field
 	{
 		return $_SESSION['scafold'][$this->table]['parent'];
 	}
+
+	public function validator($id, $value)
+	{
+		//если у нас будет потеря сессии, то случится фигня
+		return isset($_SESSION['scafold'][$this->table]['parent']);
+	}
 	
 	public function filterForm($session)
 	{
