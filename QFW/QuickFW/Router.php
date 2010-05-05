@@ -370,8 +370,40 @@ SREG;
 
 	protected function loadMCA(&$data, $type)
 	{
-		$MCA = array();
 		while (isset($data[0]) AND $data[0] === '') array_shift($data);
+
+		if (!empty(QFW::$config['cache']['MCA']))
+		{
+			$Cache = Cache::get('MCA');
+			$key = 'MCA_'.crc32(serialize($data)).$type.
+				($type=='Block' ? $this->curModule : $this->defM);
+			$cached = $Cache->load($key);
+			if ($cached)
+			{
+				$MCA = $cached['MCA'];
+				$path = $this->baseDir.'/'.$MCA['Module'];
+				QFW::$view->setScriptPath($path.'/templates');
+				$class = ucfirst($MCA['Controller']).'Controller';
+				$fullname = $path . '/controllers/' . strtr($class,'_','/') . '.php';
+				require_once($fullname);
+				$class_key=$MCA['Module'].'|'.$MCA['Controller'];
+				if ($this->module == '')
+				{
+					$this->cModule = $this->module = $MCA['Module'];
+					$this->cController = $this->controller = $MCA['Controller'];
+					$this->cAction = $this->action = $MCA['Action'];
+					$this->type = $MCA['Type'];
+				}
+				if (!isset($this->classes[$class_key]))
+					$this->classes[$class_key] = array(
+						'i'    => $MCA['Class'] = new $class,
+						'defA' => $cached['defA'],
+						'a'    => $cached['a'],
+					);
+				return $MCA;
+			}
+		}
+		$MCA = array();
 
 		//Определяем модуль
 		if (isset($data[0]) && (is_dir($this->baseDir . '/' . $data[0])))
@@ -474,6 +506,13 @@ SREG;
 				"Не работает, мать его за ногу";
 		}
 		$MCA['Path']=$MCA['Module'].'/'.$MCA['Controller'].'/'.$aname;
+
+		if (!empty(QFW::$config['cache']['MCA']))
+			$Cache->save(array(
+				'MCA' => $MCA,
+				'defA' => $this->classes[$class_key]['defA'],
+				'a' => $this->classes[$class_key]['a'],
+			), $key, array());
 
 		return $MCA;
 	}
