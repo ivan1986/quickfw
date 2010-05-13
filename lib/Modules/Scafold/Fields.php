@@ -278,6 +278,42 @@ class Scafold_Text extends Scafold_UserInput
 }
 
 /**
+ * Класс для типа Int
+ */
+class Scafold_Int extends Scafold_Field
+{
+	public function validator($id, $value)
+	{
+		return is_numeric($value);
+	}
+}
+
+/**
+ * Класс для типа Varchar
+ */
+class Scafold_Varchar extends Scafold_Field
+{
+	/** @var integer размер поля в базе */
+	private $size;
+
+	public function __construct($info, $size)
+	{
+		parent::__construct($info);
+		$this->size = $size;
+	}
+
+	public function validator($id, $value)
+	{
+		return mb_strlen($value) <= $this->size;
+	}
+}
+
+/**
+ * Класс для типа Char - полностью аналогичен Varchar
+ */
+class Scafold_Char extends Scafold_Varchar {}
+
+/**
  * Класс для типа ENUM
  */
 class Scafold_Enum extends Scafold_Field
