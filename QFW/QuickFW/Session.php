@@ -69,12 +69,15 @@ class QuickFW_Session
 	 */
 	public static function destroy($id)
 	{
+		if (!session_id())
+			return;
 		setcookie(session_name(), '', 1, '/',
 			isset(QFW::$config['session']['domain']) ? QFW::$config['session']['domain'] : '');
 		unset($_COOKIE[session_name()]);
-		self::$cache->remove('sess_'.$id);
+		if (self::$cache)
+			self::$cache->remove('sess_'.$id);
 		$_SESSION = array();
-		session_id('');
+		session_destroy();
 	}
 
 	/**
