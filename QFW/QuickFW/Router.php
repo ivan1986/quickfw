@@ -137,6 +137,9 @@ class QuickFW_Router
 		//Сохраняем старый путь шаблонов
 		$scriptPath = QFW::$view->getScriptPath();
 
+		if ($Uri instanceof Url)
+			$Uri = $Uri->intern();
+
 		//два варианта записи вызова
 		// module.controller.action(p1,p2,p3,...)
 		if (preg_match('|^(?:(\w*?)\.)?(\w*?)(?:\.(\w*))?(?:\((.*)\))?$|',$Uri,$patt))

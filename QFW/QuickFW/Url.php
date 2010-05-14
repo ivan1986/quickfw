@@ -33,7 +33,7 @@ class Url
 	/**
 	 * Урл, относительно модуля
 	 *
-	 * @param string|self $url url
+	 * @param string|self $CA url
 	 * @param string|array $get параметры
 	 * @param string $ancor якорь
 	 * @return self адрес на сайте
@@ -47,7 +47,7 @@ class Url
 	/**
 	 * Урл, относительно контроллера
 	 *
-	 * @param string|self $url url
+	 * @param string|self $action url
 	 * @param string|array $get параметры
 	 * @param string $ancor якорь
 	 * @return self адрес на сайте
@@ -63,18 +63,18 @@ class Url
 	/**
 	 * Урл, относительно экшена
 	 *
-	 * @param string|self $url url
+	 * @param string|self $params url
 	 * @param string|array $get параметры
 	 * @param string $ancor якорь
 	 * @return self адрес на сайте
 	 */
-	public static function A($url, $get='', $ancor='')
+	public static function A($params='', $get='', $ancor='')
 	{
-		return new self($url, $get, $ancor, QFW::$router->cModule.
+		return new self($params, $get, $ancor, QFW::$router->cModule.
 				QuickFW_Router::PATH_SEPARATOR.
 			QFW::$router->cController.
 				QuickFW_Router::PATH_SEPARATOR.
-			QFW::$router->cAction);
+			QFW::$router->cAction.QuickFW_Router::PATH_SEPARATOR);
 	}
 
 	/**
@@ -139,6 +139,17 @@ class Url
 			($this->get ? '?' . $this->get : '').
 			($this->ancor ? '#' . $this->ancor : '');
 
+	}
+
+	/**
+	 * Внутренний адрес - для блока
+	 *
+	 * @internal
+	 * @return string внутренний адрес
+	 */
+	public function intern()
+	{
+		return $this->u;
 	}
     
 }
