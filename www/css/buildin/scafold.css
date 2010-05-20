@@ -1,0 +1,56 @@
+div.pageslist {text-align:center;}
+
+table.scafoldTable
+{
+	border:2px solid black;
+	width: 100%;
+}
+
+.scafoldTable th, .scafoldTable td
+{
+	border:1px dashed black;
+	padding: 5px;
+	margin: 0;
+}
+
+.scafoldTable td:last-child, .scafoldTable td:nth-last-child(2)
+{
+	width: 25px;
+}
+
+.scafoldTable tr {vertical-align:top;}
+.scafoldTable th { background-color:#eec0c0; }
+.scafoldTable tr td { background-color:#ddd; text-align:left;}
+.scafoldTable tr:nth-child(odd) td { background-color:#c0ffc0; }
+
+.scafoldTable table.tnone {border: 1px solid black;}
+.scafoldTable table.tnone td {background-color:#FFF; border: none; padding: 0; margin: 0;}
+
+form.scafoldEdit .err {color: red;}
+
+form.scafoldEdit textarea:focus, input:focus, select:focus {
+	border: 2px solid #900;
+}
+
+form.scafoldEdit dt {
+	padding: 0;
+	margin: 0.7em 1em 0.5em 0;
+	width: 25%;
+	float: left;
+	clear: left;
+	text-align: right;
+}
+
+form.scafoldEdit dd {
+	margin: 0;
+	padding: 0.5em 0;
+	width: 70%;
+	float: left;
+}
+
+form.scafoldEdit small
+{
+	display: block;
+	margin-left: 20px;
+	color: #999;
+}
