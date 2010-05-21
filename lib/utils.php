@@ -293,4 +293,24 @@ function pluralForm($n, $form1, $form2, $form5)
 	return $form5;
 }
 
+/**
+ * Вызывает preg_match(_all) и
+ * <br>возвращается данные в удобном формате
+ * <br>с использованием флага PREG_SET_ORDER
+ *
+ * @param string $pattern регулярное выражение
+ * @param string $subject строка для поиска
+ * @param bool $all вызывать preg_match_all
+ * @return array найденные паттерны
+ */
+function preg($pattern, $subject, $all = true)
+{
+	$m = array();
+	if ($all)
+		preg_match_all($pattern, $subject, $m, PREG_SET_ORDER);
+	else
+		preg_match($pattern, $subject, $m);
+	return $m;
+}
+
 ?>
