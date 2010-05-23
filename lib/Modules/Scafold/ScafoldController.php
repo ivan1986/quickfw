@@ -44,6 +44,52 @@ abstract class ScafoldController extends Controller
 	private $setup = false;
 
 	/**
+	 * Получает данные о полях
+	 *
+	 * @return array Данные
+	 */
+	private function fields()
+	{
+		$f = array();
+		$shema = QFW::$db->getShema();
+		if ($shema == 'Mypdo' || $shema == 'Mysql')
+		{	//Mysql
+			$fields = QFW::$db->select('SHOW FIELDS IN ?#', $this->table);
+			foreach($fields as $field)
+			{
+				$c = $this->getInfoClass($field['Field']);
+				$c->primaryKey = $field['Key'] == 'PRI';
+				$f[$field['Field']] = $this->getFieldClass($c, $field);
+			}
+		}
+		else if ($shema == 'Litepdo' || $shema == 'Sqlite')
+		{	//Sqlite
+			$sql = QFW::$db->selectCell('SELECT sql FROM sqlite_master
+				WHERE type=? AND name=?', 'table', str_replace('?_', 
+					QFW::$db->setIdentPrefix(null), $this->table));
+			//выделяем то что в скобках
+			$sql = substr($sql, strpos($sql, '(')+1, -1);
+			$fields = explode(',', $sql);
+			foreach($fields as $field)
+			{
+				$field = explode(' ', trim($field), 2);
+				$c = $this->getInfoClass($field[0]);
+				$c->primaryKey = strpos($field[1], 'PRIMARY KEY') !== false;
+				$info = array(
+					'Field' => $field[0],
+					'Type' => $field[1],
+					'Null' => 'NO',
+					'Default' => null,
+					'Extra' => '',
+
+				);
+				$f[$field[0]] = $this->getFieldClass($c, $info);
+			}
+		}
+		return $f;
+	}
+
+	/**
 	 * Конструктор вызывать только после настройки таблицы
 	 */
 	public function  __construct()
@@ -55,14 +101,7 @@ abstract class ScafoldController extends Controller
 		$this->methods = array_flip(get_class_methods($this));
 
 		//Получаем данные о полях
-		$fields = QFW::$db->select('SHOW FIELDS IN ?#', $this->table);
-		foreach($fields as $field)
-		{
-			$c = $this->getInfoClass($field['Field']);
-			$c->primaryKey = $field['Key'] == 'PRI';
-			$this->fields[$field['Field']] = 
-				$this->getFieldClass($c, $field);
-		}
+		$this->fields = $this->fields();
 		foreach($this->fields as $k=>$field)
 			if (get_class($field) == 'Scafold_Field_Info')
 				unset($this->fields[$k]);
