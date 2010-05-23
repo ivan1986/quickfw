@@ -308,12 +308,12 @@ abstract class ScafoldController extends Controller
 		$this->session();
 		if (!empty($_POST['clear']))
 		{
-			$_SESSION['scafold']['filter'] = array();
+			$_SESSION['scafold'][$this->table]['filter'] = array();
 			QFW::$router->redirect('/'.$this->ControllerUrl.'/index', true);
 		}
 		if (empty($_POST['filter']) || empty($_POST['apply']))
 			QFW::$router->redirect('/'.$this->ControllerUrl.'/index', true);
-		$_SESSION['scafold']['filter'] = $_POST['filter'];
+		$_SESSION['scafold'][$this->table]['filter'] = $_POST['filter'];
 		
 		QFW::$router->redirect('/'.$this->ControllerUrl.'/index', true);
 	}
