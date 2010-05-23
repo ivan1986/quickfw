@@ -42,6 +42,8 @@ abstract class ScafoldController extends Controller
 	private $methods;
 	/** @var boolean Флаг окончания настройки */
 	private $setup = false;
+	/** @var array Порядок сортировки */
+	private $order = array();
 
 	/**
 	 * Получает данные о полях
@@ -105,6 +107,11 @@ abstract class ScafoldController extends Controller
 			if (get_class($field) == 'Scafold_Field_Info')
 				unset($this->fields[$k]);
 
+		//порядок сортировки полей
+		foreach($this->order as $k=>$v)
+			if (!isset($this->fields[$v]))
+				unset($this->order[$k]);
+
 		//Общая информация о таблице
 		QFW::$view->assign(array(
 			'methods' => $this->methods,
@@ -163,7 +170,7 @@ abstract class ScafoldController extends Controller
 		$foreign = $this->getForeign();
 		$data = QFW::$db->select('SELECT ?# ?s FROM ?# ?s
 			WHERE ?s ?s '.$this->where.' LIMIT ?d, ?d',
-			array($this->table=>'*'),
+			array($this->table=>array_merge($this->order, array('*'))),
 			$foreign['field'], $this->table, $foreign['join'],
 			$filter['where'], $parentWhere,
 			$page*$this->pageSize, $this->pageSize);
@@ -251,11 +258,15 @@ abstract class ScafoldController extends Controller
 		{
 			//получение дефолтовых значений для новой записи
 			$data = array();
+			foreach($this->order as $f)
+				$data[$f] = $this->fields[$f]->def();
 			foreach ($this->fields as $f=>$info)
-				$data[$f] = $info->def();
+				if (!isset($data[$f]))
+					$data[$f] = $info->def();
 		}
 		else
-			$data = QFW::$db->selectRow('SELECT * FROM ?# WHERE ?#=?',
+			$data = QFW::$db->selectRow('SELECT ?# FROM ?# WHERE ?#=?',
+				array($this->table=>array_merge($this->order, array('*'))),
 				$this->table, $this->primaryKey, $id);
 
 		$state = new TemplaterState(QFW::$view);
@@ -321,6 +332,21 @@ abstract class ScafoldController extends Controller
 	////////////////////////////////////////////////////////////
 	//Функции для упращения настройки таблицы - удобные сеттеры
 	////////////////////////////////////////////////////////////
+
+	/**
+	 * Скрывает при выводе и редактировании указанные колонки
+	 *
+	 * <br><br> Вызывается только в конструкторе
+	 *
+	 * @param array $fieldList массив с именами полей
+	 * @return ScafoldController
+	 */
+	protected function order($fieldList)
+	{
+		$this->endTest();
+		$this->order = $fieldList;
+		return $this;
+	}
 
 	/**
 	 * Устанавливает таблицу как подчиненную
