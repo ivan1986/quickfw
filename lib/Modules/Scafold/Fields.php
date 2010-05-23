@@ -296,8 +296,10 @@ class Scafold_Varchar extends Scafold_Field
 	/** @var integer размер поля в базе */
 	private $size;
 
-	public function __construct($info, $size)
+	public function __construct($info, $size = 100)
 	{
+		if (!empty($info->typeParams) && is_numeric($info->typeParams))
+			$size = $info->typeParams;
 		parent::__construct($info);
 		$this->size = $size;
 	}

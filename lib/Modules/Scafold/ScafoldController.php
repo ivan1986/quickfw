@@ -81,7 +81,6 @@ abstract class ScafoldController extends Controller
 					'Null' => 'NO',
 					'Default' => null,
 					'Extra' => '',
-
 				);
 				$f[$field[0]] = $this->getFieldClass($c, $info);
 			}
