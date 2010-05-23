@@ -34,7 +34,12 @@ define('DBSIMPLE_PARENT_KEY', 'PARENT_KEY'); // forrest-based resultset support
  */
 class DbSimple_Connect
 {
-	protected $DbSimple, $DSN;
+	/** @var DbSimple_Generic_Database База данных */
+	protected $DbSimple;
+	/** @var string DSN подключения */
+	protected $DSN;
+	/** @var string Тип базы данных */
+	protected $shema;
 
 	/**
 	 * Конструктор только запоминает переданный DSN
@@ -44,8 +49,9 @@ class DbSimple_Connect
 	 */
 	public function __construct($dsn)
 	{
-		$this->DbSimple  = null;
-		$this->DSN       = $dsn;
+		$this->DbSimple = null;
+		$this->DSN      = $dsn;
+		$this->shema    = ucfirst(substr($dsn, 0, strpos($dsn, ':')));
 	}
 
 	/**
@@ -58,6 +64,16 @@ class DbSimple_Connect
 	{
 		static $pool = array();
 		return isset($pool[$dsn]) ? $pool[$dsn] : $pool[$dsn] = new self($dsn);
+	}
+
+	/**
+	 * Возвращает тип базы данных
+	 *
+	 * @return string имя типа БД
+	 */
+	public function getShema()
+	{
+		return $this->shema;
 	}
 
 	/**
@@ -91,10 +107,11 @@ class DbSimple_Connect
 		$parsed = $this->parseDSN($dsn);
 		if (!$parsed)
 			$this->errorHandler('Ошибка разбора строки DSN',$dsn);
-		if (!isset($parsed['scheme']) || !is_file(dirname(__FILE__).'/'.ucfirst($parsed['scheme']).'.php'))
+		$this->shema = ucfirst($parsed['scheme']);
+		if (!isset($parsed['scheme']) || !is_file(dirname(__FILE__).'/'.$this->shema.'.php'))
 			$this->errorHandler('Невозможно загрузить драйвер базы данных',$parsed);
-		require_once dirname(__FILE__).'/'.ucfirst($parsed['scheme']).'.php';
-		$class = 'DbSimple_'.ucfirst($parsed['scheme']);
+		require_once dirname(__FILE__).'/'.$this->shema.'.php';
+		$class = 'DbSimple_'.$this->shema;
 		$this->DbSimple = new $class($parsed);
 		if (isset($parsed['prefix']))
 			$this->DbSimple->setIdentPrefix($parsed['prefix']);
