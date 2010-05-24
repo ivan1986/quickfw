@@ -85,8 +85,8 @@ class Url
 		self::$config = QFW::$config['redirection'];
 		self::$config['base'] = self::$config['baseUrl'].
 			(self::$config['useIndex'] ? 'index.php/' : '');
-		self::$config['ext'] = self::$config['defExt'] ?
-			self::$config['defExt'] : '/';
+		self::$config['ext'] = self::$config['defExt'] ? self::$config['defExt'] :
+			(QuickFW_Router::PATH_SEPARATOR == '/' ? '/' : '');
 	}
 
 	/** @var array QFW::$config['redirection'] */
