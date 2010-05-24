@@ -111,7 +111,7 @@ class Url
 			$this->ancor = $ancor ? ltrim($ancor, '#') : $url->ancor;
 			return;
 		}
-		$this->u = $begin.trim($url, QuickFW_Router::PATH_SEPARATOR);
+		$this->u = trim($begin.$url, QuickFW_Router::PATH_SEPARATOR);
 		$this->get = $get;
 		$this->ancor = ltrim($ancor, '#');
 		if (self::$config['delDef'])
