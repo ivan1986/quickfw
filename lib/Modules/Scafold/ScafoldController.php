@@ -42,7 +42,7 @@ abstract class ScafoldController extends Controller
 	private $methods;
 	/** @var boolean Флаг окончания настройки */
 	private $setup = false;
-	/** @var array Порядок сортировки */
+	/** @var array Порядок столбцев */
 	private $order = array();
 
 	/**
@@ -169,10 +169,11 @@ abstract class ScafoldController extends Controller
 
 		$foreign = $this->getForeign();
 		$data = QFW::$db->select('SELECT ?# ?s FROM ?# ?s
-			WHERE ?s ?s '.$this->where.' LIMIT ?d, ?d',
+			WHERE ?s ?s '.$this->where.' ?s LIMIT ?d, ?d',
 			array($this->table=>array_merge($this->order, array('*'))),
 			$foreign['field'], $this->table, $foreign['join'],
 			$filter['where'], $parentWhere,
+			$this->getSort(),
 			$page*$this->pageSize, $this->pageSize);
 
 		if (count($filter['form']))
@@ -326,6 +327,33 @@ abstract class ScafoldController extends Controller
 			QFW::$router->redirect('/'.$this->ControllerUrl.'/index', true);
 		$_SESSION['scafold'][$this->table]['filter'] = $_POST['filter'];
 		
+		QFW::$router->redirect('/'.$this->ControllerUrl.'/index', true);
+	}
+
+	/**
+	 * Устанавливает порядок сортировки
+	 *
+	 * @param string $field Имя поля
+	 */
+	public function sortAction($field='')
+	{
+		$this->session();
+		//такого поля нету
+		if (!isset($this->fields[$field]))
+			QFW::$router->redirect('/'.$this->ControllerUrl.'/index', true);
+		if (isset($_SESSION['scafold'][$this->table]['sort']) &&
+			$_SESSION['scafold'][$this->table]['sort']['field'] == $field)
+			$r = array(
+				'field' => $field,
+				'direction' => $_SESSION['scafold'][$this->table]['sort']['direction'] == 'ASC' ?
+					'DESC' : 'ASC',
+			);
+		else
+			$r = array(
+				'field' => $field,
+				'direction' => 'ASC',
+			);
+		$_SESSION['scafold'][$this->table]['sort'] = $r;
 		QFW::$router->redirect('/'.$this->ControllerUrl.'/index', true);
 	}
 
@@ -557,6 +585,21 @@ abstract class ScafoldController extends Controller
 			'where' => call_user_func_array(array(QFW::$db, 'subquery'), $args),
 			'form' => $form,
 		);
+	}
+
+	/**
+	 * Генерирует сортировку
+	 *
+	 * @return DbSimple_SubQuery Подзапрос сортировки
+	 */
+	private function getSort()
+	{
+		if (!isset($_SESSION['scafold'][$this->table]['sort']))
+			return DBSIMPLE_SKIP;
+		$order = $_SESSION['scafold'][$this->table]['sort'];
+		QFW::$view->assign('order', $order);
+		return QFW::$db->subquery('order by ?# '.$order['direction'],
+			array($this->table => $order['field']));
 	}
 
 	/**

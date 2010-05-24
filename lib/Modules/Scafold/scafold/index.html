@@ -14,7 +14,10 @@
 		if ($i->hide)
 			continue;
 		?>
-		<th><?php echo $i->title ?></th>
+		<th><a href="<?php echo $P->siteUrl($info['ControllerUrl'].
+			'/sort/'.$key) ?>"><?php echo $i->title ?></a>
+			<span class="scafoldSort"><span><?php if (isset($order) && $order['field'] == $key)
+			echo $order['direction']=='ASC' ? 'А->Я' : 'Я->А' ?></span></span></th>
 	<?php } ?>
 	<th><a href="<?php echo $P->siteUrl($info['ControllerUrl'].
 		'/edit/-1') ?>">доб.</a></th>

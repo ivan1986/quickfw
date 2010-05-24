@@ -26,6 +26,15 @@ table.scafoldTable
 .scafoldTable table.tnone {border: 1px solid black;}
 .scafoldTable table.tnone td {background-color:#FFF; border: none; padding: 0; margin: 0;}
 
+.scafoldTable .scafoldSort {
+	position: relative;
+}
+
+.scafoldTable .scafoldSort span {
+	position: absolute;
+	white-space: nowrap;
+}
+
 form.scafoldEdit .err {color: red;}
 
 form.scafoldEdit textarea:focus, input:focus, select:focus {
