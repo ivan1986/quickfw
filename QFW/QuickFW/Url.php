@@ -111,6 +111,9 @@ class Url
 			$this->ancor = $ancor ? ltrim($ancor, '#') : $url->ancor;
 			return;
 		}
+		//Заменяем / на QuickFW_Router::PATH_SEPARATOR
+		if (QuickFW_Router::PATH_SEPARATOR != '/')
+			$url = strtr($url, '/', QuickFW_Router::PATH_SEPARATOR);
 		$this->u = trim($begin.$url, QuickFW_Router::PATH_SEPARATOR);
 		$this->get = $get;
 		$this->ancor = ltrim($ancor, '#');
@@ -135,7 +138,7 @@ class Url
 	public function  __toString()
 	{
 		return self::$config['base'].$this->u.
-			($this->u!==''?self::$config['ext']:'').
+			($this->u!=='' ? self::$config['ext'] : '').
 			($this->get ? '?' . $this->get : '').
 			($this->ancor ? '#' . $this->ancor : '');
 
