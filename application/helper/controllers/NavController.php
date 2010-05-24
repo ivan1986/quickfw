@@ -49,10 +49,14 @@ class NavController
 			$result.='<li>';
 			if ($v === false)
 				$result.=$k;
-			elseif ($cur == $v)
-				$result.='<b>'.$k.'</b>';
 			else
-				$result.='<a href="'.$v.'">'.$k.'</a>';
+			{
+				if ($v instanceof Url)
+					$self = $cur == $v->intern();
+				else
+					$self = $cur == $v;
+				$result.= $self ? '<b>'.$k.'</b>' : '<a href="'.$v.'">'.$k.'</a>';
+			}
 			$result.="</li>\n";
 		}
 		$result.= '</ul>';
