@@ -63,6 +63,10 @@ class QFW
 		if (!empty(self::$config['host']['encoding']))
 			header("Content-Type: text/html; charset=".self::$config['host']['encoding']);
 
+		//Инициализируем класс базы данных
+		require LIBPATH.'/DbSimple/Connect.php';
+		self::$db = new DbSimple_Connect(self::$config['database']);
+
 		//Подключаем шаблонизатор
 		$templ = ucfirst(self::$config['templater']['name']);
 		$class = 'Templater_'.$templ;
@@ -87,13 +91,6 @@ class QFW
 	 */
 	static public function modules()
 	{
-		//Инициализируем класс базы данных
-		if (!empty(self::$config['database']))
-		{
-			require LIBPATH.'/DbSimple/Connect.php';
-			self::$db = new DbSimple_Connect(self::$config['database']);
-		}
-
 		//Включаем обработку фатальных ошибок, если в конфиге указано
 		if (!empty(self::$config['QFW']['catchFE']))
 			require QFWPATH.'/QuickFW/Error.php';
