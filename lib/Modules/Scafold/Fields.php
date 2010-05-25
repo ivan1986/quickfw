@@ -213,11 +213,13 @@ class Scafold_Foreign extends Scafold_Field
 	/** @var array Зависимые поля */
 	protected $lookup;
 
-	public function __construct($info)
+	public function __construct($info, $where = DBSIMPLE_SKIP)
 	{
+		if (!empty($info->typeParams))
+			$where = $info->typeParams;
 		parent::__construct($info);
-		$this->lookup = QFW::$db->selectCol('SELECT ?# AS ARRAY_KEY_1, ?# FROM ?#',
-			$info->foreign['key'], $info->foreign['field'], $info->foreign['table']);
+		$this->lookup = QFW::$db->selectCol('SELECT ?# AS ARRAY_KEY_1, ?# FROM ?# {WHERE ?s}',
+			$info->foreign['key'], $info->foreign['field'], $info->foreign['table'], $where);
 	}
 
 	public function editor($id, $value)
