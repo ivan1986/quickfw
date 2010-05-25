@@ -92,8 +92,12 @@ class QFW
 	static public function modules()
 	{
 		//Включаем обработку фатальных ошибок, если в конфиге указано
-		if (!empty(self::$config['QFW']['catchFE']))
-			require QFWPATH.'/QuickFW/Error.php';
+		if (!empty(self::$config['error']))
+		{
+			require_once QFWPATH.'/QuickFW/Error.php';
+			foreach(self::$config['error'] as $handler)
+			QFW_Listener::addFromConfig($handler);
+		}
 
 		//автолоад
 		if (!empty(self::$config['QFW']['autoload']))

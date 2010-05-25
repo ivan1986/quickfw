@@ -34,6 +34,21 @@ $config['redirection']=array(
 );
 
 /**
+ * Настройки обработчика ошибок
+ */
+$config['error'] = array();
+$config['error'][] = array(
+	'name' => 'mail',
+	'RemoveDups' => 300, //секунд или false
+	'options' => array(
+		'to' => 'ivan1986@localhost',
+		'whatToSend' => 65535, // LOG_ALL (look in TextNotifier)
+		'subjPrefix' => '[ERROR] ',
+		'charset' => 'UTF-8',
+	),
+);
+
+/**
  * Настройки кешера (класс бекенда и дополнительные параметры, если есть)
  *
  * @deprecated лучше юзайте новый кешер
