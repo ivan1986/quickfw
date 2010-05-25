@@ -213,10 +213,14 @@ class Scafold_Foreign extends Scafold_Field
 	/** @var array Зависимые поля */
 	protected $lookup;
 
+	/** @var bool Может ли быть нулевое значение */
+	protected $isnull;
+
 	public function __construct($info, $where = DBSIMPLE_SKIP)
 	{
 		if (!empty($info->typeParams))
 			$where = $info->typeParams;
+		$this->isnull = $info->foreign['null'];
 		parent::__construct($info);
 		$this->lookup = QFW::$db->selectCol('SELECT ?# AS ARRAY_KEY_1, ?# FROM ?# {WHERE ?s}',
 			$info->foreign['key'], $info->foreign['field'], $info->foreign['table'], $where);
@@ -225,6 +229,11 @@ class Scafold_Foreign extends Scafold_Field
 	public function editor($id, $value)
 	{
 		return $this->selectBuild($this->lookup, $value);
+	}
+
+	public function validator($id, $value)
+	{
+		return $this->isnull || !empty($value);
 	}
 
 }
