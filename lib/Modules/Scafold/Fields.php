@@ -361,7 +361,8 @@ class Scafold_Checkbox extends Scafold_Field
 	public function editor($id, $value)
 	{
 		return '<input type="hidden" name="data['.$this->name.']" value="0" />
-			<input type="checkbox" name="data['.$this->name.']" value="1" label="'.$this->title.'" />';
+			<input type="checkbox" name="data['.$this->name.']" value="1" label="'.$this->title.'"
+				default="'.($value?'checked':'').'" />';
 	}
 
 }
@@ -405,7 +406,8 @@ class Scafold_File extends Scafold_Field
 	{
 		return '<input type="file" name="file['.$this->name.']" />
 				<input type="hidden" name="data['.$this->name.']" value="0" />
-				<input type="checkbox" name="data['.$this->name.']" value="1" label="Удалить" />';
+				<input type="checkbox" name="data['.$this->name.']" value="1" label="Удалить" /> '.
+				$this->display($id, $value);
 	}
 
 	public function validator($id, $value)
