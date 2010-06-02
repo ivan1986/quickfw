@@ -95,7 +95,7 @@ abstract class ScafoldController extends Controller
 	 */
 	public function  __construct()
 	{
-		QFW::$view->P->addCSS('css/buildin/scafold.css');
+		QFW::$view->P->addCSS('buildin/scafold.css');
 		$this->setup = true;
 		parent::__construct();
 		$this->ControllerUrl = QFW::$router->module.'/'.QFW::$router->controller;

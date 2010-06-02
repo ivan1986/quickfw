@@ -16,8 +16,12 @@
 		?>
 		<th><a href="<?php echo $P->siteUrl($info['ControllerUrl'].
 			'/sort/'.$key) ?>"><?php echo $i->title ?></a>
-			<span class="scafoldSort"><span><?php if (isset($order) && $order['field'] == $key)
-			echo $order['direction']=='ASC' ? 'А->Я' : 'Я->А' ?></span></span></th>
+			<?php if (isset($order) && $order['field'] == $key) { ?><span class="scafoldSort">
+				<span><?php echo $order['direction']=='ASC' ? '↓' : '↑' ?></span>
+				<?php /*<img src="/buildin/<?php echo $order['direction']=='ASC' ? 'az' : 'za' ?>.png"
+					 alt="<?php echo $order['direction']=='ASC' ? '↓' : '↑' ?>" />*/?>
+			</span><?php } ?>
+		</th>
 	<?php } ?>
 	<th><a href="<?php echo $P->siteUrl($info['ControllerUrl'].
 		'/edit/-1') ?>">доб.</a></th>

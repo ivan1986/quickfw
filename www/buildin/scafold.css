@@ -30,9 +30,8 @@ table.scafoldTable
 	position: relative;
 }
 
-.scafoldTable .scafoldSort span {
+.scafoldTable .scafoldSort * {
 	position: absolute;
-	white-space: nowrap;
 }
 
 form.scafoldEdit .err {color: red;}
