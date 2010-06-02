@@ -291,7 +291,7 @@ class QuickFW_Router
 		if ($ref && isset($_SERVER['HTTP_REFERER']))
 			$url = $_SERVER['HTTP_REFERER'];
 		else
-			$url = $url ? $url : $_SERVER['REQUEST_URI'];
+			$url = $url ? $url :  Url::site($this->RequestUri);;
 		header('Location: '.$url);
 		exit();
 	}
