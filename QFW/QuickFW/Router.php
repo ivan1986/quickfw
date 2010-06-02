@@ -146,16 +146,9 @@ class QuickFW_Router
 		{
 			$data = array_slice($patt,1,3);
 			$MCA = $this->loadMCA($data,'Block');
-			if (isset($patt[4]))
-			{
-				// Если вы все еще сидите на PHP 5.2 то раскомментируйте старый вариант
-				$MCA['Params'] = str_getcsv($patt[4],',',"'",'\\'); // $this->parseScobParams($patt[4]);
-			}
-			else
-			{
-				$MCA['Params'] = func_get_args();
-				array_shift($MCA['Params']);
-			}
+			// Если вы все еще сидите на PHP 5.2 то раскомментируйте старый вариант
+			$MCA['Params'] = empty($patt[4]) ? array() :
+				$this->parseScobParams($patt[4]); // str_getcsv($patt[4],',',"'",'\\');
 		}
 		else
 		{
@@ -165,8 +158,14 @@ class QuickFW_Router
 			// module/controller/action/p1/p2/p3/...
 			$data = explode(self::PATH_SEPARATOR, $Uri);
 			$MCA = $this->loadMCA($data,'Block');
-			$MCA['Params']=$this->parseParams($data);
+			$MCA['Params'] = $this->parseParams($data);
 		}
+
+		$Params = func_get_args();
+		array_shift($Params);
+		if ($Params)
+			$MCA['Params'] = array_merge($MCA['Params'], $Params);
+
 		if (isset($MCA['Error']))
 		{
 			if (QFW::$config['QFW']['release'])
