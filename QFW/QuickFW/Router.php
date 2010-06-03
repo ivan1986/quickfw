@@ -161,11 +161,6 @@ class QuickFW_Router
 			$MCA['Params'] = $this->parseParams($data);
 		}
 
-		$Params = func_get_args();
-		array_shift($Params);
-		if ($Params)
-			$MCA['Params'] = array_merge($MCA['Params'], $Params);
-
 		if (isset($MCA['Error']))
 		{
 			if (QFW::$config['QFW']['release'])
@@ -173,6 +168,11 @@ class QuickFW_Router
 			return "Ошибка подключения блока ".$Uri." адрес был разобран в\t\t ".
 				$MCA['Path']."\n".$MCA['Error'];
 		}
+
+		$Params = func_get_args();
+		array_shift($Params);
+		if ($Params)
+			$MCA['Params'] = array_merge($MCA['Params'], $Params);
 
 		//сохраняем пути вызова
 		list($lpPath, $this->ParentPath, $this->CurPath) =
@@ -290,7 +290,7 @@ class QuickFW_Router
 		if ($ref && isset($_SERVER['HTTP_REFERER']))
 			$url = $_SERVER['HTTP_REFERER'];
 		else
-			$url = $url ? $url :  Url::site($this->RequestUri);;
+			$url = $url ? $url : Url::site($this->RequestUri);
 		header('Location: '.$url);
 		exit();
 	}
@@ -472,7 +472,7 @@ SREG;
 				$this->cAction = $this->action = $aname;
 				$this->type = $type;
 			}
-			
+
 			$this->classes[$class_key] = array(
 				'i'    => new $class,
 				'defA' => isset($vars['defA']) ? $vars['defA'] : $this->defA,
