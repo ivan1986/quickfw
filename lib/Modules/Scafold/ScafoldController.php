@@ -36,8 +36,6 @@ abstract class ScafoldController extends Controller
 	/** @var array Эта таблица зависимая - данные о родительской */
 	protected $parentData = false;
 
-	/** @var string Адрес контроллера */
-	private $ControllerUrl;
 	/** @var array Массив методов */
 	private $methods;
 	/** @var boolean Флаг окончания настройки */
@@ -98,7 +96,6 @@ abstract class ScafoldController extends Controller
 		QFW::$view->P->addCSS('buildin/scafold.css');
 		$this->setup = true;
 		parent::__construct();
-		$this->ControllerUrl = QFW::$router->module.'/'.QFW::$router->controller;
 		$this->methods = array_flip(get_class_methods($this));
 
 		//Получаем данные о полях
@@ -116,10 +113,7 @@ abstract class ScafoldController extends Controller
 		QFW::$view->assign(array(
 			'methods' => $this->methods,
 			'class' => get_class($this),
-			'info' => array(
-				'ControllerUrl' => $this->ControllerUrl,
-				'primaryKey' => $this->primaryKey,
-			),
+			'primaryKey' => $this->primaryKey,
 			'fields' => $this->fields,
 			'actions' => $this->actions,
 			'table' => str_replace('?_', '', $this->table),
@@ -149,7 +143,7 @@ abstract class ScafoldController extends Controller
 			if (isset($_POST['parent']))
 			{
 				$_SESSION['scafold'][$this->table]['parent'] = $_POST['parent'];
-				QFW::$router->redirectMCA(QFW::$router->module.'/'.QFW::$router->controller.'/index');
+				QFW::$router->redirect(Url::A());
 			}
 			if (empty($_SESSION['scafold'][$this->table]['parent']))
 				$_SESSION['scafold'][$this->table]['parent'] = count($parent) ? key($parent) : 0;
@@ -183,9 +177,8 @@ abstract class ScafoldController extends Controller
 			QFW::$view->assign('filter', $filter['form']);
 		}
 		//получаем пагинатор
-		$curUrl = QFW::$view->P->siteUrl($this->ControllerUrl.'/index/$');
 		$pages = ceil($count/$this->pageSize);
-		$pager=QFW::$router->blockRoute('helper.nav.pager('.$curUrl.','.$pages.','.($page+1).')');
+		$pager=QFW::$router->blockRoute('helper.nav.pager', Url::A('$'), $pages, $page+1);
 
 		return QFW::$view->assign(array(
 			'data' => $data,
@@ -247,7 +240,7 @@ abstract class ScafoldController extends Controller
 					QFW::$router->redirect($url);
 				}
 				else
-					QFW::$router->redirect('/'.$this->ControllerUrl.'/index/');
+					QFW::$router->redirect(Url::C('index'));
 
 			}
 		}
@@ -294,7 +287,7 @@ abstract class ScafoldController extends Controller
 			$v->proccess($id, false);
 		QFW::$db->query('DELETE FROM ?# WHERE ?#=?',
 			$this->table, $this->primaryKey, $id);
-		QFW::$router->redirect('/'.$this->ControllerUrl.'/index', true);
+		QFW::$router->redirect(Url::C('index'), true);
 	}
 
 	/**
@@ -309,7 +302,7 @@ abstract class ScafoldController extends Controller
 		array_shift($args);
 		if (isset($this->fields[$name]))
 			call_user_func_array(array($this->fields[$name], 'action'), $args);
-		QFW::$router->redirect('/'.$this->ControllerUrl.'/index', true);
+		QFW::$router->redirect(Url::C('index'), true);
 	}
 
 	/**
@@ -321,13 +314,13 @@ abstract class ScafoldController extends Controller
 		if (!empty($_POST['clear']))
 		{
 			$_SESSION['scafold'][$this->table]['filter'] = array();
-			QFW::$router->redirect('/'.$this->ControllerUrl.'/index', true);
+			QFW::$router->redirect(Url::C('index'), true);
 		}
 		if (empty($_POST['filter']) || empty($_POST['apply']))
-			QFW::$router->redirect('/'.$this->ControllerUrl.'/index', true);
+			QFW::$router->redirect(Url::C('index'), true);
 		$_SESSION['scafold'][$this->table]['filter'] = $_POST['filter'];
 		
-		QFW::$router->redirect('/'.$this->ControllerUrl.'/index', true);
+		QFW::$router->redirect(Url::C('index'), true);
 	}
 
 	/**
@@ -340,7 +333,7 @@ abstract class ScafoldController extends Controller
 		$this->session();
 		//такого поля нету
 		if (!isset($this->fields[$field]))
-			QFW::$router->redirect('/'.$this->ControllerUrl.'/index', true);
+			QFW::$router->redirect(Url::C('index'), true);
 		if (isset($_SESSION['scafold'][$this->table]['sort']) &&
 			$_SESSION['scafold'][$this->table]['sort']['field'] == $field)
 			$r = array(
@@ -354,7 +347,7 @@ abstract class ScafoldController extends Controller
 				'direction' => 'ASC',
 			);
 		$_SESSION['scafold'][$this->table]['sort'] = $r;
-		QFW::$router->redirect('/'.$this->ControllerUrl.'/index', true);
+		QFW::$router->redirect(Url::C('index'), true);
 	}
 
 	////////////////////////////////////////////////////////////

@@ -14,8 +14,7 @@
 		if ($i->hide)
 			continue;
 		?>
-		<th><a href="<?php echo $P->siteUrl($info['ControllerUrl'].
-			'/sort/'.$key) ?>"><?php echo $i->title ?></a>
+		<th><a href="<?php echo Url::C('sort/'.$key) ?>"><?php echo $i->title ?></a>
 			<?php if (isset($order) && $order['field'] == $key) { ?><span class="scafoldSort">
 				<span><?php echo $order['direction']=='ASC' ? '↓' : '↑' ?></span>
 				<?php /*<img src="/buildin/<?php echo $order['direction']=='ASC' ? 'az' : 'za' ?>.png"
@@ -23,8 +22,7 @@
 			</span><?php } ?>
 		</th>
 	<?php } ?>
-	<th><a href="<?php echo $P->siteUrl($info['ControllerUrl'].
-		'/edit/-1') ?>">доб.</a></th>
+	<th><a href="<?php echo Url::C('edit/-1') ?>">доб.</a></th>
 	<th>&nbsp;</th>
 	<?php if (count($actions)) { ?><th>действия</th><?php } ?>
 </tr>
@@ -42,20 +40,18 @@
 				echo $i->display($id, $v);
 		?></td>
 	<?php } ?>
-	<td><a href="<?php echo $P->siteUrl($info['ControllerUrl'].
-		'/edit/'.$row[$info['primaryKey']]) ?>">ред.</a></td>
-	<td><a onclick="return confirm('Удалить?')" href="<?php echo $P->siteUrl($info['ControllerUrl'].
-		'/delete/'.$row[$info['primaryKey']]) ?>">уд.</a></td>
+	<td><a href="<?php echo Url::C('edit/'.$row[$primaryKey]) ?>">ред.</a></td>
+	<td><a onclick="return confirm('Удалить?')" href="<?php echo
+		Url::C('delete/'.$row[$primaryKey]) ?>">уд.</a></td>
 	<?php if (count($actions)) {?><td><?php foreach ($actions as $tit => $uri) { ?>
-		<a href="<?php echo $P->siteUrl($info['ControllerUrl'].
-		'/'.$uri.'/'.$row[$info['primaryKey']]) ?>"><?php echo $tit ?></a>
+		<a href="<?php echo Url::C($uri.'/'.$row[$primaryKey]) ?>"><?php echo $tit ?></a>
 	<?php } ?></td><?php } ?>
 </tr>
 <?php } ?>
 </table>
 <?php } else { ?>
 	Записей нет
-	<a href="<?php echo $P->siteUrl($info['ControllerUrl'].'/edit/-1') ?>">добавить</a>
+	<a href="<?php echo Url::C('edit/-1') ?>">добавить</a>
 <?php } ?>
 
 <?php echo $pager; ?>

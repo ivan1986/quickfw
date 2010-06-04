@@ -1,4 +1,4 @@
-<form action="<?php echo $P->siteUrl($info['ControllerUrl'].'/filter') ?>" 
+<form action="<?php echo Url::C('filter') ?>"
 	  method="post" id="filter_<?php echo $table ?>" class="scafoldFilter">
 <?php foreach ($filter as $v) {?>
 	<?php echo $v; ?>
