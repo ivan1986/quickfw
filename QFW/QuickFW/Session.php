@@ -63,21 +63,29 @@ class QuickFW_Session
 	}
 
 	/**
+	 * Уничтожение сессии
+	 */
+	public static function destroy()
+	{
+		if (!session_id())
+			return;
+		self::dest(session_id());
+		session_destroy();
+	}
+
+	/**
 	 * Уничтожение сесии для session_set_save_handler
 	 *
 	 * @param string $id идентификатор сесии
 	 */
-	public static function destroy($id)
+	private static function dest($id)
 	{
-		if (!session_id())
-			return;
 		setcookie(session_name(), '', 1, '/',
 			isset(QFW::$config['session']['domain']) ? QFW::$config['session']['domain'] : '');
 		unset($_COOKIE[session_name()]);
 		if (self::$cache)
 			self::$cache->remove('sess_'.$id);
 		$_SESSION = array();
-		session_destroy();
 	}
 
 	/**
@@ -157,7 +165,7 @@ class QuickFW_Session
 				array('QuickFW_Session','close'),
 				array('QuickFW_Session','read'),
 				array('QuickFW_Session','write'),
-				array('QuickFW_Session','destroy'),
+				array('QuickFW_Session','dest'),
 				array('QuickFW_Session','gc')
 			);
 		}
