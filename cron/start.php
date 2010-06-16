@@ -1,6 +1,6 @@
 <?php
-	define ('DOC_ROOT', realpath(dirname(__FILE__).'../www'));
-	define ('ROOTPATH', realpath(dirname(__FILE__).'/../'));
+	define ('DOC_ROOT', dirname(dirname(__FILE__)).'/www');
+	define ('ROOTPATH', dirname(dirname(__FILE__)));
 	define ('APPPATH', ROOTPATH . '/application');
 	define ('TMPPATH', ROOTPATH . '/tmp');
 	define ('QFWPATH', ROOTPATH . '/QFW');
