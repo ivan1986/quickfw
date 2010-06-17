@@ -106,17 +106,17 @@ class DbSimple_Connect
 	{
 		$parsed = $this->parseDSN($dsn);
 		if (!$parsed)
-			$this->errorHandler('Ошибка разбора строки DSN',$dsn);
+			$this->errorHandler('Ошибка разбора строки DSN', $dsn);
+		if (!isset($parsed['scheme']))
+			$this->errorHandler('Невозможно загрузить драйвер базы данных', $parsed);
 		$this->shema = ucfirst($parsed['scheme']);
-		if (!isset($parsed['scheme']) || !is_file(dirname(__FILE__).'/'.$this->shema.'.php'))
-			$this->errorHandler('Невозможно загрузить драйвер базы данных',$parsed);
 		require_once dirname(__FILE__).'/'.$this->shema.'.php';
 		$class = 'DbSimple_'.$this->shema;
 		$this->DbSimple = new $class($parsed);
 		if (isset($parsed['prefix']))
 			$this->DbSimple->setIdentPrefix($parsed['prefix']);
 		$this->DbSimple->setCachePrefix('db_'.md5($parsed['dsn']).'_');
-		$this->DbSimple->setErrorHandler(array(&$this, 'errorHandler'), QFW::$config['QFW']['ErrorStack']);
+		$this->DbSimple->setErrorHandler(array(&$this, 'errorHandler'), false);
 	}
 
 	/**
@@ -128,7 +128,15 @@ class DbSimple_Connect
 	{
 		// Если использовалась @, ничего не делать.
 		if (!error_reporting()) return;
-		if (QFW::$config['QFW']['release'])
+		if (!empty($GLOBALS['prod']) || (defined('IN_CRON') && IN_CRON) )
+		{
+			error_log(date('Y-m-d H:i:s').': '.$msg."\n",
+				3, ROOTPATH.'/log/sql.log');
+			error_log(date('Y-m-d H:i:s').': '.print_r($info, true)."\n",
+				3, ROOTPATH.'/log/sql.log');
+			redirect('/forum/');
+		}
+		if (class_exists('QFW') && QFW::$config['QFW']['release'])
 		{
 			require_once LIBPATH.'/Log.php';
 			Log::log('SQL Error - '.$msg,'sql');
