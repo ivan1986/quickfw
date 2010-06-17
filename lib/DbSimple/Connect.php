@@ -128,15 +128,7 @@ class DbSimple_Connect
 	{
 		// Если использовалась @, ничего не делать.
 		if (!error_reporting()) return;
-		if (!empty($GLOBALS['prod']) || (defined('IN_CRON') && IN_CRON) )
-		{
-			error_log(date('Y-m-d H:i:s').': '.$msg."\n",
-				3, ROOTPATH.'/log/sql.log');
-			error_log(date('Y-m-d H:i:s').': '.print_r($info, true)."\n",
-				3, ROOTPATH.'/log/sql.log');
-			redirect('/forum/');
-		}
-		if (class_exists('QFW') && QFW::$config['QFW']['release'])
+		if (QFW::$config['QFW']['release'])
 		{
 			require_once LIBPATH.'/Log.php';
 			Log::log('SQL Error - '.$msg,'sql');
