@@ -33,7 +33,7 @@
  * The old Jabber protocol wasn't standardized, so use at your own risk.
  *
  */
-require_once "XMPP.php";
+require_once dirname(__FILE__) . '/XMPP.php';
 
 	class XMPPHP_XMPPOld extends XMPPHP_XMPP {
 		/**
