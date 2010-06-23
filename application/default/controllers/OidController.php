@@ -1,7 +1,7 @@
 <?php
 
 require_once "Auth/OpenID/Consumer.php";
-require_once "Auth/OpenID/FileStore.php";
+require_once dirname(__FILE__)."/ZendStore.php";
 require_once "Auth/OpenID/SReg.php";
 require_once "Auth/OpenID/PAPE.php";
 
@@ -10,31 +10,30 @@ require_once QFWPATH.'/QuickFW/Auth.php';
 class OidController extends QuickFW_Auth
 {
 
-	public function __construct()
+	public function indexAction($return = false)
 	{
-		QFW::$view->mainTemplate='';
-		$this->session();
-	}
+		var_dump($_SESSION);
+		$return = $return ? $return : $_SERVER['REQUEST_URI'];
+		if (!empty($_SESSION['openID']['error']))
+		{
+			echo '<p class="error">'.$_SESSION['openID']['error'].'</p>';
+			unset($_SESSION['openID']['error']);
+		} ?>
 
-	public function indexAction($clean = false)
-	{
-		if ($clean == 1)
-		{
-			unset($_SESSION['openID']);
-			QFW::$router->redirect(Url::A());
-		}
-		if (!empty($_SESSION['openID']))
-		{
-			var_dump($_SESSION['openID']);
-		}
-		?>
 <form method="get" action="<?php echo Url::C('try') ?>">
+<input type="hidden" name="return" value="<?php echo QFW::$view->esc($return); ?>" />
 <input type="text" name="openid_identifier" value="<?php echo QFW::$view->esc(
 	'http://quickfw.ib.br/openid/server.php/idpage?user=ivan') ?>" />
 <input type="submit" value="Verify" />
 </form>
-<a href="<?php echo Url::A('1') ?>">выйти</a>
+<a href="<?php echo Url::C('clean') ?>">выйти</a>
 		<?php
+	}
+
+	public function cleanAction()
+	{
+		unset($_SESSION['openID']);
+		QFW::$router->redirect(Url::C());
 	}
 
 	/* array(
@@ -49,8 +48,13 @@ class OidController extends QuickFW_Auth
 		'timezone' => 'Time Zone',
 	); */
 
+	/**
+	 * Действеи перенаправляет пользователя на сервер для авторизации
+	 */
 	public function tryAction()
 	{
+		$this->session();
+		$_SESSION['openID']['return'] = $_REQUEST['return'];
 		if (empty($_GET['openid_identifier']))
 			$this->err('Expected an OpenID URL');
 		$consumer = $this->getConsumer();
@@ -68,8 +72,6 @@ class OidController extends QuickFW_Auth
 		$redirect = $auth_request->shouldSendRedirect();
 
 		$server = $this->getServer();
-		$trustRoot = $server.Url::C('');
-		echo $trustRoot;
 
 		$query = $redirect ? 
 			$auth_request->redirectURL($server.Url::C(''), $server.Url::C('finish')) :
@@ -84,8 +86,15 @@ class OidController extends QuickFW_Auth
 			die($query);
 	}
 
+	/**
+	 * Сюда приходит пользователь с сервера авторизации
+	 *
+	 * После пользователь перенаправляется на url,
+	 * <br>в $_SESSION['openID'] данные авторизации
+	 */
 	public function finishAction()
 	{
+		$this->session();
 		if (empty($_GET['openid_identity']))
 			$this->err('Expected an OpenID URL');
 		$consumer = $this->getConsumer();
@@ -97,29 +106,45 @@ class OidController extends QuickFW_Auth
 		else if ($response->status == Auth_OpenID_SUCCESS)
 		{
 			$openid = $response->getDisplayIdentifier();
+			$return = $_SESSION['openID']['return'];
 
 			$sreg_resp = Auth_OpenID_SRegResponse::fromSuccessResponse($response);
 			$sreg = $sreg_resp->contents();
 
-			$_SESSION['openID'] = $sreg + array('id' => $openid);
-			QFW::$router->redirect(Url::C('index'));
+			$_SESSION['openID'] = array(
+				'sreg' => $sreg,
+				'id' => $openid,
+			);
+			QFW::$router->redirect($return);
 		}
 	}
 
+	/**
+	 * Сообщение при ошибке авторизации - в $_SESSION['openID']['error']
+	 *
+	 * @param string $msg сообщение об ошибке
+	 */
 	private function err($msg)
 	{
-		die($msg);
+		$_SESSION['openID']['error'] = $msg;
+		QFW::$router->redirect($_SESSION['openID']['return']);
 	}
 
+	/**
+	 * Возвращает класс хранилища для библиотеки
+	 *
+	 * @return Auth_OpenID_Consumer класс хранилища
+	 */
 	private function getConsumer()
 	{
-		$path = TMPPATH.'/openid';
-		if (!is_dir($path))
-			mkdir($path);
-		$store = new Auth_OpenID_FileStore($path);
-		return new Auth_OpenID_Consumer($store);
+		return new Auth_OpenID_Consumer(new Auth_OpenID_ZendStore(Cache::get()));
 	}
 
+	/**
+	 * формирует имя сервера
+	 *
+	 * @return string url сервера
+	 */
 	private function getServer()
 	{
 		return 'http://'.$_SERVER['HTTP_HOST'].
