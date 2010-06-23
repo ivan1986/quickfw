@@ -1091,23 +1091,6 @@ abstract class DbSimple_Generic_Database extends DbSimple_Generic_LastError
 		$this->_logQuery($log, true);
 	}
 
-	/**
-	 * mixed _cache($hash, $result=null)
-	 * Calls cache mechanism if possible.
-	 */
-	private function _cache($hash, $result=null)
-	{
-		if (is_callable($this->_cacher)) {
-			return call_user_func($this->_cacher, $hash, $result);
-		} else if (is_object($this->_cacher) && method_exists($this->_cacher, 'get') && method_exists($this->_cacher, 'save')) {
-			if (null === $result)
-				return $this->_cacher->get($hash);
-			else
-				$this->_cacher->save($result, $hash);
-		}
-		else return false;
-	}
-
 	// Identifiers prefix (used for ?_ placeholder).
 	private $_identPrefix = '';
 
