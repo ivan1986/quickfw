@@ -14,21 +14,18 @@ class DocController
 		exec('chmod -R 777 '.TMPPATH.'/doc');
 	}
 
-	public function indexAction()
-	{
-		//пока так
-		return $this->allAction();
-	}
-
 	/**
 	 * Генерирует общую страницу с документацией
 	 */
-	public function allAction()
+	public function indexAction()
 	{
-		$file = str_replace(QFW::$router->UriPath, '', QFW::$router->Uri);
-		if ($file == '/')
-			$file = '/quickfw.html';
-		$file = TMPPATH.'/doc'.$file;
+		$args = func_get_args();
+		if (substr($_SERVER['REQUEST_URI'], -1, 1) != '/' && count($args) == 0)
+			QFW::$router->redirect(Url::A());
+		$file = implode('/', $args);
+		if ($file == '')
+			$file = 'quickfw.html';
+		$file = TMPPATH.'/doc/'.$file;
 		//условие для стилей
 		if (strpos($file, '.css')!==false)
 			header('Content-Type: text/css');
