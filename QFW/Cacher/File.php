@@ -67,7 +67,7 @@ class Cacher_File implements Zend_Cache_Backend_Interface
 		if (!is_file($file))
 			return false;
 		$data = false;
-		if ($doNotTest || is_null($time = time()) || filemtime($file) > $time)
+		if ($doNotTest || filemtime($file) > time())
 			$data = $this->_read($file);
 		$data = unserialize($data);
 		return $data;
@@ -106,7 +106,7 @@ class Cacher_File implements Zend_Cache_Backend_Interface
 	public function test($id)
 	{
 		$file = $this->fileName($id);
-		return is_file($file) && filemtime($file);
+		return is_file($file) && filemtime($file) > time();
 	}
 
 	protected function unlink($file)
