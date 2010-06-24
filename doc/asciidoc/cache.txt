@@ -15,20 +15,7 @@
 
 [source, php]
 -------------------------------------------
-$options = array(
-	'cacheDir' => '',
-	'caching' => true,
-	'prefix' => 'cache_',
-	'lifeTime' => 3600,
-	'fileLocking' => true,
-	'writeControl' => false,
-	'readControl' => false,
-	'fileNameProtection' => true,
-	'automaticSerialization' => true,
-	'automaticCleaningFactor' => 0,
-	'hashedDirectoryLevel' => 0,
-	'hashedDirectoryUmask' => 0777,
-);
+sys::[cat ../../QFW/Cacher/File.php | sed '/protected $options =/,/);/!d; s/^\t//; s/^protected //']
 -------------------------------------------
 
 По умолчанию кеш хранится в папке tmp/cache, однако можно переопределить это значение. Указание другого префикса позволит хранить в одной папке несколько кешеров с различными параметрами. 

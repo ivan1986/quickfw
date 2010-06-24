@@ -7,35 +7,21 @@ class Cacher_File implements Zend_Cache_Backend_Interface
 {
 
 	protected $options = array(
-		'cacheDir' => '',
-		'caching' => true,
-		'prefix' => 'cache_',
-		'lifeTime' => 3600,
-		'fileLocking' => true,
-		'writeControl' => false,
-		'readControl' => false,
-		'fileNameProtection' => false,
-		'automaticCleaningFactor' => 0,
-		'hashedDirectoryLevel' => 0,
-		'hashedDirectoryUmask' => 0777,
+		'cacheDir' => '', //directory where to put the cache files (string),
+		'caching' => true, //enable / disable caching (boolean),
+		'prefix' => 'cache_', //file name prefix (string),
+		'lifeTime' => 3600, //cache lifetime in seconds (int),
+		'fileLocking' => true, //enable / disable fileLocking (boolean),
+		'writeControl' => false, //enable / disable write control (boolean),
+		'readControl' => false, //enable / disable read control (boolean),
+		'fileNameProtection' => false, //enable / disable automatic file name protection (boolean),
+		'automaticCleaningFactor' => 0, //distable / tune automatic cleaning process (int),
+		'hashedDirectoryLevel' => 0, //level of the hashed directory system (int),
+		'hashedDirectoryUmask' => 0777, //umask for hashed directory structure (int),
 	);
 
 /**
  * Constructor
- *
- * $options is an assoc. Available options are :
- * $options = array(
- *     'cacheDir' => directory where to put the cache files (string),
- *     'caching' => enable / disable caching (boolean),
- *     'lifeTime' => cache lifetime in seconds (int),
- *     'fileLocking' => enable / disable fileLocking (boolean),
- *     'writeControl' => enable / disable write control (boolean),
- *     'readControl' => enable / disable read control (boolean),
- *     'fileNameProtection' => enable / disable automatic file name protection (boolean),
- *     'automaticCleaningFactor' => distable / tune automatic cleaning process (int),
- *     'hashedDirectoryLevel' => level of the hashed directory system (int),
- *     'hashedDirectoryUmask' => umask for hashed directory structure (int),
- * );
  *
  * @param array $options options
  * @access public
