@@ -86,7 +86,10 @@ class Cacher_File implements Zend_Cache_Backend_Interface
 		$control = $this->options['readControl'] ? $this->hash($data) : '';
 		if (file_put_contents($file, $control.$data, ($this->options['fileLocking'] ? LOCK_EX : NULL)) === false)
 			return false;
-		touch($file, time() + ($specificLifetime ? $specificLifetime : $this->options['lifeTime']));
+		$time = $specificLifetime!==false ? $specificLifetime : $this->options['lifeTime'];
+		if ($time === null)
+			$time = 307584000; //лет на 10 хватит
+		touch($file, time() + $time);
 		if (!$this->options['writeControl'] || $data == $this->_read($file))
 			return true;
 		$this->unlink($file);
