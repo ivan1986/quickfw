@@ -67,7 +67,7 @@ class Auth_OpenID_ZendStore extends Auth_OpenID_OpenIDStore {
         }
         // and store given association key in it
         $serverAssociations[$association->issued] = $associationKey;
-        
+
         // save associations' keys list
         $this->connection->save(
             $serverAssociations,
@@ -77,7 +77,7 @@ class Auth_OpenID_ZendStore extends Auth_OpenID_OpenIDStore {
             $association,
             $associationKey,
             array(),
-            $association->issued + $association->lifetime);
+            $association->lifetime);
     }
 
     /**
