@@ -25,7 +25,7 @@ class Url
 	 * @param string $ancor якорь
 	 * @return self адрес на сайте
 	 */
-	public static function site($url, $get='', $ancor='')
+	public static function site($url='', $get='', $ancor='')
 	{
 		return new self($url, $get);
 	}
@@ -38,7 +38,7 @@ class Url
 	 * @param string $ancor якорь
 	 * @return self адрес на сайте
 	 */
-	public static function M($CA, $get='', $ancor='')
+	public static function M($CA='', $get='', $ancor='')
 	{
 		return new self($CA, $get, $ancor, QFW::$router->cModule.
 			QuickFW_Router::PATH_SEPARATOR);
@@ -52,7 +52,7 @@ class Url
 	 * @param string $ancor якорь
 	 * @return self адрес на сайте
 	 */
-	public static function C($action, $get='', $ancor='')
+	public static function C($action='', $get='', $ancor='')
 	{
 		return new self($action, $get, $ancor, QFW::$router->cModule.
 				QuickFW_Router::PATH_SEPARATOR.
