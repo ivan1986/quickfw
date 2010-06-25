@@ -12,7 +12,8 @@ class OidController extends QuickFW_Auth
 
 	public function indexAction($return = false)
 	{
-		var_dump($_SESSION);
+		if (!empty($_SESSION))
+			var_dump($_SESSION);
 		$return = $return ? $return : $_SERVER['REQUEST_URI'];
 		if (!empty($_SESSION['openID']['error']))
 		{
