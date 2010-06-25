@@ -31,7 +31,7 @@ class QuickFW_Auth
 	 * @param boolean|string $redir адрес редиректа при неудачном логине
 	 * @return boolean авторизован пользователь или нет
 	 */
-	public function __construct($name='user',$redir=false)
+	public function __construct($name='user', $redir=false)
 	{
 		//В PHP 5.3 $_REQUEST = $_GET + $_POST по умолчанию
 		//Так как cookie включены почти всегда, то такой порядок оптимален
