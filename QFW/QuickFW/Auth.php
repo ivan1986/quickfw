@@ -146,7 +146,10 @@ class QuickFW_Auth
 		if(	(strcasecmp(QFW::$config['admin']['login'], trim($username)) == 0)
 		&&	(strcasecmp(QFW::$config['admin']['passw'], trim($password)) == 0)
 		)
-			return $username;
+			return array(
+				'user' => $username,
+				'redirect' => true,
+			);
 		else
 			return false;
 	}
