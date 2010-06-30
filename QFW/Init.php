@@ -56,32 +56,32 @@ class QFW
 	{
 		self::$config = self::config();
 
-		require QFWPATH.'/QuickFW/Cache.php';
-		require QFWPATH.'/QuickFW/Plugs.php';
+		require_once QFWPATH.'/QuickFW/Cache.php';
+		require_once QFWPATH.'/QuickFW/Plugs.php';
 
 		//выставляем заголовок с нужной кодировкой
 		if (!empty(self::$config['host']['encoding']))
 			header("Content-Type: text/html; charset=".self::$config['host']['encoding']);
 
 		//Инициализируем класс базы данных
-		require LIBPATH.'/DbSimple/Connect.php';
+		require_once LIBPATH.'/DbSimple/Connect.php';
 		self::$db = new DbSimple_Connect(self::$config['database']);
 
 		//Подключаем шаблонизатор
 		$templ = ucfirst(self::$config['templater']['name']);
 		$class = 'Templater_'.$templ;
-		require QFWPATH.'/Templater/'.$templ.'.php';
+		require_once QFWPATH.'/Templater/'.$templ.'.php';
 		self::$view = new $class(APPPATH,
 			isset(self::$config['templater']['def_tpl']) ? self::$config['templater']['def_tpl'] : '');
 
 		//подключаем модули и библиотеки
 		self::modules();
 
-		require QFWPATH.'/QuickFW/Router.php';
+		require_once QFWPATH.'/QuickFW/Router.php';
 		self::$router = new QuickFW_Router(APPPATH);
 
 		//хелпер для урлов (зависит от QuickFW_Router)
-		require QFWPATH.'/QuickFW/Url.php';
+		require_once QFWPATH.'/QuickFW/Url.php';
 		Url::Init();
 	}
 
@@ -102,7 +102,7 @@ class QFW
 		//автолоад
 		if (!empty(self::$config['QFW']['autoload']))
 		{
-			require QFWPATH.'/QuickFW/Autoload.php';
+			require_once QFWPATH.'/QuickFW/Autoload.php';
 			Autoload::Init(self::$config['QFW']['autoload']);
 		}
 
