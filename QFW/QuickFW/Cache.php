@@ -113,7 +113,7 @@ class Cache
 	/**
 	 * Фабрика кешеров
 	 *
-	 * @param string $name тип кешера
+	 * @param string $name кешер - из массива или стандартный
 	 * @param string $namespace пространство имен
 	 * @return Zend_Cache_Backend_Interface кешер
 	 */
@@ -125,12 +125,15 @@ class Cache
 			$c = self::$cachers['__'.$name];
 		else
 		{
-			if (!isset(QFW::$config['cache'][$name]))
-				throw new Exception('Не найдены парамерты кеша '.$name);
-			$data = QFW::$config['cache'][$name];
-			$backend=ucfirst($data['module']);
+			if (isset(QFW::$config['cache'][$name]))
+			{
+				$data = QFW::$config['cache'][$name];
+				$backend = ucfirst($data['module']);
+			}
+			else
+				$backend = $name;
 			$cl='Cacher_'.$backend;
-			require_once(QFWPATH.'/Cacher/'.$backend.'.php');
+			require_once QFWPATH.'/Cacher/'.$backend.'.php';
 			$c=new $cl;
 			$c->setDirectives(
 				(isset($data['options']) && is_array($data['options']))
