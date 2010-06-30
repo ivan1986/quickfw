@@ -448,7 +448,7 @@ abstract class DbSimple_Generic_Database extends DbSimple_Generic_LastError
 				$dummy = null;
 				// There is no need in query, cos' needle in $this->attributes['CACHE']
 				$this->_transformQuery($dummy, 'UNIQ_KEY');
-				$uniq_key = call_user_func_array(array(&$this, 'select'), $dummy);
+				$uniq_key = call_user_func_array(array(&$this, 'select'), array($dummy));
 				$uniq_key = md5(serialize($uniq_key));
 			}
 			// Check TTL?
