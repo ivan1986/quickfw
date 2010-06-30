@@ -10,7 +10,7 @@
 	$_SERVER['HTTP_HOST'] = 'test';
 
 	$InitTime = microtime(true);
-	require (QFWPATH.'/Init.php');
+	require_once (QFWPATH.'/Init.php');
 	$InitTime = microtime(true) - $InitTime;
 
 	chdir(dirname(__FILE__));
@@ -23,7 +23,7 @@
 
 			$suite->addTestFile('DbSimple/DbSimpleTests.php');
 			$suite->addTestFile('Cache/CacheTest.php');
-			$suite->addTestFile('Smarty/SmartyTest.php');
+			//$suite->addTestFile('Smarty/SmartyTest.php');
 			$suite->addTestFile('QFW/FrameworkTests.php');
 			
 			return $suite;

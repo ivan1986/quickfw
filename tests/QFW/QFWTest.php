@@ -5,9 +5,7 @@ class QFWTest extends PHPUnit_Framework_TestCase
 	public function testInitTime()
 	{
 		global $InitTime;
-		//Вообще должно выдавать меньше 0.05 но из-за
-		//включенного дебага и отладки недотягивает
-		//$this->assertLessThanOrEqual(0.05,$InitTime);
+		$this->assertLessThanOrEqual(0.01, $InitTime);
 		unset($GLOBALS['InitTime']);
 	}
 
@@ -27,7 +25,7 @@ class QFWTest extends PHPUnit_Framework_TestCase
 			array('ddd/bbb/fff', 'ddd/bbb/fff'),
 			array('ddd/eee/ccc', 'ddd/eee'),
 			array('ddd/eee/fff', 'ddd/eee/fff'),
-			array('aaa/bbb', 'bbb'),
+			array('aaa/bbb', ''),
 			array('aaa/eee', 'eee'),
 			array('ddd/bbb', 'ddd/bbb'),
 			array('ddd/eee', 'ddd/eee'),
@@ -41,7 +39,7 @@ class QFWTest extends PHPUnit_Framework_TestCase
 			array('eee/fff', 'eee/fff'),
 			array('aaa', ''),
 			array('ddd', 'ddd'),
-			array('bbb', 'bbb'),
+			array('bbb', ''),
 			array('eee', 'eee'),
 			array('ccc', ''),
 			array('fff', 'fff'),
@@ -53,7 +51,7 @@ class QFWTest extends PHPUnit_Framework_TestCase
 	 *
 	 * Тестирование delDef
 	 */
-	public function testDdef($in,$out)
+	public function testDdef($in, $out)
 	{
 		QFW::Init();
 		QFW::$config['default']['module'] = 'aaa';

@@ -6,7 +6,7 @@ class DbSimpleTest extends PHPUnit_Framework_TestCase
 
 	protected function setUp()
 	{
-		$this->db = new QuickFW_AutoDbSimple(DSN);
+		$this->db = new DbSimple_Connect(DSN);
 		$this->db->setErrorHandler(false, false);
 	}
 

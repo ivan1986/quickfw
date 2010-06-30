@@ -1,3 +1,6 @@
 <?php
 
+$config['host']['encoding'] = '';
+
+
 ?>

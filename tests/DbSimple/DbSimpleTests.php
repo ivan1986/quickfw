@@ -16,7 +16,7 @@ class DbSimpleTests
 		$suite->addTestFile($base.'/DbSimpleTest.php');
 		$suite->addTestFile($base.'/MysqlTest.php');
 		$suite->addTestFile($base.'/MypdoTest.php');
-		$suite->addTestFile($base.'/PgsqlTest.php');
+		//$suite->addTestFile($base.'/PgsqlTest.php');
 		
 		return $suite;
 	}

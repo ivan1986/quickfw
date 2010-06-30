@@ -8,7 +8,7 @@ class MysqlTest extends GenericDbSimpleTestClass
 {
 	protected function setUp()
 	{
-		$this->db = new QuickFW_AutoDbSimple(DSNMY);
+		$this->db = new DbSimple_Connect(DSNMY);
 		$this->db->setErrorHandler(false, false);
 	}
 

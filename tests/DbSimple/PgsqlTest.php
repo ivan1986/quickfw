@@ -7,7 +7,7 @@ class PgsqlTest extends PHPUnit_Framework_TestCase
 	protected $pg;
 	protected function setUp()
 	{
-		$this->pg = new QuickFW_AutoDbSimple(DSNPG);
+		$this->pg = new DbSimple_Connect(DSNPG);
 		$this->pg->setErrorHandler(false, false);
 	}
 
