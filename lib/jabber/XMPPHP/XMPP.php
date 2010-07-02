@@ -133,7 +133,7 @@ class XMPPHP_XMPP extends XMPPHP_XMLStream {
 		$this->resource = $resource;
 		if(!$server) $server = $host;
 		$this->server = $server;
-		$this->basejid = $this->user . '@' . $this->host;
+		$this->basejid = $this->user . '@' . $this->server;
 
 		$this->roster = new Roster();
 		$this->track_presence = true;
@@ -161,7 +161,7 @@ class XMPPHP_XMPP extends XMPPHP_XMLStream {
 	public function useEncryption($useEncryption = true) {
 		$this->use_encryption = $useEncryption;
 	}
-	
+
 	/**
 	 * Turn on auto-authorization of subscription requests.
 	 *
@@ -471,6 +471,8 @@ class XMPPHP_XMPP extends XMPPHP_XMLStream {
 	* Roster iq handler
 	* Gets all packets matching XPath "iq/{jabber:iq:roster}query'
 	*
+	* Implements RFC3921, 7.4. "Adding a Roster Item"
+	*
 	* @param string $xml
 	*/
 	protected function roster_iq_handler($xml) {
@@ -498,7 +500,7 @@ class XMPPHP_XMPP extends XMPPHP_XMLStream {
 			}
 		}
 		if ($xml->attrs['type'] == 'set') {
-			$this->send("<iq type=\"reply\" id=\"{$xml->attrs['id']}\" to=\"{$xml->attrs['from']}\" />");
+			$this->send("<iq type=\"result\" id=\"{$xml->attrs['id']}\" to=\"{$xml->attrs['from']}\" />");
 		}
 	}
 
