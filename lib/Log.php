@@ -50,11 +50,7 @@ class Log
 				error_log('Jabber не настроен ');
 			else
 			{
-				require_once LIBPATH.'/jabber/XMPPHP/XMPP.php';
-				$J = new XMPPHP_XMPP(QFW::$config['jabber']['host'], QFW::$config['jabber']['port'],
-					QFW::$config['jabber']['user'], QFW::$config['jabber']['pass'],
-					QFW::$config['jabber']['resource'], QFW::$config['jabber']['server'],
-					!QFW::$config['QFW']['release'], XMPPHP_Log::LEVEL_ERROR);
+				$J = QFW::JabberFromConfig();
 				$J->connect();
 				$J->processUntil('session_start',10);
 				$J->presence();

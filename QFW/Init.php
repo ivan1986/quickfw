@@ -93,11 +93,8 @@ class QFW
 	{
 		//Включаем обработку фатальных ошибок, если в конфиге указано
 		if (!empty(self::$config['error']))
-		{
-			require_once QFWPATH.'/QuickFW/Error.php';
 			foreach(self::$config['error'] as $handler)
-			QFW_Error::addFromConfig($handler);
-		}
+				self::ErrorFromConfig($handler);
 
 		//автолоад
 		if (!empty(self::$config['QFW']['autoload']))
@@ -117,6 +114,63 @@ class QFW
 			self::$view->mainTemplate = '';
 		}
 	}
+
+	/**
+	 * Вспомогательные функции инициализации библиотек
+	 */
+
+	/** @var Debug_ErrorHook_Listener Обработчик ошибок */
+	static private $ErrorHook = false;
+
+	/**
+	 * Инициализация обработчика ошибок из конфига
+	 *
+	 * @param array $handler информация об обработчике ошибок
+	 */
+	static private function ErrorFromConfig($handler)
+	{
+		require_once LIBPATH.'/Debug/ErrorHook/Listener.php';
+		if (!self::$ErrorHook)
+			self::$ErrorHook = new Debug_ErrorHook_Listener();;
+
+		$name = ucfirst($handler['name']);
+		require_once LIBPATH.'/Debug/ErrorHook/'.$name.'Notifier.php';
+		//пока так, потом возможно придется переделать
+		if ($name == 'Mail')
+		{
+			$i = new Debug_ErrorHook_MailNotifier(
+				$handler['options']['to'], $handler['options']['whatToSend'],
+				$handler['options']['subjPrefix'], $handler['options']['charset']);
+		}
+		else
+		{
+			$class = 'Debug_ErrorHook_'.$name.'Notifier';
+			$i = new $class($handler['options']['whatToSend']);
+		}
+		if ($handler['RemoveDups'])
+		{
+			require_once LIBPATH.'/Debug/ErrorHook/RemoveDupsWrapper.php';
+			$i = new Debug_ErrorHook_RemoveDupsWrapper($i,
+				TMPPATH.'/errors', $handler['RemoveDups']);
+		}
+		self::$ErrorHook->addNotifier($i);
+	}
+
+	/**
+	 * Создание класса джаббера из конфига
+	 *
+	 * @return XMPPHP_XMPP класс jabbera
+	 */
+	static public function JabberFromConfig()
+	{
+		require_once LIBPATH.'/XMPPHP/XMPP.php';
+		new XMPPHP_XMPP(
+			QFW::$config['jabber']['host'], QFW::$config['jabber']['port'],
+			QFW::$config['jabber']['user'], QFW::$config['jabber']['pass'],
+			QFW::$config['jabber']['resource'], QFW::$config['jabber']['server'],
+			!QFW::$config['QFW']['release'], XMPPHP_Log::LEVEL_INFO);
+	}
+
 }
 
 QFW::Init();
