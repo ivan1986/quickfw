@@ -12,9 +12,9 @@ class IndexController extends QuickFW_Auth
 	public function indexAction()
 	{
 		/*print_r($_POST);
-		require_once LIBPATH.'/MetaForm/MetaFormAction.php';
-		require_once LIBPATH.'/MetaForm/MetaForm.php';
-		require_once LIBPATH.'/MetaForm/FormPersister.php';
+		require_once LIBPATH.'/HTML/MetaFormAction.php';
+		require_once LIBPATH.'/HTML/MetaForm.php';
+		require_once LIBPATH.'/HTML/FormPersister.php';
 		$SemiParser = new HTML_SemiParser();
 		ob_start(array(&$SemiParser, 'process'));
 
