@@ -221,7 +221,7 @@ class QuickFW_Router
 		/*if (substr(PHP_SAPI, 0, 3) == 'cgi')
 			header ('Status: 404 Not Found');
 		else*/
-		header($_SERVER['SERVER_PROTOCOL'].' 404 Not Found');
+		header((empty($_SERVER['SERVER_PROTOCOL']) ? 'HTTP/1.1 ' : $_SERVER['SERVER_PROTOCOL']).' 404 Not Found');
 		if (!is_file(QFW::$view->getScriptPath().'/404.html'))
 			QFW::$view->setScriptPath(APPPATH.'/default/templates/');
 		die(QFW::$view->render('404.html'));
