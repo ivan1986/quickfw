@@ -96,7 +96,7 @@ class QFW
 		{
 			require_once QFWPATH.'/QuickFW/Error.php';
 			foreach(self::$config['error'] as $handler)
-			QFW_Listener::addFromConfig($handler);
+			QFW_Error::addFromConfig($handler);
 		}
 
 		//автолоад

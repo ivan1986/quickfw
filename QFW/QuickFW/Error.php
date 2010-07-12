@@ -1,8 +1,8 @@
 <?php
 
-require_once LIBPATH.'/ErrorHook/Listener.php';
+require_once LIBPATH.'/Debug/ErrorHook/Listener.php';
 
-class QFW_Listener extends Debug_ErrorHook_Listener
+class QFW_Error extends Debug_ErrorHook_Listener
 {
 	private static $Instance;
 
@@ -17,7 +17,7 @@ class QFW_Listener extends Debug_ErrorHook_Listener
 			self::$Instance = new self();;
 
 		$name = ucfirst($handler['name']);
-		require_once LIBPATH.'/ErrorHook/'.$name.'Notifier.php';
+		require_once LIBPATH.'/Debug/ErrorHook/'.$name.'Notifier.php';
 		//пока так, потом возможно придется переделать
 		if ($name == 'Mail')
 		{
@@ -32,7 +32,7 @@ class QFW_Listener extends Debug_ErrorHook_Listener
 		}
 		if ($handler['RemoveDups'])
 		{
-			require_once LIBPATH.'/ErrorHook/RemoveDupsWrapper.php';
+			require_once LIBPATH.'/Debug/ErrorHook/RemoveDupsWrapper.php';
 			$i = new Debug_ErrorHook_RemoveDupsWrapper($i,
 				TMPPATH.'/errors', $handler['RemoveDups']);
 		}
