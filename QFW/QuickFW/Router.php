@@ -309,15 +309,7 @@ class QuickFW_Router
 	 */
 	public function backrewrite($uri)
 	{
-		if (!QFW::$config['redirection']['useRewrite'])
-			return $uri;
-		if ($this->backrewrite == false)
-		{
-			$backrewrite = array();
-			require APPPATH . '/rewrite.php';
-			$this->backrewrite = $backrewrite;
-		}
-		return preg_replace(array_keys($this->backrewrite), array_values($this->backrewrite), $uri);
+		return $this->rewr($uri, 'backrewrite');
 	}
 
 	/**
@@ -329,15 +321,37 @@ class QuickFW_Router
 	 */
 	protected function rewrite($uri)
 	{
+		return $this->rewr($uri, 'rewrite');
+	}
+
+	/**
+	 * Реализация преобразования адресов
+	 *
+	 * @internal
+	 * @param string $url Uri для реврайта
+	 * @param string $type тип преобразования
+	 * @return string преобразованный Uri
+	 */
+	private function rewr($uri, $type)
+	{
 		if (!QFW::$config['redirection']['useRewrite'])
 			return $uri;
-		if ($this->rewrite == false)
+		if ($this->$type == false)
 		{
 			$rewrite = array();
-			require APPPATH . '/rewrite.php';
+			$backrewrite = array();
+			require_once APPPATH . '/rewrite.php';
 			$this->rewrite = $rewrite;
+			$this->backrewrite = $backrewrite;
 		}
-		return preg_replace(array_keys($this->rewrite), array_values($this->rewrite), $uri);
+		if (is_array($this->$type))
+			return preg_replace(array_keys($this->$type), array_values($this->$type), $uri);
+		elseif (is_callable($this->$type))
+		{
+			$f = $this->$type;
+			return $f($uri);
+		}
+		return $uri;
 	}
 
 	/**
