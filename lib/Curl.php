@@ -282,7 +282,7 @@ class CurlResponse
 			}
 			$forms[$k]['fields'] = $fields;
 		}
-		return $num===false ? $forms : $forms[$num];
+		return $num===false ? $forms : isset($forms[$num]) ? $forms[$num] : false;
 	}
 
 	/**
