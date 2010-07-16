@@ -313,4 +313,12 @@ function preg($pattern, $subject, $all = true)
 	return $m;
 }
 
+/**
+ * Функции ескейпинга в нужной кодировке
+ *
+ * @param string $s Исходная строка
+ * @return string htmlspecialchars($s, ENT_QUOTES, $encoding)
+ */
+function esc($s) { return htmlspecialchars($s, ENT_QUOTES, QFW::$config['host']['encoding']); }
+
 ?>
