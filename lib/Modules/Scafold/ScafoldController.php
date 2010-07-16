@@ -172,7 +172,7 @@ abstract class ScafoldController extends Controller
 
 		if (count($filter['form']))
 		{
-			require_once LIBPATH.'/MetaForm/FormPersister.php';
+			require_once LIBPATH.'/HTML/FormPersister.php';
 			ob_start(array(new HTML_FormPersister(), 'process'));
 			QFW::$view->assign('filter', $filter['form']);
 		}
@@ -194,7 +194,7 @@ abstract class ScafoldController extends Controller
 	public function editAction($id=-1)
 	{
 		//инициализация FormPersister
-		require_once LIBPATH.'/MetaForm/FormPersister.php';
+		require_once LIBPATH.'/HTML/FormPersister.php';
 		ob_start(array(new HTML_FormPersister(), 'process'));
 		$errors = array();
 		
