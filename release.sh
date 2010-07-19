@@ -1,5 +1,5 @@
 #!/bin/sh
-#DESC Скрипт создания релиза, первый параметр - имя релиза (например QuickFWv0.7b => QuickFWv0.7b.tar.gz)
+#DESC Скрипт создания релиза, первый параметр - имя релиза (например QuickFWv1.5 => QuickFWv1.5.tar.bz2)
 
 test -z "$1" && echo "usage release.sh <releaseName>" && exit 1
 
@@ -20,7 +20,12 @@ rm -rf addons
 rm -f release.sh
 rm -f .gitignore
 
+#cd doc/asciidoc
+#make quickfw.pdf
+#mv quickfw.pdf ../
+#cd ../..
+
 cd ..
-rm -f $1.tar.gz
-tar -czf $1.tar.gz $1
+rm -f $1.tar.bz2
+tar -cjf $1.tar.bz2 $1
 rm -rf $1
