@@ -45,7 +45,7 @@ class Cacher_Memcached implements Zend_Cache_Backend_Interface
 
 	public function getStats()
 	{
-		return $this->mc->getExtendedStats();
+		return $this->mc->getStats();
 	}
 
 	public function remove($id)
