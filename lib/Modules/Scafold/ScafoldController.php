@@ -327,26 +327,30 @@ abstract class ScafoldController extends Controller
 	 * Устанавливает порядок сортировки
 	 *
 	 * @param string $field Имя поля
+	 * @param string $dir Направление сортировки (ASC|DESC|)
 	 */
-	public function sortAction($field='')
+	public function sortAction($field='', $dir='')
 	{
 		$this->session();
 		//такого поля нету
 		if (!isset($this->fields[$field]))
 			QFW::$router->redirect(Url::C('index'), true);
-		if (isset($_SESSION['scafold'][$this->table]['sort']) &&
-			$_SESSION['scafold'][$this->table]['sort']['field'] == $field)
-			$r = array(
-				'field' => $field,
-				'direction' => $_SESSION['scafold'][$this->table]['sort']['direction'] == 'ASC' ?
-					'DESC' : 'ASC',
+		//если сортировки в этой таблице еще нет
+		if (!isset($_SESSION['scafold'][$this->table]['sort']))
+			$_SESSION['scafold'][$this->table]['sort'] = array(
+				'field' => '',
+				'direction' => '',
 			);
-		else
-			$r = array(
-				'field' => $field,
-				'direction' => 'ASC',
-			);
-		$_SESSION['scafold'][$this->table]['sort'] = $r;
+		//ссылка на сортировку этой таблицы
+		$sort =&$_SESSION['scafold'][$this->table]['sort'];
+		//если не указана, то ASC или сменить ASC на DESC
+		if ($dir != 'ASC' && $dir != 'DESC')
+			$dir = ($sort['field'] == $field &&	$sort['direction'] == 'ASC')
+				 ? 'DESC' : 'ASC';
+		$sort = array(
+			'field' => $field,
+			'direction' => $dir,
+		);
 		QFW::$router->redirect(Url::C('index'), true);
 	}
 
