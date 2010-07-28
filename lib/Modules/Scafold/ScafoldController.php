@@ -35,6 +35,8 @@ abstract class ScafoldController extends Controller
 	protected $actions = array();
 	/** @var array Эта таблица зависимая - данные о родительской */
 	protected $parentData = false;
+	/** @var array ссылка на сессию таблицы */
+	protected $sess = array();
 
 	/** @var array Массив методов */
 	private $methods;
@@ -94,6 +96,12 @@ abstract class ScafoldController extends Controller
 	public function  __construct()
 	{
 		QFW::$view->P->addCSS('buildin/scafold.css');
+		$this->session();
+		//Создаем сессию для таблицы и ссылаемся на нее
+		if (!isset($_SESSION['scafold'][$this->table]))
+			$_SESSION['scafold'][$this->table] = array();
+		$this->sess = &$_SESSION['scafold'][$this->table];
+
 		$this->setup = true;
 		parent::__construct();
 		$this->methods = array_flip(get_class_methods($this));
@@ -117,7 +125,19 @@ abstract class ScafoldController extends Controller
 			'fields' => $this->fields,
 			'actions' => $this->actions,
 			'table' => str_replace('?_', '', $this->table),
+			'session' => $this->sess,
 		));
+	}
+
+	/**
+	 * Востанавливает данные сессии по умолчанию
+	 *
+	 * @param integer $page страница
+	 */
+	public function clearAction()
+	{
+		$this->sess = array();
+		QFW::$router->redirect(Url::C());
 	}
 
 	/**
@@ -139,22 +159,21 @@ abstract class ScafoldController extends Controller
 			$parent = QFW::$db->selectCol('SELECT ?# AS ARRAY_KEY, ?# FROM ?# ?s',
 				$this->parentData['key'], $this->parentData['field'], 
 				$this->parentData['table'], $this->parentData['other']);
-			$this->session();
 			if (isset($_POST['parent']))
 			{
-				$_SESSION['scafold'][$this->table]['parent'] = $_POST['parent'];
+				$this->sess['parent'] = $_POST['parent'];
 				QFW::$router->redirect(Url::A());
 			}
-			if (empty($_SESSION['scafold'][$this->table]['parent']))
-				$_SESSION['scafold'][$this->table]['parent'] = count($parent) ? key($parent) : 0;
+			if (empty($this->sess['parent']))
+				$this->sess['parent'] = count($parent) ? key($parent) : 0;
 
 			QFW::$view->assign('parent', QFW::$view->assign('parent', array(
 				'list' => $parent,
-				'current' => $_SESSION['scafold'][$this->table]['parent'],
+				'current' => $this->sess['parent'],
 			))->fetch('scafold/parent.html'));
 			$parentWhere = QFW::$db->subquery('AND ?#=?',
 					array($this->table => $this->parentData['colum']),
-					$_SESSION['scafold'][$this->table]['parent']);
+					$this->sess['parent']);
 		}
 
 		$filter = $this->filterGen();
@@ -233,10 +252,10 @@ abstract class ScafoldController extends Controller
 						$this->table, $data, $this->primaryKey, $id);
 
 				//редирект назад
-				if (!empty($_SESSION['scafold']['return']))
+				if (!empty($this->sess['return']))
 				{
-					$url = $_SESSION['scafold']['return'];
-					unset($_SESSION['scafold']['return']);
+					$url = $this->sess['return'];
+					unset($this->sess['return']);
 					QFW::$router->redirect($url);
 				}
 				else
@@ -246,7 +265,7 @@ abstract class ScafoldController extends Controller
 		}
 		
 		if (isset($_SERVER['HTTP_REFERER']) && strpos($_SERVER['HTTP_REFERER'], 'index'))
-			$_SESSION['scafold']['return'] = $_SERVER['HTTP_REFERER'];
+			$this->sess['return'] = $_SERVER['HTTP_REFERER'];
 
 		if ($id == -1)
 		{
@@ -310,15 +329,14 @@ abstract class ScafoldController extends Controller
 	 */
 	public function filterAction()
 	{
-		$this->session();
 		if (!empty($_POST['clear']))
 		{
-			$_SESSION['scafold'][$this->table]['filter'] = array();
+			$this->sess['filter'] = array();
 			QFW::$router->redirect(Url::C('index'), true);
 		}
 		if (empty($_POST['filter']) || empty($_POST['apply']))
 			QFW::$router->redirect(Url::C('index'), true);
-		$_SESSION['scafold'][$this->table]['filter'] = $_POST['filter'];
+		$this->sess['filter'] = $_POST['filter'];
 		
 		QFW::$router->redirect(Url::C('index'), true);
 	}
@@ -331,26 +349,7 @@ abstract class ScafoldController extends Controller
 	 */
 	public function sortAction($field='', $dir='')
 	{
-		$this->session();
-		//такого поля нету
-		if (!isset($this->fields[$field]))
-			QFW::$router->redirect(Url::C('index'), true);
-		//если сортировки в этой таблице еще нет
-		if (!isset($_SESSION['scafold'][$this->table]['sort']))
-			$_SESSION['scafold'][$this->table]['sort'] = array(
-				'field' => '',
-				'direction' => '',
-			);
-		//ссылка на сортировку этой таблицы
-		$sort =&$_SESSION['scafold'][$this->table]['sort'];
-		//если не указана, то ASC или сменить ASC на DESC
-		if ($dir != 'ASC' && $dir != 'DESC')
-			$dir = ($sort['field'] == $field &&	$sort['direction'] == 'ASC')
-				 ? 'DESC' : 'ASC';
-		$sort = array(
-			'field' => $field,
-			'direction' => $dir,
-		);
+		$this->setSort($field, $dir);
 		QFW::$router->redirect(Url::C('index'), true);
 	}
 
@@ -562,14 +561,13 @@ abstract class ScafoldController extends Controller
 		{
 			if (!$field->filter)
 				continue;
-			$this->session();
-			$data = !empty($_SESSION['scafold'][$this->table]['filter'][$name]) ?
-				$_SESSION['scafold'][$this->table]['filter'][$name] : false;
+			$data = !empty($this->sess['filter'][$name]) ?
+				$this->sess['filter'][$name] : false;
 
 			$form[$name] = $field->filterForm($data);
 			if ($data === false)
 				continue;
-			$where[$name] = $field->filterWhere($_SESSION['scafold'][$this->table]['filter'][$name]);
+			$where[$name] = $field->filterWhere($this->sess['filter'][$name]);
 		}
 		if (count($where) == 0)
 			return array(
@@ -585,15 +583,46 @@ abstract class ScafoldController extends Controller
 	}
 
 	/**
+	 * Устанавливает порядок сортировки
+	 *
+	 * @param string $field Имя поля
+	 * @param string $dir Направление сортировки (ASC|DESC|) - пустое - сменить
+	 * @return bool Удачно или нет
+	 */
+	public function setSort($field='', $dir='')
+	{
+		//такого поля нету
+		if (!isset($this->fields[$field]))
+			return false;
+		//если сортировки в этой таблице еще нет
+		if (!isset($this->sess['sort']))
+			$this->sess['sort'] = array(
+				'field' => '',
+				'direction' => '',
+			);
+		//если не указана, то ASC или сменить ASC на DESC
+		if ($dir != 'ASC' && $dir != 'DESC')
+			$dir = ($this->sess['sort']['field'] == $field &&
+				$this->sess['sort']['direction'] == 'ASC')
+				 ? 'DESC' : 'ASC';
+		$this->sess['sort'] = array(
+			'field' => $field,
+			'direction' => $dir,
+		);
+		return true;
+
+	}
+
+	/**
 	 * Генерирует сортировку
 	 *
 	 * @return DbSimple_SubQuery Подзапрос сортировки
 	 */
 	private function getSort()
 	{
-		if (!isset($_SESSION['scafold'][$this->table]['sort']))
+		if (!isset($this->sess['sort']))
 			return DBSIMPLE_SKIP;
-		$order = $_SESSION['scafold'][$this->table]['sort'];
+		$order = $this->sess['sort'];
 		QFW::$view->assign('order', $order);
 		return QFW::$db->subquery('order by ?# '.$order['direction'],
 			array($this->table => $order['field']));
