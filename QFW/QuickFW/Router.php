@@ -136,9 +136,6 @@ class QuickFW_Router
 
 		//Сохраняем старый путь шаблонов
 		$scriptPath = QFW::$view->getScriptPath();
-		//Выставляем новые пути вызова и сохраняем старые
-		list($lpPath, $this->ParentPath, $this->CurPath) =
-			array($this->ParentPath, $this->CurPath, $MCA['Path']);
 		//сохраняем прошлый MCA
 		list ($oModule, $oController, $oAction) =
 			array($this->cModule, $this->cController, $this->cAction);
@@ -172,9 +169,6 @@ class QuickFW_Router
 			//восстанавливаем MCA
 			list ($this->cModule, $this->cController, $this->cAction) =
 				array($oModule, $oController, $oAction);
-			//восстанавливаем пути вызова
-			list($this->CurPath, $this->ParentPath) =
-				array($this->ParentPath, $lpPath);
 			//Возвращаем путь к шаблонам после вызова
 			QFW::$view->setScriptPath($scriptPath);
 
@@ -189,14 +183,19 @@ class QuickFW_Router
 		if ($Params)
 			$MCA['Params'] = array_merge($MCA['Params'], $Params);
 
+		//Выставляем новые пути вызова и сохраняем старые
+		list($lpPath, $this->ParentPath, $this->CurPath) =
+			array($this->ParentPath, $this->CurPath, $MCA['Path']);
+
 		$result = call_user_func_array(array($MCA['Class'], $MCA['Action'].$MCA['Type']), $MCA['Params']);
+
+		//восстанавливаем пути вызова
+		list($this->CurPath, $this->ParentPath) =
+			array($this->ParentPath, $lpPath);
 
 		//восстанавливаем MCA
 		list ($this->cModule, $this->cController, $this->cAction) =
 			array($oModule, $oController, $oAction);
-		//восстанавливаем пути вызова
-		list($this->CurPath, $this->ParentPath) =
-			array($this->ParentPath, $lpPath);
 		//Возвращаем путь к шаблонам после вызова
 		QFW::$view->setScriptPath($scriptPath);
 
