@@ -38,6 +38,12 @@ abstract class ScafoldController extends Controller
 	/** @var array ссылка на сессию таблицы */
 	protected $sess = array();
 
+	//Опции
+	/** @var bool Ссылка добавить внизу страницы */
+	protected $addOnBottom = false;
+	/** @var bool Показывать картинки при сортировке */
+	protected $sortImages = false;
+
 	/** @var array Массив методов */
 	private $methods;
 	/** @var boolean Флаг окончания настройки */
@@ -126,6 +132,10 @@ abstract class ScafoldController extends Controller
 			'actions' => $this->actions,
 			'table' => str_replace('?_', '', $this->table),
 			'session' => $this->sess,
+			'options' => array(
+				'addOnBottom' => $this->addOnBottom,
+				'sortImages' => $this->sortImages,
+			),
 		));
 	}
 

@@ -16,14 +16,16 @@
 		?>
 		<th><a href="<?php echo Url::C('sort/'.$key) ?>"><?php echo $i->title ?></a>
 			<?php if (isset($order) && $order['field'] == $key) { ?><span class="scafoldSort">
-				<span><?php echo $order['direction']=='ASC' ? '↓' : '↑' ?></span>
-				<?php /*<img src="/buildin/<?php echo $order['direction']=='ASC' ? 'az' : 'za' ?>.png"
-					 alt="<?php echo $order['direction']=='ASC' ? '↓' : '↑' ?>" />*/?>
+				<?php if ($options['sortImages']) {?>
+					<img src="/buildin/<?php echo $order['direction']=='ASC' ? 'az' : 'za' ?>.png"
+						alt="<?php echo $order['direction']=='ASC' ? '↓' : '↑' ?>" />
+				<?php } else { ?>
+					<span><?php echo $order['direction']=='ASC' ? '↓' : '↑' ?></span>
+				<?php } ?>
 			</span><?php } ?>
 		</th>
 	<?php } ?>
-	<th><a href="<?php echo Url::C('edit/-1') ?>">доб.</a></th>
-	<th>&nbsp;</th>
+	<th colspan="2"><a href="<?php echo Url::C('edit/-1') ?>">доб.</a></th>
 	<?php if (count($actions)) { ?><th>действия</th><?php } ?>
 </tr>
 <?php foreach($data as $id=>$row) { ?>
@@ -49,6 +51,7 @@
 </tr>
 <?php } ?>
 </table>
+<?php if ($options['addOnBottom']) {?><a href="<?php echo Url::C('edit/-1') ?>">добавить</a><?php } ?>
 <?php } else { ?>
 	Записей нет
 	<a href="<?php echo Url::C('edit/-1') ?>">добавить</a>
