@@ -399,19 +399,24 @@ SREG;
 			if ($cached)
 			{
 				$MCA = $cached['MCA'];
+				//устанавливаем переменные роутера
+				if ($this->module == '')
+				{
+					$this->module = $MCA['Module'];
+					$this->controller = $MCA['Controller'];
+					$this->action = $MCA['Action'];
+					$this->type = $MCA['Type'];
+				}
+				$this->cModule = $MCA['Module'];
+				$this->cController = $MCA['Controller'];
+				$this->cAction = $MCA['Action'];
+				//составляем путь и загружаем
 				$path = $this->baseDir.'/'.$MCA['Module'];
 				QFW::$view->setScriptPath($path.'/templates');
 				$class = ucfirst($MCA['Controller']).'Controller';
 				$fullname = $path . '/controllers/' . strtr($class,'_','/') . '.php';
 				require_once($fullname);
 				$class_key=$MCA['Module'].'|'.$MCA['Controller'];
-				if ($this->module == '')
-				{
-					$this->cModule = $this->module = $MCA['Module'];
-					$this->cController = $this->controller = $MCA['Controller'];
-					$this->cAction = $this->action = $MCA['Action'];
-					$this->type = $MCA['Type'];
-				}
 				if (!isset($this->classes[$class_key]))
 					$this->classes[$class_key] = array(
 						'i'    => $MCA['Class'] = new $class,
@@ -454,6 +459,9 @@ SREG;
 		}
 		$MCA['Controller'] = $cname;
 		$class_key=$MCA['Module'].'|'.$MCA['Controller'];
+
+		$this->cModule = $MCA['Module'];
+		$this->cController = $MCA['Controller'];
 
 		if (!isset($this->classes[$class_key]))
 		{
@@ -516,6 +524,7 @@ SREG;
 				return $MCA;
 			}
 		}
+		$this->cAction = $MCA['Action'];
 
 		if (QFW::$config['QFW']['auto404'] && count($data)==$c && $c>0)
 		{	 // если из URI после модуля ничего не забрали и что-то осталось
