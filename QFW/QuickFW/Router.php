@@ -136,6 +136,12 @@ class QuickFW_Router
 
 		//Сохраняем старый путь шаблонов
 		$scriptPath = QFW::$view->getScriptPath();
+		//Выставляем новые пути вызова и сохраняем старые
+		list($lpPath, $this->ParentPath, $this->CurPath) =
+			array($this->ParentPath, $this->CurPath, $MCA['Path']);
+		//сохраняем прошлый MCA
+		list ($oModule, $oController, $oAction) =
+			array($this->cModule, $this->cController, $this->cAction);
 
 		if ($Uri instanceof Url)
 			$Uri = $Uri->intern();
@@ -163,6 +169,15 @@ class QuickFW_Router
 
 		if (isset($MCA['Error']))
 		{
+			//восстанавливаем MCA
+			list ($this->cModule, $this->cController, $this->cAction) =
+				array($oModule, $oController, $oAction);
+			//восстанавливаем пути вызова
+			list($this->CurPath, $this->ParentPath) =
+				array($this->ParentPath, $lpPath);
+			//Возвращаем путь к шаблонам после вызова
+			QFW::$view->setScriptPath($scriptPath);
+
 			if (QFW::$config['QFW']['release'])
 				return '';
 			return "Ошибка подключения блока ".$Uri." адрес был разобран в\t\t ".
@@ -174,27 +189,14 @@ class QuickFW_Router
 		if ($Params)
 			$MCA['Params'] = array_merge($MCA['Params'], $Params);
 
-		//сохраняем пути вызова
-		list($lpPath, $this->ParentPath, $this->CurPath) =
-			array($this->ParentPath, $this->CurPath, $MCA['Path']);
-
-		//сохраняем прошлый MCA
-		list ($oModule, $oController, $oAction) =
-			array($this->cModule, $this->cController, $this->cAction);
-		//устанавливаем текущий
-		list ($this->cModule, $this->cController, $this->cAction) =
-			array($MCA['Module'], $MCA['Controller'], $MCA['Action']);
-
 		$result = call_user_func_array(array($MCA['Class'], $MCA['Action'].$MCA['Type']), $MCA['Params']);
 
 		//восстанавливаем MCA
 		list ($this->cModule, $this->cController, $this->cAction) =
 			array($oModule, $oController, $oAction);
-
 		//восстанавливаем пути вызова
 		list($this->CurPath, $this->ParentPath) =
 			array($this->ParentPath, $lpPath);
-
 		//Возвращаем путь к шаблонам после вызова
 		QFW::$view->setScriptPath($scriptPath);
 
