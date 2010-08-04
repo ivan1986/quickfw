@@ -16,8 +16,33 @@ class Autoload
 	{
 		spl_autoload_register(array(__CLASS__, 'Bind'));
 		spl_autoload_register(array(__CLASS__, 'Dirs'));
+		spl_autoload_register(array(__CLASS__, 'Controller'));
 		if (is_callable($function))
 			spl_autoload_register($function);
+	}
+
+	/**
+	 * Автолоад контроллеров (при наследовании)
+	 *
+	 * @param string $class искомый класс контроллера
+	 */
+	static public function Controller($class)
+	{
+		if (mb_strpos($class, 'Controller') === false)
+			return false;
+		$class = strtr($class,'_','/');
+		//пространство имен
+		if ($pos = mb_strpos($class, '\\'))
+		{
+			$file =
+				strtolower(mb_substr($class, 0, $pos)).
+				'/controllers/'.
+				ucfirst(mb_substr($class, $pos+1));
+		}
+		else
+			$file = QFW::$router->cModule.'/controllers/'.$class;
+		require APPPATH.'/'.$file.'.php';
+		return true;
 	}
 
 	/**
