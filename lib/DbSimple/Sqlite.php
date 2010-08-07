@@ -21,7 +21,7 @@ require_once dirname(__FILE__).'/Generic.php';
  */
 class DbSimple_Sqlite extends DbSimple_Generic_Database
 {
-	private $db;
+	private $link;
 	public function __construct($dsn)
 	{
 		$connect = 'sqlite_'.((isset($dsn['persist']) && $dsn['persist'])?'p':'').'open';
@@ -30,7 +30,7 @@ class DbSimple_Sqlite extends DbSimple_Generic_Database
 		$err = '';
 		try
 		{
-			$this->db = sqlite_factory($dsn['path'], 0666, &$err);
+			$this->link = sqlite_factory($dsn['path'], 0666, &$err);
 		}
 		catch (Exception $e)
 		{
@@ -39,9 +39,9 @@ class DbSimple_Sqlite extends DbSimple_Generic_Database
 	}
 	
 	public function CreateFunction($function_name, $callback, $num_args)
-	{	return $this->db->createFunction($function_name, $callback, $num_args); }
+	{	return $this->link->createFunction($function_name, $callback, $num_args); }
 	public function CreateAggregate($function_name, $step_func, $finalize_func, $num_args)
-	{	return $this->db->createAggregate($function_name, $step_func, $finalize_func, $num_args); }
+	{	return $this->link->createAggregate($function_name, $step_func, $finalize_func, $num_args); }
 	
 	protected function _performGetPlaceholderIgnoreRe()
 	{
@@ -64,17 +64,17 @@ class DbSimple_Sqlite extends DbSimple_Generic_Database
 
 	protected function _performTransaction($parameters=null)
 	{
-		return $this->db->query('BEGIN TRANSACTION');
+		return $this->link->query('BEGIN TRANSACTION');
 	}
 
 	protected function _performCommit()
 	{
-		return $this->db->query('COMMIT TRANSACTION');
+		return $this->link->query('COMMIT TRANSACTION');
 	}
 
 	protected function _performRollback()
 	{
-		return $this->db->query('ROLLBACK TRANSACTION');
+		return $this->link->query('ROLLBACK TRANSACTION');
 	}
 
 	protected function _performQuery($queryMain)
@@ -82,15 +82,15 @@ class DbSimple_Sqlite extends DbSimple_Generic_Database
 		$this->_lastQuery = $queryMain;
 		$this->_expandPlaceholders($queryMain, false);
 		$error_msg = '';
-		$p = $this->db->query($queryMain[0], SQLITE_ASSOC, $error_msg);
+		$p = $this->link->query($queryMain[0], SQLITE_ASSOC, $error_msg);
 		if (!$p)
 			return $this->_setDbError($p->lastError(), $error_msg, $queryMain[0]);
 		if ($error_msg)
 			return $this->_setDbError($p->lastError(), $error_msg, $queryMain[0]);
 		if (preg_match('/^\s* INSERT \s+/six', $queryMain[0]))
-			return $this->db->lastInsertRowid();
+			return $this->link->lastInsertRowid();
 		if ($p->numFields()==0)
-			return $this->db->changes();
+			return $this->link->changes();
 		//Если у нас в запросе есть хотя-бы одна колонка - это по любому будет select
 		return $p->fetchAll(SQLITE_ASSOC);
 	}

@@ -22,7 +22,7 @@ require_once dirname(__FILE__).'/Generic.php';
  */
 class DbSimple_Mypdo extends DbSimple_Generic_Database
 {
-	private $PDO;
+	private $link;
 
 	public function DbSimple_Mypdo($dsn)
 	{
@@ -31,7 +31,7 @@ class DbSimple_Mypdo extends DbSimple_Generic_Database
 			return $this->_setLastError("-1", "PDO extension is not loaded", "PDO");
 
 		try {
-			$this->PDO = new PDO('mysql:host='.$dsn['host'].(empty($dsn['port'])?'':';port='.$dsn['port']).';dbname='.$base,
+			$this->link = new PDO('mysql:host='.$dsn['host'].(empty($dsn['port'])?'':';port='.$dsn['port']).';dbname='.$base,
 				$dsn['user'], isset($dsn['pass'])?$dsn['pass']:'', array(
 					PDO::ATTR_ERRMODE => PDO::ERRMODE_SILENT,
 					PDO::ATTR_PERSISTENT => isset($dsn['persist']) && $dsn['persist'],
@@ -56,7 +56,7 @@ class DbSimple_Mypdo extends DbSimple_Generic_Database
 	protected function _performEscape($s, $isIdent=false)
 	{
 		if (!$isIdent) {
-			return $this->PDO->quote($s);
+			return $this->link->quote($s);
 		} else {
 			return "`" . str_replace('`', '``', $s) . "`";
 		}
@@ -64,30 +64,30 @@ class DbSimple_Mypdo extends DbSimple_Generic_Database
 
 	protected function _performTransaction($parameters=null)
 	{
-		return $this->PDO->beginTransaction();
+		return $this->link->beginTransaction();
 	}
 
 	protected function _performCommit()
 	{
-		return $this->PDO->commit();
+		return $this->link->commit();
 	}
 
 	protected function _performRollback()
 	{
-		return $this->PDO->rollBack();
+		return $this->link->rollBack();
 	}
 
 	protected function _performQuery($queryMain)
 	{
 		$this->_lastQuery = $queryMain;
 		$this->_expandPlaceholders($queryMain, false);
-		$p = $this->PDO->query($queryMain[0]);
+		$p = $this->link->query($queryMain[0]);
 		if (!$p)
 			return $this->_setDbError($p,$queryMain[0]);
 		if ($p->errorCode()!=0)
 			return $this->_setDbError($p,$queryMain[0]);
 		if (preg_match('/^\s* INSERT \s+/six', $queryMain[0]))
-			return $this->PDO->lastInsertId();
+			return $this->link->lastInsertId();
 		if ($p->columnCount()==0)
 			return $p->rowCount();
 		//Если у нас в запросе есть хотя-бы одна колонка - это по любому будет select
@@ -121,7 +121,7 @@ class DbSimple_Mypdo extends DbSimple_Generic_Database
 
 	protected function _setDbError($obj,$q)
 	{
-		$info=$obj?$obj->errorInfo():$this->PDO->errorInfo();
+		$info=$obj?$obj->errorInfo():$this->link->errorInfo();
 		return $this->_setLastError($info[1], $info[2], $q);
 	}
 
