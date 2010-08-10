@@ -1,0 +1,64 @@
+div.pageslist {text-align:center;}
+
+table.scaffoldTable
+{
+	border:2px solid black;
+	width: 100%;
+}
+
+.scaffoldTable th, .scaffoldTable td
+{
+	border:1px dashed black;
+	padding: 5px;
+	margin: 0;
+}
+
+.scaffoldTable td:last-child, .scaffoldTable td:nth-last-child(2)
+{
+	width: 25px;
+}
+
+.scaffoldTable tr {vertical-align:top;}
+.scaffoldTable th { background-color:#eec0c0; }
+.scaffoldTable tr td { background-color:#ddd; text-align:left;}
+.scaffoldTable tr:nth-child(odd) td { background-color:#c0ffc0; }
+
+.scaffoldTable table.tnone {border: 1px solid black;}
+.scaffoldTable table.tnone td {background-color:#FFF; border: none; padding: 0; margin: 0;}
+
+.scaffoldTable .scaffoldSort {
+	position: relative;
+}
+
+.scaffoldTable .scaffoldSort * {
+	position: absolute;
+}
+
+form.scaffoldEdit .err {color: red;}
+
+form.scaffoldEdit textarea:focus, input:focus, select:focus {
+	border: 2px solid #900;
+}
+
+form.scaffoldEdit dt {
+	padding: 0;
+	margin: 0.7em 1em 0.5em 0;
+	width: 25%;
+	float: left;
+	clear: left;
+	text-align: right;
+}
+
+form.scaffoldEdit dd {
+	margin: 0;
+	padding: 0.5em 0;
+	width: 70%;
+	float: left;
+}
+
+form.scaffoldEdit small
+{
+	display: block;
+	margin-left: 20px;
+	color: #999;
+}

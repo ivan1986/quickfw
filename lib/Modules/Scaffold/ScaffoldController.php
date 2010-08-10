@@ -1,6 +1,6 @@
 <?php
 
-require_once LIBPATH.'/Modules/Scafold/Fields.php';
+require_once LIBPATH.'/Modules/Scaffold/Fields.php';
 
 /**
  * Класс для быстрого создания CRUD интерфейса к таблице
@@ -13,13 +13,13 @@ require_once LIBPATH.'/Modules/Scafold/Fields.php';
  * подобных им таблиц
  * <br><br>Пример подключения:
  * <br><br>require 'Controller.php';
- * <br>require LIBPATH.'/Modules/Scafold/ScafoldController.php';
+ * <br>require LIBPATH.'/Modules/Scaffold/ScaffoldController.php';
  * <br>.....
- * <br>class TableController extends ScafoldController
+ * <br>class TableController extends ScaffoldController
  *
  * @author Ivan1986
  */
-abstract class ScafoldController extends Controller
+abstract class ScaffoldController extends Controller
 {
 	/** @var string Имя таблицы */
 	protected $table = '';
@@ -101,12 +101,12 @@ abstract class ScafoldController extends Controller
 	 */
 	public function  __construct()
 	{
-		QFW::$view->P->addCSS('buildin/scafold.css');
+		QFW::$view->P->addCSS('built-in/scaffold.css');
 		$this->session();
 		//Создаем сессию для таблицы и ссылаемся на нее
-		if (!isset($_SESSION['scafold'][$this->table]))
-			$_SESSION['scafold'][$this->table] = array();
-		$this->sess = &$_SESSION['scafold'][$this->table];
+		if (!isset($_SESSION['scaffold'][$this->table]))
+			$_SESSION['scaffold'][$this->table] = array();
+		$this->sess = &$_SESSION['scaffold'][$this->table];
 
 		$this->setup = true;
 		parent::__construct();
@@ -115,7 +115,7 @@ abstract class ScafoldController extends Controller
 		//Получаем данные о полях
 		$this->fields = $this->fields();
 		foreach($this->fields as $k=>$field)
-			if (get_class($field) == 'Scafold_Field_Info')
+			if (get_class($field) == 'Scaffold_Field_Info')
 				unset($this->fields[$k]);
 
 		//порядок сортировки полей
@@ -180,7 +180,7 @@ abstract class ScafoldController extends Controller
 			QFW::$view->assign('parent', QFW::$view->assign('parent', array(
 				'list' => $parent,
 				'current' => $this->sess['parent'],
-			))->fetch('scafold/parent.html'));
+			))->fetch('scaffold/parent.html'));
 			$parentWhere = QFW::$db->subquery('AND ?#=?',
 					array($this->table => $this->parentData['colum']),
 					$this->sess['parent']);
@@ -212,7 +212,7 @@ abstract class ScafoldController extends Controller
 		return QFW::$view->assign(array(
 			'data' => $data,
 			'pager' => $pager,
-		))->fetch('scafold/index.html');
+		))->fetch('scaffold/index.html');
 	}
 
 	/**
@@ -299,7 +299,7 @@ abstract class ScafoldController extends Controller
 			'id' => $id,
 			'data' => $data,
 			'errors' => $errors,
-		))->fetch('scafold/edit.html');
+		))->fetch('scaffold/edit.html');
 	}
 
 	/**
@@ -373,7 +373,7 @@ abstract class ScafoldController extends Controller
 	 * <br><br> Вызывается только в конструкторе
 	 *
 	 * @param array $fieldList массив с именами полей
-	 * @return ScafoldController
+	 * @return ScaffoldController
 	 */
 	protected function order($fieldList)
 	{
@@ -392,7 +392,7 @@ abstract class ScafoldController extends Controller
 	 * @param string|DbSimple_SubQuery $id Ключ в главной таблице
 	 * @param string|DbSimple_SubQuery $name Заголовок в главной таблице
 	 * @param DbSimple_SubQuery $other Дополнительные условия
-	 * @return ScafoldController
+	 * @return ScaffoldController
 	 */
 	protected function parent($colum, $table, $id, $name, $other=DBSIMPLE_SKIP)
 	{
@@ -418,7 +418,7 @@ abstract class ScafoldController extends Controller
 	 * @param string $id Ссылочный ключ
 	 * @param string $name Значение связанного поля
 	 * @param bool $notNull Не допускать пустого значения
-	 * @return ScafoldController
+	 * @return ScaffoldController
 	 */
 	protected function foreign($colum, $table, $id, $name, $notNull=false)
 	{
@@ -444,7 +444,7 @@ abstract class ScafoldController extends Controller
 	 * @param string|array $colum Колонка или массив колонок, которые нужно скрыть
 	 * @param boolean $hide true - скрыть<br>false - показать<br>
 	 * по умолчанию показываются все кромя первичного ключа при редактировании
-	 * @return ScafoldController
+	 * @return ScaffoldController
 	 */
 	protected function hide($colum, $hide=true)
 	{
@@ -462,7 +462,7 @@ abstract class ScafoldController extends Controller
 	 * false - выключен<br>
 	 * true - включен по умолчанию<br>
 	 * mixed - произвольный параметр
-	 * @return ScafoldController
+	 * @return ScaffoldController
 	 */
 	protected function filter($colum, $filter='')
 	{
@@ -477,7 +477,7 @@ abstract class ScafoldController extends Controller
 	 * @param string|array $colum Колонка<br>
 	 * Или массив ключи - колонки, значения описания
 	 * @param string $desc описание
-	 * @return ScafoldController
+	 * @return ScaffoldController
 	 */
 	protected function desc($colum, $desc='')
 	{
@@ -492,7 +492,7 @@ abstract class ScafoldController extends Controller
 	 * @param string|array $colum Колонка<br>
 	 * Или массив ключи - колонки, значения заголовки
 	 * @param string $title Заголовок
-	 * @return ScafoldController
+	 * @return ScaffoldController
 	 */
 	protected function title($colum, $title='')
 	{
@@ -507,7 +507,7 @@ abstract class ScafoldController extends Controller
 	 * @param string $colum Колонка
 	 * @param string $className Имя класса без префикса
 	 * @param mixed $param Второй параметр конструктора класса
-	 * @return ScafoldController
+	 * @return ScaffoldController
 	 */
 	protected function type($colum, $className='', $param=false)
 	{
@@ -530,7 +530,7 @@ abstract class ScafoldController extends Controller
 	 * @param string|array $colum Колонка<br>
 	 * Или массив ключи - колонки => значения
 	 * @param string $value значение
-	 * @return ScafoldController
+	 * @return ScaffoldController
 	 */
 	private function setColumOpt($name, $colum, $value='')
 	{
@@ -546,12 +546,12 @@ abstract class ScafoldController extends Controller
 	 * Возвращает ссылку на класс заданного поля
 	 *
 	 * @param string $name имя поля
-	 * @return Scafold_Field_Info инфо о классе
+	 * @return Scaffold_Field_Info инфо о классе
 	 */
 	private function getInfoClass($name)
 	{
 		if (empty($this->fields[$name]))
-			$this->fields[$name] = new Scafold_Field_Info();
+			$this->fields[$name] = new Scaffold_Field_Info();
 		return $this->fields[$name];
 	}
 
@@ -678,9 +678,9 @@ abstract class ScafoldController extends Controller
 	/**
 	 * Фабрика объектов полей
 	 *
-	 * @param Scafold_Field_Info $infoClass Информация указанная пользователем
+	 * @param Scaffold_Field_Info $infoClass Информация указанная пользователем
 	 * @param array $fieldInfo Информация о поле из базы данных
-	 * @return Scafold_Field Класс поля
+	 * @return Scaffold_Field Класс поля
 	 */
 	private function getFieldClass($infoClass, $fieldInfo)
 	{
@@ -690,20 +690,20 @@ abstract class ScafoldController extends Controller
 
 		if ($infoClass->type)
 		{
-			$class = 'Scafold_'.ucfirst($infoClass->type);
+			$class = 'Scaffold_'.ucfirst($infoClass->type);
 			return new $class($infoClass);
 		}
 
 		//определяем по типам и прочей известной информации
 		if ($infoClass->foreign)
-			return new Scafold_Foreign($infoClass);
+			return new Scaffold_Foreign($infoClass);
 
 		$match = array();
 		if (preg_match('#(.*?)(?:\((.+?)\)|$)#', $fieldInfo['Type'], $match))
-			if (class_exists($class = 'Scafold_'.ucfirst($match[1])))
+			if (class_exists($class = 'Scaffold_'.ucfirst($match[1])))
 				return new $class($infoClass, isset($match[2]) ? $match[2] : false );
 
-		return new Scafold_Field($infoClass);
+		return new Scaffold_Field($infoClass);
 	}
 
 	private function endTest()

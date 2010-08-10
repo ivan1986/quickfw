@@ -51,7 +51,6 @@ class Language {
 	 */
 	function load($langfile = '', $idiom = '', $return = FALSE)
 	{	
-		global $config;
 		$langfile = $langfile.'_lang.php';
 		
 		if (in_array($langfile, $this->is_loaded, TRUE))
@@ -61,7 +60,7 @@ class Language {
 		
 		if ($idiom == '')
 		{
-			$deft_lang = $config['host']['lang'];
+			$deft_lang = QFW::$config['host']['lang'];
 			$idiom = is_null($deft_lang) ? 'en_EN' : $deft_lang;
 		}
 

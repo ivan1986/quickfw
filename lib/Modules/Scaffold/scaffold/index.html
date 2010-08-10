@@ -7,7 +7,7 @@
 <?php echo $pager; ?>
 
 <?php if (count($data)>0) { ?>
-<table id="table_<?php echo $table ?>" class="scafoldTable">
+<table id="table_<?php echo $table ?>" class="scaffoldTable">
 <tr>
 	<?php foreach($data[0] as $key=>$v) {
 		$i = $fields[$key];
@@ -15,9 +15,9 @@
 			continue;
 		?>
 		<th><a href="<?php echo Url::C('sort/'.$key) ?>"><?php echo $i->title ?></a>
-			<?php if (isset($order) && $order['field'] == $key) { ?><span class="scafoldSort">
+			<?php if (isset($order) && $order['field'] == $key) { ?><span class="scaffoldSort">
 				<?php if ($options['sortImages']) {?>
-					<img src="/buildin/<?php echo $order['direction']=='ASC' ? 'az' : 'za' ?>.png"
+					<img src="/built-in/<?php echo $order['direction']=='ASC' ? 'az' : 'za' ?>.png"
 						alt="<?php echo $order['direction']=='ASC' ? '↓' : '↑' ?>" />
 				<?php } else { ?>
 					<span><?php echo $order['direction']=='ASC' ? '↓' : '↑' ?></span>

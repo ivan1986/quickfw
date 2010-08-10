@@ -7,7 +7,7 @@ require_once LIBPATH.'/utils.php';
  * Содержит набор полей для заполнения пользователем
  *
  */
-class Scafold_Field_Info
+class Scaffold_Field_Info
 {
 	/** @var boolean скрытое поле */
 	public $hide = null;
@@ -44,17 +44,17 @@ class Scafold_Field_Info
  * Не содержит никаких проверок, оформлений, преобразований
  *
  */
-class Scafold_Field extends Scafold_Field_Info
+class Scaffold_Field extends Scaffold_Field_Info
 {
 
 	/**
 	 * Создает полноценное поле из данных о пользователе
 	 *
-	 * @param Scafold_Field_Info $info Информация о поле
+	 * @param Scaffold_Field_Info $info Информация о поле
 	 */
 	public function __construct($info)
 	{
-		$vars = get_class_vars('Scafold_Field_Info');
+		$vars = get_class_vars('Scaffold_Field_Info');
 		foreach ($vars as $k=>$v)
 			$this->$k = $info->$k;
 		$this->name = $info->fiendInfo['Field'];
@@ -185,17 +185,17 @@ class Scafold_Field extends Scafold_Field_Info
 /**
  * Класс для главного поля
  */
-class Scafold_Parent extends Scafold_Field
+class Scaffold_Parent extends Scaffold_Field
 {
 	public function proccess($id, $value)
 	{
-		return $_SESSION['scafold'][$this->table]['parent'];
+		return $_SESSION['scaffold'][$this->table]['parent'];
 	}
 
 	public function validator($id, $value)
 	{
 		//если у нас будет потеря сессии, то случится фигня
-		return isset($_SESSION['scafold'][$this->table]['parent']);
+		return isset($_SESSION['scaffold'][$this->table]['parent']);
 	}
 	
 	public function filterForm($session)
@@ -208,7 +208,7 @@ class Scafold_Parent extends Scafold_Field
  * Класс для зависимых полей
  * формирует select со значениями из другой таблицы
  */
-class Scafold_Foreign extends Scafold_Field
+class Scaffold_Foreign extends Scaffold_Field
 {
 	/** @var array Зависимые поля */
 	protected $lookup;
@@ -242,7 +242,7 @@ class Scafold_Foreign extends Scafold_Field
  * Сервисный классс для полей, вводимых пользователем
  * <br>пока только обрезка при выводе, так как обязательно нагадят :)
  */
-abstract class Scafold_UserInput extends Scafold_Field
+abstract class Scaffold_UserInput extends Scaffold_Field
 {
 	/** @var integer До скольки обрезать */
 	private $trim;
@@ -260,13 +260,13 @@ abstract class Scafold_UserInput extends Scafold_Field
 }
 
 //Классы для различных типов полей из базы данных
-//Соответствие в функции ScafoldController::getFieldClass
+//Соответствие в функции ScaffoldController::getFieldClass
 
 
 /**
  * Пока тестовый класс для типа TEXT
  */
-class Scafold_Text extends Scafold_UserInput
+class Scaffold_Text extends Scaffold_UserInput
 {
 	/** @var integer Сколько строк */
 	private $rows;
@@ -291,7 +291,7 @@ class Scafold_Text extends Scafold_UserInput
 /**
  * Класс для типа Int
  */
-class Scafold_Int extends Scafold_Field
+class Scaffold_Int extends Scaffold_Field
 {
 	public function validator($id, $value)
 	{
@@ -302,7 +302,7 @@ class Scafold_Int extends Scafold_Field
 /**
  * Класс для типа Varchar
  */
-class Scafold_Varchar extends Scafold_Field
+class Scaffold_Varchar extends Scaffold_Field
 {
 	/** @var integer размер поля в базе */
 	private $size;
@@ -324,12 +324,12 @@ class Scafold_Varchar extends Scafold_Field
 /**
  * Класс для типа Char - полностью аналогичен Varchar
  */
-class Scafold_Char extends Scafold_Varchar {}
+class Scaffold_Char extends Scaffold_Varchar {}
 
 /**
  * Класс для типа ENUM
  */
-class Scafold_Enum extends Scafold_Field
+class Scaffold_Enum extends Scaffold_Field
 {
 	/** @var array что в перечислении */
 	private $items;
@@ -350,7 +350,7 @@ class Scafold_Enum extends Scafold_Field
 
 //Классы для других типов полей, указываемых пользователем
 
-class Scafold_Checkbox extends Scafold_Field
+class Scaffold_Checkbox extends Scaffold_Field
 {
 
 	public function display($id, $value)
@@ -371,7 +371,7 @@ class Scafold_Checkbox extends Scafold_Field
  * Класс для поля, в котором хранится имя файла,
  * загружаемого на сервер
  */
-class Scafold_File extends Scafold_Field
+class Scaffold_File extends Scaffold_Field
 {
 	/** @var string Путь к директории, где хранятся файлы */
 	private $path;
@@ -383,7 +383,7 @@ class Scafold_File extends Scafold_Field
 	/**
 	 * Проверяет параметры для файлового поля
 	 *
-	 * @param Scafold_Field_Info $info Информация о поле
+	 * @param Scaffold_Field_Info $info Информация о поле
 	 */
 	public function __construct($info)
 	{

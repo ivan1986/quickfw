@@ -1,13 +1,13 @@
 <?php
 
 require 'Controller.php';
-require LIBPATH.'/Modules/Scafold/ScafoldController.php';
+require LIBPATH.'/Modules/Scaffold/ScaffoldController.php';
 /**
  * Description of TableController
  *
  * @author ivan
  */
-class TableController extends ScafoldController
+class TableController extends ScaffoldController
 {
     public function __construct()
 	{

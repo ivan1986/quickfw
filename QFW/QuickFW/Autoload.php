@@ -56,7 +56,7 @@ class Autoload
 	{
 		if (empty(self::$classes))
 			self::$classes = array(
-				'ScafoldController' => LIBPATH.'/Modules/Scafold/ScafoldController.php',
+				'ScaffoldController' => LIBPATH.'/Modules/Scaffold/ScaffoldController.php',
 				'QuickFW_Auth' => QFWPATH.'/QuickFW/Auth.php',
 			);
 		if (empty(self::$classes[$class]))
