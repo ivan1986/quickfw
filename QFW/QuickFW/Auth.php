@@ -55,7 +55,20 @@ class QuickFW_Auth
 			return false;
 		QFW::$router->redirect($redir);
 	}
-	
+
+	/**
+	 * Удаляет данные пользователя из сесии
+	 *
+	 * <br>Если пользователь залогинен, то его сессия удаляется
+	 * <br>Если не залогинен, то ничего не делается
+	 *
+	 */
+	public function logout()
+	{
+		if (isset($_SESSION[$this->name]))
+			unset($_SESSION[$this->name]);
+	}
+
 	/**
 	 * Старт сессии
 	 *
@@ -71,7 +84,7 @@ class QuickFW_Auth
 		require (QFWPATH.'/QuickFW/Session.php');
 		self::$session = new QuickFW_Session($sid);
 	}
-	
+
 	/**
 	 * Рестарт сессии
 	 *
@@ -88,7 +101,7 @@ class QuickFW_Auth
 		self::$session = new QuickFW_Session($sid);
 		return null;
 	}
-	
+
 	/**
 	 * Уничтожение сессии
 	 *
@@ -100,7 +113,7 @@ class QuickFW_Auth
 			return;
 		self::$session->destroy(session_id());
 	}
-	
+
 	/**
 	 * Проверка авторизации и сохранение данных в сессии
 	 *
@@ -126,7 +139,7 @@ class QuickFW_Auth
 		$this->userdata = & $_SESSION[$this->name];
 		QFW::$userdata = & $_SESSION[$this->name];
 	}
-	
+
 	/**
 	 * Простейшая проверка авторизации - имя и пароль в конфиге
 	 *
@@ -153,6 +166,6 @@ class QuickFW_Auth
 		else
 			return false;
 	}
-	
+
 }
 ?>
