@@ -664,7 +664,7 @@ abstract class DbSimple_Generic_Database extends DbSimple_Generic_LastError
 		'&' => array('inner' => ' OR ', 'outer' => ') AND (',),
 		'a' => array('inner' => ', ', 'outer' => '), (',),
 	);
-	
+
 	/**
 	 * string _expandPlaceholdersCallback(list $m)
 	 * Internal function to replace placeholders (see preg_replace_callback).
@@ -710,9 +710,8 @@ abstract class DbSimple_Generic_Database extends DbSimple_Generic_LastError
 							$field = array($prefix => $field);
 							$prefix = 0;
 						}
-						$prefix = is_int($prefix) ? '' : $this->escape($prefix, true) . '.';
-						if (substr($prefix, 0, 2) == '?_')
-							$prefix = $this->_identPrefix . substr($prefix, 2);
+						$prefix = is_int($prefix) ? '' :
+							$this->escape($this->_addPrefix2Table($prefix), true) . '.';
 						//для мультиинсерта очищаем ключи - их быть не может по синтаксису
 						if ($mult && $type=='a')
 							$field = array_values($field);
@@ -736,14 +735,13 @@ abstract class DbSimple_Generic_Database extends DbSimple_Generic_LastError
 						}
 					}
 					return $mult ? join(self::$join[$type]['outer'], $multi) : join(', ', $parts);
-				case "#":
+				case '#':
 					// Identifier.
 					if (!is_array($value))
 					{
 						if ($value instanceof DbSimple_SubQuery)
 							return $value->get($this->_placeholderNativeArgs);
-						if (substr($value, 0, 2) == '?_')
-							$value = $this->_identPrefix . substr($value, 2);
+						$value = $this->_addPrefix2Table($value);
 						return $this->escape($value, true);
 					}
 					$parts = array();
@@ -751,18 +749,17 @@ abstract class DbSimple_Generic_Database extends DbSimple_Generic_LastError
 						if (!is_array($identifiers)) $identifiers = array($identifiers);
 						$prefix = '';
 						if (!is_int($table)) {
-								if (substr($table, 0, 2) == '?_') $table = $this->_identPrefix . substr($table, 2);
-								$prefix = $this->escape($table, true) . '.';
+							$table = $this->_addPrefix2Table($table);
+							$prefix = $this->escape($table, true) . '.';
 						}
 						foreach ($identifiers as $identifier)
 							if ($identifier instanceof DbSimple_SubQuery)
 								$parts[] = $identifier->get($this->_placeholderNativeArgs);
+							elseif (!is_string($identifier))
+								return 'DBSIMPLE_ERROR_ARRAY_VALUE_NOT_STRING';
 							else
-							{
-								if (!is_string($identifier))
-									return 'DBSIMPLE_ERROR_ARRAY_VALUE_NOT_STRING';
-								$parts[] = $prefix . ($identifier!='*'?$this->escape($identifier, true):'*');
-							}
+								$parts[] = $prefix . ($identifier=='*' ? '*' :
+									$this->escape($this->_addPrefix2Table($identifier), true));
 					}
 					return join(', ', $parts);
 				case 'n':
@@ -823,6 +820,19 @@ abstract class DbSimple_Generic_Database extends DbSimple_Generic_LastError
 
 		// Default: skipped part of the string.
 		return $m[0];
+	}
+
+	/**
+	 * Заменяет ?_ на текущий префикс
+	 *
+	 * @param string $table имя таблицы
+	 * @return string имя таблицы
+	 */
+	private function _addPrefix2Table($table)
+	{
+		if (substr($table, 0, 2) == '?_')
+			$table = $this->_identPrefix . substr($table, 2);
+		return $table;
 	}
 
 	private function _expandOptionalBlock($block)

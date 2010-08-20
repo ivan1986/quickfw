@@ -96,7 +96,7 @@ class DbSimpleTest extends PHPUnit_Framework_TestCase
 		$this->db->query('SELECT ?# FROM ?_t1', array('t1'=>array('aaa','bbb')));
 		$this->db->query('SELECT ?# FROM ?_t1', array('?_t1'=>'*','?_t2'=>'ccc'));
 		$this->db->query('SELECT ?# FROM ?#', array('t1'=>'*','t2'=>'ccc'),array('base'=>'t1'));
-		$this->db->query('SELECT ?# FROM ?#', array('?_t1'=>'*','?_t2'=>'ccc'),array('base'=>'t1'));
+		$this->db->query('SELECT ?# FROM ?#', array('?_t1'=>'*','?_t2'=>'ccc'),array('base'=>'?_t1'));
 		$R = array (
 			'SELECT `aaa` FROM pre_t1',
 			'SELECT `aaa` FROM pre_t1',
@@ -105,7 +105,7 @@ class DbSimpleTest extends PHPUnit_Framework_TestCase
 			'SELECT `t1`.`aaa`, `t1`.`bbb` FROM pre_t1',
 			'SELECT `pre_t1`.*, `pre_t2`.`ccc` FROM pre_t1',
 			'SELECT `t1`.*, `t2`.`ccc` FROM `base`.`t1`',
-			'SELECT `pre_t1`.*, `pre_t2`.`ccc` FROM `base`.`t1`',
+			'SELECT `pre_t1`.*, `pre_t2`.`ccc` FROM `base`.`pre_t1`',
 		);
 		$this->assertEquals($this->Qlog, $R, 'Ошибка обработки ?#');
 
@@ -123,7 +123,7 @@ class DbSimpleTest extends PHPUnit_Framework_TestCase
 		$this->db->query('UPDATE ?_t1 SET ?a WHERE a IN (?a)', array('a'=>'1'), array('1','2','3'));
 		$this->db->query('UPDATE ?_t1 SET ?a WHERE a IN (?a)', array('a'=>'1', 'b'=>2), array('1','2','3'));
 		$this->db->query('UPDATE ?_t1 SET ?a WHERE a IN (?a)', array(
-			't' => array('a' => 1, 'b' => 2),
+			'?_t' => array('a' => 1, 'b' => 2),
 			't2' => array('a' => 3)
 		), array('1','2','3'));
 		$this->db->query('INSERT INTO t1(a,b,c) VALUES (?a)',array(
@@ -147,7 +147,7 @@ class DbSimpleTest extends PHPUnit_Framework_TestCase
 			'SELECT * FROM pre_t1 WHERE a IN (\'1\', \'2\', \'3\')',
 			'UPDATE pre_t1 SET `a`=\'1\' WHERE a IN (\'1\', \'2\', \'3\')',
 			'UPDATE pre_t1 SET `a`=\'1\', `b`=\'2\' WHERE a IN (\'1\', \'2\', \'3\')',
-			'UPDATE pre_t1 SET `t`.`a`=\'1\', `t`.`b`=\'2\', `t2`.`a`=\'3\' WHERE a IN (\'1\', \'2\', \'3\')',
+			'UPDATE pre_t1 SET `pre_t`.`a`=\'1\', `pre_t`.`b`=\'2\', `t2`.`a`=\'3\' WHERE a IN (\'1\', \'2\', \'3\')',
 			'INSERT INTO t1(a,b,c) VALUES (\'1\', \'2\', \'3\'), (\'4\', \'5\', \'6\'), (\'7\', \'8\', \'9\')',
 			'SELECT * FROM t1 WHERE (`a`=\'1\' OR `b`=\'2\') AND (`c`=\'3\' OR `d`=\'4\')',
 			'SELECT * FROM t1 WHERE (`a`=\'1\') OR (`a`=\'1\' AND `b`=\'2\') OR (`c`=\'3\' AND `d`=\'4\')',
