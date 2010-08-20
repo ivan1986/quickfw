@@ -116,7 +116,7 @@ class DbSimple_Connect
 		if (isset($parsed['prefix']))
 			$this->DbSimple->setIdentPrefix($parsed['prefix']);
 		$this->DbSimple->setCachePrefix('db_'.md5($parsed['dsn']).'_');
-		$this->DbSimple->setErrorHandler($this->errorHandler ? $this->errorHandler : array(&$this, 'errorHandler'), false);
+		$this->DbSimple->setErrorHandler($this->errorHandler!==null ? $this->errorHandler : array(&$this, 'errorHandler'));
 	}
 
 	/**
@@ -147,7 +147,9 @@ class DbSimple_Connect
 	 * - сообщение об ошибке
 	 * - массив (код, сообщение, запрос, контекст)
 	 *
-	 * @param callback setErrorHandler(callback $handler)
+	 * @param callback|null|false $handler обработчик ошибок
+	 * <br>  null - по умолчанию
+	 * <br>  false - отключен
 	 */
 	public function setErrorHandler($handler)
 	{
