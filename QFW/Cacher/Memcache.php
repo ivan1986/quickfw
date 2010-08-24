@@ -3,6 +3,7 @@
 class Cacher_Memcache implements Zend_Cache_Backend_Interface
 {
 	protected $mc;
+	protected $compress;
 
 	public function __construct()
 	{
@@ -18,6 +19,7 @@ class Cacher_Memcache implements Zend_Cache_Backend_Interface
 				isset($directives['port']) ? $directives['port'] : '11211');
 			return;
 		}
+		$this->compress = !empty($directives['compress']) ? MEMCACHE_COMPRESSED : 0;
 
 		foreach($directives['servers'] as $server)
 			$this->mc->addServer($server['host'], $server['port']);
@@ -30,7 +32,7 @@ class Cacher_Memcache implements Zend_Cache_Backend_Interface
 
 	public function save($data, $id, $tags = array(), $specificLifetime = 3600)
 	{
-		return $this->mc->set($id, $data, 0, $specificLifetime);
+		return $this->mc->set($id, $data, $this->compress, $specificLifetime);
 	}
 
 	public function load($id, $doNotTest = false)
