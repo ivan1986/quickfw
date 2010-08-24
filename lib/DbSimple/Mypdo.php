@@ -15,12 +15,12 @@
  *
  * @version 2.x $Id$
  */
-require_once dirname(__FILE__).'/Generic.php';
+require_once dirname(__FILE__).'/Database.php';
 
 /**
  * Database class for MySQL.
  */
-class DbSimple_Mypdo extends DbSimple_Generic_Database
+class DbSimple_Mypdo extends DbSimple_Database
 {
 	private $link;
 

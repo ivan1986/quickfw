@@ -14,12 +14,12 @@
  *
  * @version 2.x $Id$
  */
-require_once dirname(__FILE__).'/Generic.php';
+require_once dirname(__FILE__).'/Database.php';
 
 /**
  * Database class for Sqlite.
  */
-class DbSimple_Sqlite extends DbSimple_Generic_Database
+class DbSimple_Sqlite extends DbSimple_Database
 {
 	private $link;
 	public function __construct($dsn)
@@ -37,12 +37,12 @@ class DbSimple_Sqlite extends DbSimple_Generic_Database
 			$this->_setLastError($e->getCode() , $e->getMessage(), 'sqlite_factory');
 		}
 	}
-	
+
 	public function CreateFunction($function_name, $callback, $num_args)
 	{	return $this->link->createFunction($function_name, $callback, $num_args); }
 	public function CreateAggregate($function_name, $step_func, $finalize_func, $num_args)
 	{	return $this->link->createAggregate($function_name, $step_func, $finalize_func, $num_args); }
-	
+
 	protected function _performGetPlaceholderIgnoreRe()
 	{
 		return '
@@ -143,40 +143,5 @@ class DbSimple_Sqlite extends DbSimple_Generic_Database
 	}
 
 }
-/*
-class DbSimple_Mypdo_Blob implements DbSimple_Generic_Blob
-{
-	// MySQL does not support separate BLOB fetching.
-	private $blobdata = null;
-	private $curSeek = 0;
 
-	public function __construct(&$database, $blobdata=null)
-	{
-		$this->blobdata = $blobdata;
-		$this->curSeek = 0;
-	}
-
-	public function read($len)
-	{
-		$p = $this->curSeek;
-		$this->curSeek = min($this->curSeek + $len, strlen($this->blobdata));
-		return substr($this->blobdata, $this->curSeek, $len);
-	}
-
-	public function write($data)
-	{
-		$this->blobdata .= $data;
-	}
-
-	public function close()
-	{
-		return $this->blobdata;
-	}
-
-	public function length()
-	{
-		return strlen($this->blobdata);
-	}
-}
-*/
 ?>

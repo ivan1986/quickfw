@@ -120,20 +120,13 @@ class DbSimple_Connect
 	}
 
 	/**
-	 * Функция обработки ошибок - выводит сообщение об ошибке на тестовом
-	 * на продакшене показывает 404 и пишит в sql.log
+	 * Функция обработки ошибок - стандартный обработчик
 	 * Все вызовы без @ прекращают выполнение скрипта
 	 */
 	public function errorHandler($msg, $info)
 	{
 		// Если использовалась @, ничего не делать.
 		if (!error_reporting()) return;
-		if (QFW::$config['QFW']['release'])
-		{
-			require_once LIBPATH.'/Log.php';
-			Log::log('SQL Error - '.$msg,'sql');
-			QFW::$router->show404();
-		}
 		// Выводим подробную информацию об ошибке.
 		echo "SQL Error: $msg<br><pre>";
 		print_r($info);
@@ -156,15 +149,17 @@ class DbSimple_Connect
 		$prev = $this->errorHandler;
 		$this->errorHandler = $handler;
 		if ($this->DbSimple)
-			return $this->DbSimple->setErrorHandler($handler);
+			$this->DbSimple->setErrorHandler($handler);
+		return $prev;
 	}
 
 	/** @var callback обработчик ошибок */
 	private $errorHandler = null;
 
 	/**
-	 * array parseDSN(string $dsn)
 	 * Разбирает строку DSN в массив параметров подключения к базе
+	 *
+	 * @param array parseDSN(string $dsn)
 	 */
 	protected function parseDSN($dsn)
 	{

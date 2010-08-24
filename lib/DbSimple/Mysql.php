@@ -16,13 +16,13 @@
  *
  * @version 2.x $Id: Mysql.php 247 2008-08-18 21:17:08Z dk $
  */
-require_once dirname(__FILE__).'/Generic.php';
+require_once dirname(__FILE__).'/Database.php';
 
 
 /**
  * Database class for MySQL.
  */
-class DbSimple_Mysql extends DbSimple_Generic_Database
+class DbSimple_Mysql extends DbSimple_Database
 {
 	var $link;
 
@@ -35,7 +35,7 @@ class DbSimple_Mysql extends DbSimple_Generic_Database
 		$connect = 'mysql_'.((isset($dsn['persist']) && $dsn['persist'])?'p':'').'connect';
 		if (!is_callable($connect))
 			return $this->_setLastError("-1", "MySQL extension is not loaded", $connect);
-		$ok = $this->link = call_user_func($connect,
+		$ok = $this->link = @call_user_func($connect,
 			$dsn['host'] . (empty($dsn['port'])? "" : ":".$dsn['port']),
 			empty($dsn['user'])?'':$dsn['user'],
 			empty($dsn['pass'])?'':$dsn['pass'],
@@ -43,10 +43,10 @@ class DbSimple_Mysql extends DbSimple_Generic_Database
 		);
 		$this->_resetLastError();
 		if (!$ok)
-			return $this->_setDbError($connect.'()');
-		$ok = mysql_select_db(preg_replace('{^/}s', '', $dsn['path']), $this->link);
+			return $this->_setLastError('-1', 'not connect', $connect.'()');
+		$ok = @mysql_select_db(preg_replace('{^/}s', '', $dsn['path']), $this->link);
 		if (!$ok)
-			return $this->_setDbError('mysql_select_db()');
+			return $this->_setLastError('-1', 'wrong database', 'mysql_select_db()');
 		mysql_query('SET NAMES '.(isset($dsn['enc'])?$dsn['enc']:'UTF8'));
 	}
 
@@ -167,7 +167,7 @@ class DbSimple_Mysql extends DbSimple_Generic_Database
 }
 
 
-class DbSimple_Mysql_Blob implements DbSimple_Generic_Blob
+class DbSimple_Mysql_Blob implements DbSimple_Blob
 {
 	// MySQL does not support separate BLOB fetching.
 	private $blobdata = null;

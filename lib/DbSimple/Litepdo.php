@@ -15,12 +15,12 @@
  *
  * @version 2.x $Id$
  */
-require_once dirname(__FILE__).'/Generic.php';
+require_once dirname(__FILE__).'/Database.php';
 
 /**
  * Database class for SQLite.
  */
-class DbSimple_Litepdo extends DbSimple_Generic_Database
+class DbSimple_Litepdo extends DbSimple_Database
 {
 	private $link;
 
@@ -36,7 +36,7 @@ class DbSimple_Litepdo extends DbSimple_Generic_Database
 		}
 		$this->link->exec('SET NAMES '.(isset($dsn['enc'])?$dsn['enc']:'UTF8'));
 	}
-	
+
 	public function CreateFunction($function_name, $callback, $num_args)
 	{	return $this->link->sqliteCreateFunction($function_name, $callback, $num_args); }
 	public function CreateAggregate($function_name, $step_func, $finalize_func, $num_args)

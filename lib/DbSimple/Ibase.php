@@ -14,9 +14,9 @@
  * @author Dmitry Koterov, http://forum.dklab.ru/users/DmitryKoterov/
  * @author Konstantin Zhinko, http://forum.dklab.ru/users/KonstantinGinkoTit/
  *
- * @version 2.x $Id: Ibase.php 221 2007-07-27 23:24:35Z dk $
+ * @version 2.x $Id$
  */
-require_once dirname(__FILE__).'/Generic.php';
+require_once dirname(__FILE__) . '/Database.php';
 
 /**
  * Best transaction parameters for script queries.
@@ -30,7 +30,7 @@ define('IBASE_BEST_FETCH', IBASE_UNIXTIME);
  * Database class for Interbase/Firebird.
  */
 
-class DbSimple_Ibase extends DbSimple_Generic_Database
+class DbSimple_Ibase extends DbSimple_Database
 {
 	var $DbSimple_Ibase_BEST_TRANSACTION = IBASE_BEST_TRANSACTION;
 	var $DbSimple_Ibase_USE_NATIVE_PHOLDERS = true;
@@ -45,19 +45,20 @@ class DbSimple_Ibase extends DbSimple_Generic_Database
 	 */
 	function DbSimple_Ibase($dsn)
 	{
+		$p = DbSimple_Database::parseDSN($dsn);
 		if (!is_callable('ibase_connect')) {
 			return $this->_setLastError("-1", "Interbase/Firebird extension is not loaded", "ibase_connect");
 		}
 		$ok = $this->link = ibase_connect(
-			$dsn['host'] . (empty($dsn['port'])? "" : ":".$dsn['port']) .':'.preg_replace('{^/}s', '', $dsn['path']),
-			$dsn['user'],
-			$dsn['pass'],
-			isset($dsn['CHARSET']) ? $dsn['CHARSET'] : 'win1251',
-			isset($dsn['BUFFERS']) ? $dsn['BUFFERS'] : 0,
-			isset($dsn['DIALECT']) ? $dsn['DIALECT'] : 3,
-			isset($dsn['ROLE'])    ? $dsn['ROLE']    : ''
+			$p['host'] . (empty($p['port'])? "" : ":".$p['port']) .':'.preg_replace('{^/}s', '', $p['path']),
+			$p['user'],
+			$p['pass'],
+			isset($p['CHARSET']) ? $p['CHARSET'] : 'win1251',
+			isset($p['BUFFERS']) ? $p['BUFFERS'] : 0,
+			isset($p['DIALECT']) ? $p['DIALECT'] : 3,
+			isset($p['ROLE'])    ? $p['ROLE']    : ''
 		);
-		if (isset($dsn['TRANSACTION'])) $this->DbSimple_Ibase_BEST_TRANSACTION = eval($dsn['TRANSACTION'].";");
+		if (isset($p['TRANSACTION'])) $this->DbSimple_Ibase_BEST_TRANSACTION = eval($p['TRANSACTION'].";");
 		$this->_resetLastError();
 		if (!$ok) return $this->_setDbError('ibase_connect()');
 	}
@@ -78,8 +79,7 @@ class DbSimple_Ibase extends DbSimple_Generic_Database
 
 	function& _performNewBlob($blobid=null)
 	{
-		$obj =& new DbSimple_Ibase_Blob($this, $blobid);
-		return $obj;
+		return new DbSimple_Ibase_Blob($this, $blobid);
 	}
 
 	function _performGetBlobFieldNames($result)
@@ -198,7 +198,6 @@ class DbSimple_Ibase extends DbSimple_Generic_Database
 
 		$row = @ibase_fetch_assoc($result, $flags);
 		if (ibase_errmsg()) return $this->_setDbError($this->_lastQuery);
-		if ($row === false) return null;
 		return $row;
 	}
 
@@ -210,7 +209,7 @@ class DbSimple_Ibase extends DbSimple_Generic_Database
 
 }
 
-class DbSimple_Ibase_Blob extends DbSimple_Generic_Blob
+class DbSimple_Ibase_Blob implements DbSimple_Blob
 {
 	var $blob; // resourse link
 	var $id;

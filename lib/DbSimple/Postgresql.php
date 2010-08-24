@@ -14,15 +14,15 @@
  * @author Dmitry Koterov, http://forum.dklab.ru/users/DmitryKoterov/
  * @author Konstantin Zhinko, http://forum.dklab.ru/users/KonstantinGinkoTit/
  *
- * @version 2.x $Id: Postgresql.php 167 2007-01-22 10:12:09Z tit $
+ * @version 2.x $Id$
  */
-require_once dirname(__FILE__).'/Generic.php';
+require_once dirname(__FILE__) . '/Database.php';
 
 
 /**
  * Database class for PostgreSQL.
  */
-class DbSimple_Postgresql extends DbSimple_Generic_Database
+class DbSimple_Postgresql extends DbSimple_Database
 {
 
 	var $DbSimple_Postgresql_USE_NATIVE_PHOLDERS = null;
@@ -35,6 +35,7 @@ class DbSimple_Postgresql extends DbSimple_Generic_Database
 	 */
 	function DbSimple_Postgresql($dsn)
 	{
+		$p = DbSimple_Database::parseDSN($dsn);
 		if (!is_callable('pg_connect')) {
 			return $this->_setLastError("-1", "PostgreSQL extension is not loaded", "pg_connect");
 		}
@@ -43,15 +44,14 @@ class DbSimple_Postgresql extends DbSimple_Generic_Database
 		$this->DbSimple_Postgresql_USE_NATIVE_PHOLDERS = function_exists('pg_prepare');
 
 		$ok = $this->link = @pg_connect(
-			$t = (!empty($dsn['host']) ? 'host='.$dsn['host'].' ' : '').
-			(!empty($dsn['port']) ? 'port='.$dsn['port'].' ' : '').
-			'dbname='.preg_replace('{^/}s', '', $dsn['path']).' '.
-			(!empty($dsn['user']) ? 'user='.$dsn['user'].' ' : '').
-			(!empty($dsn['pass']) ? 'password='.$dsn['pass'].' ' : '')
+			$t = (!empty($p['host']) ? 'host='.$p['host'].' ' : '').
+			(!empty($p['port']) ? 'port='.$p['port'].' ' : '').
+			'dbname='.preg_replace('{^/}s', '', $p['path']).' '.
+			(!empty($p['user']) ? 'user='.$p['user'].' ' : '').
+			(!empty($p['pass']) ? 'password='.$p['pass'].' ' : '')
 		);
 		$this->_resetLastError();
-		if (!$ok)
-			return $this->_setLastError("-1", "Not connect to server", "pg_connect");
+		if (!$ok) return $this->_setDbError('pg_connect()');
 	}
 
 
@@ -70,7 +70,7 @@ class DbSimple_Postgresql extends DbSimple_Generic_Database
 	}
 
 
-	function _performNewBlob($blobid=null)
+	function& _performNewBlob($blobid=null)
 	{
 		return new DbSimple_Postgresql_Blob($this, $blobid);
 	}
@@ -81,7 +81,7 @@ class DbSimple_Postgresql extends DbSimple_Generic_Database
 		$blobFields = array();
 		for ($i=pg_num_fields($result)-1; $i>=0; $i--) {
 			$type = pg_field_type($result, $i);
-			if (stripos($type, "BLOB") !== false) $blobFields[] = pg_field_name($result, $i);
+			if (strpos($type, "BLOB") !== false) $blobFields[] = pg_field_name($result, $i);
 		}
 		return $blobFields;
 	}
@@ -225,7 +225,7 @@ class DbSimple_Postgresql extends DbSimple_Generic_Database
 }
 
 
-class DbSimple_Postgresql_Blob implements DbSimple_Generic_Blob
+class DbSimple_Postgresql_Blob implements DbSimple_Blob
 {
 	var $blob; // resourse link
 	var $id;
