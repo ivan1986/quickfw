@@ -76,11 +76,11 @@ $config['cache'] = array(
 		'namespace' => '',
 		'tags' => false,
 	),
-	'MCA' => array(
+	/*'MCA' => array(
 		'module' => 'Xcache',
 		'namespace' => '',
 		'tags' => false,
-	),
+	),*/
 );
 
 $config['templater'] = array(
