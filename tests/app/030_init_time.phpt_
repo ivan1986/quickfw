@@ -1,0 +1,23 @@
+--TEST--
+QFW: init time (may faild - rerun)
+--FILE--
+<?php
+
+define ('DOC_ROOT', dirname(__FILE__));
+define ('ROOTPATH', dirname(dirname(dirname(__FILE__))));
+define ('APPPATH', ROOTPATH . '/application');
+define ('TMPPATH', ROOTPATH . '/tmp');
+define ('QFWPATH', ROOTPATH . '/QFW');
+define ('LIBPATH', ROOTPATH . '/lib');
+define ('MODPATH', APPPATH  . '/_common/models');
+
+$_SERVER['HTTP_HOST'] = 'test';
+
+$InitTime = microtime(true);
+require_once (QFWPATH.'/Init.php');
+$InitTime = microtime(true) - $InitTime;
+
+var_dump($InitTime < 0.01);
+
+--EXPECT--
+bool(true)

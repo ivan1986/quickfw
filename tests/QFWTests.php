@@ -23,8 +23,6 @@
 
 			$suite->addTestFile('DbSimple/DbSimpleTests.php');
 			$suite->addTestFile('Cache/CacheTest.php');
-			//$suite->addTestFile('Smarty/SmartyTest.php');
-			$suite->addTestFile('QFW/FrameworkTests.php');
 			
 			return $suite;
 		}
