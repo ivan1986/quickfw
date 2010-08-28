@@ -8,13 +8,14 @@
 class Url
 {
 	/**
-	 * Возвращает базовый урл
+	 * Добавляет в начале базовый урл
 	 *
+	 * @param string|self $url url
 	 * @return self базовый url
 	 */
-	public static function base()
+	public static function base($url='')
 	{
-		return new self('');
+		return new self('').$url;
 	}
 
 	/**
