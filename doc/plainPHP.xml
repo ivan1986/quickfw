@@ -5,7 +5,7 @@
 	<!ENTITY entref  "&amp;(#[0-9]+|#[xX][0-9A-Fa-f]+|&name;);">
 ]>
 
-<language name="PlainPHP" version="1.98" kateversion="2.4" section="Scripts" extensions="*.qtp;*.html;*.phtm;" mimetype="text/x-php4-src;text/x-php3-src;application/x-php"  author="Ivan Borzenkov (ivan1986@list.ru)" license="LGPL" priority="10">
+<language name="PlainPHP" version="1.99" kateversion="2.4" section="Scripts" extensions="*.qtp;*.html;*.phtm;" mimetype="text/x-php4-src;text/x-php3-src;application/x-php"  author="Ivan Borzenkov (ivan1986@list.ru)" license="LGPL" priority="10">
 
 <highlighting>
 <contexts>
@@ -27,10 +27,16 @@
     <RegExpr attribute="Element" context="El Open" String="&lt;pre\b" insensitive="TRUE" beginRegion="pre" />
     <RegExpr attribute="Element" context="El Open" String="&lt;div\b" insensitive="TRUE" beginRegion="div" />
     <RegExpr attribute="Element" context="El Open" String="&lt;table\b" insensitive="TRUE" beginRegion="table" />
+    <RegExpr attribute="Element" context="El Open" String="&lt;ul\b" insensitive="TRUE" beginRegion="ul" />
+    <RegExpr attribute="Element" context="El Open" String="&lt;ol\b" insensitive="TRUE" beginRegion="ol" />
+    <RegExpr attribute="Element" context="El Open" String="&lt;dl\b" insensitive="TRUE" beginRegion="dl" />
     <RegExpr attribute="Element" context="El Open" String="&lt;&name;" />
     <RegExpr attribute="Element" context="El Close" String="&lt;/pre\b" insensitive="TRUE" endRegion="pre" />
     <RegExpr attribute="Element" context="El Close" String="&lt;/div\b" insensitive="TRUE" endRegion="div" />
     <RegExpr attribute="Element" context="El Close" String="&lt;/table\b" insensitive="TRUE" endRegion="table" />
+    <RegExpr attribute="Element" context="El Close" String="&lt;/ul\b" insensitive="TRUE" endRegion="ul" />
+    <RegExpr attribute="Element" context="El Close" String="&lt;/ol\b" insensitive="TRUE" endRegion="ol" />
+    <RegExpr attribute="Element" context="El Close" String="&lt;/dl\b" insensitive="TRUE" endRegion="dl" />
     <RegExpr attribute="Element" context="El Close" String="&lt;/&name;" />
     <!-- as long as kde gives DTDs the text/html mimetype--><IncludeRules context="FindDTDRules" />
     <IncludeRules context="FindEntityRefs" />
@@ -212,7 +218,6 @@
 <RegExpr attribute="Element" context="CSS content" String="&lt;\?(?:=|php)?.*\$P-\&gt;sCSS\(.*\).*\?&gt;" insensitive="TRUE" beginRegion="script" lookAhead="true"/>
 <RegExpr context="##PHP/PHP" String="&lt;\?(?:=|php)?" lookAhead="true" />
 </context>
-
 </contexts>
 <itemDatas>
   <itemData name="Normal Text" defStyleNum="dsNormal" />
