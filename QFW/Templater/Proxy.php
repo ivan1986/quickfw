@@ -55,9 +55,8 @@ class Templater_Proxy extends Templater
 	public function fetch($name)
 	{
 		$key=substr($name,strrpos($name,'.')+1);
-		if (!array_key_exists($key, QFW::$config['templater']['exts']))
-			return '';
-		$T = QFW::$config['templater']['exts'][$key];
+		$T = isset(QFW::$config['templater']['exts'][$key]) ?
+			QFW::$config['templater']['exts'][$key] : 'PlainView';
 
 		if (!array_key_exists($T,$this->templates))
 		{
