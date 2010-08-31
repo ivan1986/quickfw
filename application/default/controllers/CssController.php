@@ -1,6 +1,7 @@
 <?php
 /**
  * Преобразование scss в css
+ * Выполнение php в css
  *
  * <br>Необходимо установить sass версии не ниже 3.0
  *
@@ -9,7 +10,15 @@
 class CssController
 {
 	/** Путь к sass */
-	const SASS = 'sass -C';
+	const SASS = 'sass --scss -C';
+	/** Путь к папке с scss - проецируется на DOC_ROOT/css */
+	private $path;
+
+	public function __construct()
+	{
+		//$this->path = DOC_ROOT.'/css';
+		$this->path = APPPATH.'/_common/css';
+	}
 
 	/**
 	 * Генерирует несуществующую css по scss если он есть
@@ -22,14 +31,16 @@ class CssController
 		$args = func_get_args();
 		$css = implode('/', $args);
 		$scss = str_replace('.css', '.scss', $css);
-		if (!is_file(DOC_ROOT.'/css/'.$scss))
+		if (!is_file($this->path.'/'.$scss))
 			QFW::$router->show404();
 
 		header('Content-Type: text/css');
 		$out = array();
 		$ret = false;
+		QFW::$view->setScriptPath($this->path);
+		$text = QFW::$view->fetch($scss);
 		//запускаем преобразования - по умолчанию без кеша и выводим ошибки в основной поток
-		exec(self::SASS.' 2>&1 '.DOC_ROOT.'/css/'.$scss, $out, $ret);
+		exec('echo '.escapeshellarg($text).' | '.self::SASS.' 2>&1 ', $out, $ret);
 		$out = implode("\n", $out);
 
 		if ($ret)
@@ -48,13 +59,16 @@ class CssController
 	{
 		$out = array();
 		$ret = false;
-		exec('find '.DOC_ROOT.'/css -name \'*.scss\'', $out, $ret);
+		chdir($this->path);
+		QFW::$view->setScriptPath($this->path);
+		exec('find . -name \'*.scss\'', $out, $ret);
 		if ($ret)
 			return;
 		foreach ($out as $file)
 		{
 			$css = str_replace('.scss', '.css', $file);
-			exec(self::SASS.' 2>&1 '.$file.' | unexpand -t2 --first-only >'.$css, $out, $ret);
+			$text = QFW::$view->fetch($file);
+			exec('echo '.escapeshellarg($text).' | '.self::SASS.' 2>&1 | unexpand -t2 --first-only > '.DOC_ROOT.'/css/'.$css, $out, $ret);
 		}
 	}
 
@@ -65,12 +79,16 @@ class CssController
 	{
 		$out = array();
 		$ret = false;
-		exec('find '.DOC_ROOT.'/css -name \'*.scss\'', $out, $ret);
+		chdir($this->path);
+		exec('find . -name \'*.scss\'', $out, $ret);
 		if ($ret)
 			return;
 		foreach ($out as $file)
 		{
-			$css = str_replace('.scss', '.css', $file);
+			$css = str_replace(
+				array('.scss', './'),
+				array('.css', DOC_ROOT.'/css/'),
+			$file);
 			if (is_file($css))
 				unlink($css);
 		}
