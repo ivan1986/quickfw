@@ -43,6 +43,7 @@ class QuickFW_Plugs
 	protected $HeadData = array();
 
 	protected $IncFiles = array(
+		'js_main'=>array(),
 		'js'=>array(),
 		'css_main'=>array(),
 		'css'=>array(),
@@ -53,7 +54,7 @@ class QuickFW_Plugs
 
 	public function addJS($file, $noBase=false)
 	{
-		$this->IncFiles['js'][]=($noBase?'':QFW::$config['redirection']['baseUrl']).$file;
+		$this->IncFiles['js'.($this->isMain?'_main':'')][]=($noBase?'':QFW::$config['redirection']['baseUrl']).$file;
 		return "";
 	}
 
@@ -119,6 +120,7 @@ class QuickFW_Plugs
 	{
 		$head='';
 		$this->IncFiles['css'] = array_merge($this->IncFiles['css_main'], $this->IncFiles['css']);
+		$this->IncFiles['js'] = array_merge($this->IncFiles['js_main'], $this->IncFiles['js']);
 
 		$this->IncFiles['css'] = array_unique($this->IncFiles['css']);
 		if (count($this->IncFiles['css'])>0)
