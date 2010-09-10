@@ -119,14 +119,15 @@ class QuickFW_Plugs
 	public function HeaderFilter($text)
 	{
 		$head='';
+		$endSlash = QFW::$config['QFW']['addCSSXml'] ? '/' : '';
 		$this->IncFiles['css'] = array_merge($this->IncFiles['css_main'], $this->IncFiles['css']);
 		$this->IncFiles['js'] = array_merge($this->IncFiles['js_main'], $this->IncFiles['js']);
 
 		$this->IncFiles['css'] = array_unique($this->IncFiles['css']);
 		if (count($this->IncFiles['css'])>0)
 			$head.='<link rel="stylesheet" href="'.
-				join('" type="text/css" />'."\n".'<link rel="stylesheet" href="', $this->IncFiles['css']).
-				'" type="text/css" />'."\n";
+				join('" type="text/css" '.$endSlash.'>'."\n".'<link rel="stylesheet" href="', $this->IncFiles['css']).
+				'" type="text/css" '.$endSlash.'>'."\n";
 
 		$this->IncFiles['js'] = array_unique($this->IncFiles['js']);
 		if (count($this->IncFiles['js'])>0)

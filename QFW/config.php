@@ -37,6 +37,7 @@ $config['QFW'] = array(
 	'cacheSessions' => false, /* Хранить сессии в кеше, не использовать стандартный механизм */
 	'autoload' => false, /* включить автолоад false|true|string */
 	'auto404' => false, /* не перенаправлять на дефолтовый контроллер все запросы  */
+	'addCSSXml' => false, /* addJS и addCSS выводят теги в XML  */
 );
 
 /**
