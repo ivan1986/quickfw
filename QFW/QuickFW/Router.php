@@ -219,7 +219,6 @@ class QuickFW_Router
 	 */
 	public function show404()
 	{
-		$GLOBALS['DONE'] = 1;
 		//php_sapi_name если через nginx, то Status
 		//а надо ли? - nginx и так понимает
 		/*if (substr(PHP_SAPI, 0, 3) == 'cgi')
@@ -568,7 +567,6 @@ SREG;
 			if ($l>0 && strpos($uri,QFW::$config['redirection']['defExt'],$l)!==false)
 				$uri = substr($uri,0,$l);
 		}
-		
 		return trim($uri, self::PATH_SEPARATOR.'/');
 	}
 

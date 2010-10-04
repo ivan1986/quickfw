@@ -7,11 +7,8 @@
 	define ('LIBPATH', ROOTPATH . '/lib');
 	define ('MODPATH', APPPATH  . '/_common/models');
 	
-	$DONE = 0;
-	
 	require (QFWPATH.'/Init.php');
 	
 	QFW::$router->route();
-	
-	$DONE = 1;
+
 ?>
