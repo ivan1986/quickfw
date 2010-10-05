@@ -17,6 +17,7 @@ class QuickFW_Plugs
 
 	public function baseUrl()
 	{
+		trigger_error('Используйте Url::base()', E_USER_DEPRECATED);
 		return QFW::$config['redirection']['baseUrl'];
 	}
 
@@ -25,8 +26,12 @@ class QuickFW_Plugs
 		return $this->siteUrl(QFW::$router->delDef($url), $get);
 	}
 
+	/**
+	 * @deprecated Используйте Url::...
+	 */
 	public function siteUrl($url, $get='')
 	{
+		trigger_error('Используйте Url::...', E_USER_DEPRECATED);
 		if (QFW::$config['redirection']['delDef'])
 			$url = QFW::$router->delDef($url);
 		if (QFW::$config['redirection']['useRewrite'])

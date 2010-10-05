@@ -209,6 +209,7 @@ class Cache
  */
 function &getCache($backend='',$opt=array(),$tags=false,$namespace='')
 {
+	trigger_error('Используйте Cache::get()', E_USER_DEPRECATED);
 	global $config;
 	static $cachers=array();
 	if ($backend=='')

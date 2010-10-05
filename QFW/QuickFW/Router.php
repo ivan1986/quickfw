@@ -261,12 +261,15 @@ class QuickFW_Router
 	/**
 	 * Посылает заголовок Location для перехода на нужное действие
 	 *
+	 * @deprecated Используйте redirect(Url::...)
+	 *
 	 * @param string $MCA Uri нужного действия (модуль/контроллер/экшен)
 	 * @param string|array $get GET парамерты или произвольный хвост
 	 * @return exit
 	 */
 	public function redirectMCA($MCA, $get='')
 	{
+		trigger_error('Используйте redirect(Url::...)', E_USER_DEPRECATED);
 		$base   = QFW::$config['redirection']['baseUrl'];
 		$index  = QFW::$config['redirection']['useIndex']?'index.php/':'';
 		$url    = QFW::$config['redirection']['useRewrite']?$this->backrewrite($MCA):$MCA;
@@ -366,6 +369,7 @@ class QuickFW_Router
 	{
 		if (empty($data) || $data[0]!='')
 			return $data;
+		trigger_error('Вы все еще кипятите? А мы уже рубим!', E_USER_DEPRECATED);
 		array_shift($data); //Удаляем первый пустой параметр
 		$params = array();
 		while(!empty($data))
