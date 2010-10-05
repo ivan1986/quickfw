@@ -154,7 +154,7 @@ class QuickFW_Router
 			$MCA = $this->loadMCA($data,'Block');
 			// Если вы все еще сидите на PHP 5.2 то раскомментируйте старый вариант
 			$MCA['Params'] = empty($patt[4]) ? array() :
-				$this->parseScobParams($patt[4]); // str_getcsv($patt[4],',',"'",'\\');
+				$this->str_getcsv($patt[4],',',"'",'\\'); // parseScobParams($patt[4]);
 		}
 		else
 		{
