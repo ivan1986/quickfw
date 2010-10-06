@@ -1,35 +1,11 @@
+<!DOCTYPE html>
 <html>
-<head><title>Main.tpl</title></head>
+<head>
+	<meta charset="utf-8">
+	<title><?php echo isset($title)?'QFW::'.$title:'QFW' ?></title>
+</head>
 <body>
-<?php echo $P->outHead('h','1','2'); ?>
-Это файл Main.tpl<br />
-Это урл <?php echo Url::site('test'); ?>
-
-<br />
+<h1>QFW - <small>оно таки у вас завелось</small></h1>
 <?php echo $content; ?>
-<br />
-
-<form method="post">
-<input type="text" name="test" default="ttt" label="test: ^" id="wdf" meta:validator="!filled" />
-<input type="submit" name="aaa" />
-</form>
-
-<?php echo $P->addJS('file.js'); ?>
-<?php echo $P->addJS('file.js'); ?>
-<?php echo $P->addCSS('file.css'); ?>
-<?php echo $P->addCSS('file.css'); ?>
-<?php $this->begin()->strtoupper(); ?>
-zzzzzzzzzzzzzzzzzzz
-<?php $this->end(); ?>
-
-<?php echo $P->getHead(false,'h');?>HEAD<?php echo $P->getHead(true,'h');?>
-А сюда у нас подключен блок test/index<br />
-<?php echo $this->block('default.test', 11, 34, 'sdfsf');?><br />
-<?php echo $this->block('default.test.index(1,2,3,4)');?><br />
-<?php echo $this->block('test(\'34\\\'23\',342,\'sfsdf,sfs\'\'df\',"234545\"fdsgdf")');?><br />
-<?php echo $this->block("test(lsfdjhskjhg sjskh ,'jks'dfkjhsdf',jsh,kjs sdhf)");?><br />
-<?php echo $this->block('test');?><br />
-А вот тут он закончился
-<?php echo $P->getHead(false,'h');?>HEAD<?php echo $P->getHead(true,'h');?>
 </body>
 </html>

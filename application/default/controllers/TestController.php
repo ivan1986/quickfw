@@ -6,6 +6,11 @@ class TestController
 	{
 	}
 
+	public function indexAction()
+	{
+		return QFW::$view->render('a.html');
+	}
+
 	public function indexBlock()
 	{
 		return "<pre>".QFW::$view->render('b.html')
@@ -21,8 +26,8 @@ class TestController
 
 	public function bBlock()
 	{
-		return QFW::$view->render('b.html')."\nБлок B - ".
-			QFW::$router->UriPath.' '.QFW::$router->CurPath.' '.QFW::$router->ParentPath;
+		return QFW::$view->render('b.html')
+		."\nБлок B - ".QFW::$router->UriPath.' '.QFW::$router->CurPath.' '.QFW::$router->ParentPath;
 	}
 
 }
