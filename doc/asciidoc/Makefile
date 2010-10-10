@@ -1,7 +1,11 @@
-all: quickfw.pdf quickfw.html
+all: pdf html
 
 FILES = quickfw general quickstart directory mvc blocks templates cache auth autoload helpers features
 TEXTS = $(addsuffix .txt, $(FILES) )
+
+pdf: quickfw.pdf
+
+html: quickfw.html
 
 quickfw.pdf: $(TEXTS)
 	a2x -v quickfw.txt --dblatex-opts='--backend=xetex -o quickfw.pdf' -a lang=ru
@@ -21,4 +25,7 @@ clean:
 	rm -rf quickfw.html docbook-xsl.css
 	rm -rf ../../tmp/doc
 
-.PHONY: all clean
+install:
+	sudo aptitude install asciidoc texlive-xetex source-highlight
+
+.PHONY: all clean install
