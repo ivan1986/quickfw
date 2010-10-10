@@ -16,6 +16,11 @@ class IndexController extends QuickFW_Auth
 		return QFW::$view->fetch('b.html');
 	}
 
+	public function dinmenuAction()
+	{
+		return QFW::$view->fetch('dinmenu.html');
+	}
+
 	public function testBlock()
 	{
 		echo 2;

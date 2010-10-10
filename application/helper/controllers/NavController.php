@@ -28,16 +28,71 @@ class NavController
 	}
 
 	/**
+	 * Древоводное меню на вложенными списками
+	 *
+	 * @param array $items Массив элементов:
+	 * <br>каждый элемент - array(
+	 * <br> 'title' => Заголовок,
+	 * <br> 'url' => адрес(Url|строка|false),
+	 * <br> 'childNodes' => вложенный массив аналогичной структуры,
+	 * <br>)
+	 * <br>остальные элементы игнорируются
+	 * @param string $id id для элемента ul - для оформления
+	 * @param Url $cur текущий адресс
+	 * @return string Сформированное меню
+	 */
+	public function menuTreeBlock($items, $id='', $cur=false)
+	{
+		if (count($items) == 0)
+			return '';
+		if ($cur == false)
+			$cur = QFW::$router->RequestUri;
+		$result = '<ul'.($id?' id="'.$id.'"':'').'>';
+		$result.=$this->menuTreeNodes($items, $cur);
+		$result.= '</ul>';
+		return $result;
+	}
+
+	/**
+	 * Рекурсивная функция формирования меню
+	 *
+	 * @param array $items Массив элементов - аналогичен menuTreeBlock
+	 * @param Url $cur текущий адресс
+	 * @return string Сформированное подменю
+	 */
+	private function menuTreeNodes($items, $cur)
+	{
+		$result = '';
+		foreach ($items as $v)
+		{
+			$result.='<li>';
+			if ($v === false)
+				$result.=$v['title'];
+			else
+			{
+				if ($v['url'] instanceof Url)
+					$self = $cur == $v['url']->intern();
+				else
+					$self = $cur == $v['url'];
+				$result.= $self ? '<b>'.$v['title'].'</b>' : '<a href="'.$v['url'].'">'.$v['title'].'</a>';
+			}
+			if (isset($v['childNodes']))
+				$result.='<ul>'.$this->menuTreeNodes($v['childNodes'], $cur).'</ul>';
+			$result.="</li>\n";
+		}
+		return $result;
+	}
+
+	/**
 	 * Вывод меню списком с подсветкой текущего элемента
 	 *
 	 * @param array $items Массив элементов:
 	 * <br>ключ - заголовок, значение Url|false
 	 * @param string $id id для элемента ul - для оформления
 	 * @param Url $cur текущий адресс
-	 * @param boolean $delDef Применять к ссылкам функцию QFW::$router->delDef
 	 * @return string Сформированное меню
 	 */
-	public function menuNewBlock($items, $id='', $cur=false)
+	public function menuBlock($items, $id='', $cur=false)
 	{
 		if (count($items) == 0)
 			return '';
@@ -73,7 +128,7 @@ class NavController
 	 * @param boolean $delDef Применять к ссылкам функцию QFW::$router->delDef
 	 * @return string Сформированное меню
 	 */
-	public function menuBlock($items, $id='', $cur=false, $delDef = true)
+	public function menuOldBlock($items, $id='', $cur=false, $delDef = true)
 	{
 		if (count($items) == 0)
 			return '';
