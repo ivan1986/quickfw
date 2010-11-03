@@ -305,6 +305,8 @@ class QuickFW_Router
 	protected $rewrite = false;
 	/** @var array Массив обратных преобразований Uri */
 	protected $backrewrite = false;
+	/** @var array Массив обратных преобразований Urr */
+	protected $backrewriteUrl = false;
 	
 	/**
 	 * Функция производит преобразования урла для вывода на страницу
@@ -316,6 +318,18 @@ class QuickFW_Router
 	public function backrewrite($uri)
 	{
 		return $this->rewr($uri, 'backrewrite');
+	}
+
+	/**
+	 * Функция производит фитальные преобразования полного урла
+	 *
+	 * @internal
+	 * @param string $url Url для бекреврайта
+	 * @return string преобразованный Url
+	 */
+	public function backrewriteUrl($url)
+	{
+		return $this->rewr($url, 'backrewriteUrl');
 	}
 
 	/**
@@ -342,17 +356,19 @@ class QuickFW_Router
 	{
 		if (!QFW::$config['redirection']['useRewrite'])
 			return $uri;
-		if ($this->$type == false)
+		if ($this->$type === false)
 		{
-			$rewrite = array();
-			$backrewrite = array();
+			$rewrite = $backrewrite = $backrewriteUrl = array();
 			require_once APPPATH . '/rewrite.php';
 			$this->rewrite = $rewrite;
 			$this->backrewrite = $backrewrite;
+			$this->backrewriteUrl = $backrewriteUrl;
 		}
+		if (empty($this->$type))
+			return $uri;
 		if (is_array($this->$type))
 			return preg_replace(array_keys($this->$type), array_values($this->$type), $uri);
-		elseif (is_callable($this->$type))
+		if (is_callable($this->$type))
 		{
 			$f = $this->$type;
 			return $f($uri);

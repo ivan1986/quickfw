@@ -138,10 +138,11 @@ class Url
 	 */
 	public function  __toString()
 	{
-		return self::$config['base'].$this->u.
+		return QFW::$router->backrewriteUrl(
+			self::$config['base'].QFW::$router->backrewrite($this->u).
 			($this->u!=='' ? self::$config['ext'] : '').
 			($this->get ? '?' . $this->get : '').
-			($this->ancor ? '#' . $this->ancor : '');
+			($this->ancor ? '#' . $this->ancor : ''));
 
 	}
 
