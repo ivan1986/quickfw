@@ -159,13 +159,14 @@ class Scaffold_Field extends Scaffold_Field_Info
 	/**
 	 * Строит стандартный селект
 	 *
+	 * @param string $id первичный ключ
 	 * @param array $data массив ключ=>значение
 	 * @param scalar $cur текущий элемент
 	 * @return string блок селекта
 	 */
-	protected function selectBuild($data, $cur, $null=true)
+	protected function selectBuild($id, $data, $cur, $null=true)
 	{
-		$text = '<select name="data['.$this->name.']">';
+		$text = '<select name="'.$this->editName($id).'">';
 		if ($null)
 			$text.= '<option value="0"'.
 				(!isset($data[$cur]) ? ' selected="selected"' : '').
@@ -176,6 +177,17 @@ class Scaffold_Field extends Scaffold_Field_Info
 				'>'.QFW::$view->esc($v).'</option>';
 		$text.= '</select>';
 		return $text;
+	}
+
+	/**
+	 * Имя поля для формы
+	 *
+	 * @param string $id первичный ключ
+	 * @return string Имя поля в name
+	 */
+	protected function editName($id)
+	{
+		return 'data['.$this->name.']';
 	}
 
 }
@@ -228,7 +240,7 @@ class Scaffold_Foreign extends Scaffold_Field
 
 	public function editor($id, $value)
 	{
-		return $this->selectBuild($this->lookup, $value);
+		return $this->selectBuild($id, $this->lookup, $value);
 	}
 
 	public function validator($id, $value)
@@ -282,7 +294,7 @@ class Scaffold_Text extends Scaffold_UserInput
 
 	public function editor($id, $value)
 	{
-		return '<textarea name="data['.$this->name.']" '.
+		return '<textarea name="'.$this->editName($id).'" '.
 			'rows="'.$this->rows.'" cols="'.$this->cols.'">'.
 			QFW::$view->esc($value).'</textarea>';
 	}
@@ -343,7 +355,7 @@ class Scaffold_Enum extends Scaffold_Field
 
 	public function editor($id, $value)
 	{
-		return $this->selectBuild($this->items, $value, false);
+		return $this->selectBuild($id, $this->items, $value, false);
 	}
 
 }
@@ -360,8 +372,8 @@ class Scaffold_Checkbox extends Scaffold_Field
 
 	public function editor($id, $value)
 	{
-		return '<input type="hidden" name="data['.$this->name.']" value="0" />
-			<input type="checkbox" name="data['.$this->name.']" value="1" label="'.$this->title.'"
+		return '<input type="hidden" name="'.$this->editName($id).'" value="0" />
+			<input type="checkbox" name="'.$this->editName($id).'" value="1" label="'.$this->title.'"
 				default="'.($value?'checked':'').'" />';
 	}
 
@@ -404,20 +416,20 @@ class Scaffold_File extends Scaffold_Field
 
 	public function editor($id, $value)
 	{
-		return '<input type="file" name="file['.$this->name.']" />
-				<input type="hidden" name="data['.$this->name.']" value="0" />
-				<input type="checkbox" name="data['.$this->name.']" value="1" label="Удалить" /> '.
+		return '<input type="file" name="f'.$this->editName($id).'" />
+				<input type="hidden" name="'.$this->editName($id).'" value="0" />
+				<input type="checkbox" name="'.$this->editName($id).'" value="1" label="Удалить" /> '.
 				$this->display($id, $value);
 	}
 
 	public function validator($id, $value)
 	{
 		//оставляем старый файл
-		if ($_FILES['file']['error'][$this->name] == 4)
+		if ($_FILES['fdata']['error'][$this->name] == 4)
 			return true;
-		if ($_FILES['file']['error'][$this->name] != 0)
+		if ($_FILES['fdata']['error'][$this->name] != 0)
 			return 'Ошибка при загрузке файла '.$this->title;
-		return is_uploaded_file($_FILES['file']['tmp_name'][$this->name]);
+		return is_uploaded_file($_FILES['fdata']['tmp_name'][$this->name]);
 	}
 
 	public function proccess($id, $value)
@@ -428,7 +440,7 @@ class Scaffold_File extends Scaffold_Field
 		if ($value === false && is_file($this->path.'/'.$old))
 			unlink($this->path.'/'.$old);
 		//оставляем старое значение
-		if ($_FILES['file']['error'][$this->name] == 4 && !$value)
+		if ($_FILES['fdata']['error'][$this->name] == 4 && !$value)
 			return $old ? $old : '';
 		//удяляем старый
 		if (is_file($this->path.'/'.$old))
@@ -437,11 +449,11 @@ class Scaffold_File extends Scaffold_Field
 		if ($value)
 			return '';
 		//генерим новое имя
-		$info = pathinfo($_FILES['file']['name'][$this->name]);
+		$info = pathinfo($_FILES['fdata']['name'][$this->name]);
 		if ($id == -1)
 			$id = time();
 		$new_name = $this->name.'_'.$id.'.'.$info['extension'];
-		move_uploaded_file($_FILES['file']['tmp_name'][$this->name], $this->path.'/'.$new_name);
+		move_uploaded_file($_FILES['fdata']['tmp_name'][$this->name], $this->path.'/'.$new_name);
 		return $new_name;
 	}
 
