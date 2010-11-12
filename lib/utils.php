@@ -277,7 +277,7 @@ function array2xml($array,$attrName='attr',$arrFlar='array')
 /**
  * Вывод окончаний русских слов с учетом числительных (например сообщение сообщения сообщений)
  *
- * @param intereg $n число
+ * @param integer $n число
  * @param string $form1 единственное
  * @param string $form2 форма для 2-4
  * @param string $form5 форма для 5 и более
@@ -292,6 +292,42 @@ function pluralForm($n, $form1, $form2, $form5)
 	if ($n1 == 1) return $form1;
 	return $form5;
 }
+
+/**
+ * Формирование даты по-русски
+ * <br>так как при выстановке локали неправильно склоняет
+ *
+ * @see date
+ * @param string $format формат аналогичен date
+ * @param integer $time время
+ * @return string дата
+ */
+function russian_date($format, $time=false)
+{
+	static $translation = array(
+		"January" => "Января",
+		"February" => "Февраля",
+		"March" => "Марта",
+		"April" => "Апреля",
+		"May" => "Мая",
+		"June" => "Июня",
+		"July" => "Июля",
+		"August" => "Августа",
+		"September" => "Сентября",
+		"October" => "Октября",
+		"November" => "Ноября",
+		"December" => "Декабря",
+		"Monday" => "Понедельник",
+		"Tuesday" => "Вторник",
+		"Wednesday" => "Среда",
+		"Thursday" => "Четверг",
+		"Friday" => "Пятница",
+		"Saturday" => "Суббота",
+		"Sunday" => "Воскресенье",
+	);
+	return strtr(date($format, $time!==false ? $time : time()), $translation);
+}
+
 
 /**
  * Вызывает preg_match(_all) и
