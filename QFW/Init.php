@@ -17,7 +17,7 @@ class QFW
 	/** @var array Подключенные глобальные библиотеки */
 	static public $libs = array();
 
-	/** @var DbSimple_Generic_Database|false Подключение к базе данных */
+	/** @var DbSimple_Database|false Подключение к базе данных */
 	static public $db = false;
 
 	/** @var mixed|false Данные о пользователе */
