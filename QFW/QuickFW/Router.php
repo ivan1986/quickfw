@@ -305,7 +305,7 @@ class QuickFW_Router
 	protected $rewrite = false;
 	/** @var array Массив обратных преобразований Uri */
 	protected $backrewrite = false;
-	/** @var array Массив обратных преобразований Urr */
+	/** @var array Массив обратных преобразований Url */
 	protected $backrewriteUrl = false;
 	
 	/**
@@ -321,7 +321,7 @@ class QuickFW_Router
 	}
 
 	/**
-	 * Функция производит фитальные преобразования полного урла
+	 * Функция производит финальные преобразования полного урла
 	 *
 	 * @internal
 	 * @param string $url Url для бекреврайта
@@ -348,7 +348,7 @@ class QuickFW_Router
 	 * Реализация преобразования адресов
 	 *
 	 * @internal
-	 * @param string $url Uri для реврайта
+	 * @param string $uri Uri для реврайта
 	 * @param string $type тип преобразования
 	 * @return string преобразованный Uri
 	 */
