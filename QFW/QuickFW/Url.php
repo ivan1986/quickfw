@@ -23,12 +23,12 @@ class Url
 	 *
 	 * @param string|self $url url
 	 * @param string|array $get параметры
-	 * @param string $ancor якорь
+	 * @param string $anchor якорь
 	 * @return self адрес на сайте
 	 */
-	public static function site($url='', $get='', $ancor='')
+	public static function site($url='', $get='', $anchor='')
 	{
-		return new self($url, $get);
+		return new self($url, $get, $anchor);
 	}
 
 	/**
@@ -36,12 +36,12 @@ class Url
 	 *
 	 * @param string|self $CA url
 	 * @param string|array $get параметры
-	 * @param string $ancor якорь
+	 * @param string $anchor якорь
 	 * @return self адрес на сайте
 	 */
-	public static function M($CA='', $get='', $ancor='')
+	public static function M($CA='', $get='', $anchor='')
 	{
-		return new self($CA, $get, $ancor, QFW::$router->cModule.
+		return new self($CA, $get, $anchor, QFW::$router->cModule.
 			QuickFW_Router::PATH_SEPARATOR);
 	}
 
@@ -50,12 +50,12 @@ class Url
 	 *
 	 * @param string|self $action url
 	 * @param string|array $get параметры
-	 * @param string $ancor якорь
+	 * @param string $anchor якорь
 	 * @return self адрес на сайте
 	 */
-	public static function C($action='', $get='', $ancor='')
+	public static function C($action='', $get='', $anchor='')
 	{
-		return new self($action, $get, $ancor, QFW::$router->cModule.
+		return new self($action, $get, $anchor, QFW::$router->cModule.
 				QuickFW_Router::PATH_SEPARATOR.
 			QFW::$router->cController.
 				QuickFW_Router::PATH_SEPARATOR);
@@ -66,12 +66,12 @@ class Url
 	 *
 	 * @param string|self $params url
 	 * @param string|array $get параметры
-	 * @param string $ancor якорь
+	 * @param string $anchor якорь
 	 * @return self адрес на сайте
 	 */
-	public static function A($params='', $get='', $ancor='')
+	public static function A($params='', $get='', $anchor='')
 	{
-		return new self($params, $get, $ancor, QFW::$router->cModule.
+		return new self($params, $get, $anchor, QFW::$router->cModule.
 				QuickFW_Router::PATH_SEPARATOR.
 			QFW::$router->cController.
 				QuickFW_Router::PATH_SEPARATOR.
@@ -98,10 +98,10 @@ class Url
 	 *
 	 * @param string $url внутреннее представление адреса
 	 * @param string|array $get параметры get
-	 * @param string $ancor якорь
+	 * @param string $anchor якорь
 	 * @param string $begin базовый урл от текущего
 	 */
-	private function __construct($url, $get='', $ancor='', $begin='')
+	private function __construct($url, $get='', $anchor='', $begin='')
 	{
 		if (is_array($get) && count($get))
 			$get = http_build_query($get);
@@ -109,7 +109,7 @@ class Url
 		{
 			$this->u = $begin.$url->u;
 			$this->get = $url->get.($get?('&'.$get):'');
-			$this->ancor = $ancor ? ltrim($ancor, '#') : $url->ancor;
+			$this->anchor = $anchor ? ltrim($anchor, '#') : $url->anchor;
 			return;
 		}
 		//Заменяем / на QuickFW_Router::PATH_SEPARATOR
@@ -117,7 +117,7 @@ class Url
 			$url = strtr($url, '/', QuickFW_Router::PATH_SEPARATOR);
 		$this->u = trim($begin.$url, QuickFW_Router::PATH_SEPARATOR);
 		$this->get = $get;
-		$this->ancor = ltrim($ancor, '#');
+		$this->anchor = ltrim($anchor, '#');
 		if (self::$config['delDef'])
 			$this->u = QFW::$router->delDef($this->u);
 	}
@@ -129,7 +129,7 @@ class Url
 	private $get;
 
 	/** @var string якорь */
-	private $ancor;
+	private $anchor;
 
 	/**
 	 * урл для вывода, с подстановками
@@ -142,7 +142,7 @@ class Url
 			self::$config['base'].QFW::$router->backrewrite($this->u).
 			($this->u!=='' ? self::$config['ext'] : '').
 			($this->get ? '?' . $this->get : '').
-			($this->ancor ? '#' . $this->ancor : ''));
+			($this->anchor ? '#' . $this->anchor : ''));
 
 	}
 
