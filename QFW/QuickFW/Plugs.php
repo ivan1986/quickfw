@@ -92,8 +92,6 @@ class QuickFW_Plugs
 		return Helpers::displayErrors($errors);
 	}
 
-	protected $displayErrorsParams = array('pre'=>'', 'post'=>'');
-
 	/**
 	 * Установка обрамления сообщений об ошибках
 	 */
