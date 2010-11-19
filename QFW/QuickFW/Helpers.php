@@ -34,7 +34,7 @@ class Hlp
 	static public function addJS($file, $noBase=false)
 	{
 		self::$IncFiles['js'.(self::$isMain?'_main':'')][]=($noBase?'':QFW::$config['redirection']['baseUrl']).$file;
-		return true;
+		return '';
 	}
 
 	/**
@@ -47,7 +47,7 @@ class Hlp
 	static public function addCSS($file, $noBase=false)
 	{
 		self::$IncFiles['css'.(self::$isMain?'_main':'')][]=($noBase?'':QFW::$config['redirection']['baseUrl']).$file;
-		return true;
+		return '';
 	}
 
 	//Cтандартные вставки - JS в начало и в конец документа и CSS в начало

@@ -1,14 +1,14 @@
-<?php echo $P->outHead('h','1','2'); ?><br>
+<?php echo Hlp::outHead('h','1','2'); ?><br>
 Это урл <?php echo Url::site('test'); ?><br>
-<?php echo $P->addJS('file.js'); ?>
-<?php echo $P->addJS('file.js'); ?>
-<?php echo $P->addCSS('file.css'); ?>
-<?php echo $P->addCSS('file.css'); ?>
+<?php Hlp::addJS('file.js'); ?>
+<?php Hlp::addJS('file.js'); ?>
+<?php Hlp::addCSS('file.css'); ?>
+<?php Hlp::addCSS('file.css'); ?>
 <?php $this->begin()->strtoupper(); ?>
 zzzzzzzzzzzzzzzzzzz
 <?php $this->end(); ?>
 
-<?php echo $P->getHead(false,'h');?>HEAD<?php echo $P->getHead(true,'h');?>
+<?php Hlp::getHead(false,'h');?>HEAD<?php Hlp::getHead(true,'h');?>
 А сюда у нас подключен блок test/index<br />
 <?php echo $this->block('default.test', 11, 34, 'sdfsf');?><br />
 <?php echo $this->block('default.test.index(1,2,3,4)');?><br />
@@ -16,4 +16,4 @@ zzzzzzzzzzzzzzzzzzz
 <?php echo $this->block("test(lsfdjhskjhg sjskh ,'jks'dfkjhsdf',jsh,kjs sdhf)");?><br />
 <?php echo $this->block('test');?><br />
 А вот тут он закончился
-<?php echo $P->getHead(false,'h');?>HEAD<?php echo $P->getHead(true,'h');?>
+<?php Hlp::getHead(false,'h');?>HEAD<?php Hlp::getHead(true,'h');?>
