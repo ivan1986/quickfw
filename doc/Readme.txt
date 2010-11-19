@@ -271,7 +271,7 @@ getHead/outHead захватывают контент и потом выводя
 
 Пример простейшего контроллера, шаблона и основного шаблона (PlainPHP):
 
-default/templates/main.html:
+default/templates/main.php:
 <html>
 <head><title><?=$title?></title></head>
 <body>
@@ -279,7 +279,7 @@ default/templates/main.html:
 </body>
 </html>
 
-default/templates/index.html:
+default/templates/index.php:
 Страничка сайта
 Превед, <?=$user ?>!
 
@@ -290,7 +290,7 @@ class IndexController
 	{
 		QFW::$view->assign('user','медвед');
 		QFW::$view->assign('title','заголовок');
-		return QFW::$view->fetch('index.html');
+		return QFW::$view->fetch('index.php');
 	}
 
 }

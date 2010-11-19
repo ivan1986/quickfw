@@ -7,7 +7,7 @@ class IndexController extends QuickFW_Auth
 	function __construct()
 	{
 		if(!parent::__construct())
-			die(QFW::$view->displayMain(QFW::$view->fetch('auth.html')));
+			die(QFW::$view->displayMain(QFW::$view->fetch('auth.php')));
 	}
 	
 	public function indexAction()

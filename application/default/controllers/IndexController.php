@@ -12,13 +12,12 @@ class IndexController extends QuickFW_Auth
 	public function indexAction()
 	{
 		QFW::$view->assign('title', 'Основная страница');
-		return QFW::$view->fetch('index.html');
-		return QFW::$view->fetch('b.html');
+		return QFW::$view->fetch('index.php');
 	}
 
 	public function dinmenuAction()
 	{
-		return QFW::$view->fetch('dinmenu.html');
+		return QFW::$view->fetch('dinmenu.php');
 	}
 
 	public function testBlock()

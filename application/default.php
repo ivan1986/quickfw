@@ -91,12 +91,12 @@ $config['QFW'] = array(
 /* Шаблонизатор - имя класса + дефолтовый шаблон */
 /*$config['templater']= array(
 	'name'      => 'PlainView',
-	'def_tpl'   => 'main.html',
+	'def_tpl'   => 'main.php',
 );*/
 
 $config['templater']= array(
 	'name'      => 'Proxy',
-	'def_tpl'   => 'main.html',
+	'def_tpl'   => 'main.php',
 	'exts' => array(
 		'tpl' => 'Smarty',
 		'html' => 'PlainView',

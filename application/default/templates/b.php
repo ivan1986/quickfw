@@ -1,7 +1,7 @@
-Это шаблон B.html
+Это шаблон B.php
 <?php echo $this->P->addCSS('file3.css'); ?>
 <?php echo $this->P->addJS('file3.js'); ?>
-<?php $this->extend('t1.html') ?>
+<?php $this->extend('t1.php') ?>
 <?php $this->bl('ttt') ?>
 67890
 <?php $this->end() ?>
