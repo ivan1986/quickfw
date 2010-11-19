@@ -48,40 +48,40 @@ class QuickFW_Plugs
 
 	public function addJS($file, $noBase=false)
 	{
-		Helpers::addJS($file, $noBase);
+		Hlp::addJS($file, $noBase);
 		return "";
 	}
 
 	public function addCSS($file, $noBase=false)
 	{
-		Helpers::addCSS($file, $noBase);
+		Hlp::addCSS($file, $noBase);
 		return "";
 	}
 
 	//Cтандартные вставки - JS в начало и в конец документа и CSS в начало
-	public function JSh($data) {return Helpers::JSh($data);}
-	public function JSe($data) {return Helpers::JSe($data);}
-	public function CSS($data) {return Helpers::CSS($data);}
-	public function sJSh() {return Helpers::sJSh();}
-	public function eJSh() {return Helpers::eJSh();}
-	public function sJSe() {return Helpers::sJSe();}
-	public function eJSe() {return Helpers::eJSe();}
-	public function sCSS() {return Helpers::sCSS();}
-	public function eCSS() {return Helpers::eCSS();}
+	public function JSh($data) {return Hlp::JSh($data);}
+	public function JSe($data) {return Hlp::JSe($data);}
+	public function CSS($data) {return Hlp::CSS($data);}
+	public function sJSh() {return Hlp::sJSh();}
+	public function eJSh() {return Hlp::eJSh();}
+	public function sJSe() {return Hlp::sJSe();}
+	public function eJSe() {return Hlp::eJSe();}
+	public function sCSS() {return Hlp::sCSS();}
+	public function eCSS() {return Hlp::eCSS();}
 
 	//сокращения для JavaScript
-	public function sJS($name='') {return Helpers::sJS($name);}
-	public function eJS($name='') {return Helpers::eJS($name);}
-	public function oJS($name='') {return Helpers::oJS($name);}
+	public function sJS($name='') {return Hlp::sJS($name);}
+	public function eJS($name='') {return Hlp::eJS($name);}
+	public function oJS($name='') {return Hlp::oJS($name);}
 
 	public function outHead($name='default', $pre='',$post='')
 	{
-		return Helpers::outHead($name, $pre, $post);
+		return Hlp::outHead($name, $pre, $post);
 	}
 
 	public function getHead($content, $name='default', $join=false)
 	{
-		Helpers::getHead($content, $name, $join);
+		Hlp::getHead($content, $name, $join);
 	}
 
 	/**
@@ -89,7 +89,7 @@ class QuickFW_Plugs
 	 */
 	public function displayErrors($errors=array())
 	{
-		return Helpers::displayErrors($errors);
+		return Hlp::displayErrors($errors);
 	}
 
 	/**
@@ -97,7 +97,7 @@ class QuickFW_Plugs
 	 */
 	public function setDisplayErrorsParams($pre='', $post='')
 	{
-		Helpers::setDisplayErrorsParams($pre, $post);
+		Hlp::setDisplayErrorsParams($pre, $post);
 	}
 
 	/**

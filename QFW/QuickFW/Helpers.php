@@ -4,7 +4,7 @@
  *
  * @author ivan
  */
-class Helpers
+class Hlp
 {
 	static protected $Head = array();
 	static protected $HeadData = array();

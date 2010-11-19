@@ -11,7 +11,7 @@ abstract class Templater
 	protected $_tmplPath;
 
 	/** @var QuickFW_Plugs Плагины фреймворка
-	 *  @deprecated Используйте Helpers
+	 *  @deprecated Используйте Hlp
 	 */
 	public $P;
 	
@@ -143,13 +143,13 @@ abstract class Templater
 		if (isset($this->mainTemplate) && $this->mainTemplate!="")
 		{
 			//Необходимо для установки флага CSS
-			Helpers::startDisplayMain();
+			Hlp::startDisplayMain();
 			$this->assign('content',$content);
 			$content = $this->render($this->mainTemplate);
 		}
 		//Необходимо для вызовов всех деструкторов
 		QFW::$router->startDisplayMain();
-		return Helpers::HeaderFilter($content);
+		return Hlp::HeaderFilter($content);
 	}
 
 	/**
