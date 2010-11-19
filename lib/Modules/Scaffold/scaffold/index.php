@@ -1,7 +1,7 @@
 <?php if (isset($parent)) echo $parent; ?>
 
 <?php if (isset($filter)) {
-	include 'filterForm.html';
+	include 'filterForm.php';
 } ?>
 
 <?php echo $pager; ?>

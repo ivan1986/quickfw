@@ -180,7 +180,7 @@ abstract class ScaffoldController extends Controller
 			QFW::$view->assign('parent', QFW::$view->assign('parent', array(
 				'list' => $parent,
 				'current' => $this->sess['parent'],
-			))->fetch('scaffold/parent.html'));
+			))->fetch('scaffold/parent.php'));
 			$parentWhere = QFW::$db->subquery('AND ?#=?',
 					array($this->table => $this->parentData['colum']),
 					$this->sess['parent']);
@@ -212,7 +212,7 @@ abstract class ScaffoldController extends Controller
 		return QFW::$view->assign(array(
 			'data' => $data,
 			'pager' => $pager,
-		))->fetch('scaffold/index.html');
+		))->fetch('scaffold/index.php');
 	}
 
 	/**
@@ -299,7 +299,7 @@ abstract class ScaffoldController extends Controller
 			'id' => $id,
 			'data' => $data,
 			'errors' => $errors,
-		))->fetch('scaffold/edit.html');
+		))->fetch('scaffold/edit.php');
 	}
 
 	/**
