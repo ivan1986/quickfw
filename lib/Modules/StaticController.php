@@ -10,10 +10,10 @@ class StaticController
 		if ($file=='') {
 			$file='index';
 		}
-		if (!is_file(QFW::$view->getScriptPath().'/static/'.$dir.'/'.$file.'.tpl')) {
+		if (!is_file(QFW::$view->getScriptPath().'/static/'.$dir.'/'.$file.'.html')) {
 			QFW::$router->show404();
 		}
-		return QFW::$view->fetch('static/'.$dir.'/'.$file.'.tpl');
+		return QFW::$view->fetch('static/'.$dir.'/'.$file.'.html');
 	}
 }
 
