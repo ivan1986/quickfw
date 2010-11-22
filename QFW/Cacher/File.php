@@ -29,7 +29,7 @@ class Cacher_File implements Zend_Cache_Backend_Interface
 
 	function __construct($options = array(NULL))
 	{
-		$this->options['cacheDir']=TMPPATH.'/cache/';
+		$this->options['cacheDir'] = VARPATH.'/cache/';
 		$this->options=array_merge($this->options, $options);
 	}
 

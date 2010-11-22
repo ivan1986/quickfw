@@ -71,7 +71,7 @@ class Log
 	private function email($str, $to) { self::$messages['email'][$to][]=$str; }
 	private static function f($str, $to)
 	{
-		error_log(date('Y-m-d H:i:s').': '.$str."\n", 3, QFW::$config['host']['logpath'].'/'.$to.'.log');
+		error_log(date('Y-m-d H:i:s').': '.$str."\n", 3, LOGPATH.'/'.$to.'.log');
 	}
 
 	public function __destruct()

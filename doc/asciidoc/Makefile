@@ -13,17 +13,17 @@ quickfw.pdf: $(TEXTS)
 quickfw.html: $(TEXTS)
 	a2x -f xhtml -v quickfw.txt -a lang=ru
 
-site: ../../tmp/doc/quickfw.html $(TEXTS)
+site: ../../var/tmp/doc/quickfw.html $(TEXTS)
 
-../../tmp/doc/quickfw.html: $(TEXTS)
-	rm -rf ../../tmp/doc
-	mkdir -p ../../tmp/doc
-	a2x -f xhtml -v quickfw.txt -D ../../tmp/doc -a lang=ru
+../../var/tmp/doc/quickfw.html: $(TEXTS)
+	rm -rf ../../var/tmp/doc
+	mkdir -p ../../var/tmp/doc
+	a2x -f xhtml -v quickfw.txt -D ../../var/tmp/doc -a lang=ru
 
 clean:
 	rm -rf quickfw.pdf
 	rm -rf quickfw.html docbook-xsl.css
-	rm -rf ../../tmp/doc
+	rm -rf ../../var/tmp/doc
 
 install:
 	sudo aptitude install asciidoc texlive-xetex source-highlight
