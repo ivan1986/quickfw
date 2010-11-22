@@ -35,11 +35,11 @@ class CssController
 			QFW::$router->show404();
 
 		header('Content-Type: text/css');
-		$out = array();
-		$ret = false;
 		QFW::$view->setScriptPath($this->path);
 		$text = QFW::$view->fetch($scss);
 		//запускаем преобразования - по умолчанию без кеша и выводим ошибки в основной поток
+		$out = array();
+		$ret = false;
 		exec('echo '.escapeshellarg($text).' | '.self::SASS.' 2>&1 ', $out, $ret);
 		$out = implode("\n", $out);
 

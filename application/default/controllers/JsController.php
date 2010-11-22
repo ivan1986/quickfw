@@ -29,8 +29,6 @@ class JsController
 			QFW::$router->show404();
 
 		header('Content-Type: application/javascript');
-		$out = array();
-		$ret = false;
 		QFW::$view->setScriptPath($this->path);
 		$text = QFW::$view->fetch($js);
 
