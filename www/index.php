@@ -8,7 +8,8 @@
 //	define ('LOGPATH', VARPATH  . '/log');
 	define ('QFWPATH', ROOTPATH . '/QFW');
 	define ('LIBPATH', ROOTPATH . '/lib');
-	define ('MODPATH', APPPATH  . '/_common/models');
+//Настройки по умолчанию, если нужно - измените
+//	define ('MODPATH', APPPATH  . '/_common/models');
 	
 	require (QFWPATH.'/Init.php');
 	
