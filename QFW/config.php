@@ -85,7 +85,7 @@ $config['cache'] = array(
 
 $config['templater'] = array(
 	'name'    => 'PlainView',
-	'def_tpl' => 'main.html',
+	'def_tpl' => 'main.php',
 );
 
 ?>

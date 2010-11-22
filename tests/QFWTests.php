@@ -2,7 +2,7 @@
 	define ('ROOTPATH', dirname(dirname(__FILE__)));
 	define ('DOC_ROOT', ROOTPATH . '/www');
 	define ('APPPATH',  ROOTPATH . '/tests/testapp');
-	define ('TMPPATH',  ROOTPATH . '/tmp');
+	define ('VARPATH',  ROOTPATH . '/vap');
 	define ('QFWPATH',  ROOTPATH . '/QFW');
 	define ('LIBPATH',  ROOTPATH . '/lib');
 	define ('MODPATH',  APPPATH  . '/_common/models');

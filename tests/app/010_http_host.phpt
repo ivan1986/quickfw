@@ -9,7 +9,6 @@ define ('APPPATH', ROOTPATH . '/application');
 define ('VARPATH', ROOTPATH . '/var');
 define ('QFWPATH', ROOTPATH . '/QFW');
 define ('LIBPATH', ROOTPATH . '/lib');
-define ('MODPATH', APPPATH  . '/_common/models');
 
 require (QFWPATH.'/Init.php');
 
