@@ -173,6 +173,11 @@ class QFW
 
 }
 
+if (!defined('TMPPATH'))
+	define('TMPPATH', VARPATH.'/tmp');
+if (!defined('LOGPATH'))
+	define('LOGPATH', VARPATH.'/log');
+
 QFW::Init();
 
 ?>

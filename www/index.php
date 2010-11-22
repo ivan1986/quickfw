@@ -3,8 +3,9 @@
 	define ('ROOTPATH', dirname(dirname(__FILE__)));
 	define ('APPPATH', ROOTPATH . '/application');
 	define ('VARPATH', ROOTPATH . '/var');
-	define ('TMPPATH', VARPATH  . '/tmp');
-	define ('LOGPATH', VARPATH  . '/log');
+//Настройки по умолчанию, если нужно - измените
+//	define ('TMPPATH', VARPATH  . '/tmp');
+//	define ('LOGPATH', VARPATH  . '/log');
 	define ('QFWPATH', ROOTPATH . '/QFW');
 	define ('LIBPATH', ROOTPATH . '/lib');
 	define ('MODPATH', APPPATH  . '/_common/models');

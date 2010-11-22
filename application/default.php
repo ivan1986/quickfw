@@ -7,7 +7,6 @@ mb_internal_encoding("UTF-8");
 $config['host']=array(
 	'encoding' => 'utf-8',
 	'lang' => 'ru_RU',
-	'logpath' => ROOTPATH.'/log',
 );
 
 /* Настройки дефолтового MCA */
