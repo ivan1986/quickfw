@@ -225,9 +225,9 @@ class QuickFW_Router
 			header ('Status: 404 Not Found');
 		else*/
 		header((empty($_SERVER['SERVER_PROTOCOL']) ? 'HTTP/1.1 ' : $_SERVER['SERVER_PROTOCOL']).' 404 Not Found');
-		if (!is_file(QFW::$view->getScriptPath().'/404.html'))
+		if (!is_file(QFW::$view->getScriptPath().'/404.php'))
 			QFW::$view->setScriptPath(APPPATH.'/default/templates/');
-		die(QFW::$view->render('404.html'));
+		die(QFW::$view->render('404.php'));
 	}
 
 	/**
