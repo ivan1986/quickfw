@@ -14,16 +14,11 @@ git archive --format=tar master | ( cd "../$1" ; tar xf - )
 cd ../$1
 
 find ./doc/* -type d | grep -v asciidoc | xargs rm -rf $1
-find ./tmp/* -type f | xargs rm -rf $1
+find ./var/* -type f | xargs rm -rf $1
 rm -rf addons
 ./perm.sh 777
 rm -f release.sh
 rm -f .gitignore
-
-#cd doc/asciidoc
-#make quickfw.pdf
-#mv quickfw.pdf ../
-#cd ../..
 
 cd ..
 rm -f $1.tar.bz2
