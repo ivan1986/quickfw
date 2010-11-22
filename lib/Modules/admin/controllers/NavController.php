@@ -11,7 +11,7 @@ class NavController
 			'c'=>$cur,
 			'url'=>$url,
 		));
-		return QFW::$view->fetch('pager.html');
+		return QFW::$view->fetch('pager.php');
 	}
 
 	public function menuBlock($type)
@@ -31,7 +31,7 @@ class NavController
 
 		$data = $data[$type];
 
-		return QFW::$view->assign('menu',$data)->fetch('sub/head_stripe.html');
+		return QFW::$view->assign('menu',$data)->fetch('sub/head_stripe.php');
 	}
 
 }

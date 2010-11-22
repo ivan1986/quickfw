@@ -20,7 +20,7 @@ class InfoController extends Controller
 		QFW::$view->assign('stat', '<pre>'.print_r($mc->getStats(), true).'</pre>');
 		unset($mc);
 
-		return QFW::$view->fetch('memcache.html');
+		return QFW::$view->fetch('memcache.php');
 	}
 
 	public function phpinfoAction()

@@ -7,7 +7,7 @@ class Controller extends QuickFW_Auth
 	function __construct()
 	{
 		if(!parent::__construct('admin'))
-			die (QFW::$view->displayMain(QFW::$view->fetch(('auth.html'))));
+			die (QFW::$view->displayMain(QFW::$view->fetch(('auth.php'))));
 	}
 
 	protected function acl($level)

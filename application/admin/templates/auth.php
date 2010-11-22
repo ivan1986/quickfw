@@ -14,5 +14,6 @@
 			    </tr>
 			</table>
 		</form>
+		</div>
 	</div>
 </div>
