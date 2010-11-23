@@ -19,7 +19,7 @@
 		font-size:20px;
 		line-height:28px;
 		font-style:italic;
-		font-family:Times New Roman;
+		font-family:"Times New Roman";
 	}
 
 	#author{

@@ -1,4 +1,4 @@
-<style>
+<style type="text/css">
 ul#ttt ul, ul#ttt li {
 	margin:-1px;
 	padding:1px;
