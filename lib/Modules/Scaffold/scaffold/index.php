@@ -58,4 +58,4 @@
 <?php } ?>
 
 <?php echo $pager; ?>
-<?php echo $this->block(Url::C('postTable'), $id); ?>
+<?php echo $this->block(Url::C('postTable')); ?>
