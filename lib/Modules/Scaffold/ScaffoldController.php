@@ -243,23 +243,29 @@ abstract class ScaffoldController extends Controller
 			//Если ошибок нет, то записываем в базу изменения
 			if (count($errors) == 0)
 			{
+				$old = QFW::$db->selectRow('SELECT ?# FROM ?# WHERE ?#=?',
+					array($this->table=>array_merge($this->order, array('*'))),
+					$this->table, $this->primaryKey, $id);
 				//Обработка данных после POST
 				foreach ($this->fields as $k=>$class)
 					if ($k == $this->primaryKey && !isset($data[$k]))
 						continue; //не трогаем первичный ключ
 					elseif (isset($this->methods['proccess_'.ucfirst($k)]))
 						$data[$k] = call_user_func(array($this, 'proccess_'.ucfirst($k)), 
-							isset($data[$k]) ? $data[$k] : $class->def(), $id);
+							isset($data[$k]) ? $data[$k] : $class->def(), $id, $old[$k]);
 					else
 						$data[$k] = $class->proccess($id,
-							isset($data[$k]) ? $data[$k] : $class->def());
+							isset($data[$k]) ? $data[$k] : $class->def(), $old[$k]);
 
 				if ($id == -1)
-					QFW::$db->query('INSERT INTO ?#(?#) VALUES(?a)',
+					$ins_id = QFW::$db->query('INSERT INTO ?#(?#) VALUES(?a)',
 						$this->table, array_keys($data), array_values($data));
 				else
 					QFW::$db->query('UPDATE ?# SET ?a WHERE ?#=?',
 						$this->table, $data, $this->primaryKey, $id);
+
+				if (isset($this->methods['postEdit']))
+					call_user_func(array($this, 'postEdit'), $id == -1 ? $ins_id : $id);
 
 				//редирект назад
 				if (!empty($this->sess['return']))
@@ -695,6 +701,7 @@ abstract class ScaffoldController extends Controller
 	{
 		$infoClass->fiendInfo = $fieldInfo;
 		$infoClass->table = $this->table;
+		$infoClass->tableClass = get_class($this);
 		$infoClass->primaryKey = $this->primaryKey;
 
 		if ($infoClass->type)
