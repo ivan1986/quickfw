@@ -34,6 +34,7 @@ class NavController
 	 * <br>каждый элемент - array(
 	 * <br> 'title' => Заголовок,
 	 * <br> 'url' => адрес(Url|строка|false),
+	 * <br> ['show'] => true|false показывать или нет
 	 * <br> 'childNodes' => вложенный массив аналогичной структуры,
 	 * <br>)
 	 * <br>остальные элементы игнорируются
@@ -65,8 +66,10 @@ class NavController
 		$result = '';
 		foreach ($items as $v)
 		{
+			if (isset($v['show']) && $v['show'] === false)
+				continue;
 			$result.='<li>';
-			if ($v === false)
+			if ($v['url'] === false)
 				$result.=$v['title'];
 			else
 			{
