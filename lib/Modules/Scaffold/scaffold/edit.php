@@ -8,7 +8,9 @@
 	  method="post" id="form_<?php echo $table ?>" enctype="multipart/form-data">
 	<?php echo $this->block(Url::C('preEdit'), $id); ?>
 	<dl>
-<?php foreach($data as $k=>$v) {
+<?php foreach($data as $k=>$v) {?>
+	<?php echo $this->block(Url::C('preEditField'.ucfirst($k)), $id); ?>
+<?php
 	$i = $fields[$k];
 	if ($i->hide)
 		continue;

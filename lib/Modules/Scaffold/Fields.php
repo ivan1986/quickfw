@@ -134,9 +134,10 @@ class Scaffold_Field extends Scaffold_Field_Info
 	 *
 	 * @param string $id первичный ключ или -1 для новой записи
 	 * @param string|false $value исходное значение или false при удалении
+	 * @param string $old Старое значение
 	 * @return string обработанное значение
 	 */
-	public function proccess($id, $value)
+	public function proccess($id, $value, $old)
 	{
 		if ($this->fiendInfo['Null'] == 'YES' && $value=='')
 			return null;
@@ -201,7 +202,7 @@ class Scaffold_Field extends Scaffold_Field_Info
  */
 class Scaffold_Parent extends Scaffold_Field
 {
-	public function proccess($id, $value)
+	public function proccess($id, $value, $old)
 	{
 		return $_SESSION['scaffold'][$this->table]['parent'];
 	}
@@ -242,7 +243,7 @@ class Scaffold_Foreign extends Scaffold_Field
 
 	public function editor($id, $value)
 	{
-		return $this->selectBuild($id, $this->lookup, $value);
+		return $this->selectBuild($id, $this->lookup, $value, $this->isnull);
 	}
 
 	public function validator($id, $value)
@@ -381,6 +382,9 @@ class Scaffold_Checkbox extends Scaffold_Field
 
 }
 
+/**
+ * Дата и время
+ */
 class Scaffold_Datetime extends Scaffold_Field
 {
 
@@ -403,6 +407,7 @@ class Scaffold_Datetime extends Scaffold_Field
 }
 
 class Scaffold_Timestamp extends Scaffold_Datetime {}
+
 
 /**
  * Класс для поля, в котором хранится имя файла,
@@ -457,10 +462,8 @@ class Scaffold_File extends Scaffold_Field
 		return is_uploaded_file($_FILES['fdata']['tmp_name'][$this->name]);
 	}
 
-	public function proccess($id, $value)
+	public function proccess($id, $value, $old)
 	{
-		$old = QFW::$db->selectCell('SELECT ?# FROM ?# WHERE ?#=?',
-			$this->name, $this->table, $this->prim, $id);
 		//если запись удалили
 		if ($value === false && is_file($this->path.'/'.$old))
 			unlink($this->path.'/'.$old);

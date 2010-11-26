@@ -123,6 +123,14 @@ abstract class ScaffoldController extends Controller
 			if (!isset($this->fields[$v]))
 				unset($this->order[$k]);
 
+		$this->assignMainInfo();
+	}
+
+	/**
+	 * Выставляет в шаблон общую инфу о таблице
+	 */
+	private function assignMainInfo()
+	{
 		//Общая информация о таблице
 		QFW::$view->assign(array(
 			'methods' => $this->methods,
@@ -137,7 +145,7 @@ abstract class ScaffoldController extends Controller
 				'sortImages' => $this->sortImages,
 			),
 		));
-	}
+  }
 
 	/**
 	 * Востанавливает данные сессии по умолчанию
@@ -223,6 +231,46 @@ abstract class ScaffoldController extends Controller
 			'data' => $data,
 			'pager' => $pager,
 		))->fetch('scaffold/index.php');
+	}
+
+	/**
+	 * Отображает форму добавления
+	 *
+	 * @param int $id ключ записи для редактирования
+	 */
+	public function newBlock()
+	{
+		//инициализация FormPersister
+	/*	require_once LIBPATH.'/HTML/FormPersister.php';
+		ob_start(array(new HTML_FormPersister(), 'process'));*/
+		$errors = array();
+    
+		//получение дефолтовых значений для новой записи
+		$data = array();
+		$fields = array();
+		//сортированные поля
+		foreach($this->order as $f)
+			$fields[] = $f;
+		//остальные поля
+		foreach ($this->fields as $f=>$info)
+			if (!isset($fields[$f]))
+				$fields[] = $f;
+		//вынимаем с учетом default_*
+		foreach($fields as $f)
+			if (isset($this->methods['default_'.ucfirst($f)]))
+				$data[$f] = call_user_func(array(get_class($this), 'default_'.ucfirst($f)));
+			else
+				$data[$f] = $this->fields[$f]->def();
+
+		$state = new TemplaterState(QFW::$view);
+		QFW::$view->setScriptPath(dirname(__FILE__));
+
+		$this->assignMainInfo();
+		return QFW::$view->assign(array(
+			'id' => -1,
+			'data' => $data,
+			'errors' => $errors,
+		))->fetch('scaffold/edit.php');
 	}
 
 	/**
