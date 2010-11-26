@@ -379,6 +379,29 @@ class Scaffold_Checkbox extends Scaffold_Field
 
 }
 
+class Scaffold_Datetime extends Scaffold_Field
+{
+
+	public function __construct($info)
+	{
+		parent::__construct($info);
+		if ($this->default == 'CURRENT_TIMESTAMP')
+			$this->default = date('Y-m-d H:i:s');
+	}
+
+	public function editor($id, $value)
+	{
+		return QFW::$view->
+			assign('id', $id)->
+			assign('name', $this->editName($id))->
+			assign('value', $value)->
+			fetch('scaffold/fields/dateedit.php');
+	}
+
+}
+
+class Scaffold_Timestamp extends Scaffold_Datetime {}
+
 /**
  * Класс для поля, в котором хранится имя файла,
  * загружаемого на сервер

@@ -281,11 +281,20 @@ abstract class ScaffoldController extends Controller
 		{
 			//получение дефолтовых значений для новой записи
 			$data = array();
+			$fields = array();
+			//сортированные поля
 			foreach($this->order as $f)
-				$data[$f] = $this->fields[$f]->def();
+				$fields[] = $f;
+			//остальные поля
 			foreach ($this->fields as $f=>$info)
-				if (!isset($data[$f]))
-					$data[$f] = $info->def();
+				if (!isset($fields[$f]))
+					$fields[] = $f;
+			//вынимаем с учетом default_*
+			foreach($fields as $f)
+				if (isset($this->methods['default_'.ucfirst($f)]))
+					$data[$f] = call_user_func(array(get_class($this), 'default_'.ucfirst($f)));
+				else
+					$data[$f] = $this->fields[$f]->def();
 		}
 		else
 			$data = QFW::$db->selectRow('SELECT ?# FROM ?# WHERE ?#=?',
