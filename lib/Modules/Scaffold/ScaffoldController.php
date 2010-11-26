@@ -151,6 +151,16 @@ abstract class ScaffoldController extends Controller
 	}
 
 	/**
+	 * Блок заглушка для всех необъявленных
+	 *
+	 * @return string пусто
+	 */
+	public function indexBlock()
+	{
+		return '';
+	}
+
+	/**
 	 * Вывод страницы таблицы
 	 *
 	 * @param integer $page страница

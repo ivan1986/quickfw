@@ -3,8 +3,10 @@
 	Поле <?php echo $fields[$k]->title ?> имеет некорректное значение<br />
 	<?php } ?>
 <?php } ?>
+<?php echo $this->block(Url::C('preForm'), $id); ?>
 <form action="<?php echo Url::C('edit/'.$id) ?>" class="scaffoldEdit"
 	  method="post" id="form_<?php echo $table ?>" enctype="multipart/form-data">
+	<?php echo $this->block(Url::C('preEdit'), $id); ?>
 	<dl>
 <?php foreach($data as $k=>$v) {
 	$i = $fields[$k];
@@ -24,7 +26,10 @@
 		<?php if ($i->desc) {?><small><?php echo $i->desc ?></small><?php } ?>
 	</dd>
 <?php } ?>
+	<?php echo $this->block(Url::C('preSend'), $id); ?>
 	<dt></dt>
 	<dd><input type="submit" value="Отправить" name="send" /></dd>
 	</dl>
+	<?php echo $this->block(Url::C('postEdit'), $id); ?>
 </form>
+<?php echo $this->block(Url::C('postForm'), $id); ?>
