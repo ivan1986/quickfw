@@ -416,11 +416,11 @@ class Scaffold_Timestamp extends Scaffold_Datetime {}
 class Scaffold_File extends Scaffold_Field
 {
 	/** @var string Путь к директории, где хранятся файлы */
-	private $path;
+	protected $path;
 	/** @var string Первичный ключ таблицы */
-	private $prim;
+	protected $prim;
 	/** @var bool Скачиваемый (доступен извне) */
-	private $download;
+	protected $download;
 
 	/**
 	 * Проверяет параметры для файлового поля
@@ -448,8 +448,8 @@ class Scaffold_File extends Scaffold_Field
 	{
 		return '<input type="file" name="f'.$this->editName($id).'" />
 				<input type="hidden" name="'.$this->editName($id).'" value="0" />
-				<input type="checkbox" name="'.$this->editName($id).'" value="1" label="Удалить" /> '.
-				$this->display($id, $value);
+				<input type="checkbox" name="'.$this->editName($id).'" value="1" label="Удалить" />'.
+				'<div>'.$this->display($id, $value).'</div>';
 	}
 
 	public function validator($id, $value)
@@ -492,6 +492,70 @@ class Scaffold_File extends Scaffold_Field
 		if ($this->download)
 			return '<a href="'.$this->download.'/'.$value.'">'.$value.'</a>';
 		return $value;
+	}
+
+}
+
+class Scaffold_Image extends Scaffold_File
+{
+
+	public function display($id, $value)
+	{
+		if (!$value || !is_file($this->path.'/'.$value))
+			return '-нет-';
+		if ($this->download)
+			return '<img src="'.$this->download.'/'.$value.'" />';
+		return $value;
+	}
+
+	public function validator($id, $value)
+	{
+		$res = parent::validator($id, $value);
+		if ($res !== true)
+			return $res;
+		//флаг что удалили
+		if ($value)
+			return true;
+		$ext = $this->getImgType($_FILES['fdata']['tmp_name'][$this->name]);
+		if (!$ext)
+			return 'Картинка должна быть';
+		return true;
+	}
+
+	public function proccess($id, $value, $old)
+	{
+		//если запись удалили
+		if ($value === false)
+		{
+			if (is_file($this->path.'/'.$old))
+				unlink($this->path.'/'.$old);
+			return '';
+		}
+		//оставляем старое значение
+		if ($_FILES['fdata']['error'][$this->name] == 4 && !$value)
+			return $old ? $old : '';
+		//удяляем старый
+		if (is_file($this->path.'/'.$old))
+			unlink($this->path.'/'.$old);
+		//флаг что удалили
+		if ($value)
+			return '';
+		//генерим новое имя
+		$ext = $this->getImgType($_FILES['fdata']['tmp_name'][$this->name]);
+		if ($id == -1)
+			$id = time();
+		$new_name = $this->name.'_'.$id.$ext;
+		move_uploaded_file($_FILES['fdata']['tmp_name'][$this->name], $this->path.'/'.$new_name);
+		return $new_name;
+	}
+
+	private function getImgType($name)
+	{
+		$info = getimagesize($name);
+		if (!$info)
+			return false;
+		$ext = image_type_to_extension($info[2]);
+		return $ext;
 	}
 
 }

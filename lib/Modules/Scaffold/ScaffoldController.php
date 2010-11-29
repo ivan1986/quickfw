@@ -241,10 +241,10 @@ abstract class ScaffoldController extends Controller
 	public function newBlock()
 	{
 		//инициализация FormPersister
-	/*	require_once LIBPATH.'/HTML/FormPersister.php';
+		/*require_once LIBPATH.'/HTML/FormPersister.php';
 		ob_start(array(new HTML_FormPersister(), 'process'));*/
 		$errors = array();
-    
+
 		//получение дефолтовых значений для новой записи
 		$data = array();
 		$fields = array();
@@ -301,19 +301,17 @@ abstract class ScaffoldController extends Controller
 			//Если ошибок нет, то записываем в базу изменения
 			if (count($errors) == 0)
 			{
-				$old = QFW::$db->selectRow('SELECT ?# FROM ?# WHERE ?#=?',
-					array($this->table=>array_merge($this->order, array('*'))),
-					$this->table, $this->primaryKey, $id);
+				$old = $this->getOldVars($id);
 				//Обработка данных после POST
 				foreach ($this->fields as $k=>$class)
 					if ($k == $this->primaryKey && !isset($data[$k]))
 						continue; //не трогаем первичный ключ
 					elseif (isset($this->methods['proccess_'.ucfirst($k)]))
 						$data[$k] = call_user_func(array($this, 'proccess_'.ucfirst($k)), 
-							isset($data[$k]) ? $data[$k] : $class->def(), $id, $old[$k]);
+							isset($data[$k]) ? $data[$k] : $old[$k], $id, $old[$k]);
 					else
 						$data[$k] = $class->proccess($id,
-							isset($data[$k]) ? $data[$k] : $class->def(), $old[$k]);
+							isset($data[$k]) ? $data[$k] : $old[$k], $old[$k]);
 
 				if ($id == -1)
 					$ins_id = QFW::$db->query('INSERT INTO ?#(?#) VALUES(?a)',
@@ -341,29 +339,7 @@ abstract class ScaffoldController extends Controller
 		if (isset($_SERVER['HTTP_REFERER']) && strpos($_SERVER['HTTP_REFERER'], 'index'))
 			$this->sess['return'] = $_SERVER['HTTP_REFERER'];
 
-		if ($id == -1)
-		{
-			//получение дефолтовых значений для новой записи
-			$data = array();
-			$fields = array();
-			//сортированные поля
-			foreach($this->order as $f)
-				$fields[] = $f;
-			//остальные поля
-			foreach ($this->fields as $f=>$info)
-				if (!isset($fields[$f]))
-					$fields[] = $f;
-			//вынимаем с учетом default_*
-			foreach($fields as $f)
-				if (isset($this->methods['default_'.ucfirst($f)]))
-					$data[$f] = call_user_func(array(get_class($this), 'default_'.ucfirst($f)));
-				else
-					$data[$f] = $this->fields[$f]->def();
-		}
-		else
-			$data = QFW::$db->selectRow('SELECT ?# FROM ?# WHERE ?#=?',
-				array($this->table=>array_merge($this->order, array('*'))),
-				$this->table, $this->primaryKey, $id);
+		$data = $this->getOldVars($id);
 
 		$state = new TemplaterState(QFW::$view);
 		QFW::$view->setScriptPath(dirname(__FILE__));
@@ -385,8 +361,11 @@ abstract class ScaffoldController extends Controller
 	 */
 	public function deleteAction($id=0)
 	{
+		$old = $this->getOldVars($id);
+		if (!$old)
+			QFW::$router->redirect(Url::C('index'), true);
 		foreach($this->fields as $k=>$v)
-			$v->proccess($id, false);
+			$v->proccess($id, false, $old[$k]);
 		QFW::$db->query('DELETE FROM ?# WHERE ?#=?',
 			$this->table, $this->primaryKey, $id);
 		QFW::$router->redirect(Url::C('index'), true);
@@ -628,11 +607,44 @@ abstract class ScaffoldController extends Controller
 		return $this->fields[$name];
 	}
 
+
+	/**
+	 * Получает старые значения для записи или дефолтовые для новой
+	 *
+	 * @param integer $id ID записи
+	 * @return array значения
+	 */
+	private function getOldVars($id)
+	{
+		if ($id != -1)
+			return QFW::$db->selectRow('SELECT ?# FROM ?# WHERE ?#=?',
+				array($this->table=>array_merge($this->order, array('*'))),
+				$this->table, $this->primaryKey, $id);
+
+		//получение дефолтовых значений для новой записи
+		$data = array();
+		$fields = array();
+		//сортированные поля
+		foreach($this->order as $f)
+			$fields[] = $f;
+		//остальные поля
+		foreach ($this->fields as $f=>$info)
+		if (!isset($fields[$f]))
+			$fields[] = $f;
+		//вынимаем с учетом default_*
+		foreach($fields as $f)
+			if (isset($this->methods['default_'.ucfirst($f)]))
+				$data[$f] = call_user_func(array(get_class($this), 'default_'.ucfirst($f)));
+			else
+				$data[$f] = $this->fields[$f]->def();
+		return $data;
+	}
+
 	/**
 	 * Генерирует фильтр для запроса
 	 *
 	 * @return array(<br>
-	 *	'where' => DbSimple_SubQuery сгенерерованное условие с учетом фильтров<br>
+	 *  'where' => DbSimple_SubQuery сгенерерованное условие с учетом фильтров<br>
 	 *  'form' => array инпуты формы<br>
 	 * );
 	 */
