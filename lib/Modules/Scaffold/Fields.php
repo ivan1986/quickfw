@@ -421,6 +421,8 @@ class Scaffold_File extends Scaffold_Field
 	protected $prim;
 	/** @var bool Скачиваемый (доступен извне) */
 	protected $download;
+	/** @var function Генерит имя файла */
+	protected $genFunc;
 
 	/**
 	 * Проверяет параметры для файлового поля
@@ -437,6 +439,7 @@ class Scaffold_File extends Scaffold_Field
 		if (!is_writable($info->typeParams['path']))
 			throw new Exception('Нельзя писать в директорию файлов '.$info->typeParams['path'], 1);
 		$this->path = $info->typeParams['path'];
+		$this->genFunc = !empty($info->typeParams['genFunc']) ? $info->typeParams['genFunc'] : false;
 		$this->prim = $info->primaryKey;
 		if (strpos($info->typeParams['path'], DOC_ROOT) === 0)
 			$this->download = substr($info->typeParams['path'], strlen(DOC_ROOT) );
@@ -480,7 +483,7 @@ class Scaffold_File extends Scaffold_Field
 		$info = pathinfo($_FILES['fdata']['name'][$this->name]);
 		if ($id == -1)
 			$id = time();
-		$new_name = $this->name.'_'.$id.'.'.$info['extension'];
+		$new_name = $this->genFunc ? call_user_func($this->genFunc, $this->name, $id, '.'.$info['extension']) : $this->name.'_'.$id.'.'.$info['extension'];
 		move_uploaded_file($_FILES['fdata']['tmp_name'][$this->name], $this->path.'/'.$new_name);
 		return $new_name;
 	}
@@ -516,6 +519,8 @@ class Scaffold_Image extends Scaffold_File
 		//флаг что удалили
 		if ($value)
 			return true;
+		if ($_FILES['fdata']['error'][$this->name] == 4)
+			return true;
 		$ext = $this->getImgType($_FILES['fdata']['tmp_name'][$this->name]);
 		if (!$ext)
 			return 'Картинка должна быть';
@@ -544,7 +549,7 @@ class Scaffold_Image extends Scaffold_File
 		$ext = $this->getImgType($_FILES['fdata']['tmp_name'][$this->name]);
 		if ($id == -1)
 			$id = time();
-		$new_name = $this->name.'_'.$id.$ext;
+		$new_name = $this->genFunc ? call_user_func($this->genFunc, $this->name, $id, $ext) : $this->name.'_'.$id.$ext;
 		move_uploaded_file($_FILES['fdata']['tmp_name'][$this->name], $this->path.'/'.$new_name);
 		return $new_name;
 	}
