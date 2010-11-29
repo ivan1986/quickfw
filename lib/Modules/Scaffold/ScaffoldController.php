@@ -516,7 +516,7 @@ abstract class ScaffoldController extends Controller
 	 * mixed - произвольный параметр
 	 * @return ScaffoldController
 	 */
-	protected function filter($colum, $filter='')
+	protected function filter($colum, $filter=true)
 	{
 		return $this->setColumOpt('filter', $colum, $filter);
 	}
