@@ -552,6 +552,21 @@ abstract class ScaffoldController extends Controller
 	}
 
 	/**
+	 * Устанавливает css класс для столбца
+	 *
+	 * <br><br> Вызывается только в конструкторе
+	 *
+	 * @param string|array $colum Колонка<br>
+	 * Или массив ключи - колонки, значения заголовки
+	 * @param bool|string $class имя класса или true (col_$key)
+	 * @return ScaffoldController
+	 */
+	protected function setClass($colum, $class='')
+	{
+		return $this->setColumOpt('class', $colum, $class);
+	}
+
+	/**
 	 * Принудительно устанавливает класс для поля
 	 *
 	 * <br><br> Вызывается только в конструкторе

@@ -38,6 +38,8 @@ class Scaffold_Field_Info
 	public $title = '';
 	/** @var string Описание колонки */
 	public $desc = '';
+	/** @var bool|string добавить класс колонке */
+	public $class = false;
 
 }
 

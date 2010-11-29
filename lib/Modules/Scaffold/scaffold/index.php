@@ -35,7 +35,7 @@
 		if ($i->hide)
 			continue;
 		?>
-		<td><?php //отображение обычного не связанного поля
+		<td<?php if ($i->class) {?> class="<?php echo $i->class===true ? 'col_'.$key : $i->class ?>"<?php } ?>><?php //отображение обычного не связанного поля
 			if (isset($methods['display_'.ucfirst($key)]))
 				echo call_user_func($class.'::display_'.ucfirst($key), $row[$primaryKey], $v);
 			else
