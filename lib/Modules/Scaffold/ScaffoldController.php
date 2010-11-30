@@ -39,8 +39,8 @@ abstract class ScaffoldController extends Controller
 	protected $sess = array();
 
 	//Опции
-	/** @var bool Ссылка добавить внизу страницы */
-	protected $addOnBottom = false;
+	/** @var bool|string Добавить внизу страницы (заголовок) */
+	protected $addOnBottom = true;
 	/** @var bool Показывать картинки при сортировке */
 	protected $sortImages = false;
 
@@ -243,7 +243,6 @@ abstract class ScaffoldController extends Controller
 		//инициализация FormPersister
 		/*require_once LIBPATH.'/HTML/FormPersister.php';
 		ob_start(array(new HTML_FormPersister(), 'process'));*/
-		$errors = array();
 
 		//получение дефолтовых значений для новой записи
 		$data = array();
@@ -269,7 +268,6 @@ abstract class ScaffoldController extends Controller
 		return QFW::$view->assign(array(
 			'id' => -1,
 			'data' => $data,
-			'errors' => $errors,
 		))->fetch('scaffold/edit.php');
 	}
 
@@ -297,9 +295,13 @@ abstract class ScaffoldController extends Controller
 					$res = $this->fields[$k]->validator($id, $v);
 				if ($res !== true)
 					$errors[$k] = $res;
+				if ($res === false)
+					$errors[$k] = 'Поле '.$this->fields[$k]->title.' имеет некорректное значение';
 			}
 			//Если ошибок нет, то записываем в базу изменения
-			if (count($errors) == 0)
+			if (count($errors))
+				QFW::$view->assign('errors', $errors);
+			else
 			{
 				$old = $this->getOldVars($id);
 				//Обработка данных после POST
@@ -347,7 +349,6 @@ abstract class ScaffoldController extends Controller
 		return QFW::$view->assign(array(
 			'id' => $id,
 			'data' => $data,
-			'errors' => $errors,
 		))->fetch('scaffold/edit.php');
 	}
 

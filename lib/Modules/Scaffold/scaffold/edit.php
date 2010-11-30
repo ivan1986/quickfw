@@ -1,8 +1,4 @@
-<?php if (count($errors)) foreach($errors as $k=>$err) { ?>
-	<?php if ($err) echo $err; else {?>
-	Поле <?php echo $fields[$k]->title ?> имеет некорректное значение<br />
-	<?php } ?>
-<?php } ?>
+<?php require dirname(__FILE__).'/info.php' ?>
 <?php echo $this->block(Url::C('preForm'), $id); ?>
 <form action="<?php echo Url::C('edit/'.$id) ?>" class="scaffoldEdit"
 	  method="post" id="form_<?php echo $table ?>" enctype="multipart/form-data">
@@ -37,5 +33,6 @@
 	<dd><input type="submit" value="Отправить" name="send" /></dd>
 	</dl>
 	<?php echo $this->block(Url::C('postEdit'), $id); ?>
+	<div></div>
 </form>
 <?php echo $this->block(Url::C('postForm'), $id); ?>

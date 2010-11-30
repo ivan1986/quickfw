@@ -1,3 +1,4 @@
+<?php require dirname(__FILE__).'/info.php' ?>
 <?php if (isset($parent)) echo $parent; ?>
 
 <?php if (isset($filter)) {
@@ -51,11 +52,19 @@
 </tr>
 <?php } ?>
 </table>
-<?php if ($options['addOnBottom']) {?><a href="<?php echo Url::C('edit/-1') ?>">добавить</a><?php } ?>
 <?php } else { ?>
 	Записей нет
+	<?php if (!$options['addOnBottom']) {?>
 	<a href="<?php echo Url::C('edit/-1') ?>">добавить</a>
+	<?php } ?>
 <?php } ?>
-
 <?php echo $pager; ?>
 <?php echo $this->block(Url::C('postTable')); ?>
+
+<?php if ($options['addOnBottom']) {?>
+<div>
+<?php if ($options['addOnBottom']!==true) echo $options['addOnBottom'] ?>
+<?php echo $this->block(Url::C('new')) ?>
+<p>&nbsp;</p>
+</div>
+<?php } ?>

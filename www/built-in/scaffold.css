@@ -1,4 +1,7 @@
-div.pageslist {text-align:center;}
+.pageslist {margin: 15px; text-align: center}
+.pageslist b {padding: 5px 10px; margin: 2px; border: 1px solid #eee; font-weight: bold }
+.pageslist a {padding: 5px 10px; margin: 2px; border: 1px solid #eee; text-decoration: none }
+.pageslist a:hover {background: #f0f0ff}
 
 table.scaffoldTable
 {
@@ -61,4 +64,9 @@ form.scaffoldEdit small
 	display: block;
 	margin-left: 20px;
 	color: #999;
+}
+
+form.scaffoldEdit > :last-child
+{
+	clear:left;
 }
