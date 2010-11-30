@@ -68,19 +68,14 @@ class NavController
 		{
 			if (isset($v['show']) && $v['show'] === false)
 				continue;
-			$result.='<li>';
+			$self = $cur == ($v['url'] instanceof Url ? $v['url']->intern() : $v['url']);
+			$result.='<li'.($self?' class="cur"':'').'>';
 			if ($v['url'] === false)
 				$result.=$v['title'];
 			else
-			{
-				if ($v['url'] instanceof Url)
-					$self = $cur == $v['url']->intern();
-				else
-					$self = $cur == $v['url'];
 				$result.= $self ? '<b>'.$v['title'].'</b>' : '<a href="'.$v['url'].'">'.$v['title'].'</a>';
-			}
 			if (isset($v['childNodes']))
-				$result.='<ul>'.$this->menuTreeNodes($v['childNodes'], $cur).'</ul>';
+				$result.="\n<ul>".$this->menuTreeNodes($v['childNodes'], $cur).'</ul>';
 			$result.="</li>\n";
 		}
 		return $result;
