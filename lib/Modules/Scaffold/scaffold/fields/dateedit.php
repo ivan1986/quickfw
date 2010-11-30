@@ -4,7 +4,7 @@ Hlp::addJs('js/jquery.js');
 Hlp::addJs('timepicker/jquery-ui-1.8.custom.min.js');
 Hlp::addJs('timepicker/jquery-ui-timepicker-addon.min.js');
 Hlp::addJs('timepicker/jquery-ui-datepicker-ru.js');
-?><input type="text" name="<?php echo $name ?>" value="<?php echo $value?>" class="datepicker" />
+?><input type="text" name="<?php echo $name ?>" default="<?php echo $value?>" class="datepicker" />
 <?php Hlp::sJSe() ?>
 $('.datepicker').datetimepicker({
 	showSecond: true,

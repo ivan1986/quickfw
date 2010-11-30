@@ -552,6 +552,21 @@ abstract class ScaffoldController extends Controller
 	}
 
 	/**
+	 * Устанавливает флаг, что поле обязательно для заполнения
+	 *
+	 * <br><br> Вызывается только в конструкторе
+	 *
+	 * @param string|array $colum Колонка<br>
+	 * Или массив ключи - колонки, значения заголовки
+	 * @param string $title Заголовок
+	 * @return ScaffoldController
+	 */
+	protected function required($colum, $required=true)
+	{
+		return $this->setColumOpt('required', $colum, $required);
+	}
+
+	/**
 	 * Устанавливает css класс для столбца
 	 *
 	 * <br><br> Вызывается только в конструкторе

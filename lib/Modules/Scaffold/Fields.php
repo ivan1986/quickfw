@@ -38,8 +38,10 @@ class Scaffold_Field_Info
 	public $title = '';
 	/** @var string Описание колонки */
 	public $desc = '';
-	/** @var bool|string добавить класс колонке */
+	/** @var bool|string Добавить класс колонке */
 	public $class = false;
+	/** @var bool Обязательная колонка */
+	public $required = false;
 
 }
 
@@ -104,6 +106,9 @@ class Scaffold_Field extends Scaffold_Field_Info
 	 */
 	public function validator($id, $value)
 	{
+		var_dump($this->required);
+		if ($this->required && empty($value))
+			return false;
 		return true;
 	}
 
@@ -211,6 +216,9 @@ class Scaffold_Parent extends Scaffold_Field
 
 	public function validator($id, $value)
 	{
+		$res = parent::validator($id, $value);
+		if ($res !== true)
+			return $res;
 		//если у нас будет потеря сессии, то случится фигня
 		return isset($_SESSION['scaffold'][$this->table]['parent']);
 	}
@@ -250,6 +258,9 @@ class Scaffold_Foreign extends Scaffold_Field
 
 	public function validator($id, $value)
 	{
+		$res = parent::validator($id, $value);
+		if ($res !== true)
+			return $res;
 		return $this->isnull || !empty($value);
 	}
 
@@ -334,6 +345,9 @@ class Scaffold_Varchar extends Scaffold_Field
 
 	public function validator($id, $value)
 	{
+		$res = parent::validator($id, $value);
+		if ($res !== true)
+			return $res;
 		return mb_strlen($value) <= $this->size;
 	}
 }
@@ -459,6 +473,9 @@ class Scaffold_File extends Scaffold_Field
 
 	public function validator($id, $value)
 	{
+		$res = parent::validator($id, $value);
+		if ($res !== true)
+			return $res;
 		//оставляем старый файл
 		if ($_FILES['fdata']['error'][$this->name] == 4)
 			return true;

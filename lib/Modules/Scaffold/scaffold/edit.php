@@ -18,6 +18,7 @@
 	if (!$i->primaryKey && !($i->hide === false))
 		continue;
 	?>
+	<label>
 	<dt<?php if (isset($errors[$k])) echo ' class="err"'; ?>>
 			<?php echo $i->title ?></dt>
 	<dd><?php
@@ -27,6 +28,7 @@
 			echo $i->editor($id, $v); ?>
 		<?php if ($i->desc) {?><small><?php echo $i->desc ?></small><?php } ?>
 	</dd>
+	</label>
 <?php } ?>
 	<?php echo $this->block(Url::C('preSend'), $id); ?>
 	<dt></dt>
