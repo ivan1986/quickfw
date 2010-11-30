@@ -21,7 +21,7 @@ table.scaffoldTable
 	width: 25px;
 }
 
-.scaffoldTable tr {vertical-align:top;}
+.scaffoldTable tr > * {vertical-align:top;}
 .scaffoldTable th { background-color:#eec0c0; }
 .scaffoldTable tr td { background-color:#ddd; text-align:left;}
 .scaffoldTable tr:nth-child(odd) td { background-color:#c0ffc0; }
