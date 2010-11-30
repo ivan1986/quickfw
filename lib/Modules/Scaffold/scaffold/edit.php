@@ -20,7 +20,9 @@
 	?>
 	<label>
 	<dt<?php if (isset($errors[$k])) echo ' class="err"'; ?>>
-			<?php echo $i->title ?></dt>
+		<?php echo $i->title ?><?php 
+		if ($i->required) {?><span class="required"></span><?php }
+	?></dt>
 	<dd><?php
 		if (isset($methods['editor_'.ucfirst($k)]))
 			echo call_user_func($class.'::editor_'.ucfirst($k), $id, $v);
