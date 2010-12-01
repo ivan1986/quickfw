@@ -43,6 +43,8 @@ abstract class ScaffoldController extends Controller
 	protected $addOnBottom = true;
 	/** @var bool Показывать картинки при сортировке */
 	protected $sortImages = false;
+	/** @var bool Подключить JS и jquery */
+	protected $useJs = true;
 
 	/** @var array Массив методов */
 	private $methods;
@@ -103,7 +105,12 @@ abstract class ScaffoldController extends Controller
 	 */
 	public function  __construct()
 	{
-		QFW::$view->P->addCSS('built-in/scaffold.css');
+		Hlp::addCSS('built-in/scaffold.css');
+		if ($this->useJs)
+		{
+				Hlp::addJS('js/jquery.js');
+				Hlp::addJS('built-in/scaffold.js');
+		}
 		$this->session();
 		//Создаем сессию для таблицы и ссылаемся на нее
 		if (!isset($_SESSION['scaffold'][$this->table]))
@@ -186,6 +193,25 @@ abstract class ScaffoldController extends Controller
 	 */
 	public function indexAction($page=1)
 	{
+		//обработка выбора мультиедита и мультидела
+		if ($_SERVER['REQUEST_METHOD'] == 'POST')
+		{
+			if (empty($_POST['id']))
+				QFW::$router->redirect(Url::C('index'));
+			if (empty($_POST['edit']) && empty($_POST['delete']))
+				QFW::$router->redirect(Url::C('index'));
+			$this->sess['multi']['ids'] = $_POST['id'];
+			if (!empty($_POST['edit']))
+				QFW::$router->redirect(Url::C('multiEdit'));
+			elseif (!empty($_POST['delete']))
+				QFW::$router->redirect(Url::C('multiDelete'));
+			else
+			{
+				unset($this->sess['multi']);
+				QFW::$router->redirect(Url::C('index'), true);
+			}
+		}
+
 		// считаем страницы с нуля и убираем отрицательные
 		$page = max($page-1, 0);
 		$state = new TemplaterState(QFW::$view);
@@ -293,7 +319,7 @@ abstract class ScaffoldController extends Controller
 		require_once LIBPATH.'/HTML/FormPersister.php';
 		ob_start(array(new HTML_FormPersister(), 'process'));
 		$errors = array();
-		
+
 		if ($_SERVER['REQUEST_METHOD'] == 'POST' && count($_POST['data'][$id])>0)
 		{
 			//Обработка результата редактирования
@@ -380,7 +406,55 @@ abstract class ScaffoldController extends Controller
 			$v->proccess($id, false, $old[$k]);
 		QFW::$db->query('DELETE FROM ?# WHERE ?#=?',
 			$this->table, $this->primaryKey, $id);
+		$this->messages['success'][] = 'Запись успешно удалена';
 		QFW::$router->redirect(Url::C('index'), true);
+	}
+
+	/**
+	 * Удаление множества строк
+	 *
+	 * <br>Если нужно обработать удаление как-то нестандартно,
+	 * то функция должна быть перегружена
+	 *
+	 * @param string $id значение первичного ключа удаляемой строки
+	 */
+	public function multiDeleteAction()
+	{
+		if (empty($this->sess['multi']['ids']))
+			QFW::$router->redirect(Url::C('index'));
+		$ids = $this->sess['multi']['ids'];
+		if ($_SERVER['REQUEST_METHOD'] == 'POST')
+		{
+			if (isset($_POST['delete']))
+			{
+				$olds = QFW::$db->select('SELECT ?# AS PRIMARY_KEY, ?# FROM ?# WHERE ?# IN (?a)',
+					$this->primaryKey, array($this->table=>array_merge($this->order, array('*'))),
+					$this->table, $this->primaryKey, $ids);
+				foreach($olds as $id=>$old)
+					foreach($this->fields as $k=>$v)
+						$v->proccess($id, false, $old[$k]);
+				QFW::$db->query('DELETE FROM ?# WHERE ?# IN (?a)',
+					$this->table, $this->primaryKey, $ids);
+				$this->messages['success'][] = 'Выбранные записи удалены';
+			}
+			elseif (isset($_POST['cancel']))
+				$this->messages['message'][] = 'Удаление отменено';
+			unset($this->sess['multi']['ids']);
+			QFW::$router->redirect(Url::C('index'));
+		}
+		$state = new TemplaterState(QFW::$view);
+		QFW::$view->setScriptPath(dirname(__FILE__));
+
+		$foreign = $this->getForeign();
+		$data = QFW::$db->select('SELECT ?# ?s FROM ?# ?s
+			WHERE ?# IN (?a) ?s',
+			array($this->table=>array_merge($this->order, array('*'))),
+			$foreign['field'], $this->table, $foreign['join'],
+			$this->primaryKey, $ids,
+			$this->getSort());
+		return QFW::$view->assign(array(
+			'data' => $data,
+		))->fetch('scaffold/multidel.php');
 	}
 
 	/**

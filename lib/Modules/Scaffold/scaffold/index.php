@@ -7,13 +7,17 @@
 
 <?php echo $pager; ?>
 
-<?php if (count($data)>0) { ?>
+<?php if (count($data)>0) { $cols = 3 + (empty($actions) ? 0 : 1); // с чекбоксами,  редактирование+удаление, действия ?>
+<form action="" method="post">
 <table id="table_<?php echo $table ?>" class="scaffoldTable">
+<thead>
 <tr>
+	<th><input type="checkbox" class="multiSelect" /></th>
 	<?php foreach($data[0] as $key=>$v) {
 		$i = $fields[$key];
 		if ($i->hide)
 			continue;
+		$cols++;
 		?>
 		<th><a href="<?php echo Url::C('sort/'.$key) ?>"><?php echo $i->title ?></a>
 			<?php if (isset($order) && $order['field'] == $key) { ?><span class="scaffoldSort">
@@ -29,8 +33,11 @@
 	<th colspan="2"><a href="<?php echo Url::C('edit/-1') ?>">доб.</a></th>
 	<?php if (count($actions)) { ?><th>действия</th><?php } ?>
 </tr>
+</thead>
+<tbody>
 <?php foreach($data as $id=>$row) { ?>
 <tr>
+	<td><input type="checkbox" name="id[]" value="<?php echo $row[$primaryKey] ?>" /></td>
 	<?php foreach($row as $key=>$v) {
 		$i = $fields[$key];
 		if ($i->hide)
@@ -51,7 +58,16 @@
 	<?php } ?></td><?php } ?>
 </tr>
 <?php } ?>
+</tbody>
+<tfoot>
+<tr><td colspan="<?php echo $cols ?>">
+	<input type="submit" name="edit" value="Редактировать выбранных" />
+	<input type="submit" name="delete" value="Удалить выбранных" />
+	<?php echo $this->block(Url::C('multiPost')); ?>
+</td></tr>
+</tfoot>
 </table>
+</form>
 <?php } else { ?>
 	Записей нет
 	<?php if (!$options['addOnBottom']) {?>

@@ -16,7 +16,7 @@ table.scaffoldTable
 	margin: 0;
 }
 
-.scaffoldTable td:last-child, .scaffoldTable td:nth-last-child(2)
+.scaffoldTable td:last-child, .scaffoldTable td:nth-last-child(2), .scaffoldTable td:first-child
 {
 	width: 25px;
 }
