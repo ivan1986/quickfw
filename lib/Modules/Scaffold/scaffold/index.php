@@ -8,12 +8,12 @@
 <?php echo $pager; ?>
 
 <?php if (count($data)>0) { $cols = 3 + (empty($actions) ? 0 : 1); // с чекбоксами,  редактирование+удаление, действия ?>
-<form action="" method="post">
+<form action="" method="post" enctype="multipart/form-data">
 <table id="table_<?php echo $table ?>" class="scaffoldTable">
 <thead>
 <tr>
 	<th><input type="checkbox" class="multiSelect" /></th>
-	<?php foreach($data[0] as $key=>$v) {
+	<?php foreach(current($data) as $key=>$v) {
 		$i = $fields[$key];
 		if ($i->hide)
 			continue;
@@ -37,7 +37,7 @@
 <tbody>
 <?php foreach($data as $id=>$row) { ?>
 <tr>
-	<td><input type="checkbox" name="id[]" value="<?php echo $row[$primaryKey] ?>" /></td>
+	<td><input type="checkbox" name="id[]" value="<?php echo $id ?>" /></td>
 	<?php foreach($row as $key=>$v) {
 		$i = $fields[$key];
 		if ($i->hide)
@@ -45,9 +45,9 @@
 		?>
 		<td<?php if ($i->class) {?> class="<?php echo $i->class===true ? 'col_'.$key : $i->class ?>"<?php } ?>><?php //отображение обычного не связанного поля
 			if (isset($methods['display_'.ucfirst($key)]))
-				echo call_user_func($class.'::display_'.ucfirst($key), $row[$primaryKey], $v);
+				echo call_user_func($class.'::display_'.ucfirst($key), $id, $v);
 			else
-				echo $i->display($row[$primaryKey], $v);
+				echo $i->display($id, $v);
 		?></td>
 	<?php } ?>
 	<td><a href="<?php echo Url::C('edit/'.$row[$primaryKey]) ?>">ред.</a></td>

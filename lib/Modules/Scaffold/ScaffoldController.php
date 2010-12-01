@@ -163,7 +163,7 @@ abstract class ScaffoldController extends Controller
 			),
 			'messages' => $this->messages,
 		));
-  }
+	}
 
 	/**
 	 * Востанавливает данные сессии по умолчанию
@@ -246,9 +246,9 @@ abstract class ScaffoldController extends Controller
 			WHERE ?s ?s '.$this->where, $this->table, $filter['where'], $parentWhere);
 
 		$foreign = $this->getForeign();
-		$data = QFW::$db->select('SELECT ?# ?s FROM ?# ?s
+		$data = QFW::$db->select('SELECT ?# AS ARRAY_KEY, ?# ?s FROM ?# ?s
 			WHERE ?s ?s '.$this->where.' ?s LIMIT ?d, ?d',
-			array($this->table=>array_merge($this->order, array('*'))),
+			$this->primaryKey, array($this->table=>array_merge($this->order, array('*'))),
 			$foreign['field'], $this->table, $foreign['join'],
 			$filter['where'], $parentWhere,
 			$this->getSort(),
@@ -455,6 +455,105 @@ abstract class ScaffoldController extends Controller
 		return QFW::$view->assign(array(
 			'data' => $data,
 		))->fetch('scaffold/multidel.php');
+	}
+
+	public function multiEditAction()
+	{
+		if (empty($this->sess['multi']['ids']))
+			QFW::$router->redirect(Url::C('index'));
+		$ids = $this->sess['multi']['ids'];
+		require_once LIBPATH.'/HTML/FormPersister.php';
+		ob_start(array(new HTML_FormPersister(), 'process'));
+		$errors = array();
+		if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['edit']))
+		{
+			$res = $this->multiEditPost($_POST['data']);
+			if ($res)
+			{
+				$this->messages['success'][] = 'Выбранные записи отредактированы';
+				unset($this->sess['multi']['ids']);
+				QFW::$router->redirect(Url::C('index'));
+			}
+			QFW::$view->assign('messages', $this->messages);
+		}
+		if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['cancel']))
+		{
+			$this->messages['message'][] = 'редактирование отменено';
+			unset($this->sess['multi']['ids']);
+			QFW::$router->redirect(Url::C('index'));
+		}
+
+		$state = new TemplaterState(QFW::$view);
+		QFW::$view->setScriptPath(dirname(__FILE__));
+
+		$foreign = $this->getForeign();
+		$data = QFW::$db->select('SELECT ?# AS ARRAY_KEY, ?# ?s FROM ?# ?s
+			WHERE ?# IN (?a) ?s',
+			$this->primaryKey, array($this->table=>array_merge($this->order, array('*'))),
+			$foreign['field'], $this->table, $foreign['join'],
+			$this->primaryKey, $ids,
+			$this->getSort());
+		return QFW::$view->assign(array(
+			'data' => $data,
+		))->fetch('scaffold/multiedit.php');
+	}
+
+	/**
+	 * Редактирование данных
+	 *
+	 * @param array $alldata данные
+	 * @return bool успешно отредактировано
+	 */
+	private function multiEditPost($alldata)
+	{
+		$errors = array();
+		//Обработка результата редактирования
+		foreach($alldata as $id => $data)
+			foreach ($data as $k=>$v)
+			{
+				if (isset($this->methods['validator_'.ucfirst($k)]))
+					$res = call_user_func(array($this, 'validator_'.ucfirst($k)), $v, $id);
+				else
+					$res = $this->fields[$k]->validator($id, $v);
+				if ($res !== true)
+					$errors[$k] = $res;
+				if ($res === false)
+					$errors[$k] = 'Поле '.$this->fields[$k]->title.' имеет некорректное значение';
+			}
+
+		//Если ошибок нет, то записываем в базу изменения
+		if (count($errors))
+		{
+			$this->messages['error'] = $errors;
+			return false;
+		}
+
+		foreach($alldata as $id => $data)
+		{
+			$old = $this->getOldVars($id);
+			//Обработка данных после POST
+			foreach ($this->fields as $k=>$class)
+				if ($k == $this->primaryKey && !isset($data[$k]))
+					continue; //не трогаем первичный ключ
+				elseif (isset($this->methods['proccess_'.ucfirst($k)]))
+				$data[$k] = call_user_func(array($this, 'proccess_'.ucfirst($k)),
+					isset($data[$k]) ? $data[$k] : $old[$k], $id, $old[$k]);
+				else
+				$data[$k] = $class->proccess($id,
+					isset($data[$k]) ? $data[$k] : $old[$k], $old[$k]);
+
+			//вообще при редактировании быть не может, но для вставки
+			if ($id == -1)
+				$ins_id = QFW::$db->query('INSERT INTO ?#(?#) VALUES(?a)',
+					$this->table, array_keys($data), array_values($data));
+			else
+				QFW::$db->query('UPDATE ?# SET ?a WHERE ?#=?',
+					$this->table, $data, $this->primaryKey, $id);
+
+			if (isset($this->methods['postEdit']))
+				call_user_func(array($this, 'postEdit'), $id == -1 ? $ins_id : $id);
+		}
+		return true;
 	}
 
 	/**
@@ -732,8 +831,8 @@ abstract class ScaffoldController extends Controller
 	private function getOldVars($id)
 	{
 		if ($id != -1)
-			return QFW::$db->selectRow('SELECT ?# FROM ?# WHERE ?#=?',
-				array($this->table=>array_merge($this->order, array('*'))),
+			return QFW::$db->selectRow('SELECT ?# AS ARRAY_KEY, ?# FROM ?# WHERE ?#=?',
+				$this->primaryKey, array($this->table=>array_merge($this->order, array('*'))),
 				$this->table, $this->primaryKey, $id);
 
 		//получение дефолтовых значений для новой записи
