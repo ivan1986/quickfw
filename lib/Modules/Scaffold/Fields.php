@@ -91,7 +91,7 @@ class Scaffold_Field extends Scaffold_Field_Info
 	 */
 	public function editor($id, $value)
 	{
-		return '<input type="text" name="data['.$this->name.']"
+		return '<input type="text" name="'.$this->editName($id).'"
 			   default="'.QFW::$view->esc($value).'" />';
 	}
 
@@ -197,7 +197,7 @@ class Scaffold_Field extends Scaffold_Field_Info
 	 */
 	protected function editName($id)
 	{
-		return 'data['.$this->name.']';
+		return 'data['.$id.']['.$this->name.']';
 	}
 
 }
@@ -477,11 +477,11 @@ class Scaffold_File extends Scaffold_Field
 		if ($res !== true)
 			return $res;
 		//оставляем старый файл
-		if ($_FILES['fdata']['error'][$this->name] == 4)
+		if ($this->postField($id, 'error') == 4)
 			return true;
-		if ($_FILES['fdata']['error'][$this->name] != 0)
+		if ($this->postField($id, 'error') != 0)
 			return 'Ошибка при загрузке файла '.$this->title;
-		return is_uploaded_file($_FILES['fdata']['tmp_name'][$this->name]);
+		return is_uploaded_file($this->postField($id, 'tmp_name'));
 	}
 
 	public function proccess($id, $value, $old)
@@ -490,7 +490,7 @@ class Scaffold_File extends Scaffold_Field
 		if ($value === false && is_file($this->path.'/'.$old))
 			unlink($this->path.'/'.$old);
 		//оставляем старое значение
-		if ($_FILES['fdata']['error'][$this->name] == 4 && !$value)
+		if ($this->postField($id, 'error') == 4 && !$value)
 			return $old ? $old : '';
 		//удяляем старый
 		if (is_file($this->path.'/'.$old))
@@ -499,11 +499,11 @@ class Scaffold_File extends Scaffold_Field
 		if ($value)
 			return '';
 		//генерим новое имя
-		$info = pathinfo($_FILES['fdata']['name'][$this->name]);
+		$info = pathinfo($this->postField($id, 'name'));
 		if ($id == -1)
 			$id = time();
 		$new_name = $this->genFunc ? call_user_func($this->genFunc, $this->name, $id, '.'.$info['extension']) : $this->name.'_'.$id.'.'.$info['extension'];
-		move_uploaded_file($_FILES['fdata']['tmp_name'][$this->name], $this->path.'/'.$new_name);
+		move_uploaded_file($this->postField($id, 'tmp_name'), $this->path.'/'.$new_name);
 		return $new_name;
 	}
 
@@ -514,6 +514,19 @@ class Scaffold_File extends Scaffold_Field
 		if ($this->download)
 			return '<a href="'.$this->download.'/'.$value.'">'.$value.'</a>';
 		return $value;
+	}
+
+	/**
+	 * Имя поля для формы
+	 *
+	 * @param string $id первичный ключ
+	 * @param string $field имя поля в массиве files
+	 * @return mixed значение
+	 */
+	protected function postField($id, $field)
+	{
+		return $_FILES['fdata'][$field][$id][$this->name];
+		//return 'data['.$id.']['.$this->name.']';
 	}
 
 }
@@ -538,9 +551,9 @@ class Scaffold_Image extends Scaffold_File
 		//флаг что удалили
 		if ($value)
 			return true;
-		if ($_FILES['fdata']['error'][$this->name] == 4)
+		if ($this->postField($id, 'error') == 4)
 			return true;
-		$ext = $this->getImgType($_FILES['fdata']['tmp_name'][$this->name]);
+		$ext = $this->getImgType($this->postField($id, 'tmp_name'));
 		if (!$ext)
 			return 'Картинка должна быть';
 		return true;
@@ -556,7 +569,7 @@ class Scaffold_Image extends Scaffold_File
 			return '';
 		}
 		//оставляем старое значение
-		if ($_FILES['fdata']['error'][$this->name] == 4 && !$value)
+		if ($this->postField($id, 'error') == 4 && !$value)
 			return $old ? $old : '';
 		//удяляем старый
 		if (is_file($this->path.'/'.$old))
@@ -565,11 +578,11 @@ class Scaffold_Image extends Scaffold_File
 		if ($value)
 			return '';
 		//генерим новое имя
-		$ext = $this->getImgType($_FILES['fdata']['tmp_name'][$this->name]);
+		$ext = $this->getImgType($this->postField($id, 'tmp_name'));
 		if ($id == -1)
 			$id = time();
 		$new_name = $this->genFunc ? call_user_func($this->genFunc, $this->name, $id, $ext) : $this->name.'_'.$id.$ext;
-		move_uploaded_file($_FILES['fdata']['tmp_name'][$this->name], $this->path.'/'.$new_name);
+		move_uploaded_file($this->postField($id, 'tmp_name'), $this->path.'/'.$new_name);
 		return $new_name;
 	}
 

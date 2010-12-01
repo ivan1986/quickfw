@@ -283,10 +283,10 @@ abstract class ScaffoldController extends Controller
 		ob_start(array(new HTML_FormPersister(), 'process'));
 		$errors = array();
 		
-		if ($_SERVER['REQUEST_METHOD'] == 'POST' && count($_POST['data'])>0)
+		if ($_SERVER['REQUEST_METHOD'] == 'POST' && count($_POST['data'][$id])>0)
 		{
 			//Обработка результата редактирования
-			$data = $_POST['data'];
+			$data = $_POST['data'][$id];
 			foreach ($data as $k=>$v)
 			{
 				if (isset($this->methods['validator_'.ucfirst($k)]))
