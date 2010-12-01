@@ -50,6 +50,8 @@ abstract class ScaffoldController extends Controller
 	private $setup = false;
 	/** @var array Порядок столбцев */
 	private $order = array();
+	/** @var array сообщения для вывода */
+	private $messages;
 
 	/**
 	 * Получает данные о полях
@@ -108,6 +110,14 @@ abstract class ScaffoldController extends Controller
 			$_SESSION['scaffold'][$this->table] = array();
 		$this->sess = &$_SESSION['scaffold'][$this->table];
 
+		$this->messages = &$this->sess['messages'];
+		if (empty($this->messages))
+			$this->messages = array(
+				'error' => array(),
+				'success' => array(),
+				'message' => array(),
+			);
+
 		$this->setup = true;
 		parent::__construct();
 		$this->methods = array_flip(get_class_methods($this));
@@ -144,6 +154,7 @@ abstract class ScaffoldController extends Controller
 				'addOnBottom' => $this->addOnBottom,
 				'sortImages' => $this->sortImages,
 			),
+			'messages' => $this->messages,
 		));
   }
 
@@ -300,7 +311,7 @@ abstract class ScaffoldController extends Controller
 			}
 			//Если ошибок нет, то записываем в базу изменения
 			if (count($errors))
-				QFW::$view->assign('errors', $errors);
+				$this->messages['error'] = $errors;
 			else
 			{
 				$old = $this->getOldVars($id);
@@ -400,7 +411,6 @@ abstract class ScaffoldController extends Controller
 		if (empty($_POST['filter']) || empty($_POST['apply']))
 			QFW::$router->redirect(Url::C('index'), true);
 		$this->sess['filter'] = $_POST['filter'];
-		
 		QFW::$router->redirect(Url::C('index'), true);
 	}
 
@@ -736,7 +746,6 @@ abstract class ScaffoldController extends Controller
 			'direction' => $dir,
 		);
 		return true;
-
 	}
 
 	/**
