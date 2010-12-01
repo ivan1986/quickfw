@@ -196,6 +196,11 @@ abstract class ScaffoldController extends Controller
 		//обработка выбора мультиедита и мультидела
 		if ($_SERVER['REQUEST_METHOD'] == 'POST')
 		{
+			if (isset($_POST['parent']))
+			{
+				$this->sess['parent'] = $_POST['parent'];
+				QFW::$router->redirect(Url::A());
+			}
 			if (empty($_POST['id']))
 				QFW::$router->redirect(Url::C('index'));
 			if (empty($_POST['edit']) && empty($_POST['delete']))
@@ -224,11 +229,6 @@ abstract class ScaffoldController extends Controller
 			$parent = QFW::$db->selectCol('SELECT ?# AS ARRAY_KEY, ?# FROM ?# ?s',
 				$this->parentData['key'], $this->parentData['field'], 
 				$this->parentData['table'], $this->parentData['other']);
-			if (isset($_POST['parent']))
-			{
-				$this->sess['parent'] = $_POST['parent'];
-				QFW::$router->redirect(Url::A());
-			}
 			if (empty($this->sess['parent']))
 				$this->sess['parent'] = count($parent) ? key($parent) : 0;
 
