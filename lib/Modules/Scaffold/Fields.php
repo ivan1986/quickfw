@@ -106,7 +106,6 @@ class Scaffold_Field extends Scaffold_Field_Info
 	 */
 	public function validator($id, $value)
 	{
-		var_dump($this->required);
 		if ($this->required && empty($value))
 			return false;
 		return true;
@@ -323,6 +322,11 @@ class Scaffold_Int extends Scaffold_Field
 {
 	public function validator($id, $value)
 	{
+		$res = parent::validator($id, $value);
+		if ($res !== true)
+			return $res;
+		if (!$this->required && empty($value))
+			return true;
 		return is_numeric($value);
 	}
 }

@@ -345,6 +345,7 @@ abstract class ScaffoldController extends Controller
 		$state = new TemplaterState(QFW::$view);
 		QFW::$view->setScriptPath(dirname(__FILE__));
 
+		$this->assignMainInfo();
 		return QFW::$view->assign(array(
 			'id' => $id,
 			'data' => $data,
