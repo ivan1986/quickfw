@@ -48,6 +48,8 @@ class NavController
 			return '';
 		if ($cur == false)
 			$cur = QFW::$router->RequestUri;
+		if ($cur instanceof Url)
+			$cur = $cur->intern();
 		$result = '<ul'.($id?' id="'.$id.'"':'').'>';
 		$result.=$this->menuTreeNodes($items, $cur);
 		$result.= '</ul>';
@@ -96,6 +98,8 @@ class NavController
 			return '';
 		if ($cur == false)
 			$cur = QFW::$router->RequestUri;
+		if ($cur instanceof Url)
+			$cur = $cur->intern();
 		$result = '<ul'.($id?' id="'.$id.'"':'').'>';
 		foreach ($items as $k=>$v)
 		{
