@@ -636,6 +636,20 @@ abstract class ScaffoldController extends Controller
 	////////////////////////////////////////////////////////////
 
 	/**
+	 * Условия отображения колонки
+	 *
+	 * <br><br> Вызывается только в конструкторе
+	 *
+	 * @param string|array $colum Колонка или массив колонок, которые нужно скрыть
+	 * @param boolean $disp Scaffold_Display
+	 * @return ScaffoldController
+	 */
+	protected function disp($colum, $disp)
+	{
+		return $this->setColumOpt('disp', $colum, $disp);
+	}
+
+	/**
 	 * Скрывает при выводе и редактировании указанные колонки
 	 *
 	 * <br><br> Вызывается только в конструкторе

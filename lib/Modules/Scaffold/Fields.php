@@ -1,6 +1,7 @@
 <?php
 
 require_once LIBPATH.'/utils.php';
+require_once dirname(__FILE__).'/Display.php';
 
 /**
  * Класс, на основе которого создаются остальные<br>
@@ -11,6 +12,8 @@ class Scaffold_Field_Info
 {
 	/** @var boolean скрытое поле */
 	public $hide = null;
+	/** @var Scaffold_Display условие показа */
+	public $disp = false;
 	/** @var string класс поля */
 	public $type = false;
 	/** @var string параметры класса */
@@ -67,6 +70,16 @@ class Scaffold_Field extends Scaffold_Field_Info
 		$this->default = $info->fiendInfo['Default'];
 		if (!$this->title)
 			$this->title = $this->name;
+		//для совместимости
+		if ($this->disp === false)
+		{
+			$this->disp = new Scaffold_Display();
+			$this->disp->list =
+			$this->disp->edit =
+			$this->disp->new =
+			$this->disp->multiedit =
+			$this->disp->multidel = !$this->hide;
+		}
 	}
 
 	/**

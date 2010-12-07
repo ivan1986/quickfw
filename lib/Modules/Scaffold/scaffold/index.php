@@ -7,17 +7,28 @@
 
 <?php echo $pager; ?>
 
-<?php if (count($data)>0) { $cols = 3 + (empty($actions) ? 0 : 1); // с чекбоксами,  редактирование+удаление, действия ?>
+<?php if (count($data)>0) { $cols = 3 + (empty($actions) ? 0 : 1); // с чекбоксами,  редактирование+удаление, действия
+//считаем колонки
+foreach(current($data) as $key=>$v) 
+	$cols += $fields[$key]->disp->list ? 1 : 0;
+?>
 <form action="" method="post" enctype="multipart/form-data">
 <table id="table_<?php echo $table ?>" class="scaffoldTable">
 <thead>
 <tr>
+	<td colspan="<?php echo $cols ?>">
+	<input type="button" class="button" value="Добавить" onclick="window.location.href='<?php echo Url::C('edit/-1') ?>'" />
+	<input type="submit" name="edit" value="Редактировать выбранных" />
+	<input type="submit" name="delete" value="Удалить выбранных" />
+	<?php echo $this->block(Url::C('multiPost')); ?>
+	</td>
+</tr>
+<tr>
 	<th><input type="checkbox" class="multiSelect" /></th>
 	<?php foreach(current($data) as $key=>$v) {
 		$i = $fields[$key];
-		if ($i->hide)
+		if (!$i->disp->list)
 			continue;
-		$cols++;
 		?>
 		<th><a href="<?php echo Url::C('sort/'.$key) ?>"><?php echo $i->title ?></a>
 			<?php if (isset($order) && $order['field'] == $key) { ?><span class="scaffoldSort">
@@ -40,7 +51,7 @@
 	<td><input type="checkbox" name="id[]" value="<?php echo $id ?>" /></td>
 	<?php foreach($row as $key=>$v) {
 		$i = $fields[$key];
-		if ($i->hide)
+		if (!$i->disp->list)
 			continue;
 		?>
 		<td<?php if ($i->class) {?> class="<?php echo $i->class===true ? 'col_'.$key : $i->class ?>"<?php } ?>><?php //отображение обычного не связанного поля
@@ -61,6 +72,7 @@
 </tbody>
 <tfoot>
 <tr><td colspan="<?php echo $cols ?>">
+	<input type="button" class="button" value="Добавить" onclick="window.location.href='<?php echo Url::C('edit/-1') ?>'" />
 	<input type="submit" name="edit" value="Редактировать выбранных" />
 	<input type="submit" name="delete" value="Удалить выбранных" />
 	<?php echo $this->block(Url::C('multiPost')); ?>
