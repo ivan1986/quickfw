@@ -520,6 +520,8 @@ class Scaffold_File extends Scaffold_Field
 			return '';
 		//генерим новое имя
 		$info = pathinfo($this->postField($id, 'name'));
+		if (empty($info['extension']))
+			return '';
 		if ($id == -1)
 			$id = time();
 		$new_name = $this->genFunc ? call_user_func($this->genFunc, $this->name, $id, '.'.$info['extension']) : $this->name.'_'.$id.'.'.$info['extension'];
@@ -545,8 +547,8 @@ class Scaffold_File extends Scaffold_Field
 	 */
 	protected function postField($id, $field)
 	{
-		return $_FILES['fdata'][$field][$id][$this->name];
-		//return 'data['.$id.']['.$this->name.']';
+		return isset($_FILES['fdata'][$field][$id][$this->name]) ?
+			$_FILES['fdata'][$field][$id][$this->name] : '';
 	}
 
 }
