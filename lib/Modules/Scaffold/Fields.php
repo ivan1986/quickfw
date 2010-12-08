@@ -456,6 +456,8 @@ class Scaffold_File extends Scaffold_Field
 	protected $download;
 	/** @var function Генерит имя файла */
 	protected $genFunc;
+	/** @var string параметр accept */
+	protected $accept;
 
 	/**
 	 * Проверяет параметры для файлового поля
@@ -471,6 +473,7 @@ class Scaffold_File extends Scaffold_Field
 			throw new Exception('Неверная директория для файлов '.$info->typeParams['path'], 1);
 		if (!is_writable($info->typeParams['path']))
 			throw new Exception('Нельзя писать в директорию файлов '.$info->typeParams['path'], 1);
+		$this->accept = !empty($info->typeParams['accept']) ? 'accept="'.$info->typeParams['accept'].'"' : '';
 		$this->path = $info->typeParams['path'];
 		$this->genFunc = !empty($info->typeParams['genFunc']) ? $info->typeParams['genFunc'] : false;
 		$this->prim = $info->primaryKey;
@@ -482,7 +485,7 @@ class Scaffold_File extends Scaffold_Field
 
 	public function editor($id, $value)
 	{
-		return '<input type="file" name="f'.$this->editName($id).'" />
+		return '<input type="file" name="f'.$this->editName($id).'" '.$this->accept.' />
 				<input type="hidden" name="'.$this->editName($id).'" value="0" />
 				<input type="checkbox" name="'.$this->editName($id).'" value="1" label="Удалить" />'.
 				'<div>'.$this->display($id, $value).'</div>';
@@ -550,6 +553,12 @@ class Scaffold_File extends Scaffold_Field
 
 class Scaffold_Image extends Scaffold_File
 {
+	public function __construct($info)
+	{
+		if (empty($info->typeParams['accept']))
+			$info->typeParams['accept'] = 'image/*';
+		parent::__construct($info);
+	}
 
 	public function display($id, $value)
 	{
