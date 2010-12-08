@@ -650,6 +650,23 @@ abstract class ScaffoldController extends Controller
 	}
 
 	/**
+	 * Устанавливает отображение для столбцев
+	 *
+	 * @param string|array $colum Колонка<br>
+	 * Или массив ключи - колонки => значения
+	 * @param string $value значение
+	 * @return ScaffoldController
+	 */
+	protected function setDisp($colum, $value='')
+	{
+		if (!is_array($colum))
+			$colum = array($colum => $value);
+		foreach ($colum as $col=>$val)
+			$this->getInfoClass($col)->disp = $val;
+		return $this;
+	}
+
+	/**
 	 * Скрывает при выводе и редактировании указанные колонки
 	 *
 	 * <br><br> Вызывается только в конструкторе
