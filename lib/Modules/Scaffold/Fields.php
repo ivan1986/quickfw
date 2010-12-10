@@ -526,9 +526,8 @@ class Scaffold_File extends Scaffold_Field
 		$info = pathinfo($this->postField($id, 'name'));
 		if (empty($info['extension']))
 			return '';
-		if ($id == -1)
-			$id = time();
-		$new_name = $this->genFunc ? call_user_func($this->genFunc, $this->name, $id, '.'.$info['extension']) : $this->name.'_'.$id.'.'.$info['extension'];
+		$p = $id == -1 ? time() : $id;
+		$new_name = $this->genFunc ? call_user_func($this->genFunc, $this->name, $id, '.'.$info['extension']) : $this->name.'_'.$p.'.'.$info['extension'];
 		move_uploaded_file($this->postField($id, 'tmp_name'), $this->path.'/'.$new_name);
 		return $new_name;
 	}
