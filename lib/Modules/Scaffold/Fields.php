@@ -265,6 +265,8 @@ class Scaffold_Foreign extends Scaffold_Field
 
 	public function editor($id, $value)
 	{
+		if (isset($_POST['data'][$id][$this->name]))
+			$value = $_POST['data'][$id][$this->name];
 		return $this->selectBuild($id, $this->lookup, $value, $this->isnull);
 	}
 
@@ -391,6 +393,8 @@ class Scaffold_Enum extends Scaffold_Field
 
 	public function editor($id, $value)
 	{
+		if (isset($_POST['data'][$id][$this->name]))
+			$value = $_POST['data'][$id][$this->name];
 		return $this->selectBuild($id, $this->items, $value, false);
 	}
 
@@ -590,12 +594,8 @@ class Scaffold_Image extends Scaffold_File
 	public function proccess($id, $value, $old)
 	{
 		//если запись удалили
-		if ($value === false)
-		{
-			if (is_file($this->path.'/'.$old))
-				unlink($this->path.'/'.$old);
-			return '';
-		}
+		if ($value === false && is_file($this->path.'/'.$old))
+			unlink($this->path.'/'.$old);
 		//оставляем старое значение
 		if ($this->postField($id, 'error') == 4 && !$value)
 			return $old ? $old : '';
@@ -607,9 +607,8 @@ class Scaffold_Image extends Scaffold_File
 			return '';
 		//генерим новое имя
 		$ext = $this->getImgType($this->postField($id, 'tmp_name'));
-		if ($id == -1)
-			$id = time();
-		$new_name = $this->genFunc ? call_user_func($this->genFunc, $this->name, $id, $ext) : $this->name.'_'.$id.$ext;
+		$p = $id == -1 ? time() : $id;
+		$new_name = $this->genFunc ? call_user_func($this->genFunc, $this->name, $id, $ext) : $this->name.'_'.$p.$ext;
 		move_uploaded_file($this->postField($id, 'tmp_name'), $this->path.'/'.$new_name);
 		return $new_name;
 	}
