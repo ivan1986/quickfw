@@ -69,9 +69,10 @@ class PlainView_Delegate
 class Templater_PlainView extends Templater
 {
 
-	public function fetch($tmpl)
+	public function fetch($tmpl, $vars=array())
 	{
 		extract($this->_vars, EXTR_OVERWRITE);
+		extract($vars, EXTR_OVERWRITE);
 		$P=&$this->P;
 		ob_start();
 		include($this->_tmplPath . '/' . $tmpl);

@@ -62,11 +62,11 @@ class Templater_Twig extends Templater
 		return true;
 	}
 
-	public function fetch($name)
+	public function fetch($name, $vars=array())
 	{
 		$template = $this->getEngine()->loadTemplate($name);
 		$this->assign('P', $this->P);
-		return $template->render($this->_vars);
+		return $template->render($vars + $this->_vars);
 	}
 
 	/**

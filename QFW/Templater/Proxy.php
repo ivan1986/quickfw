@@ -52,7 +52,7 @@ class Templater_Proxy extends Templater
 		parent::delete($spec);
 	}
 
-	public function fetch($name)
+	public function fetch($name, $vars=array())
 	{
 		$key=substr($name,strrpos($name,'.')+1);
 		$T = isset(QFW::$config['templater']['exts'][$key]) ?
@@ -75,7 +75,7 @@ class Templater_Proxy extends Templater
 			$this->syncronize($this->templates[$T]['c']);
 			$this->templates[$T]['s']=true;
 		}
-		return $this->templates[$T]['c']->fetch($name);
+		return $this->templates[$T]['c']->fetch($name, $vars);
 	}
 
 	/**

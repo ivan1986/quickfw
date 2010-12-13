@@ -46,6 +46,20 @@ abstract class Templater
 	}
 
 	/**
+	 * Добавлеет в массив в шаблонизаторе новое значение
+	 *
+	 * @param string $name имя массива
+	 * @param mixed $value значение
+	 */
+	public function append($name, $value)
+	{
+		if (empty($this->_vars[$name]))
+			$this->_vars[$name] = array();
+		$this->_vars[$name][] = $value;
+		return $this;
+	}
+
+	/**
 	 * Удаляет указанную переменную из шаблона
 	 *
 	 * @param string|array имя переменной или массив имен
@@ -124,12 +138,12 @@ abstract class Templater
 	/**
 	 * Синоним fetch
 	 */
-	public function render($tmpl)
+	public function render($tmpl, $vars=array())
 	{
-		return $this->fetch($tmpl);
+		return $this->fetch($tmpl, $vars);
 	}
 
-	abstract public function fetch($tmpl);
+	abstract public function fetch($tmpl, $vars=array());
 
 	/**
 	 * Генерирует полный вывод, обрабатывает фильтрами
