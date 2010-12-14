@@ -54,18 +54,18 @@ foreach(current($data) as $key=>$v)
 		if (!$i->disp->list)
 			continue;
 		?>
-		<td<?php if ($i->class) {?> class="<?php echo $i->class===true ? 'col_'.$key : $i->class ?>"<?php } ?>><?php //отображение обычного не связанного поля
+		<td<?php if ($i->class) {?> class="<?php echo $i->class===true ? 'col_'.$key : $i->class ?>"<?php } ?>><?php
 			if (isset($methods['display_'.ucfirst($key)]))
 				echo call_user_func($class.'::display_'.ucfirst($key), $id, $v);
 			else
 				echo $i->display($id, $v);
 		?></td>
 	<?php } ?>
-	<td><a href="<?php echo Url::C('edit/'.$row[$primaryKey]) ?>">ред.</a></td>
+	<td><a href="<?php echo Url::C('edit/'.$id) ?>">ред.</a></td>
 	<td><a onclick="return confirm('Удалить?')" href="<?php echo
 		Url::C('delete/'.$row[$primaryKey]) ?>">уд.</a></td>
 	<?php if (count($actions)) {?><td><?php foreach ($actions as $tit => $uri) { ?>
-		<a href="<?php echo Url::C($uri.'/'.$row[$primaryKey]) ?>"><?php echo $tit ?></a>
+		<a href="<?php echo Url::C($uri.'/'.$id) ?>"><?php echo $tit ?></a>
 	<?php } ?></td><?php } ?>
 </tr>
 <?php } ?>
