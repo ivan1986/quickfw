@@ -30,8 +30,8 @@ class Scaffold_Field_Info
 	public $table;
 	/** @var string Имя первичного ключа */
 	public $primaryKey;
-	/** @var string Класс таблицы */
-	public $tableClass;
+	/** @var ScaffoldController Объект таблицы */
+	public $tableObject;
 
 	/** @var string Имя поля */
 	public $name = '';

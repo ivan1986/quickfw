@@ -978,7 +978,7 @@ abstract class ScaffoldController extends Controller
 	{
 		$infoClass->fiendInfo = $fieldInfo;
 		$infoClass->table = $this->table;
-		$infoClass->tableClass = get_class($this);
+		$infoClass->tableObject = &$this;
 		$infoClass->primaryKey = $this->primaryKey;
 
 		if ($infoClass->type)
