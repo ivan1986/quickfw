@@ -113,6 +113,17 @@ class QFW
 			//устанавливаем пустой главный шаблон
 			self::$view->mainTemplate = '';
 		}
+		if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest')
+		{
+			//TODO: нужен класс для возврата данных в json
+			//сейчас не отличаются вызовы html и json
+			//возможно -
+			// ["HTTP_ACCEPT"]=> string(3) "*/*" для json
+			// ["HTTP_ACCEPT"]=> string(3) "text/html, */*; q=0.01" для html
+			self::$ajax = 'jquery';
+			//устанавливаем пустой главный шаблон
+			self::$view->mainTemplate = '';
+		}
 	}
 
 	/**
