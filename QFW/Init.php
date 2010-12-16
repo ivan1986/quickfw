@@ -23,7 +23,7 @@ class QFW
 	/** @var mixed|false Данные о пользователе */
 	static public $userdata = false;
 
-	/** @var JsHttpRequest|false JsHttpRequest, если был выполнени Ajax запрос */
+	/** @var JsHttpRequest|jQuery|false JsHttpRequest или jQuery, если был выполнени Ajax запрос */
 	static public $ajax = false;
 
 	private function __construct() {}
@@ -107,20 +107,14 @@ class QFW
 		if (isset($_REQUEST['JsHttpRequest']))
 		{
 			require_once LIBPATH.'/JsHttpRequest.php';
-			//QFW::$libs['JsHttpRequest'] для совместимости	со старым вариантом
-			self::$ajax = QFW::$libs['JsHttpRequest'] = new
-				JsHttpRequest(self::$config['host']['encoding']);
+			self::$ajax = new JsHttpRequest(self::$config['host']['encoding']);
 			//устанавливаем пустой главный шаблон
 			self::$view->mainTemplate = '';
 		}
 		if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest')
 		{
-			//TODO: нужен класс для возврата данных в json
-			//сейчас не отличаются вызовы html и json
-			//возможно -
-			// ["HTTP_ACCEPT"]=> string(3) "*/*" для json
-			// ["HTTP_ACCEPT"]=> string(3) "text/html, */*; q=0.01" для html
-			self::$ajax = 'jquery';
+			require_once LIBPATH.'/jquery.php';
+			self::$ajax = new jQuery();
 			//устанавливаем пустой главный шаблон
 			self::$view->mainTemplate = '';
 		}
