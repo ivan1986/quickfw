@@ -138,12 +138,21 @@ class Url
 	 */
 	public function  __toString()
 	{
+		return $this->get();
+	}
+
+	/**
+	 * урл для вывода, с подстановками
+	 *
+	 * @return string урл
+	 */
+	public function get()
+	{
 		return QFW::$router->backrewriteUrl(
 			self::$config['base'].QFW::$router->backrewrite($this->u).
 			($this->u!=='' ? self::$config['ext'] : '').
 			($this->get ? '?' . $this->get : '').
 			($this->anchor ? '#' . $this->anchor : ''));
-
 	}
 
 	/**
@@ -156,7 +165,7 @@ class Url
 	{
 		return $this->u;
 	}
-    
+
 }
 
 ?>
