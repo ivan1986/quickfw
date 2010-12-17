@@ -77,7 +77,7 @@ abstract class Dklab_Cache_Frontend_Slot
      * Saves a data for this slot. 
      * 
      * @param mixed $data   Data to be saved.
-     * @return void
+     * @return mixed $data
      */
     public function save($data)
     {
@@ -87,6 +87,7 @@ abstract class Dklab_Cache_Frontend_Slot
         }
         $raw = serialize($data);
         $this->_getBackend()->save($raw, $this->_id, $tags, $this->_lifetime);
+        return $data;
     }
     
     
