@@ -19,7 +19,7 @@
 </tr>
 </thead>
 <tbody>
-<?php foreach($data as $id=>$row) { ?>
+<?php foreach($data as $id=>$row) { $class::setCurRow($row); ?>
 <tr>
 	<?php foreach($row as $key=>$v) {
 		$i = $fields[$key];

@@ -55,6 +55,28 @@ abstract class ScaffoldController extends Controller
 	/** @var array сообщения для вывода */
 	private $messages;
 
+	/** @var array текущая строка */
+	static private $row;
+
+	/**
+	 * Получает текущую строку
+	 *
+	 * @return array текущая строка
+	 */
+	static public function getCurRow()
+	{
+		return self::$row;
+	}
+	/**
+	 * устанавливает текущую строку
+	 *
+	 * @param array $row строка
+	 */
+	static public function setCurRow($row)
+	{
+		self::$row = $row;
+	}
+
 	/**
 	 * Получает данные о полях
 	 *
@@ -105,6 +127,7 @@ abstract class ScaffoldController extends Controller
 	 */
 	public function  __construct()
 	{
+		$this->row = array();
 		Hlp::addCSS('built-in/scaffold.css');
 		if ($this->useJs)
 		{
@@ -297,6 +320,7 @@ abstract class ScaffoldController extends Controller
 				$data[$f] = call_user_func(array(get_class($this), 'default_'.ucfirst($f)));
 			else
 				$data[$f] = $this->fields[$f]->def();
+		self::setCurRow($data);
 
 		$state = new TemplaterState(QFW::$view);
 		QFW::$view->setScriptPath(dirname(__FILE__));
@@ -341,6 +365,7 @@ abstract class ScaffoldController extends Controller
 			$this->sess['return'] = $_SERVER['HTTP_REFERER'];
 
 		$data = $this->getOldVars($id);
+		self::setCurRow($data);
 
 		$state = new TemplaterState(QFW::$view);
 		QFW::$view->setScriptPath(dirname(__FILE__));
@@ -365,6 +390,7 @@ abstract class ScaffoldController extends Controller
 		$old = $this->getOldVars($id);
 		if (!$old)
 			QFW::$router->redirect(Url::C('index'), true);
+		self::setCurRow($old);
 		foreach($this->fields as $k=>$v)
 			$v->proccess($id, false, $old[$k]);
 		QFW::$db->query('DELETE FROM ?# WHERE ?#=?',
@@ -394,8 +420,11 @@ abstract class ScaffoldController extends Controller
 					$this->primaryKey, array($this->table=>array_merge($this->order, array('*'))),
 					$this->table, $this->primaryKey, $ids);
 				foreach($olds as $id=>$old)
+				{
+					self::setCurRow($old);
 					foreach($this->fields as $k=>$v)
 						$v->proccess($id, false, $old[$k]);
+				}
 				QFW::$db->query('DELETE FROM ?# WHERE ?# IN (?a)',
 					$this->table, $this->primaryKey, $ids);
 				$this->messages['success'][] = 'Выбранные записи удалены';
@@ -472,6 +501,8 @@ abstract class ScaffoldController extends Controller
 		$errors = array();
 		//Обработка результата редактирования
 		foreach($alldata as $id => $data)
+		{
+			self::setCurRow($old);
 			foreach ($data as $k=>$v)
 			{
 				if (isset($this->methods['validator_'.ucfirst($k)]))
@@ -483,6 +514,7 @@ abstract class ScaffoldController extends Controller
 				if ($res === false)
 					$errors[$k] = 'Поле '.$this->fields[$k]->title.' имеет некорректное значение';
 			}
+		}
 
 		//Если ошибок нет, то записываем в базу изменения
 		if (count($errors))
@@ -494,7 +526,8 @@ abstract class ScaffoldController extends Controller
 		foreach($alldata as $id => $data)
 		{
 			$old = $this->getOldVars($id);
-			//Обработка данных после POST
+			self::setCurRow($old);
+			//Обработка данных перед POST
 			foreach ($this->fields as $k=>$class)
 				if ($k == $this->primaryKey && !isset($data[$k]))
 					continue; //не трогаем первичный ключ
@@ -512,6 +545,17 @@ abstract class ScaffoldController extends Controller
 			else
 				QFW::$db->query('UPDATE ?# SET ?a WHERE ?#=?',
 					$this->table, $data, $this->primaryKey, $id);
+
+			//Обработка данных после POST
+			foreach ($this->fields as $k=>$class)
+				if ($k == $this->primaryKey && !isset($data[$k]))
+					continue; //не трогаем первичный ключ
+				elseif (isset($this->methods['post_'.ucfirst($k)]))
+				$data[$k] = call_user_func(array($this, 'post_'.ucfirst($k)),
+					isset($data[$k]) ? $data[$k] : $old[$k], $id == -1 ? $ins_id : $id, $old[$k]);
+				else
+				$data[$k] = $class->post($id == -1 ? $ins_id : $id,
+					isset($data[$k]) ? $data[$k] : $old[$k], $old[$k]);
 
 			if (isset($this->methods['postEdit']))
 				call_user_func(array($this, 'postEdit'), $id == -1 ? $ins_id : $id);

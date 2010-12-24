@@ -48,7 +48,7 @@ foreach(current($data) as $key=>$v)
 </tr>
 </thead>
 <tbody>
-<?php foreach($data as $id=>$row) { ?>
+<?php foreach($data as $id=>$row) { $class::setCurRow($row); ?>
 <tr>
 	<td><input type="checkbox" name="id[]" value="<?php echo $id ?>" /></td>
 	<?php foreach($row as $key=>$v) {

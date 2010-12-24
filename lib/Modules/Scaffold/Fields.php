@@ -165,6 +165,17 @@ class Scaffold_Field extends Scaffold_Field_Info
 		return $value;
 	}
 
+	/**
+	 * Обработка значения после записи в таблицу - известен ID для insert
+	 *
+	 * @param string $id первичный ключ - уже исзвестен для insert
+	 * @param string $value новое значение
+	 * @param string $old Старое значение
+	 */
+	public function post($id, $value, $old)
+	{
+	}
+
 	public function action($id, $action='do')
 	{
 		die('Был вызван метод '.$action.' для поля '. $this->title);
