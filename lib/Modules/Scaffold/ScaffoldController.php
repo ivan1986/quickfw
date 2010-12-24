@@ -562,6 +562,37 @@ abstract class ScaffoldController extends Controller
 		QFW::$router->redirect(Url::C('index'), true);
 	}
 
+
+	/**
+	 * Устанавливает порядок сортировки
+	 *
+	 * @param string $field Имя поля
+	 * @param string $dir Направление сортировки (ASC|DESC|) - пустое - сменить
+	 * @return bool Удачно или нет
+	 */
+	public function setSort($field='', $dir='')
+	{
+		//такого поля нету
+		if (!isset($this->fields[$field]))
+			return false;
+		//если сортировки в этой таблице еще нет
+		if (!isset($this->sess['sort']))
+			$this->sess['sort'] = array(
+				'field' => '',
+				'direction' => '',
+			);
+		//если не указана, то ASC или сменить ASC на DESC
+		if ($dir != 'ASC' && $dir != 'DESC')
+			$dir = ($this->sess['sort']['field'] == $field &&
+				$this->sess['sort']['direction'] == 'ASC')
+				 ? 'DESC' : 'ASC';
+		$this->sess['sort'] = array(
+			'field' => $field,
+			'direction' => $dir,
+		);
+		return true;
+	}
+
 	////////////////////////////////////////////////////////////
 	//Функции для упращения настройки таблицы - удобные сеттеры
 	////////////////////////////////////////////////////////////
@@ -883,36 +914,6 @@ abstract class ScaffoldController extends Controller
 			'where' => call_user_func_array(array(QFW::$db, 'subquery'), $args),
 			'form' => $form,
 		);
-	}
-
-	/**
-	 * Устанавливает порядок сортировки
-	 *
-	 * @param string $field Имя поля
-	 * @param string $dir Направление сортировки (ASC|DESC|) - пустое - сменить
-	 * @return bool Удачно или нет
-	 */
-	public function setSort($field='', $dir='')
-	{
-		//такого поля нету
-		if (!isset($this->fields[$field]))
-			return false;
-		//если сортировки в этой таблице еще нет
-		if (!isset($this->sess['sort']))
-			$this->sess['sort'] = array(
-				'field' => '',
-				'direction' => '',
-			);
-		//если не указана, то ASC или сменить ASC на DESC
-		if ($dir != 'ASC' && $dir != 'DESC')
-			$dir = ($this->sess['sort']['field'] == $field &&
-				$this->sess['sort']['direction'] == 'ASC')
-				 ? 'DESC' : 'ASC';
-		$this->sess['sort'] = array(
-			'field' => $field,
-			'direction' => $dir,
-		);
-		return true;
 	}
 
 	/**
