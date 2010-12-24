@@ -465,16 +465,17 @@ class Scaffold_Datetime extends Scaffold_Field
 
 	public function editor($id, $value)
 	{
-		return QFW::$view->
-			assign('id', $id)->
-			assign('name', $this->editName($id))->
-			assign('value', $value)->
-			fetch('scaffold/fields/dateedit.php');
+		//баг - с секундами не отправляет - ограничимся минутами
+		return '<input type="datetime-local" name="'.$this->editName($id).'"
+			   default="'.date('Y-m-d\TH:i:00', strtotime($value)).'" />';
 	}
 
 }
 
-class Scaffold_Timestamp extends Scaffold_Datetime {}
+class Scaffold_Timestamp extends Scaffold_Datetime {
+	//пока никаких отличий от Scaffold_Datetime
+	//так как в опере баг с datetime - часовой пояс отличный от 0 не работает
+}
 
 
 /**
