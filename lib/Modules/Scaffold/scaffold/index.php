@@ -5,6 +5,7 @@
 	include 'filterForm.php';
 } ?>
 
+<?php echo $this->block(Url::C('preTable')); ?>
 <?php echo $pager; ?>
 
 <?php if (count($data)>0) { $cols = 3 + (empty($actions) ? 0 : 1); // с чекбоксами,  редактирование+удаление, действия
@@ -17,7 +18,8 @@ foreach(current($data) as $key=>$v)
 <thead>
 <tr>
 	<td colspan="<?php echo $cols ?>">
-	<input type="button" class="button" value="Добавить" onclick="window.location.href='<?php echo Url::C('edit/-1') ?>'" />
+	<?php echo $this->block(Url::C('multiPre')); ?>
+	<input type="button" value="Добавить" onclick="window.location.href='<?php echo Url::C('edit/-1') ?>'" />
 	<input type="submit" name="edit" value="Редактировать выбранных" />
 	<input type="submit" name="delete" value="Удалить выбранных" />
 	<?php echo $this->block(Url::C('multiPost')); ?>
@@ -54,25 +56,26 @@ foreach(current($data) as $key=>$v)
 		if (!$i->disp->list)
 			continue;
 		?>
-		<td<?php if ($i->class) {?> class="<?php echo $i->class===true ? 'col_'.$key : $i->class ?>"<?php } ?>><?php
+		<td<?php if ($i->class) {?> class="<?php echo $i->class===true ? 'col_'.$key : $i->class ?>"<?php } ?>><?php //отображение обычного не связанного поля
 			if (isset($methods['display_'.ucfirst($key)]))
 				echo call_user_func($class.'::display_'.ucfirst($key), $id, $v);
 			else
 				echo $i->display($id, $v);
 		?></td>
 	<?php } ?>
-	<td><a href="<?php echo Url::C('edit/'.$id) ?>">ред.</a></td>
+	<td><a href="<?php echo Url::C('edit/'.$row[$primaryKey]) ?>">ред.</a></td>
 	<td><a onclick="return confirm('Удалить?')" href="<?php echo
 		Url::C('delete/'.$row[$primaryKey]) ?>">уд.</a></td>
 	<?php if (count($actions)) {?><td><?php foreach ($actions as $tit => $uri) { ?>
-		<a href="<?php echo Url::C($uri.'/'.$id) ?>"><?php echo $tit ?></a>
+		<a href="<?php echo Url::C($uri.'/'.$row[$primaryKey]) ?>"><?php echo $tit ?></a>
 	<?php } ?></td><?php } ?>
 </tr>
 <?php } ?>
 </tbody>
 <tfoot>
 <tr><td colspan="<?php echo $cols ?>">
-	<input type="button" class="button" value="Добавить" onclick="window.location.href='<?php echo Url::C('edit/-1') ?>'" />
+	<?php echo $this->block(Url::C('multiPre')); ?>
+	<input type="button" value="Добавить" onclick="window.location.href='<?php echo Url::C('edit/-1') ?>'" />
 	<input type="submit" name="edit" value="Редактировать выбранных" />
 	<input type="submit" name="delete" value="Удалить выбранных" />
 	<?php echo $this->block(Url::C('multiPost')); ?>

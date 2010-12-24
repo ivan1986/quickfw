@@ -45,6 +45,8 @@ class Scaffold_Field_Info
 	public $class = false;
 	/** @var bool Обязательная колонка */
 	public $required = false;
+	/** @var bool использовать label */
+	public $label = true;
 
 }
 
@@ -500,6 +502,7 @@ class Scaffold_File extends Scaffold_Field
 	public function __construct($info)
 	{
 		parent::__construct($info);
+		$this->label = false;
 		if (empty ($info->typeParams['path']))
 			throw new Exception('Не указана директория для фалов', 1);
 		if (!is_dir($info->typeParams['path']))
