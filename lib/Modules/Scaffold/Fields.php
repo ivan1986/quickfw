@@ -74,14 +74,13 @@ class Scaffold_Field extends Scaffold_Field_Info
 			$this->title = $this->name;
 		//для совместимости
 		if ($this->disp === false)
-		{
-			$this->disp = new Scaffold_Display();
-			$this->disp->list =
-			$this->disp->edit =
-			$this->disp->new =
-			$this->disp->multiedit =
-			$this->disp->multidel = !$this->hide;
-		}
+			$this->disp = Scaffold_Display::get()
+				->hide($this->hide)
+				->tlist()
+				->tedit()
+				->tnew()
+				->tmultiedit()
+				->tmultidel();
 	}
 
 	/**
