@@ -36,7 +36,7 @@ abstract class Debug_ErrorHook_TextNotifier implements Debug_ErrorHook_INotifier
         $body[] = $this->_makeSection(
             "", 
             join("\n", array(
-                (@$_SERVER['GATEWAY_INTERFACE']? "//{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}" : ""),
+                (!empty($_SERVER['GATEWAY_INTERFACE'])? "//{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}" : ""),
                 "$errno: $errstr",
                 "at $errfile on line $errline",
             ))
