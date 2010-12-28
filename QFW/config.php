@@ -34,8 +34,9 @@ $config['redirection']=array(
 $config['QFW'] = array(
 	'release' => false, /* статус проекта на данном хосте - отладка и всякие быстрые компиляции */
 	'cacheSessions' => false, /* Хранить сессии в кеше, не использовать стандартный механизм */
-	'autoload' => false, /* включить автолоад false|true|string */
+	'autoload' => true, /* включить автолоад false|true|string */
 	'auto404' => false, /* не перенаправлять на дефолтовый контроллер все запросы  */
+	'main404' => false, /* 404 страница в дизайне main */
 	'addCSSXml' => false, /* addJS и addCSS выводят теги в XML  */
 );
 

@@ -227,7 +227,10 @@ class QuickFW_Router
 		header((empty($_SERVER['SERVER_PROTOCOL']) ? 'HTTP/1.1 ' : $_SERVER['SERVER_PROTOCOL']).' 404 Not Found');
 		if (!is_file(QFW::$view->getScriptPath().'/404.php'))
 			QFW::$view->setScriptPath(APPPATH.'/default/templates/');
-		die(QFW::$view->displayMain(QFW::$view->render('404.php')));
+		$content = QFW::$view->fetch('404.php');
+		if (!QFW::$config['QFW']['main404'])
+			QFW::$view->mainTemplate = '';
+		die(QFW::$view->displayMain($content));
 	}
 
 	/**
