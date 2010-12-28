@@ -96,8 +96,10 @@ class QuickFW_Router
 		$data = explode(self::PATH_SEPARATOR, $requestUri);
 		$data = array_map('urldecode', $data);
 
-		//обнуляем модуль - если нас вызвали повторно
+		//обнуляем если нас вызвали повторно
 		$this->module = '';
+		$this->controller = '';
+		$this->action = '';
 
 		$MCA = $this->loadMCA($data, $type);
 		if (isset($MCA['Error']))
