@@ -32,6 +32,9 @@ class Text
 		return $form5;
 	}
 
+	/**
+	 * Обрезка текста
+	 */
 	static public function my_trim($str, $size, $word=false)
 	{
 		if (mb_strlen($str)<=$size)
@@ -44,6 +47,19 @@ class Text
 		$len = mb_strlen(implode(' ', count($words) > 1 ? array_slice($words, 0, count($words)-1) : $words));
 		$str = mb_substr($str, 0, $len).'...';
 		return $str;
+	}
+
+
+	/**
+	 * Печать размера файла в форматированном виде
+	 */
+	static public function printSize($size)
+	{
+		if ($size>1024*1024*2)
+			return round($size/1024/1024,2).' Мб';
+		if ($size>1024*10)
+			return round($size/1024,2).' Кб';
+		return $size.' байт';
 	}
 
 	/**

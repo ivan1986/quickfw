@@ -127,31 +127,6 @@ function make_urls($string)
 }
 
 /**
- * Печать размера файла в форматированном виде
- */
-function printSize($size)
-{
-	if ($size>1024*1024*2)
-		return round($size/1024/1024,2).' Мб';
-	if ($size>1024*10)
-		return round($size/1024,2).' Кб';
-	return $size.' байт';
-}
-
-/**
- * Обрезает длинные строки, добавляя в конце многоточие
- *
- * @param string $str строка, которую нужно обрезать
- * @param integer $size до скольки знаков
- */
-function my_trim($str, $size)
-{
-	if (mb_strlen($str)>$size)
-		$str=mb_substr($str,0,$size-3).'...';
-	return $str;
-}
-
-/**
  * Обрезает длинные строки, не разрывая последнее слово
  *
  * @param string $str строка, которую нужно обрезать
@@ -273,61 +248,6 @@ function array2xml($array,$attrName='attr',$arrFlar='array')
 		return array('xml'=>$xml,'attr'=>$subattr);
 	return $xml;
 }
-
-/**
- * Вывод окончаний русских слов с учетом числительных (например сообщение сообщения сообщений)
- *
- * @param integer $n число
- * @param string $form1 единственное
- * @param string $form2 форма для 2-4
- * @param string $form5 форма для 5 и более
- * @return string нужная форма
- */
-function pluralForm($n, $form1, $form2, $form5)
-{
-	$n = abs($n) % 100;
-	$n1 = $n % 10;
-	if ($n > 10 && $n < 20) return $form5;
-	if ($n1 > 1 && $n1 < 5) return $form2;
-	if ($n1 == 1) return $form1;
-	return $form5;
-}
-
-/**
- * Формирование даты по-русски
- * <br>так как при выстановке локали неправильно склоняет
- *
- * @see date
- * @param string $format формат аналогичен date
- * @param integer $time время
- * @return string дата
- */
-function russian_date($format, $time=false)
-{
-	static $translation = array(
-		"January" => "Января",
-		"February" => "Февраля",
-		"March" => "Марта",
-		"April" => "Апреля",
-		"May" => "Мая",
-		"June" => "Июня",
-		"July" => "Июля",
-		"August" => "Августа",
-		"September" => "Сентября",
-		"October" => "Октября",
-		"November" => "Ноября",
-		"December" => "Декабря",
-		"Monday" => "Понедельник",
-		"Tuesday" => "Вторник",
-		"Wednesday" => "Среда",
-		"Thursday" => "Четверг",
-		"Friday" => "Пятница",
-		"Saturday" => "Суббота",
-		"Sunday" => "Воскресенье",
-	);
-	return strtr(date($format, $time!==false ? $time : time()), $translation);
-}
-
 
 /**
  * Вызывает preg_match(_all) и
