@@ -227,7 +227,7 @@ class QuickFW_Router
 		header((empty($_SERVER['SERVER_PROTOCOL']) ? 'HTTP/1.1 ' : $_SERVER['SERVER_PROTOCOL']).' 404 Not Found');
 		if (!is_file(QFW::$view->getScriptPath().'/404.php'))
 			QFW::$view->setScriptPath(APPPATH.'/default/templates/');
-		die(QFW::$view->render('404.php'));
+		die(QFW::$view->displayMain(QFW::$view->render('404.php')));
 	}
 
 	/**
@@ -454,7 +454,9 @@ SREG;
 			$MCA['Module'] = array_shift($data);
 		else
 			$MCA['Module'] = $type=='Block' ? $this->curModule : $this->defM;
-		$path = $this->baseDir.'/'.$MCA['Module'];
+		$this->cModule = $MCA['Module'];
+		if ($this->module == '') $this->module = $this->cModule;
+		$path = $this->baseDir.'/'.$this->cModule;
 		QFW::$view->setScriptPath($path.'/templates');
 
 		$c=count($data); // Количество элементов URI исключая модуль
@@ -480,9 +482,8 @@ SREG;
 		}
 		$MCA['Controller'] = $cname;
 		$class_key=$MCA['Module'].'|'.$MCA['Controller'];
-
-		$this->cModule = $MCA['Module'];
 		$this->cController = $MCA['Controller'];
+		if ($this->controller == '') $this->controller = $this->cController;
 
 		if (!isset($this->classes[$class_key]))
 		{
@@ -503,17 +504,13 @@ SREG;
 			$acts = get_class_methods($class);
 
 			//Выполняется при первом вызове и сохраняет значение вызванного MCA
-			//Достаточно проверить только один - после выполнения пустыми они быть не могут
-			if ($this->module == '')
+			//Проверяем последний так как остальные уже записаны
+			if ($this->action == '')
 			{
 				$aname = isset($data[0]) ? $data[0] :
 					(isset($vars['defA']) ? $vars['defA'] : $this->defA);
 				if (!in_array(strtr($aname,'.','_').$type, $acts))
 					$aname = (isset($vars['defA']) ? $vars['defA'] : $this->defA);
-				//Инициализируем значения, чтобы можно было узнать
-				//как нас вызвали в конструкторе
-				$this->cModule = $this->module = $MCA['Module'];
-				$this->cController = $this->controller = $MCA['Controller'];
 				$this->cAction = $this->action = $aname;
 				$this->type = $type;
 			}
