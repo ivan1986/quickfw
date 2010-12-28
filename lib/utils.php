@@ -288,4 +288,23 @@ function nocache()
  */
 function esc($s) { return htmlspecialchars($s, ENT_QUOTES, QFW::$config['host']['encoding']); }
 
+/**
+ * Добавляет соль пароля
+ */
+function password_sailt($pass)
+{
+  return md5($pass.QFW::$config['pass_sailt']);
+}
+
+/**
+ * Генерирует урл из текста - убирает / и применяет urlencode
+ *
+ * @param string $text
+ * @return string
+ */
+function genUrl($text)
+{
+  return rawurlencode(str_replace(array('/', ' '), '-', $text));
+}
+
 ?>
