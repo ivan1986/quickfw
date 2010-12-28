@@ -68,9 +68,6 @@ $config['session'] = array(
 	//'httponly' => false,
 );
 
-$config['cacher']=array(
-	'module' => 'File',
-);
 $config['cache'] = array(
 	'default' => array(
 		'module' => 'File',

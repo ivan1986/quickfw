@@ -59,23 +59,12 @@ $config['error'][] = array(
 $config['error'] = false;
 
 /**
- * Настройки кешера (класс бекенда и дополнительные параметры, если есть)
- *
- * @deprecated лучше юзайте новый кешер
- */
-$config['cacher']=array(
-	'module' => 'Bdb',
-	'options' => array(
-		'file'=>'ttt',
-	),
-);
-/**
  * Настройки кешеров
  * Массив из названий, обязателен default
  */
 $config['cache'] = array(
 	'default' => array(
-		'module' => 'Bdb',
+		'module' => 'File',
 		'namespace' => '',
 		'tags' => false,
 	),
