@@ -1,6 +1,7 @@
 <?php
 
 require_once LIBPATH.'/utils.php';
+require_once LIBPATH.'/Text.php';
 require_once dirname(__FILE__).'/Display.php';
 
 /**
@@ -309,7 +310,7 @@ abstract class Scaffold_UserInput extends Scaffold_Field
 
 	public function display($id, $value)
 	{
-		return QFW::$view->esc(my_trim($value, $this->trim));
+		return QFW::$view->esc(Text::my_trim($value, $this->trim));
 	}
 }
 
