@@ -169,7 +169,7 @@ class QFW
 	static public function JabberFromConfig()
 	{
 		require_once LIBPATH.'/XMPPHP/XMPP.php';
-		new XMPPHP_XMPP(
+		return new XMPPHP_XMPP(
 			QFW::$config['jabber']['host'], QFW::$config['jabber']['port'],
 			QFW::$config['jabber']['user'], QFW::$config['jabber']['pass'],
 			QFW::$config['jabber']['resource'], QFW::$config['jabber']['server'],
