@@ -25,12 +25,13 @@ class JsController
 		QFW::$view->mainTemplate = '';
 		$args = func_get_args();
 		$js = implode('/', $args);
-		if (!is_file($this->path.'/'.$js))
+		$jsp = str_replace('.js', '.js.php', $js);
+		if (!is_file($this->path.'/'.$jsp))
 			QFW::$router->show404();
 
 		header('Content-Type: application/javascript');
 		QFW::$view->setScriptPath($this->path);
-		$text = QFW::$view->fetch($js);
+		$text = QFW::$view->fetch($jsp);
 
 		return $text;
 	}
@@ -44,11 +45,14 @@ class JsController
 		$ret = false;
 		chdir($this->path);
 		QFW::$view->setScriptPath($this->path);
-		exec('find . -name \'*.js\'', $out, $ret);
+		exec('find . -name \'*.js.php\'', $out, $ret);
 		if ($ret)
 			return;
 		foreach ($out as $file)
-			file_put_contents(DOC_ROOT.'/js/'.$file, QFW::$view->fetch($file));
+		{
+			$js = str_replace('.js.php', '.js', $file);
+			file_put_contents(DOC_ROOT.'/js/'.$js, QFW::$view->fetch($file));
+		}
 	}
 
 	/**
@@ -59,12 +63,15 @@ class JsController
 		$out = array();
 		$ret = false;
 		chdir($this->path);
-		exec('find . -name \'*.js\'', $out, $ret);
+		exec('find . -name \'*.js.php\'', $out, $ret);
 		if ($ret)
 			return;
 		foreach ($out as $file)
 		{
-			$js = str_replace('./', DOC_ROOT.'/js/', $file);
+			$js = str_replace(
+				array('.js.php', './'),
+				array('.js', DOC_ROOT.'/css/'),
+			$file);
 			if (is_file($js))
 				unlink($js);
 		}

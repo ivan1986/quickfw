@@ -30,7 +30,7 @@ class CssController
 		QFW::$view->mainTemplate = '';
 		$args = func_get_args();
 		$css = implode('/', $args);
-		$scss = str_replace('.css', '.scss', $css);
+		$scss = str_replace('.css', '.scss.php', $css);
 		if (!is_file($this->path.'/'.$scss))
 			QFW::$router->show404();
 
@@ -61,14 +61,17 @@ class CssController
 		$ret = false;
 		chdir($this->path);
 		QFW::$view->setScriptPath($this->path);
-		exec('find . -name \'*.scss\'', $out, $ret);
+		exec('find . -name \'*.scss.php\'', $out, $ret);
 		if ($ret)
 			return;
 		foreach ($out as $file)
 		{
-			$css = str_replace('.scss', '.css', $file);
+			$css = str_replace(
+				array('.scss.php', './'),
+				array('.css', DOC_ROOT.'/css/'),
+			$file);
 			$text = QFW::$view->fetch($file);
-			exec('echo '.escapeshellarg($text).' | '.self::SASS.' 2>&1 | unexpand -t2 --first-only > '.DOC_ROOT.'/css/'.$css, $out, $ret);
+			exec('echo '.escapeshellarg($text).' | '.self::SASS.' 2>&1 | unexpand -t2 --first-only > '.$css, $out, $ret);
 		}
 	}
 
@@ -80,13 +83,13 @@ class CssController
 		$out = array();
 		$ret = false;
 		chdir($this->path);
-		exec('find . -name \'*.scss\'', $out, $ret);
+		exec('find . -name \'*.scss.php\'', $out, $ret);
 		if ($ret)
 			return;
 		foreach ($out as $file)
 		{
 			$css = str_replace(
-				array('.scss', './'),
+				array('.scss.php', './'),
 				array('.css', DOC_ROOT.'/css/'),
 			$file);
 			if (is_file($css))
