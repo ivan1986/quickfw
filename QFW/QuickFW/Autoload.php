@@ -17,6 +17,7 @@ class Autoload
 		spl_autoload_register(array(__CLASS__, 'Bind'));
 		spl_autoload_register(array(__CLASS__, 'Dirs'));
 		spl_autoload_register(array(__CLASS__, 'Controller'));
+		spl_autoload_register(array(__CLASS__, 'SlotsAndTags'));
 		if (is_callable($function))
 			spl_autoload_register($function);
 	}
@@ -59,11 +60,33 @@ class Autoload
 				'ScaffoldController' => LIBPATH.'/Modules/Scaffold/ScaffoldController.php',
 				'QuickFW_Auth' => QFWPATH.'/QuickFW/Auth.php',
 				'Hlp' => QFWPATH.'/QuickFW/Helpers.php',
+				'Dklab_Cache_Frontend_Slot' => QFWPATH.'/QuickFW/Cacher/Slot.php',
+				'Dklab_Cache_Frontend_Tag' => QFWPATH.'/QuickFW/Cacher/Tag.php',
 			);
 		if (empty(self::$classes[$class]))
 			return false;
 		require self::$classes[$class];
 		return true;
+	}
+
+	/**
+	 * Автолоад слотов и тегов
+	 *
+	 * @param string $class искомый класс
+	 */
+	static public function SlotsAndTags($class)
+	{
+		if (strpos($class, 'Slot_') === 0)
+		{
+			require APPPATH.'/_common/slots/'.substr($class, 5).'.php';
+			return true;
+		}
+		if (strpos($class, 'Tag_') === 0)
+		{
+			require APPPATH.'/_common/tags/'.substr($class, 4).'.php';
+			return true;
+		}
+		return false;
 	}
 
 	/** @var array соответствие классов и файлов */
