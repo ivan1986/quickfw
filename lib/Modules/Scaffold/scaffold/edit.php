@@ -8,9 +8,7 @@
 	<?php echo $this->block(Url::C('preEditField'.ucfirst($k)), $id); ?>
 <?php
 	$i = $fields[$k];
-	if ($id == -1 && !$i->disp->new)
-		continue;
-	if (!$i->disp->edit)
+	if ( ($id == -1 && !$i->disp->new) && (!$i->disp->edit))
 		continue;
 	//по умолчанию первичный ключ не редактируем, но если принудительно установим показ
 	if (!$i->primaryKey && !($i->hide === false))
