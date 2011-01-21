@@ -1,6 +1,6 @@
 <?php require dirname(__FILE__).'/info.php' ?>
 <?php echo $this->block(Url::C('preForm'), $id); ?>
-<form class="scaffoldEdit" action="<?php echo Url::C('edit/-1') ?>"
+<form class="scaffoldEdit" action="<?php echo Url::C('edit/'.$id) ?>"
 	  method="post" id="form_<?php echo $table ?>" enctype="multipart/form-data">
 	<?php echo $this->block(Url::C('preEdit'), $id); ?>
 	<dl>
