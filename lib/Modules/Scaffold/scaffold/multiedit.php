@@ -7,7 +7,7 @@
 <tr>
 	<?php foreach(current($data) as $key=>$v) {
 		$i = $fields[$key];
-		if ($i->hide)
+		if (!$i->disp->multiedit)
 			continue;
 		if (!$i->primaryKey && !($i->hide === false))
 			continue;
@@ -23,7 +23,7 @@
 <tr>
 	<?php foreach($row as $key=>$v) {
 		$i = $fields[$key];
-		if ($i->hide)
+		if (!$i->disp->multiedit)
 			continue;
 		if (!$i->primaryKey && !($i->hide === false))
 			continue;

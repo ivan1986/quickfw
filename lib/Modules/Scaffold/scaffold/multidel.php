@@ -7,7 +7,7 @@
 <tr>
 	<?php foreach(current($data) as $key=>$v) {
 		$i = $fields[$key];
-		if ($i->hide)
+		if (!$i->disp->multidel)
 			continue;
 		$cols++;
 		?>
@@ -20,7 +20,7 @@
 <tr>
 	<?php foreach($row as $key=>$v) {
 		$i = $fields[$key];
-		if ($i->hide)
+		if (!$i->disp->multidel)
 			continue;
 		?>
 		<td<?php if ($i->class) {?> class="<?php echo $i->class===true ? 'col_'.$key : $i->class ?>"<?php } ?>><?php //отображение обычного не связанного поля

@@ -1,6 +1,6 @@
 <?php require dirname(__FILE__).'/info.php' ?>
 <?php echo $this->block(Url::C('preForm'), $id); ?>
-<form class="scaffoldEdit"
+<form class="scaffoldEdit" action="<?php echo Url::C('edit/-1') ?>"
 	  method="post" id="form_<?php echo $table ?>" enctype="multipart/form-data">
 	<?php echo $this->block(Url::C('preEdit'), $id); ?>
 	<dl>
@@ -8,13 +8,13 @@
 	<?php echo $this->block(Url::C('preEditField'.ucfirst($k)), $id); ?>
 <?php
 	$i = $fields[$k];
-	if ( ($id == -1 && !$i->disp->new) && (!$i->disp->edit))
+	if ( ($id == -1 && !$i->disp->new) || ($id != -1 && !$i->disp->edit))
 		continue;
 	//по умолчанию первичный ключ не редактируем, но если принудительно установим показ
 	if (!$i->primaryKey && !($i->hide === false))
 		continue;
 	?>
-	<label>
+	<?php if ($i->label) { ?><label><?php } ?>
 	<dt<?php if (isset($errors[$k])) echo ' class="err"'; ?>>
 		<?php echo $i->title ?><?php 
 		if ($i->required) {?><span class="required"></span><?php }
@@ -26,7 +26,7 @@
 			echo $i->editor($id, $v); ?>
 		<?php if ($i->desc) {?><small><?php echo $i->desc ?></small><?php } ?>
 	</dd>
-	</label>
+	<?php if ($i->label) { ?></label><?php } ?>
 <?php } ?>
 	<?php echo $this->block(Url::C('preSend'), $id); ?>
 	<dt></dt>

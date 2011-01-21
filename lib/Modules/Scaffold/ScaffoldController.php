@@ -127,6 +127,9 @@ abstract class ScaffoldController extends Controller
 	 */
 	public function  __construct()
 	{
+		//инициализация FormPersister
+		require_once LIBPATH.'/HTML/FormPersister.php';
+		ob_start(array(new HTML_FormPersister(), 'process'));
 		$this->row = array();
 		Hlp::addCSS('built-in/scaffold.css');
 		if ($this->useJs)
@@ -278,11 +281,7 @@ abstract class ScaffoldController extends Controller
 			$page*$this->pageSize, $this->pageSize);
 
 		if (count($filter['form']))
-		{
-			require_once LIBPATH.'/HTML/FormPersister.php';
-			ob_start(array(new HTML_FormPersister(), 'process'));
 			QFW::$view->assign('filter', $filter['form']);
-		}
 		//получаем пагинатор
 		$pages = ceil($count/$this->pageSize);
 		$pager=QFW::$router->blockRoute('helper.nav.pager', Url::A('$'), $pages, $page+1);
@@ -300,10 +299,6 @@ abstract class ScaffoldController extends Controller
 	 */
 	public function newBlock()
 	{
-		//инициализация FormPersister
-		/*require_once LIBPATH.'/HTML/FormPersister.php';
-		ob_start(array(new HTML_FormPersister(), 'process'));*/
-
 		//получение дефолтовых значений для новой записи
 		$data = array();
 		$fields = array();
@@ -339,9 +334,6 @@ abstract class ScaffoldController extends Controller
 	 */
 	public function editAction($id=-1)
 	{
-		//инициализация FormPersister
-		require_once LIBPATH.'/HTML/FormPersister.php';
-		ob_start(array(new HTML_FormPersister(), 'process'));
 		$errors = array();
 
 		if ($_SERVER['REQUEST_METHOD'] == 'POST' && count($_POST['data'][$id])>0)
@@ -454,8 +446,6 @@ abstract class ScaffoldController extends Controller
 		if (empty($this->sess['multi']['ids']))
 			QFW::$router->redirect(Url::C('index'));
 		$ids = $this->sess['multi']['ids'];
-		require_once LIBPATH.'/HTML/FormPersister.php';
-		ob_start(array(new HTML_FormPersister(), 'process'));
 		$errors = array();
 		if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['edit']))
 		{
