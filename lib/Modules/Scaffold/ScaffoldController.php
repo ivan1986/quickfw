@@ -468,13 +468,9 @@ abstract class ScaffoldController extends Controller
 		$state = new TemplaterState(QFW::$view);
 		QFW::$view->setScriptPath(dirname(__FILE__));
 
-		$foreign = $this->getForeign();
-		$data = QFW::$db->select('SELECT ?# AS ARRAY_KEY, ?# ?s FROM ?# ?s
-			WHERE ?# IN (?a) ?s',
+		$data = QFW::$db->select('SELECT ?# AS ARRAY_KEY, ?# FROM ?# WHERE ?# IN (?a) ?s',
 			$this->primaryKey, array($this->table=>array_merge($this->order, array('*'))),
-			$foreign['field'], $this->table, $foreign['join'],
-			$this->primaryKey, $ids,
-			$this->getSort());
+			$this->table, $this->primaryKey, $ids, $this->getSort());
 		return QFW::$view->assign(array(
 			'data' => $data,
 		))->fetch('scaffold/multiedit.php');
