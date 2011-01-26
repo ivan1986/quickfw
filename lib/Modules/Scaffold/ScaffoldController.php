@@ -274,7 +274,7 @@ abstract class ScaffoldController extends Controller
 		$foreign = $this->getForeign();
 		$data = QFW::$db->select('SELECT ?# AS ARRAY_KEY, ?# ?s FROM ?# ?s
 			WHERE ?s ?s '.$this->where.' ?s LIMIT ?d, ?d',
-			$this->primaryKey, array($this->table=>array_merge($this->order, array('*'))),
+			array($this->table=>$this->primaryKey), array($this->table=>array_merge($this->order, array('*'))),
 			$foreign['field'], $this->table, $foreign['join'],
 			$filter['where'], $parentWhere,
 			$this->getSort(),
