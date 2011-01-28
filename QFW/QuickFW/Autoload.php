@@ -37,11 +37,11 @@ class Autoload
 		{
 			$file =
 				strtolower(mb_substr($class, 0, $pos)).
-				'/controllers/'.
+				'/'.QuickFW_Router::CONTROLLERS_DIR.'/'.
 				ucfirst(mb_substr($class, $pos+1));
 		}
 		else
-			$file = QFW::$router->cModule.'/controllers/'.$class;
+			$file = QFW::$router->cModule.'/'.QuickFW_Router::CONTROLLERS_DIR.'/'.$class;
 		require APPPATH.'/'.$file.'.php';
 		return true;
 	}

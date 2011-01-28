@@ -16,6 +16,11 @@ class QuickFW_Router
 	 */
 	const PATH_SEPARATOR = '/';
 
+	/**
+	 * @var string	Папка контроллеров в модуле
+	 */
+	const CONTROLLERS_DIR = 'controllers';
+
 	protected $classes=array();
 
 	protected $baseDir;
@@ -440,7 +445,7 @@ SREG;
 				$path = $this->baseDir.'/'.$MCA['Module'];
 				QFW::$view->setScriptPath($path.'/templates');
 				$class = ucfirst($MCA['Controller']).'Controller';
-				$fullname = $path . '/controllers/' . strtr($class,'_','/') . '.php';
+				$fullname = $path . '/' . self::CONTROLLERS_DIR . '/' .strtr($class,'_','/') . '.php';
 				require_once($fullname);
 				$class_key=$MCA['Module'].'|'.$MCA['Controller'];
 				if (!isset($this->classes[$class_key]))
@@ -455,7 +460,7 @@ SREG;
 		$MCA = array();
 
 		//Определяем модуль
-		if (isset($data[0]) && (is_dir($this->baseDir . '/' . $data[0])))
+		if (isset($data[0]) && (is_dir($this->baseDir . '/' . $data[0]  . '/' . self::CONTROLLERS_DIR . '/')))
 			$MCA['Module'] = array_shift($data);
 		else
 			$MCA['Module'] = $type=='Block' ? $this->curModule : $this->defM;
@@ -469,7 +474,7 @@ SREG;
 		$cname = isset($data[0]) ? $data[0] : ($type=='Block' ? $this->curController : $this->defC);
 
 		$class = ucfirst($cname).'Controller';
-		$fullname = $path . '/controllers/' . strtr($class,'_','/') . '.php';
+		$fullname = $path . '/' . self::CONTROLLERS_DIR . '/' . strtr($class,'_','/') . '.php';
 
 		if (is_file($fullname))
 			array_shift($data);
@@ -477,7 +482,7 @@ SREG;
 		{
 			$cname = $type=='Block' ? $this->curController : $this->defC;
 			$class = ucfirst($cname).'Controller';
-			$fullname = $path . '/controllers/' . $class . '.php';
+			$fullname = $path . '/' . self::CONTROLLERS_DIR . '/' . $class . '.php';
 			if (!is_file($fullname))
 			{
 				$MCA['Error']="не найден файл \t\t\t".$fullname."\nФайл не найден, твою дивизию...";
