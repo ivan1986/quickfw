@@ -47,12 +47,4 @@ class Url extends \Url
 
 }
 
-function run($base, $uri)
-{
-	QFW::Init();
-	Url::Init($base.'');
-	$TS = new \TemplaterState(QFW::$view);
-	return QFW::$router->subroute($uri, \QFW::$router->type);
-}
-
 ?>

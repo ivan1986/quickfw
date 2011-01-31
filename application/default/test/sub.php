@@ -25,10 +25,21 @@ class QFW extends \baseSub\QFW
 
 class Url extends \baseSub\Url {}
 
-function run($base, $uri)
+/**
+ * Вызывает саброутинг
+ *
+ * @param array $args результат func_get_args()
+ * @param integer $count сколько использовано в экшене
+ * @return string результат
+ */
+function run($args, $count)
 {
+	$base = \Url::base(\Url::A('')->intern());
+	while($count--)
+		$base.= \QuickFW_Router::PATH_SEPARATOR.array_shift($args);
+	$uri = join(\QuickFW_Router::PATH_SEPARATOR, $args);
 	QFW::Init();
-	Url::Init($base.'');
+	Url::Init($base.\QuickFW_Router::PATH_SEPARATOR);
 	$TS = new \TemplaterState(QFW::$view);
 	return QFW::$router->subroute($uri, \QFW::$router->type);
 }

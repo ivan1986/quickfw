@@ -17,8 +17,7 @@ class IndexController extends QuickFW_Auth
 		include dirname(dirname(__FILE__)).'/test/sub.php';
 		$a = func_get_args();
 		array_shift($a);
-		$data = test\run(Url::A($p1), join('/',$a));
-		return $data;
+		return test\run(func_get_args(), 1);
 	}
 
 	public function indexAction()
