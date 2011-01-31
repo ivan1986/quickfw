@@ -416,10 +416,12 @@ class QuickFW_Router
 		if ($this->$type === false)
 		{
 			$rewrite = $backrewrite = $backrewriteUrl = array();
-			require_once APPPATH . '/rewrite.php';
+			if (!$this->sub || is_file($this->baseDir . '/rewrite.php'))
+				require_once $this->baseDir . '/rewrite.php';
 			$this->rewrite = $rewrite;
 			$this->backrewrite = $backrewrite;
-			$this->backrewriteUrl = $backrewriteUrl;
+			if (!$this->sub)
+				$this->backrewriteUrl = $backrewriteUrl;
 		}
 		if (empty($this->$type))
 			return $uri;

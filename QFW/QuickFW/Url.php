@@ -41,7 +41,7 @@ class Url
 	 */
 	public static function M($CA='', $get='', $anchor='')
 	{
-		return new static($CA, $get, $anchor, QFW::$router->cModule.
+		return new static($CA, $get, $anchor, static::$config['router']->cModule.
 			QuickFW_Router::PATH_SEPARATOR);
 	}
 
@@ -55,9 +55,9 @@ class Url
 	 */
 	public static function C($action='', $get='', $anchor='')
 	{
-		return new static($action, $get, $anchor, QFW::$router->cModule.
+		return new static($action, $get, $anchor, static::$config['router']->cModule.
 				QuickFW_Router::PATH_SEPARATOR.
-			QFW::$router->cController.
+			static::$config['router']->cController.
 				QuickFW_Router::PATH_SEPARATOR);
 	}
 
@@ -71,11 +71,11 @@ class Url
 	 */
 	public static function A($params='', $get='', $anchor='')
 	{
-		return new static($params, $get, $anchor, QFW::$router->cModule.
+		return new static($params, $get, $anchor, static::$config['router']->cModule.
 				QuickFW_Router::PATH_SEPARATOR.
-			QFW::$router->cController.
+			static::$config['router']->cController.
 				QuickFW_Router::PATH_SEPARATOR.
-			QFW::$router->cAction.QuickFW_Router::PATH_SEPARATOR);
+			static::$config['router']->cAction.QuickFW_Router::PATH_SEPARATOR);
 	}
 
 	/**
@@ -83,11 +83,13 @@ class Url
 	 */
 	public static function Init()
 	{
-		static::$config = QFW::$config['redirection'];
+		$c = str_replace(__CLASS__, '', get_called_class()).'QFW';
+		static::$config = $c::$config['redirection'];
 		static::$config['base'] = static::$config['baseUrl'].
 			(static::$config['useIndex'] ? 'index.php/' : '');
 		static::$config['ext'] = static::$config['defExt'] ? static::$config['defExt'] :
 			(QuickFW_Router::PATH_SEPARATOR == '/' ? '/' : '');
+		static::$config['router'] = $c::$router;
 	}
 
 	/** @var array QFW::$config['redirection'] */
@@ -119,7 +121,7 @@ class Url
 		$this->get = $get;
 		$this->anchor = ltrim($anchor, '#');
 		if (static::$config['delDef'])
-			$this->u = QFW::$router->delDef($this->u);
+			$this->u = static::$config['router']->delDef($this->u);
 	}
 
 	/** @var string внутреннее представление адреса */
@@ -148,8 +150,8 @@ class Url
 	 */
 	public function get()
 	{
-		return QFW::$router->backrewriteUrl(
-			static::$config['base'].QFW::$router->backrewrite($this->u).
+		return static::$config['router']->backrewriteUrl(
+			static::$config['base'].static::$config['router']->backrewrite($this->u).
 			($this->u!=='' ? static::$config['ext'] : '').
 			($this->get ? '?' . $this->get : '').
 			($this->anchor ? '#' . $this->anchor : ''));
