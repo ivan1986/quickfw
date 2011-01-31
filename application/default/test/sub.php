@@ -60,19 +60,13 @@ class QFW
 
 		self::$db = \QFW::$db;
 
-		//Подключаем шаблонизатор
-		$templ = ucfirst(self::$config['templater']['name']);
-		$class = '\Templater_'.$templ;
-		require_once QFWPATH.'/Templater/'.$templ.'.php';
-		self::$view = new $class(dirname(__FILE__), '');
+		self::$view = \QFW::$view;
 
 		//подключаем модули и библиотеки
 		self::modules();
 
 		require_once QFWPATH.'/QuickFW/Router.php';
 		self::$router = new \QuickFW_Router(dirname(__FILE__), __NAMESPACE__);
-
-		Url::Init();
 	}
 
 	/**
@@ -88,14 +82,27 @@ class QFW
 
 class Url extends \Url
 {
+	public static function Init($base)
+	{
+		static::$config = QFW::$config['redirection'];
+		static::$config['delDef'] = QFW::$config['redirection']['delDef'];
+		static::$config['baseUrl'] = static::$config['base'] = $base;
+		static::$config['ext'] = (\QuickFW_Router::PATH_SEPARATOR == '/' ? '/' : '');
+	}
+
+	/** @var array QFW::$config['redirection'] */
+	protected static $config;
 
 }
 
 class run
 {
-	static public function run($uri)
+	static public function run($base, $uri)
 	{
-		return QFW::$router->r($uri);
+		Url::Init($base.'');
+		$TS = new \TemplaterState(QFW::$view);
+		$data = QFW::$router->r($uri);
+		return $data;
 	}
 }
 

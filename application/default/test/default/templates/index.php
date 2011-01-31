@@ -1,10 +1,4 @@
-<h2>Добро пожаловать</h2>
-
-<ul>
-	<li><a href="<?php echo Url::M('doc') ?>">Документация</a>
-		<p><small>Для генерации нужен установленный a2x, xetex и вообще только unix - с виндой трахайтесь как хотите</small></p>
-	</li>
-	<li><a href="<?php echo Url::C('dinmenu') ?>">Динамическое меню</a>
-		<p><small>Пример вложенного динамического меню с помощью хелпера на CSS3</small></p>
-	</li>
-</ul>
+Проверка работы саброутинга<br>
+<?php echo Url::A('a'); ?><br>
+<?php echo test\Url::A('a'); ?><br>
+<?php echo test\Url::C('a'); ?><br>

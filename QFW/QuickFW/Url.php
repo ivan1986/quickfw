@@ -15,7 +15,7 @@ class Url
 	 */
 	public static function base($url='')
 	{
-		return new self('').$url;
+		return new static('').$url;
 	}
 
 	/**
@@ -28,7 +28,7 @@ class Url
 	 */
 	public static function site($url='', $get='', $anchor='')
 	{
-		return new self($url, $get, $anchor);
+		return new static($url, $get, $anchor);
 	}
 
 	/**
@@ -41,7 +41,7 @@ class Url
 	 */
 	public static function M($CA='', $get='', $anchor='')
 	{
-		return new self($CA, $get, $anchor, QFW::$router->cModule.
+		return new static($CA, $get, $anchor, QFW::$router->cModule.
 			QuickFW_Router::PATH_SEPARATOR);
 	}
 
@@ -55,7 +55,7 @@ class Url
 	 */
 	public static function C($action='', $get='', $anchor='')
 	{
-		return new self($action, $get, $anchor, QFW::$router->cModule.
+		return new static($action, $get, $anchor, QFW::$router->cModule.
 				QuickFW_Router::PATH_SEPARATOR.
 			QFW::$router->cController.
 				QuickFW_Router::PATH_SEPARATOR);
@@ -71,7 +71,7 @@ class Url
 	 */
 	public static function A($params='', $get='', $anchor='')
 	{
-		return new self($params, $get, $anchor, QFW::$router->cModule.
+		return new static($params, $get, $anchor, QFW::$router->cModule.
 				QuickFW_Router::PATH_SEPARATOR.
 			QFW::$router->cController.
 				QuickFW_Router::PATH_SEPARATOR.
@@ -83,15 +83,15 @@ class Url
 	 */
 	public static function Init()
 	{
-		self::$config = QFW::$config['redirection'];
-		self::$config['base'] = self::$config['baseUrl'].
-			(self::$config['useIndex'] ? 'index.php/' : '');
-		self::$config['ext'] = self::$config['defExt'] ? self::$config['defExt'] :
+		static::$config = QFW::$config['redirection'];
+		static::$config['base'] = static::$config['baseUrl'].
+			(static::$config['useIndex'] ? 'index.php/' : '');
+		static::$config['ext'] = static::$config['defExt'] ? static::$config['defExt'] :
 			(QuickFW_Router::PATH_SEPARATOR == '/' ? '/' : '');
 	}
 
 	/** @var array QFW::$config['redirection'] */
-	private static $config;
+	protected static $config;
 
 	/**
 	 * Конструктор класса запроса
@@ -101,7 +101,7 @@ class Url
 	 * @param string $anchor якорь
 	 * @param string $begin базовый урл от текущего
 	 */
-	private function __construct($url, $get='', $anchor='', $begin='')
+	protected function __construct($url, $get='', $anchor='', $begin='')
 	{
 		if (is_array($get) && count($get))
 			$get = http_build_query($get);
@@ -118,7 +118,7 @@ class Url
 		$this->u = trim($begin.$url, QuickFW_Router::PATH_SEPARATOR);
 		$this->get = $get;
 		$this->anchor = ltrim($anchor, '#');
-		if (self::$config['delDef'])
+		if (static::$config['delDef'])
 			$this->u = QFW::$router->delDef($this->u);
 	}
 
@@ -149,8 +149,8 @@ class Url
 	public function get()
 	{
 		return QFW::$router->backrewriteUrl(
-			self::$config['base'].QFW::$router->backrewrite($this->u).
-			($this->u!=='' ? self::$config['ext'] : '').
+			static::$config['base'].QFW::$router->backrewrite($this->u).
+			($this->u!=='' ? static::$config['ext'] : '').
 			($this->get ? '?' . $this->get : '').
 			($this->anchor ? '#' . $this->anchor : ''));
 	}
