@@ -78,7 +78,7 @@ class QFW
 		self::modules();
 
 		require_once QFWPATH.'/QuickFW/Router.php';
-		self::$router = new QuickFW_Router(APPPATH);
+		static::$router = new QuickFW_Router(APPPATH);
 
 		//хелпер для урлов (зависит от QuickFW_Router)
 		require_once QFWPATH.'/QuickFW/Url.php';

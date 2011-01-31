@@ -11,6 +11,7 @@ class IndexController extends \QuickFW_Auth
 
 	public function indexAction()
 	{
+		QFW::$view->assign('in', 'in');
 		return QFW::$view->fetch('index.php');
 	}
 

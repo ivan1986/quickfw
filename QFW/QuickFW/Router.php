@@ -88,7 +88,14 @@ class QuickFW_Router
 		$this->defA = QFW::$config['default']['action'];
 	}
 
-	public function r($requestUri = null, $type='Action')
+	/**
+	 * Вызов Uri для исполнения в саброутинге
+	 *
+	 * @param string $requestUri запрашиваемый Uri
+	 * @param string $type тип Uri (Action|Cli|...)
+	 * @return stinrg результат
+	 */
+	public function subroute($requestUri = null, $type='Action')
 	{
 		$requestUri = $this->rewrite($requestUri);
 		$data = explode(self::PATH_SEPARATOR, $requestUri);
@@ -122,7 +129,6 @@ class QuickFW_Router
 		QFW::$view->setScriptPath($this->baseDir.'/'.$MCA['Module'].'/templates');
 
 		return $result;
-		
 	}
 
 	/**

@@ -13,12 +13,11 @@ class IndexController extends QuickFW_Auth
 	{
 		if (!$p1)
 			return '';
+		QFW::$view->assign('out', $p1);
 		include dirname(dirname(__FILE__)).'/test/sub.php';
 		$a = func_get_args();
 		array_shift($a);
-		echo "<br><br>".Url::A($p1)."<br><br>";
-		$data = 'a'.test\run::run(Url::A($p1), join('/',$a)).'a';
-		echo "<br><br>".Url::A($p1)."<br><br>";
+		$data = test\run(Url::A($p1), join('/',$a));
 		return $data;
 	}
 
