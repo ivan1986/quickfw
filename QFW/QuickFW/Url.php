@@ -81,12 +81,12 @@ class Url
 	/**
 	 * Инициализация класса из конфига
 	 */
-	public static function Init()
+	public static function Init($base='')
 	{
+	  $base = $base ? $base : QFW::$config['redirection']['baseUrl'];
 		$c = str_replace(__CLASS__, '', get_called_class()).'QFW';
 		static::$config = $c::$config['redirection'];
-		static::$config['base'] = static::$config['baseUrl'].
-			(static::$config['useIndex'] ? 'index.php/' : '');
+		static::$config['base'] = $base.(static::$config['useIndex'] ? 'index.php/' : '');
 		static::$config['ext'] = static::$config['defExt'] ? static::$config['defExt'] :
 			(QuickFW_Router::PATH_SEPARATOR == '/' ? '/' : '');
 		static::$config['router'] = $c::$router;

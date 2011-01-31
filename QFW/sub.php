@@ -37,8 +37,7 @@ function run($args, $count)
 		$base.= \QuickFW_Router::PATH_SEPARATOR.array_shift($args);
 	$uri = join(\QuickFW_Router::PATH_SEPARATOR, $args);
 	QFW::Init();
-	QFW::$config['redirection']['baseUrl'] = $base.\QuickFW_Router::PATH_SEPARATOR;
-	Url::Init();
+	Url::Init($base.\QuickFW_Router::PATH_SEPARATOR);
 	$TS = new \TemplaterState(QFW::$view);
 	return QFW::$router->subroute($uri, \QFW::$router->type);
 }
