@@ -35,13 +35,15 @@ class Autoload
 		//пространство имен
 		if ($pos = mb_strpos($class, '\\'))
 		{
-			$file =
-				strtolower(mb_substr($class, 0, $pos)).
-				'/'.QuickFW_Router::CONTROLLERS_DIR.'/'.
-				ucfirst(mb_substr($class, $pos+1));
+			$ns = strtolower(mb_substr($class, 0, $pos));
+			$class = ucfirst(mb_substr($class, $pos+1));
+			$Q = $ns.'\QFW';
+			//Проверка на саброутинг
+			$dir = !class_exists($Q) ? $ns : QFW::$router->cModule.'/'.$ns.'/'.$Q::$router->cModule;
 		}
 		else
-			$file = QFW::$router->cModule.'/'.QuickFW_Router::CONTROLLERS_DIR.'/'.$class;
+			$dir = QFW::$router->cModule;
+		$file = $dir.'/'.QuickFW_Router::CONTROLLERS_DIR.'/'.$class;
 		require APPPATH.'/'.$file.'.php';
 		return true;
 	}
