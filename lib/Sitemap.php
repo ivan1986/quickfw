@@ -30,16 +30,14 @@ class Sitemap
    * Добавить путь
    *
    * @param string $url Урл
-   * @param float $priority Приоритет
    * @param array $extra Дополнительные поля
    */
-  public function add($url, $priority, $extra = array())
+  public function add($url, $extra = array())
   {
     if ($this->last_urls == 0)
       $this->nextFile();
 
-    $text = '<url><loc>'.$this->prefix.$url.'</loc>'.
-        '<priority>'.$priority.'</priority>';
+    $text = '<url><loc>'.$this->prefix.$url.'</loc>';
     foreach($extra as $tag=>$value)
       $text.='<'.$tag.'>'.$value.'</'.$tag.'>';
     $text.='</url>'."\n";
