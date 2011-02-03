@@ -168,6 +168,20 @@ class Url
 		return $this->u;
 	}
 
+	/**
+	 * урл для саброута
+	 *
+	 * @internal
+	 * @return string урл
+	 */
+	public function getBase()
+	{
+		return static::$config['router']->backrewriteUrl(
+			static::$config['base'].static::$config['router']->backrewrite($this->u).
+          QuickFW_Router::PATH_SEPARATOR
+			);
+	}
+
 }
 
 ?>

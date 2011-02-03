@@ -33,10 +33,9 @@ class Url extends \Url { protected static $config;}
 function run($args, $count)
 {
 	$base = join(\QuickFW_Router::PATH_SEPARATOR, \array_slice($args, 0, $count));
-	$base = \Url::base(\Url::A($base)->intern());
 	$uri = join(\QuickFW_Router::PATH_SEPARATOR, \array_slice($args, $count));
 	QFW::Init();
-	Url::Init($base.\QuickFW_Router::PATH_SEPARATOR);
+	Url::Init(\Url::A($base)->getBase());
 	$TS = new \TemplaterState(QFW::$view);
 	return QFW::$router->subroute($uri, \QFW::$router->type);
 }
