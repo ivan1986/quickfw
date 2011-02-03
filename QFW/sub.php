@@ -32,10 +32,9 @@ class Url extends \Url { protected static $config;}
  */
 function run($args, $count)
 {
-	$base = \Url::base(\Url::A('')->intern());
-	while($count--)
-		$base.= \QuickFW_Router::PATH_SEPARATOR.array_shift($args);
-	$uri = join(\QuickFW_Router::PATH_SEPARATOR, $args);
+	$base = join(\QuickFW_Router::PATH_SEPARATOR, \array_slice($args, 0, $count));
+	$base = \Url::base(\Url::A($base)->intern());
+	$uri = join(\QuickFW_Router::PATH_SEPARATOR, \array_slice($args, $count));
 	QFW::Init();
 	Url::Init($base.\QuickFW_Router::PATH_SEPARATOR);
 	$TS = new \TemplaterState(QFW::$view);
