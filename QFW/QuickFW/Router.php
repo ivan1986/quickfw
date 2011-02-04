@@ -422,6 +422,8 @@ class QuickFW_Router
 			$this->backrewrite = $backrewrite;
 			if (!$this->sub)
 				$this->backrewriteUrl = $backrewriteUrl;
+			else
+				$this->backrewriteUrl = null;
 		}
 		if (empty($this->$type))
 			return $uri;
