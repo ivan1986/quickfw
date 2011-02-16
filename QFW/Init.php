@@ -126,6 +126,8 @@ class QFW
 
 	/** @var Debug_ErrorHook_Listener Обработчик ошибок */
 	static private $ErrorHook = false;
+	/** @var Debug_ErrorHook_INotifier Сообщение об ошибке */
+	static private $Notifer = false;
 
 	/**
 	 * Инициализация обработчика ошибок из конфига
@@ -153,7 +155,34 @@ class QFW
 			$i = new Debug_ErrorHook_RemoveDupsWrapper($i,
 				TMPPATH.'/errors', $handler['RemoveDups']);
 		}
-		self::$ErrorHook->addNotifier($i);
+		self::$Notifer = $i;
+		self::$ErrorHook->addNotifier(self::$Notifer);
+		self::$db->setErrorHandler(array(get_class(), 'dbErrorHandler'));
+	}
+
+	static public function dbErrorHandler($msg, $info)
+	{
+		// Если использовалась @, ничего не делать.
+		if (!error_reporting()) return;
+		// В лог подробную информацию об ошибке.
+		list($file, $line) = explode(' line ', $info['context']);
+		$msg = str_replace(' at '.$info['context'], ' of query', $msg);
+		$text = "SQL Error\n\n".
+			$msg."\n\n".
+			$info['query']."\n";
+		$trace = debug_backtrace();
+		while(1)
+		{
+			$t = $trace[0];
+			if (!isset($t['file']) || $t['file']!=$file || $t['line']!=$line || $t['function'] == '__call')
+			{
+				array_shift($trace);
+				continue;
+			}
+			break;
+		}
+		self::$Notifer->notify($info['code'], $text, $file, $line, $trace);
+		exit();
 	}
 
 	/**
