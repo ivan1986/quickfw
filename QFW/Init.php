@@ -171,7 +171,7 @@ class QFW
 			$msg."\n\n".
 			$info['query']."\n";
 		$trace = debug_backtrace();
-		while(1)
+		while(count($trace))
 		{
 			$t = $trace[0];
 			if (!isset($t['file']) || $t['file']!=$file || $t['line']!=$line || $t['function'] == '__call')
