@@ -512,29 +512,29 @@ SREG;
 			}
 			$vars = get_class_vars($class);
 			$acts = get_class_methods($class);
+			$defA = isset($vars['defA']) ? $vars['defA'] : $this->defA;
 
 			//Выполняется при первом вызове и сохраняет значение вызванного MCA
 			//Проверяем последний так как остальные уже записаны
 			if ($this->action == '')
 			{
-				$aname = isset($data[0]) ? $data[0] :
-					(isset($vars['defA']) ? $vars['defA'] : $this->defA);
-				if (!in_array(strtr($aname,'.','_').$type, $acts))
-					$aname = (isset($vars['defA']) ? $vars['defA'] : $this->defA);
+				$aname = isset($data[0]) ? strtr($data[0],'.','_') : $defA;
+				if (!in_array($aname.$type, $acts))
+					$aname = $defA;
 				$this->cAction = $this->action = $aname;
 				$this->type = $type;
 			}
 
 			$this->classes[$class_key] = array(
 				'i'    => new $class,
-				'defA' => isset($vars['defA']) ? $vars['defA'] : $this->defA,
+				'defA' => $defA,
 				'a'    => $acts,
 			);
 		}
 		$MCA['Class'] = $this->classes[$class_key]['i'];
 		
-		$aname = isset($data[0]) ? $data[0] : $this->classes[$class_key]['defA'];
-		$MCA['Action'] = strtr($aname,'.','_');
+		$aname = isset($data[0]) ? strtr($data[0],'.','_') : $this->classes[$class_key]['defA'];
+		$MCA['Action'] = $aname;
 		$MCA['Type'] = $type;
 		
 		if (in_array($MCA['Action'].$MCA['Type'], $this->classes[$class_key]['a']))
@@ -542,7 +542,7 @@ SREG;
 		else
 		{
 			$aname = $this->classes[$class_key]['defA'];
-			$MCA['Action'] = strtr($aname,'.','_');
+			$MCA['Action'] = $aname;
 			$MCA['Type'] = $type;
 			if (!in_array($aname.$type,$this->classes[$class_key]['a']))
 			{
