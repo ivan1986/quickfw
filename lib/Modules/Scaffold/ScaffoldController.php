@@ -1037,4 +1037,22 @@ abstract class ScaffoldController extends Controller
 	}
 
 }
-?>
+
+/**
+ * Autoload для скафолда - классы полей в fields
+ *
+ * @param  string $class имя класса
+ * @return bool загрузилось
+ */
+function ScaffoldAutoload($class)
+{
+	if (strpos($class, 'Scaffold_') === 0)
+	{
+		$class = str_replace('Scaffold_','fields/', $class);
+		require dirname(__FILE__).'/'.$class.'.php';
+		return true;
+	}
+	return false;
+}
+
+spl_autoload_register('ScaffoldAutoload');
