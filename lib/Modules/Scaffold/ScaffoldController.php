@@ -1013,22 +1013,28 @@ abstract class ScaffoldController extends Controller
 		$infoClass->tableObject = &$this;
 		$infoClass->primaryKey = $this->primaryKey;
 
+		$class = 'Scaffold_Field';
+		$match = array();
 		if ($infoClass->type)
 		{
 			$class = 'Scaffold_'.ucfirst($infoClass->type);
-			return new $class($infoClass);
 		}
 
 		//определяем по типам и прочей известной информации
-		if ($infoClass->foreign)
-			return new Scaffold_Foreign($infoClass);
+		elseif ($infoClass->foreign)
+			$class = 'Scaffold_Foreign';
 
-		$match = array();
-		if (preg_match('#(.*?)(?:\((.+?)\)|$)#', $fieldInfo['Type'], $match))
-			if (class_exists($class = 'Scaffold_'.ucfirst($match[1])))
-				return new $class($infoClass, isset($match[2]) ? $match[2] : false );
+		elseif (preg_match('#(.*?)(?:\((.+?)\)|$)#', $fieldInfo['Type'], $match))
+			if (class_exists($cl = 'Scaffold_'.ucfirst($match[1])))
+			{
+				$class = $cl;
+				$infoClass->typeParams = $match[2];
+			}
 
-		return new Scaffold_Field($infoClass);
+		$C = new $class();
+		/** @var $C Scaffold_Field */
+		$C->init($infoClass);
+		return $C;
 	}
 
 	private function endTest()

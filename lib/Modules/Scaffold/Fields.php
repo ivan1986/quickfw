@@ -59,12 +59,16 @@ class Scaffold_Field_Info
 class Scaffold_Field extends Scaffold_Field_Info
 {
 
+	public function __construct()
+	{
+	}
+
 	/**
-	 * Создает полноценное поле из данных о пользователе
+	 * Инициализирует данные из таблицы
 	 *
 	 * @param Scaffold_Field_Info $info Информация о поле
 	 */
-	public function __construct($info)
+	public function init($info)
 	{
 		$vars = get_class_vars('Scaffold_Field_Info');
 		foreach ($vars as $k=>$v)
@@ -266,12 +270,10 @@ class Scaffold_Foreign extends Scaffold_Field
 	/** @var bool Может ли быть нулевое значение */
 	protected $isnull;
 
-	public function __construct($info, $where = DBSIMPLE_SKIP)
+	public function init($info)
 	{
-		if (!empty($info->typeParams))
-			$where = $info->typeParams;
 		$this->isnull = $info->foreign['null'];
-		parent::__construct($info);
+		parent::init($info);
 		$this->lookup = QFW::$db->selectCol('SELECT ?# AS ARRAY_KEY_1, ?# FROM ?# {WHERE ?s}',
 			$info->foreign['key'], $info->foreign['field'], $info->foreign['table'], $where);
 	}
@@ -302,9 +304,9 @@ abstract class Scaffold_UserInput extends Scaffold_Field
 	/** @var integer До скольки обрезать */
 	private $trim;
 	
-	public function __construct($info)
+	public function init($info)
 	{
-		parent::__construct($info);
+		parent::init($info);
 		$this->trim = isset($info->typeParams['trim']) ? $info->typeParams['trim'] : 80;
 	}
 
@@ -328,9 +330,9 @@ class Scaffold_Text extends Scaffold_UserInput
 	/** @var integer Сколько колонок */
 	private $cols;
 
-	public function __construct($info)
+	public function init($info)
 	{
-		parent::__construct($info);
+		parent::init($info);
 		$this->rows = isset($info->typeParams['rows']) ? $info->typeParams['rows'] : 10;
 		$this->cols = isset($info->typeParams['cols']) ? $info->typeParams['cols'] : 80;
 	}
@@ -367,12 +369,17 @@ class Scaffold_Varchar extends Scaffold_Field
 	/** @var integer размер поля в базе */
 	private $size;
 
-	public function __construct($info, $size = 100)
+	public function __construct($size = false)
 	{
-		if (!empty($info->typeParams) && is_numeric($info->typeParams))
-			$size = $info->typeParams;
-		parent::__construct($info);
 		$this->size = $size;
+	}
+	
+	public function init($info)
+	{
+		parent::init($info);
+		if (!$this->size)
+			if (!empty($info->typeParams) && is_numeric($info->typeParams))
+				$this->size = $info->typeParams;
 	}
 
 	public function validator($id, $value)
@@ -397,11 +404,15 @@ class Scaffold_Enum extends Scaffold_Field
 	/** @var array что в перечислении */
 	private $items;
 
-	public function __construct($info, $items)
+	public function __construct($items = '')
 	{
-		parent::__construct($info);
-		$items = str_getcsv($items, ',', "'");
-		$this->items = array_combine($items, $items);
+		$this->items = str_getcsv($items, ',', "'");
+	}
+
+	public function init($info)
+	{
+		parent::init($info);
+		$this->items = array_combine($info->typeParams, $this->items);
 	}
 
 	public function editor($id, $value)
@@ -421,9 +432,13 @@ class Scaffold_Enum extends Scaffold_Field
 class Scaffold_Datetime extends Scaffold_Field
 {
 
-	public function __construct($info)
+	public function __construct()
 	{
-		parent::__construct($info);
+	}
+
+	public function init($info)
+	{
+		parent::init($info);
 		if ($this->default == 'CURRENT_TIMESTAMP')
 			$this->default = date('Y-m-d H:i:s');
 	}
@@ -465,9 +480,9 @@ class Scaffold_File extends Scaffold_Field
 	 *
 	 * @param Scaffold_Field_Info $info Информация о поле
 	 */
-	public function __construct($info)
+	public function init($info)
 	{
-		parent::__construct($info);
+		parent::init($info);
 		$this->label = false;
 		if (empty ($info->typeParams['path']))
 			throw new Exception('Не указана директория для фалов', 1);
@@ -556,11 +571,11 @@ class Scaffold_File extends Scaffold_Field
 
 class Scaffold_Image extends Scaffold_File
 {
-	public function __construct($info)
+	public function init($info)
 	{
 		if (empty($info->typeParams['accept']))
 			$info->typeParams['accept'] = 'image/*';
-		parent::__construct($info);
+		parent::init($info);
 	}
 
 	public function display($id, $value)
