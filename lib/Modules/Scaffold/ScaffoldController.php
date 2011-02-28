@@ -488,6 +488,7 @@ abstract class ScaffoldController extends Controller
 		//Обработка результата редактирования
 		foreach($alldata as $id => $data)
 		{
+			$old = $this->getOldVars($id);
 			self::setCurRow($old);
 			foreach ($data as $k=>$v)
 			{
