@@ -136,6 +136,22 @@ abstract class Templater
 	}
 
 	/**
+	 * Вызывает выполнение блока и возвращает результат
+	 *
+	 * @param string $ns неймспейс из которого вызвать (должен быть инициализирован)
+	 * @param string $block имя блока (MCA)
+	 * @return string результат работы блока
+	 */
+	public function localBlock($ns, $block)
+	{
+		//TODO: убрать ненужную переменную после перехода на php 5.3
+		$args = func_get_args();
+		array_shift($args);
+		$c = $ns.'\QFW';
+		return call_user_func_array(array($c::$router, 'blockRoute'), $args);
+	}
+
+	/**
 	 * Синоним fetch
 	 */
 	public function render($tmpl, $vars=array())

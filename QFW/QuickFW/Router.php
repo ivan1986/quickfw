@@ -24,6 +24,9 @@ class QuickFW_Router
 	protected $classes=array();
 
 	protected $baseDir;
+
+	/** @var string Неймспейс для подроутинга */
+	protected $sub;
 	
 	protected $defM,$defC,$defA;
 
@@ -73,15 +76,59 @@ class QuickFW_Router
 	/** @var string Uri который был вызван для исполнения после фильтрации переменных и реврайта */
 	public $RequestUri;
 
-	public function __construct($baseDir)
+	public function __construct($baseDir, $sub='')
 	{
 		$this->baseDir = rtrim($baseDir, '/\\');
 		$this->module = '';
 		$this->controller = '';
 		$this->action = '';
+		$this->sub = $sub?($sub.'\\'):'';
 		$this->defM = QFW::$config['default']['module'];
 		$this->defC = QFW::$config['default']['controller'];
 		$this->defA = QFW::$config['default']['action'];
+	}
+
+	/**
+	 * Вызов Uri для исполнения в саброутинге
+	 *
+	 * @param string $requestUri запрашиваемый Uri
+	 * @param string $type тип Uri (Action|Cli|...)
+	 * @return stinrg результат
+	 */
+	public function subroute($requestUri = null, $type='Action')
+	{
+		$requestUri = $this->rewrite($requestUri);
+		$data = explode(self::PATH_SEPARATOR, $requestUri);
+		//обнуляем если нас вызвали повторно
+		$this->module = '';
+		$this->controller = '';
+		$this->action = '';
+
+		$MCA = $this->loadMCA($data, $type);
+		if (isset($MCA['Error']))
+		{
+			if (QFW::$config['QFW']['release'])
+				$this->show404();
+			else
+				die("Был выполнен запрос \t\t".$requestUri."\nадрес был разобран в\t\t ".
+					$MCA['Path']."\n".
+					$MCA['Error']);
+		}
+		$params = $this->parseParams($data);
+
+		$this->curModule = $this->cModule = $this->module = $MCA['Module'];
+		$this->curController = $this->cController = $this->controller = $MCA['Controller'];
+		$this->cAction = $this->action = $MCA['Action'];
+		$this->CurPath = $this->UriPath = $MCA['Path'];
+		$this->Uri = $MCA['Path'] . self::PATH_SEPARATOR . join(self::PATH_SEPARATOR, $data);
+		$this->RequestUri = $requestUri;
+		$this->ParentPath = null;
+
+		$result = call_user_func_array(array($MCA['Class'], $MCA['Action'].$MCA['Type']), $params);
+
+		QFW::$view->setScriptPath($this->baseDir.'/'.$MCA['Module'].'/templates');
+
+		return $result;
 	}
 
 	/**
@@ -369,10 +416,14 @@ class QuickFW_Router
 		if ($this->$type === false)
 		{
 			$rewrite = $backrewrite = $backrewriteUrl = array();
-			require_once APPPATH . '/rewrite.php';
+			if (!$this->sub || is_file($this->baseDir . '/rewrite.php'))
+				require_once $this->baseDir . '/rewrite.php';
 			$this->rewrite = $rewrite;
 			$this->backrewrite = $backrewrite;
-			$this->backrewriteUrl = $backrewriteUrl;
+			if (!$this->sub)
+				$this->backrewriteUrl = $backrewriteUrl;
+			else
+				$this->backrewriteUrl = null;
 		}
 		if (empty($this->$type))
 			return $uri;
@@ -424,7 +475,7 @@ SREG;
 		if (!empty(QFW::$config['cache']['MCA']))
 		{
 			$Cache = Cache::get('MCA');
-			$key = 'MCA_'.crc32(serialize($data)).$type.
+			$key = 'MCA_'.$this->sub.crc32(serialize($data)).$type.
 				($type=='Block' ? $this->curModule : $this->defM);
 			$cached = $Cache->load($key);
 			if ($cached)
@@ -498,18 +549,19 @@ SREG;
 		if (!isset($this->classes[$class_key]))
 		{
 			require_once($fullname);
-			if (!class_exists($class))
+			if (!class_exists($this->sub.$class))
 			{
 				//Смотрим, а не в неймспейсе ли он случайно
-				if (class_exists($MCA['Module'].'\\'.$class))
-					$class = $MCA['Module'].'\\'.$class;
+				if (class_exists($MCA['Module'].'\\'.$this->sub.$class))
+					$class = $MCA['Module'].'\\'.$this->sub.$class;
 				else
 				{
-					$MCA['Error']="не найден класс \t\t\t".$class."\nКласс не найден, мать его за ногу";
+					$MCA['Error']="не найден класс \t\t\t".$this->sub.$class."\nКласс не найден, мать его за ногу";
 					$MCA['Path']=$MCA['Module'].'/'.$MCA['Controller'].'/...';
 					return $MCA;
 				}
 			}
+			$class = $this->sub.$class;
 			$vars = get_class_vars($class);
 			$acts = get_class_methods($class);
 			$defA = isset($vars['defA']) ? $vars['defA'] : $this->defA;

@@ -9,6 +9,15 @@ class IndexController extends QuickFW_Auth
 		//echo QFW::$router->module.'.'.QFW::$router->controller.'.'.QFW::$router->action."<br>\n";
 	}
 
+	public function tttAction($p1='')
+	{
+		if (!$p1)
+			return '';
+		QFW::$view->assign('out', $p1);
+		include dirname(dirname(__FILE__)).'/test/sub.php';
+		return test\run(func_get_args(), 1);
+	}
+
 	public function indexAction()
 	{
 		QFW::$view->assign('title', 'Основная страница');

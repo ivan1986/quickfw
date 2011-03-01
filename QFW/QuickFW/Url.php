@@ -15,7 +15,7 @@ class Url
 	 */
 	public static function base($url='')
 	{
-		return new self('').$url;
+		return new static('').$url;
 	}
 
 	/**
@@ -28,7 +28,7 @@ class Url
 	 */
 	public static function site($url='', $get='', $anchor='')
 	{
-		return new self($url, $get, $anchor);
+		return new static($url, $get, $anchor);
 	}
 
 	/**
@@ -41,7 +41,7 @@ class Url
 	 */
 	public static function M($CA='', $get='', $anchor='')
 	{
-		return new self($CA, $get, $anchor, QFW::$router->cModule.
+		return new static($CA, $get, $anchor, static::$config['router']->cModule.
 			QuickFW_Router::PATH_SEPARATOR);
 	}
 
@@ -55,9 +55,9 @@ class Url
 	 */
 	public static function C($action='', $get='', $anchor='')
 	{
-		return new self($action, $get, $anchor, QFW::$router->cModule.
+		return new static($action, $get, $anchor, static::$config['router']->cModule.
 				QuickFW_Router::PATH_SEPARATOR.
-			QFW::$router->cController.
+			static::$config['router']->cController.
 				QuickFW_Router::PATH_SEPARATOR);
 	}
 
@@ -71,27 +71,29 @@ class Url
 	 */
 	public static function A($params='', $get='', $anchor='')
 	{
-		return new self($params, $get, $anchor, QFW::$router->cModule.
+		return new static($params, $get, $anchor, static::$config['router']->cModule.
 				QuickFW_Router::PATH_SEPARATOR.
-			QFW::$router->cController.
+			static::$config['router']->cController.
 				QuickFW_Router::PATH_SEPARATOR.
-			QFW::$router->cAction.QuickFW_Router::PATH_SEPARATOR);
+			static::$config['router']->cAction.QuickFW_Router::PATH_SEPARATOR);
 	}
 
 	/**
 	 * Инициализация класса из конфига
 	 */
-	public static function Init()
+	public static function Init($base='')
 	{
-		self::$config = QFW::$config['redirection'];
-		self::$config['base'] = self::$config['baseUrl'].
-			(self::$config['useIndex'] ? 'index.php/' : '');
-		self::$config['ext'] = self::$config['defExt'] ? self::$config['defExt'] :
+	  $base = $base ? $base : QFW::$config['redirection']['baseUrl'];
+		$c = str_replace(__CLASS__, '', get_called_class()).'QFW';
+		static::$config = $c::$config['redirection'];
+		static::$config['base'] = $base.(static::$config['useIndex'] ? 'index.php/' : '');
+		static::$config['ext'] = static::$config['defExt'] ? static::$config['defExt'] :
 			(QuickFW_Router::PATH_SEPARATOR == '/' ? '/' : '');
+		static::$config['router'] = $c::$router;
 	}
 
 	/** @var array QFW::$config['redirection'] */
-	private static $config;
+	protected static $config;
 
 	/**
 	 * Конструктор класса запроса
@@ -101,7 +103,7 @@ class Url
 	 * @param string $anchor якорь
 	 * @param string $begin базовый урл от текущего
 	 */
-	private function __construct($url, $get='', $anchor='', $begin='')
+	protected function __construct($url, $get='', $anchor='', $begin='')
 	{
 		if (is_array($get) && count($get))
 			$get = http_build_query($get);
@@ -118,8 +120,8 @@ class Url
 		$this->u = trim($begin.$url, QuickFW_Router::PATH_SEPARATOR);
 		$this->get = $get;
 		$this->anchor = ltrim($anchor, '#');
-		if (self::$config['delDef'])
-			$this->u = QFW::$router->delDef($this->u);
+		if (static::$config['delDef'])
+			$this->u = static::$config['router']->delDef($this->u);
 	}
 
 	/** @var string внутреннее представление адреса */
@@ -148,9 +150,9 @@ class Url
 	 */
 	public function get()
 	{
-		return QFW::$router->backrewriteUrl(
-			self::$config['base'].QFW::$router->backrewrite($this->u).
-			($this->u!=='' ? self::$config['ext'] : '').
+		return static::$config['router']->backrewriteUrl(
+			static::$config['base'].static::$config['router']->backrewrite($this->u).
+			($this->u!=='' ? static::$config['ext'] : '').
 			($this->get ? '?' . $this->get : '').
 			($this->anchor ? '#' . $this->anchor : ''));
 	}
@@ -164,6 +166,20 @@ class Url
 	public function intern()
 	{
 		return $this->u;
+	}
+
+	/**
+	 * урл для саброута
+	 *
+	 * @internal
+	 * @return string урл
+	 */
+	public function getBase()
+	{
+		return static::$config['router']->backrewriteUrl(
+			static::$config['base'].static::$config['router']->backrewrite($this->u).
+          QuickFW_Router::PATH_SEPARATOR
+			);
 	}
 
 }
