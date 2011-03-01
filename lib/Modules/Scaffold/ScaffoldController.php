@@ -1031,8 +1031,8 @@ abstract class ScaffoldController extends Controller
 				$infoClass->typeParams = $match[2];
 			}
 
+		/** @var Scaffold_Field $C */
 		$C = new $class();
-		/** @var $C Scaffold_Field */
 		$C->init($infoClass);
 		return $C;
 	}
