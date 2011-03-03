@@ -130,9 +130,7 @@ abstract class Templater
 	 */
 	public function block($block)
 	{
-		//TODO: убрать ненужную переменную после перехода на php 5.3
-		$args = func_get_args();
-		return call_user_func_array(array(&QFW::$router, 'blockRoute'), $args);
+		return call_user_func_array(array(&QFW::$router, 'blockRoute'), func_get_args());
 	}
 
 	/**
@@ -144,7 +142,6 @@ abstract class Templater
 	 */
 	public function localBlock($ns, $block)
 	{
-		//TODO: убрать ненужную переменную после перехода на php 5.3
 		$args = func_get_args();
 		array_shift($args);
 		$c = $ns.'\QFW';

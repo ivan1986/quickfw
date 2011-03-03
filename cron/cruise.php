@@ -11,10 +11,8 @@
 //	define ('LOGPATH', VARPATH  . '/log');
 //	define ('MODPATH', APPPATH  . '/_common/models');
 
-	//TODO: Выкинуть gethostbyaddr после перехода на PHP 5.3
 	if (empty($_SERVER['HTTP_HOST']))
-		$_SERVER['HTTP_HOST'] = function_exists('gethostname') ?
-			gethostname() : gethostbyaddr('127.0.0.1');
+		$_SERVER['HTTP_HOST'] = gethostname();
 
 	require (QFWPATH.'/Init.php');
 

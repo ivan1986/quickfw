@@ -206,9 +206,7 @@ class QuickFW_Router
 		{
 			$data = array_slice($patt,1,3);
 			$MCA = $this->loadMCA($data,'Block');
-			// Если вы все еще сидите на PHP 5.2 то раскомментируйте старый вариант
-			$MCA['Params'] = empty($patt[4]) ? array() :
-				str_getcsv($patt[4],',',"'",'\\'); // $this->parseScobParams($patt[4]);
+			$MCA['Params'] = empty($patt[4]) ? array() : str_getcsv($patt[4],',',"'",'\\');
 		}
 		else
 		{
@@ -452,20 +450,6 @@ class QuickFW_Router
 		while(!empty($data))
 			$params[array_shift($data)] = array_shift($data);
 		return array('params' => $params);
-	}
-
-	protected function parseScobParams($par)
-	{
-//регулярка для парсинга параметров - записана так, чтобы не было страшных экранировок
-$re = <<<SREG
-#\s*([^,"']+|"(?:[^"]|\\"|"")*?[^\"]"|'(?:[^']|\\'|'')*?[^\']')\s*(?:,|$)#
-SREG;
-		$m=array();
-		preg_match_all($re, $par, $m);
-		foreach ($m[1] as &$v)
-			$v = str_replace(array('""',"''",'\"',"\'"), array('"',"'",'"',"'"),
-				trim($v,'\'" '));
-		return $m[1];
 	}
 
 	protected function loadMCA(&$data, $type)
