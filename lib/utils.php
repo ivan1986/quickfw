@@ -85,63 +85,6 @@ function checkUrl($url)
 }
 
 /**
- * Вывод сообщения с разбивкой длинных слов без повреждения тегов
- *
- * @param string $msg собщение, в котором нужно разбить слова
- * @param integer $n длина, на которой ставить пробел
- * @return string сообщение со словами, не превышающими n символов
- */
-function msg2html($msg, $n=50)
-{
-	$marker = " <> ";
-
-	# Сохраняем все тэги чтобы уберечь их от разбивки
-	preg_match_all("/(<.*?>)/si",$msg,$tags);
-
-	# Заменяем все тэги на маркеры
-	$msg =  preg_replace("/(<.*?>)/si", $marker, $msg);
-
-	$msg = preg_replace('|\S{'.$n.'}|u','\0 ',$msg);
-
-	# Восстанавливаем тэги в места которых были отмечены маркерами
-	for ($i=0; $i<count($tags[0]);  $i++)
-		$msg = preg_replace("/$marker/si", $tags[1][$i], $msg, 1);
-
-	return $msg;
-}
-
-/**
- * Преобразование URL в ссылки
- */
-function make_urls($string)
-{
-	$p = '/((?:(?:ht|f)tps?:\/\/|www\.)[^<\s\n]+)(?<![]\.,:;!\})<-])/msiu';
-	$r = '<a href="$1">$1</a>$2';
-
-	$string = preg_replace($p, $r, $string);
-
-	$p = '/ href="www\./msiu';
-	$r = ' href="http://www.';
-
-	return preg_replace($p, $r, $string);
-}
-
-/**
- * Обрезает длинные строки, не разрывая последнее слово
- *
- * @param string $str строка, которую нужно обрезать
- * @param integer $size до скольки знаков
- */
-function clearCut($str, $size)
-{
-	if(mb_strlen($str) <= $size)
-		return $str;
-
-	$words = explode(' ', mb_substr($str, 0, $size));
-	return implode(' ', array_slice($words, 0, count($words)-1)).'...';
-}
-
-/**
  * Выдает несколько неповторяющихся случайных значений
  */
 function n_rand($min, $max, $count)
@@ -295,16 +238,3 @@ function password_sailt($pass)
 {
   return md5($pass.QFW::$config['pass_sailt']);
 }
-
-/**
- * Генерирует урл из текста - убирает / и применяет urlencode
- *
- * @param string $text
- * @return string
- */
-function genUrl($text)
-{
-  return rawurlencode(str_replace(array('/', ' '), '-', $text));
-}
-
-?>

@@ -33,9 +33,14 @@ class Text
 	}
 
 	/**
-	 * Обрезка текста
+	 * Обрезает длинные строки
+	 *
+	 * @param string $str Строка
+	 * @param integer $size длина, до которой обрезать
+	 * @param bool $word Обрезать по словам
+	 * @return string Обрезанная строка
 	 */
-	static public function my_trim($str, $size, $word=false)
+	static public function myTrim($str, $size, $word=false)
 	{
 		if (mb_strlen($str)<=$size)
 			return $str;
@@ -49,7 +54,6 @@ class Text
 		return $str;
 	}
 
-
 	/**
 	 * Печать размера файла в форматированном виде
 	 */
@@ -60,6 +64,59 @@ class Text
 		if ($size>1024*10)
 			return round($size/1024,2).' Кб';
 		return $size.' байт';
+	}
+
+	/**
+	 * Вывод сообщения с разбивкой длинных слов без повреждения тегов
+	 *
+	 * @param string $msg собщение, в котором нужно разбить слова
+	 * @param integer $n длина, на которой ставить пробел
+	 * @return string сообщение со словами, не превышающими n символов
+	 */
+	static public function msg2html($msg, $n=50)
+	{
+		$marker = " <> ";
+
+		# Сохраняем все тэги чтобы уберечь их от разбивки
+		preg_match_all("/(<.*?>)/si",$msg,$tags);
+
+		# Заменяем все тэги на маркеры
+		$msg =  preg_replace("/(<.*?>)/si", $marker, $msg);
+
+		$msg = preg_replace('|\S{'.$n.'}|u','\0 ',$msg);
+
+		# Восстанавливаем тэги в места которых были отмечены маркерами
+		for ($i=0; $i<count($tags[0]);  $i++)
+			$msg = preg_replace("/$marker/si", $tags[1][$i], $msg, 1);
+
+		return $msg;
+	}
+
+	/**
+	 * Преобразование URL в ссылки
+	 */
+	static public function make_urls($string)
+	{
+		$p = '/((?:(?:ht|f)tps?:\/\/|www\.)[^<\s\n]+)(?<![]\.,:;!\})<-])/msiu';
+		$r = '<a href="$1">$1</a>$2';
+
+		$string = preg_replace($p, $r, $string);
+
+		$p = '/ href="www\./msiu';
+		$r = ' href="http://www.';
+
+		return preg_replace($p, $r, $string);
+	}
+
+	/**
+	 * Генерирует урл из текста - убирает / и применяет urlencode
+	 *
+	 * @param string $text
+	 * @return string
+	 */
+	static public function genUrl($text)
+	{
+	  return rawurlencode(str_replace(array('/', ' '), '-', $text));
 	}
 
 	/**
@@ -97,6 +154,12 @@ class Text
 		return strtr(date($format, $time!==false ? $time : time()), $translation);
 	}
 
+	/**
+	 * Формирует из timestamp строку времяни
+	 *
+	 * @param integer $ts timestamp
+	 * @return string строка - сколько времени назад
+	 */
 	static public function date_ago($ts) 
 	{
 		$dif = time() - $ts;
