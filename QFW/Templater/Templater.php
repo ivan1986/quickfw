@@ -18,12 +18,12 @@ abstract class Templater
 	/** @var String Основной шаблон (путь относительно директории шаблонов) */
 	public $mainTemplate;
 
-	public function __construct($tmplPath, $mainTmpl)
+	public function __construct($tplPath, $mainTpl)
 	{
 		$this->_vars = array();
-		$this->_tmplPath = $tmplPath;
+		$this->_tmplPath = $tplPath;
 		$this->P = QuickFW_Plugs::getInstance();
-		$this->mainTemplate = $mainTmpl;
+		$this->mainTemplate = $mainTpl;
 	}
 
 	public function __get($name)
