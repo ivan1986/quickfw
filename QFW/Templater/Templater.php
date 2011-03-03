@@ -26,6 +26,16 @@ abstract class Templater
 		$this->mainTemplate = $mainTmpl;
 	}
 
+	public function __get($name)
+	{
+		return $this->getTemplateVars($name);
+	}
+
+	public function __set($name, $value)
+	{
+		$this->assign($name, $value);
+	}
+
 	/**
 	 * Присваение значения переменной шаблона
 	 *
