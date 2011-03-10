@@ -130,6 +130,28 @@ abstract class Dklab_Cache_Frontend_Slot
         return new Dklab_Cache_Frontend_Slot_Thru($this, $obj);
     }
 
+    /**
+     * Call a function with transparent caching.
+     * Usage:
+     *   $slot = new SomeSlot(...);
+     *   $data = $slot->get(function() use(...){
+     *       ...
+     *   });
+     *   // calls lamda function() with intermediate caching
+     *
+     * @param Closure $obj function
+     * @return mixed result
+     */
+    public function get($function)
+    {
+        $result = $this->load();
+        if ($result === false) {
+            $result = $function();
+            $this->save($result);
+        }
+        return $result;
+    }
+
 
     /**
      * Returns backend object responsible for this cache slot.
