@@ -116,6 +116,3 @@ class Language {
 	}
 
 }
-// END Language Class
-QFW::$libs['lang'] = new Language();
-?>

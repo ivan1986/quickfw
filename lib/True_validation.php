@@ -8,15 +8,21 @@ class True_Validation {
 	var $_errors			= array(); //Массив ошибок
 	var $_error_messages	= array();//Собственные сообщения об ошибках
 
-	function True_Validation() {
+	function __construct() {
 		$this->init();
-		require_once(LIBPATH.'/Language.php');
 	}
 
 	function init() {
 		$this->_rules = array();
 		$this->_data = array();
 		$this->_fields = array();
+	}
+
+	function set($name, $field, $rules, $data=null) {
+		$this->_fields[$name] = $field;
+		$this->_rules[$name] = $rules;
+		if ($data !== null)
+			$this->_data[$name] = $data;
 	}
 
 	function set_data($data = '') {
@@ -87,7 +93,7 @@ class True_Validation {
 		}
 
 		// Load the language file containing error messages
-		QFW::$libs['lang']->load('true_validation');
+		QFW::$libs['lang'] = new Language();
 
 		// Cycle through the rules and test for errors
 		foreach ($this->_rules as $field => $rules) {
@@ -466,6 +472,3 @@ class True_Validation {
 	}
 
 }
-// END Validation Class
-QFW::$libs['true_validation'] = new True_Validation();
-?>
