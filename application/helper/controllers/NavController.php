@@ -15,17 +15,37 @@ class NavController
 	 * @param string $name Имя шаблона пагинатора
 	 * @return string Сформированный пагинатор
 	 */
-	public function pagerBlock($url='$', $all=0, $cur=1, $size=5, $name='pager')
+	public function pagerBlock($url='$', $all=0, $cur=1, $name='pager')
 	{
 		if ($all<2) return '';
 		QFW::$view->assign('pager',array(
 			'all'=>$all,
 			'c'=>$cur,
 			'url'=>$url,
-			'size'=>$size,
 		));
 		return QFW::$view->fetch('pager/'.$name.'.php');
 	}
+
+	/**
+	 * Пагинатор
+	 *
+	 * <br>готовый пейджинатор с несколькими шаблонами
+	 * которому указывается урл и с какого элемента считать и сколько элементов
+	 *
+	 * @param string $url Шаблон урла, номер страницы заменен $
+	 * @param int $from с какого элемента
+	 * @param int $items сколько элементов
+	 * @param int $size По сколько отображать на странице
+	 * @param string $name Имя шаблона пагинатора
+	 * @return string
+	 */
+	public function pagerFromBlock($url='$', $from, $items=0, $size = 10, $name='pager')
+	{
+		$all = ceil($items / $size);
+		$cur = ceil($from / $size);
+		return $this->pagerBlock($url, $all, $cur, $name);
+	}
+
 
 	/**
 	 * Древоводное меню на вложенными списками

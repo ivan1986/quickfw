@@ -1,9 +1,9 @@
 <!-- Pageslist -->
 <div class="pageslist">
-	<?php
-		$first = $pager['c'] - $pager['size'];
+	<?php $ps = 10;
+		$first = $pager['c'] - $ps;
 		if($first<1) $first = 1;
-		$last = $pager['c'] + $pager['size'];
+		$last = $pager['c'] + $ps;
 		if($last>$pager['all']) $last =  $pager['all'];
 		
 		if ($first>1):?>
