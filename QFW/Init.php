@@ -1,5 +1,18 @@
 <?php
 
+//регаем автолоад
+require_once QFWPATH.'/QuickFW/Autoload.php';
+Autoload::Init();
+
+//определяем пути относительно известных
+if (!defined('TMPPATH'))
+	define('TMPPATH', VARPATH.'/tmp');
+if (!defined('LOGPATH'))
+	define('LOGPATH', VARPATH.'/log');
+if (!defined('MODPATH'))
+	define ('MODPATH', APPPATH  . '/_common/models');
+
+
 class QFW
 {
 	/** @var array Глобальный массив данных */
@@ -56,15 +69,11 @@ class QFW
 	{
 		self::$config = self::config();
 
-		require_once QFWPATH.'/QuickFW/Cache.php';
-		require_once QFWPATH.'/QuickFW/Plugs.php';
-
 		//выставляем заголовок с нужной кодировкой
 		if (!empty(self::$config['host']['encoding']))
 			header("Content-Type: text/html; charset=".self::$config['host']['encoding']);
 
 		//Инициализируем класс базы данных
-		require_once LIBPATH.'/DbSimple/Connect.php';
 		self::$db = new DbSimple_Connect(self::$config['database']);
 
 		//Подключаем шаблонизатор
@@ -77,11 +86,9 @@ class QFW
 		//подключаем модули и библиотеки
 		self::modules();
 
-		require_once QFWPATH.'/QuickFW/Router.php';
 		static::$router = new QuickFW_Router(APPPATH);
 
 		//хелпер для урлов (зависит от QuickFW_Router)
-		require_once QFWPATH.'/QuickFW/Url.php';
 		Url::Init();
 	}
 
@@ -96,24 +103,18 @@ class QFW
 			foreach(self::$config['error'] as $handler)
 				self::ErrorFromConfig($handler);
 
-		//автолоад
-		if (!empty(self::$config['QFW']['autoload']))
-		{
-			require_once QFWPATH.'/QuickFW/Autoload.php';
-			Autoload::Init(self::$config['QFW']['autoload']);
-		}
+		if (self::$config['QFW']['autoload'])
+			Autoload::Add(self::$config['QFW']['autoload']);
 
 		//JsHttpRequest
 		if (isset($_REQUEST['JsHttpRequest']))
 		{
-			require_once LIBPATH.'/JsHttpRequest.php';
 			self::$ajax = new JsHttpRequest(self::$config['host']['encoding']);
 			//устанавливаем пустой главный шаблон
 			self::$view->mainTemplate = '';
 		}
 		if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest')
 		{
-			require_once LIBPATH.'/jquery.php';
 			self::$ajax = new jQuery();
 			//устанавливаем пустой главный шаблон
 			self::$view->mainTemplate = '';
@@ -136,12 +137,12 @@ class QFW
 	 */
 	static private function ErrorFromConfig($handler)
 	{
-		require_once LIBPATH.'/Debug/ErrorHook/Listener.php';
+		//require_once LIBPATH.'/Debug/ErrorHook/Listener.php';
 		if (!self::$ErrorHook)
 			self::$ErrorHook = new Debug_ErrorHook_Listener();;
 
 		$name = ucfirst($handler['name']);
-		require_once LIBPATH.'/Debug/ErrorHook/'.$name.'Notifier.php';
+		//require_once LIBPATH.'/Debug/ErrorHook/'.$name.'Notifier.php';
 		//пока так, потом возможно придется переделать
 		{
 			$class = 'Debug_ErrorHook_'.$name.'Notifier';
@@ -151,7 +152,7 @@ class QFW
 		}
 		if ($handler['RemoveDups'])
 		{
-			require_once LIBPATH.'/Debug/ErrorHook/RemoveDupsWrapper.php';
+			//require_once LIBPATH.'/Debug/ErrorHook/RemoveDupsWrapper.php';
 			$i = new Debug_ErrorHook_RemoveDupsWrapper($i,
 				TMPPATH.'/errors', $handler['RemoveDups']);
 		}
@@ -192,7 +193,7 @@ class QFW
 	 */
 	static public function JabberFromConfig()
 	{
-		require_once LIBPATH.'/XMPPHP/XMPP.php';
+		//require_once LIBPATH.'/XMPPHP/XMPP.php';
 		return new XMPPHP_XMPP(
 			QFW::$config['jabber']['host'], QFW::$config['jabber']['port'],
 			QFW::$config['jabber']['user'], QFW::$config['jabber']['pass'],
@@ -201,13 +202,6 @@ class QFW
 	}
 
 }
-
-if (!defined('TMPPATH'))
-	define('TMPPATH', VARPATH.'/tmp');
-if (!defined('LOGPATH'))
-	define('LOGPATH', VARPATH.'/log');
-if (!defined('MODPATH'))
-	define ('MODPATH', APPPATH  . '/_common/models');
 
 QFW::Init();
 
