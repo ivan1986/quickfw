@@ -58,7 +58,7 @@ class QFW
 		$file = APPPATH.'/'.$_SERVER['HTTP_HOST'].'.php';
 		if (is_file($file))
 			require ($file);
-		return $config;
+		return new QuickFW_Config($config, APPPATH.'/config');
 	}
 
 	/**
