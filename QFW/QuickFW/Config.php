@@ -13,7 +13,9 @@ class QuickFW_Config implements ArrayAccess
 
 	// necessary for deep copies
 	public function __clone() {
-		foreach ($this->data as $key => $value) if ($value instanceof self) $this[$key] = clone $value;
+		foreach ($this->data as $key => $value)
+			if ($value instanceof self)
+				$this[$key] = clone $value;
 	}
 
 	public function __construct(array $data = array(), $dir='') {
@@ -59,7 +61,9 @@ class QuickFW_Config implements ArrayAccess
 				if ($data == 1 && isset($config))
 					$data = $config;
 			}
-			$this->data[$offset] = is_object($data) ? $data : new self($data, $this->dir.'/'.$offset);
+			$this->data[$offset] = is_object($data) ? $data : (
+				is_array($data) ? new self($data, $this->dir.'/'.$offset) :
+				$data);
 		}
 		return $this->data[$offset];
 	}
