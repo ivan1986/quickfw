@@ -428,10 +428,7 @@ class QuickFW_Router
 		if (is_array($this->$type))
 			return preg_replace(array_keys($this->$type), array_values($this->$type), $uri);
 		if (is_callable($this->$type))
-		{
-			$f = $this->$type;
-			return $f($uri);
-		}
+			return call_user_func($this->$type, $uri);
 		return $uri;
 	}
 
