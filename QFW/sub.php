@@ -13,9 +13,6 @@ class QFW extends \QFW
 	 */
 	static public function Init()
 	{
-		//подключаем модули и библиотеки
-		self::modules();
-
 		static::$router = new \QuickFW_Router(dirname(__FILE__), __NAMESPACE__);
 	}
 
