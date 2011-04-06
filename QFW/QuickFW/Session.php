@@ -142,7 +142,7 @@ class QuickFW_Session
 	 */
 	public function __construct($sid = '')
 	{
-		call_user_func_array('session_set_cookie_params', QFW::$config['session']);
+		call_user_func_array('session_set_cookie_params', QFW::$config['session']->toArray());
 		if (!empty($sid))
 			session_id($sid);
 		$this->start();
