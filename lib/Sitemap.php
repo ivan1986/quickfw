@@ -62,12 +62,9 @@ class Sitemap
 		//Файл был не один - генерим индекс
 		if ($this->curFileNum)
 		{
+			//если у нас еще есть урлы для записи
 			if ($this->last_urls != 50000)
-			{ //если у нас еще есть урлы для записи
-				$this->curFileNum++;
-				file_put_contents(($this->gzip ? 'compress.zlib://' : '').
-					$this->dir.'/'.$this->name.$this->curFileNum.'.'.($this->gzip ? 'gz' : 'xml'), $this->data.$this->foot);
-			}
+				$this->nextFile();
 
 			$index= '<?xml version="1.0" encoding="UTF-8"?>'."\n".
 				'<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'."\n";
