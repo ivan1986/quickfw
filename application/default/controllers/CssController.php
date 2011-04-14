@@ -17,7 +17,7 @@ class CssController
 	public function __construct()
 	{
 		//$this->path = DOC_ROOT.'/css';
-		$this->path = APPPATH.'/_common/css';
+		$this->path = COMPATH.'/css';
 	}
 
 	/**

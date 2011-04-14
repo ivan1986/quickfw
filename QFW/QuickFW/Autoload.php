@@ -109,12 +109,12 @@ class Autoload
 	{
 		if (strpos($class, 'Slot_') === 0)
 		{
-			require APPPATH.'/_common/slots/'.substr($class, 5).'.php';
+			require COMPATH.'/slots/'.substr($class, 5).'.php';
 			return true;
 		}
 		if (strpos($class, 'Tag_') === 0)
 		{
-			require APPPATH.'/_common/tags/'.substr($class, 4).'.php';
+			require COMPATH.'/tags/'.substr($class, 4).'.php';
 			return true;
 		}
 		return false;

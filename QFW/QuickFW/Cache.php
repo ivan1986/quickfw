@@ -175,7 +175,7 @@ class Cache
 	public static function slot($name)
 	{
 		require_once QFWPATH.'/QuickFW/Cacher/Slot.php';
-		require_once APPPATH.'/_common/slots/'.$name.'.php';
+		require_once COMPATH.'/slots/'.$name.'.php';
 		$args = func_get_args();
 		array_shift($args);
 		$reflectionObj = new ReflectionClass('Slot_'.$name);
@@ -191,7 +191,7 @@ class Cache
 	public static function tag($name)
 	{
 		require_once QFWPATH.'/QuickFW/Cacher/Tag.php';
-		require_once APPPATH.'/_common/tags/'.$name.'.php';
+		require_once COMPATH.'/tags/'.$name.'.php';
 		$args = func_get_args();
 		array_shift($args);
 		$reflectionObj = new ReflectionClass('Tag_'.$name);

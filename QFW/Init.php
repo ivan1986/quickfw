@@ -9,8 +9,10 @@ if (!defined('TMPPATH'))
 	define('TMPPATH', VARPATH.'/tmp');
 if (!defined('LOGPATH'))
 	define('LOGPATH', VARPATH.'/log');
+if (!defined('COMPATH'))
+	define ('COMPATH', APPPATH  . '/_common');
 if (!defined('MODPATH'))
-	define ('MODPATH', APPPATH  . '/_common/models');
+	define ('MODPATH', COMPATH  . '/models');
 
 
 class QFW

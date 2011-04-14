@@ -12,7 +12,7 @@ class JsController
 	public function __construct()
 	{
 		//$this->path = DOC_ROOT.'/js';
-		$this->path = APPPATH.'/_common/js';
+		$this->path = COMPATH.'/js';
 	}
 
 	/**
