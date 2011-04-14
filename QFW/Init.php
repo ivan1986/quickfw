@@ -1,19 +1,18 @@
 <?php
 
-//регаем автолоад
-require_once QFWPATH.'/QuickFW/Autoload.php';
-Autoload::Init();
-
 //определяем пути относительно известных
 if (!defined('TMPPATH'))
 	define('TMPPATH', VARPATH.'/tmp');
 if (!defined('LOGPATH'))
 	define('LOGPATH', VARPATH.'/log');
 if (!defined('COMPATH'))
-	define ('COMPATH', APPPATH  . '/_common');
+	define ('COMPATH', APPPATH.'/_common');
 if (!defined('MODPATH'))
-	define ('MODPATH', COMPATH  . '/models');
+	define ('MODPATH', COMPATH.'/models');
 
+//регаем автолоад
+require_once QFWPATH.'/QuickFW/Autoload.php';
+Autoload::Init();
 
 class QFW
 {

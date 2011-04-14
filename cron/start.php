@@ -7,9 +7,10 @@
 	define ('LIBPATH', ROOTPATH . '/lib');
 
 //Настройки по умолчанию, если нужно - измените
-//	define ('TMPPATH', VARPATH  . '/tmp');
-//	define ('LOGPATH', VARPATH  . '/log');
-//	define ('MODPATH', APPPATH  . '/_common/models');
+//	define ('TMPPATH', VARPATH . '/tmp');
+//	define ('LOGPATH', VARPATH . '/log');
+//	define ('COMPATH', APPPATH . '/_common');
+//	define ('MODPATH', COMPATH . '/models');
 
 	if (empty($_SERVER['HTTP_HOST']))
 		$_SERVER['HTTP_HOST'] = gethostname();
