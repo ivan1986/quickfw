@@ -5,6 +5,44 @@
  */
 class QuickFW_Config implements ArrayAccess
 {
+	/**
+	 * Генерирует список файлов конфигураций
+	 *
+	 * @param string|false $prefix префикс
+	 * @return array массив файлов
+	 */
+	static private function files($prefix)
+	{
+		if ($prefix === false)
+		{
+			$files = array();
+			$files[] = QFWPATH.'/config.php';
+			$files[] = APPPATH.'/default.php';
+			if (isset($_SERVER['SERVER_NAME']))
+				$files[] = APPPATH.'/serv.'.$_SERVER['SERVER_NAME'].'.php';
+			if (isset($_SERVER['HTTP_HOST']))
+				$files[] = APPPATH.'/host.'.$_SERVER['HTTP_HOST'].'.php';
+			return $files;
+		}
+		$files = array();
+		$files[] = $prefix.'.php';
+		if (isset($_SERVER['SERVER_NAME']))
+			$files[] = $prefix.'.serv.'.$_SERVER['SERVER_NAME'].'.php';
+		if (isset($_SERVER['HTTP_HOST']))
+			$files[] = $prefix.'.host.'.$_SERVER['HTTP_HOST'].'.php';
+		return $files;
+	}
+
+	/**
+	 * Генерация основного конфига
+	 *
+	 * @return array|mixed|QuickFW_Config вложенный массив
+	 */
+	static public function main()
+	{
+		return new self(self::loadFromFiles(self::files(false)), APPPATH.'/config');
+	}
+
 	private $data = array();
 	/**
 	 * @var string Директория конфигурации
@@ -46,7 +84,7 @@ class QuickFW_Config implements ArrayAccess
 
 	public function offsetGet($offset) {
 		if ($this->dir && !isset($this->data[$offset]))
-			$this->data[$offset] = $this->loadFromFile($offset);
+			$this->data[$offset] = $this->load($offset);
 		return $this->data[$offset];
 	}
 	public function offsetExists($offset) { return isset($this->data[$offset]); }
@@ -58,22 +96,29 @@ class QuickFW_Config implements ArrayAccess
 	 * @param string $name имя файла
 	 * @return array|mixed|QuickFW_Config вложенный массив
 	 */
-	private function loadFromFile($name)
+	private function load($name)
 	{
-		$file = $this->dir.'/'.$name.'.php';
+		$data = self::loadFromFiles(self::files($this->dir.'/'.$name));
+		return is_array($data) ? new self($data, $this->dir.'/'.$name) : $data;
+	}
+
+	/**
+	 * Пробуем загрузить файл из текущей директории
+	 *
+	 * @param array $files файлы
+	 * @return array|mixed|QuickFW_Config вложенный массив
+	 */
+	static private function loadFromFiles($files)
+	{
 		$data = array();
-		if (is_file($file))
-			$data = include($file);
-		if ($data == 1 && isset($config))
-			$data = $config;
-		$hf = $this->dir.'/'.$name.'.'.$_SERVER['HTTP_HOST'].'.php';
-		if (is_file($hf))
+		foreach($files as $file)
 		{
-			$data = include($hf);
+			if (is_file($file))
+				$data = include($file);
 			if ($data == 1 && isset($config))
 				$data = $config;
 		}
-		return is_array($data) ? new self($data, $this->dir.'/'.$name) : $data;
+		return $data;
 	}
 
 	//as prop
