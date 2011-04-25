@@ -113,6 +113,7 @@ class QuickFW_Config implements ArrayAccess
 		$data = array();
 		foreach($files as $file)
 		{
+			$new = array();
 			if (is_file($file))
 				$new = include($file);
 			if ($new == 1 && isset($config))
