@@ -114,9 +114,10 @@ class QuickFW_Config implements ArrayAccess
 		foreach($files as $file)
 		{
 			if (is_file($file))
-				$data = include($file);
-			if ($data == 1 && isset($config))
-				$data = $config;
+				$new = include($file);
+			if ($new == 1 && isset($config))
+				$new = $config;
+			$data = array_merge_recursive($data, $new);
 		}
 		return $data;
 	}
