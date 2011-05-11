@@ -28,7 +28,7 @@ class Url
 	 */
 	public static function site($url='')
 	{
-		return new static($url);
+		return new static(func_get_args());
 	}
 
 	/**
@@ -41,7 +41,7 @@ class Url
 	 */
 	public static function M($CA='')
 	{
-		return new static($CA, static::$config['router']->cModule.
+		return new static(func_get_args(), static::$config['router']->cModule.
 			QuickFW_Router::PATH_SEPARATOR);
 	}
 
@@ -55,7 +55,7 @@ class Url
 	 */
 	public static function C($action='')
 	{
-		return new static($action, static::$config['router']->cModule.
+		return new static(func_get_args(), static::$config['router']->cModule.
 				QuickFW_Router::PATH_SEPARATOR.
 			static::$config['router']->cController.
 				QuickFW_Router::PATH_SEPARATOR);
@@ -71,7 +71,7 @@ class Url
 	 */
 	public static function A($params='')
 	{
-		return new static($params, static::$config['router']->cModule.
+		return new static(func_get_args(), static::$config['router']->cModule.
 				QuickFW_Router::PATH_SEPARATOR.
 			static::$config['router']->cController.
 				QuickFW_Router::PATH_SEPARATOR.
@@ -112,6 +112,8 @@ class Url
 			$this->anchor = $url->anchor;
 			return;
 		}
+		if (is_array($url))
+			$url = join(QuickFW_Router::PATH_SEPARATOR, $url);
 		//Заменяем / на QuickFW_Router::PATH_SEPARATOR
 		if (QuickFW_Router::PATH_SEPARATOR != '/')
 			$url = strtr($url, '/', QuickFW_Router::PATH_SEPARATOR);
