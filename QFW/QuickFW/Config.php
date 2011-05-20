@@ -116,9 +116,11 @@ class QuickFW_Config implements ArrayAccess
 			$new = array();
 			if (is_file($file))
 				$new = include($file);
-			if ($new == 1 && isset($config))
+			if ($new === 1 && isset($config))
 				$new = $config;
-			$data = array_merge_replace_recursive($data, $new);
+			if (!empty($new))
+				$data = (is_array($data) && is_array($new)) ?
+					array_merge_replace_recursive($data, $new) : $new;
 		}
 		return $data;
 	}
