@@ -88,7 +88,7 @@ class QuickFW_Config implements ArrayAccess
 		return $this->data[$offset];
 	}
 	public function offsetExists($offset) { return isset($this->data[$offset]); }
-	public function offsetUnset($offset) { unset($this->data); }
+	public function offsetUnset($offset) { unset($this->data[$offset]); }
 
 	/**
 	 * Пробуем загрузить файл из текущей директории

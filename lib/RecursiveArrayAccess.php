@@ -32,7 +32,7 @@ class RecursiveArrayAccess implements ArrayAccess
 	//public function offsetGet($offset) { return isset($this->data[$offset]) ? $this->data[$offset] : null; }
 	public function offsetGet($offset) { return $this->data[$offset]; }
 	public function offsetExists($offset) { return isset($this->data[$offset]); }
-	public function offsetUnset($offset) { unset($this->data); }
+	public function offsetUnset($offset) { unset($this->data[$offset]); }
 	
 	//as prop
 	public function __get($offset) { return $this->offsetGet($offset); }
