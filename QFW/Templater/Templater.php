@@ -5,8 +5,9 @@
  */
 abstract class Templater
 {
+	protected static $global_vars = array();
 	/** @var array переменные, установленные в шаблоне */
-	protected $_vars;
+	protected $_vars = array();
 	/** @var string путь к шаблонам */
 	protected $_tmplPath;
 
@@ -33,9 +34,40 @@ abstract class Templater
 
 	public function __set($name, $value)
 	{
-		$this->assign($name, $value);
+		$this->_vars[$name] = $value;
 	}
 
+	/**
+	 * Sets a view variable.
+	 *
+	 * @param   string|array  name of variable or an array of variables
+	 * @param   mixed         value when using a named variable
+	 * @return  object
+	 */
+	public function set($name, $value = NULL)
+	{
+		if (is_array($name))
+			$this->_vars = array_merge($this->_vars, $name);
+		else
+			$this->__set($name, $value);
+		return $this;
+	}
+
+	/**
+	 * Функция для совместимости с kohana View
+	 *
+	 * @static
+	 * @param $name
+	 * @param null $value
+	 * @return void
+	 */
+	public static function set_global($name, $value = NULL)
+	{
+		if (is_array($name))
+			static::$global_vars = array_merge(static::$global_vars, $name);
+		else
+			static::$global_vars[$name] = $value;
+	}
 	/**
 	 * Присваение значения переменной шаблона
 	 *
@@ -48,10 +80,7 @@ abstract class Templater
 	 */
 	public function assign($name, $value = null)
 	{
-		if (is_array($name))
-			$this->_vars = array_merge($this->_vars, $name);
-		else
-			$this->_vars[$name] = $value;
+		self::set_global($name, $value);
 		return $this;
 	}
 
@@ -63,9 +92,9 @@ abstract class Templater
 	 */
 	public function append($name, $value)
 	{
-		if (empty($this->_vars[$name]))
-			$this->_vars[$name] = array();
-		$this->_vars[$name][] = $value;
+		if (empty(static::$global_vars[$name]))
+			static::$global_vars[$name] = array();
+		static::$global_vars[$name][] = $value;
 		return $this;
 	}
 
@@ -75,12 +104,25 @@ abstract class Templater
 	 * @param string|array имя переменной или массив имен
 	 */
 	public function delete($spec)
-	{
+	{   //TODO: уделание из всех
 		if (is_array($spec))
 			foreach ($spec as $item)
 				unset($this->_vars[$item]);
 		else
 			unset($this->_vars[$spec]);
+	}
+
+	/**
+	 * Sets a bound variable by reference.
+	 *
+	 * @param   string   name of variable
+	 * @param   mixed    variable to assign by reference
+	 * @return  object
+	 */
+	public function bind($name, & $var)
+	{
+		$this->_vars[$name] =& $var;
+		return $this;
 	}
 
 	/**
@@ -99,7 +141,7 @@ abstract class Templater
 	 * @return mixed значение
 	 */
 	public function getTemplateVars($var = null)
-	{
+	{   //TODO: получение из всех
 		if ($var === null)
 			return $this->_vars;
 		elseif (isset($this->_vars[$var]))

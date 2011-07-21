@@ -71,6 +71,7 @@ class Templater_PlainView extends Templater
 
 	public function fetch($tmpl, $vars=array())
 	{
+		extract(static::$global_vars, EXTR_OVERWRITE);
 		extract($this->_vars, EXTR_OVERWRITE);
 		extract($vars, EXTR_OVERWRITE);
 		$P=&$this->P;

@@ -21,23 +21,19 @@ class Templater_Proxy extends Templater
 	}
 
 	/**
-	* Assign variables to the template
-	*
-	* Allows setting a specific key to the specified value, OR passing an array
-	* of key => value pairs to set en masse.
-	*
-	* @see __set()
-	* @param string|array $spec The assignment strategy to use (key or array of key
-	* => value pairs)
-	* @param mixed $value (Optional) If assigning a named variable, use this
-	* as the value.
-	* @return void
-	*/
+	 * добавляем unsyncronize
+	 */
 	public function assign($spec, $value = null)
 	{
 		$this->unsyncronize();
 		parent::assign($spec, $value);
 		return $this;
+	}
+
+	public function __set($name, $value)
+	{
+		$this->unsyncronize();
+		parent::__set($name, $value);
 	}
 
 	/**
