@@ -27,14 +27,33 @@ abstract class Templater
 		$this->mainTemplate = $mainTpl;
 	}
 
-	public function __get($name)
+	/**
+	 * Возвращает значения переменных в шаблоне
+	 * Используется для изменения массивов
+	 *
+	 * @param string $var имя переменной
+	 * @return mixed значение
+	 */
+	public function &__get($key)
 	{
-		return $this->getTemplateVars($name);
+		if (isset($this->_vars[$key]))
+			return $this->_vars[$key];
+
+		if (isset(static::$global_vars[$key]))
+			return static::$global_vars[$key];
+
+		$this->_vars[$key] = false;
+		return $this->_vars[$key];
 	}
 
 	public function __set($name, $value)
 	{
 		$this->_vars[$name] = $value;
+	}
+
+	public function __isset($name)
+	{
+		return isset($this->_vars[$name]) || isset(static::$global_vars[$name]);
 	}
 
 	/**
@@ -104,12 +123,18 @@ abstract class Templater
 	 * @param string|array имя переменной или массив имен
 	 */
 	public function delete($spec)
-	{   //TODO: уделание из всех
+	{
 		if (is_array($spec))
 			foreach ($spec as $item)
+			{
 				unset($this->_vars[$item]);
+				unset(static::$global_vars[$item]);
+			}
 		else
+		{
 			unset($this->_vars[$spec]);
+			unset(static::$global_vars[$spec]);
+		}
 	}
 
 	/**
@@ -117,11 +142,15 @@ abstract class Templater
 	 *
 	 * @param   string   name of variable
 	 * @param   mixed    variable to assign by reference
+	 * @param   bool     variable bind to global data
 	 * @return  object
 	 */
-	public function bind($name, & $var)
+	public function bind($name, & $var, $global = false)
 	{
-		$this->_vars[$name] =& $var;
+		if ($global)
+			static::$global_vars[$name] =& $var;
+		else
+			$this->_vars[$name] =& $var;
 		return $this;
 	}
 
@@ -141,7 +170,7 @@ abstract class Templater
 	 * @return mixed значение
 	 */
 	public function getTemplateVars($var = null)
-	{   //TODO: получение из всех
+	{
 		if ($var === null)
 			return $this->_vars;
 		elseif (isset($this->_vars[$var]))
