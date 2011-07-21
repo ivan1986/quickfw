@@ -99,6 +99,7 @@ $config['templater']= array(
 	'exts' => array(
 		'tpl' => 'Smarty',
 		'html' => 'PlainView',
+		'php' => 'PlainView',
 	),
 );
 
