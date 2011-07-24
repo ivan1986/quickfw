@@ -66,7 +66,7 @@ class Templater_Twig extends Templater
 	{
 		$template = $this->getEngine()->loadTemplate($name);
 		$this->assign('P', $this->P);
-		return $template->render($vars + $this->_vars);
+		return $template->render($vars + $this->_vars + static::$global_vars);
 	}
 
 	/**

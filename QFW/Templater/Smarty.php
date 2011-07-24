@@ -113,15 +113,8 @@ class Templater_Smarty extends Templater
 
 	public function fetch($name, $vars=array())
 	{
-		if (!$vars)
-			return $this->getEngine()->fetch($name);
-		//если есть локальные переменные - сохраняем старые
-		//Smarty не поддерживает локальные переменные
-		$old = $this->getEngine()->get_template_vars();
-		$this->getEngine()->assign($vars);
+		$this->getEngine()->assign($vars + $this->_vars + static::$global_vars);
 		$data = $this->getEngine()->fetch($name);
-		$this->getEngine()->clear_all_assign();
-		$this->getEngine()->assign($old);
 		return $data;
 	}
 
