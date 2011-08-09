@@ -74,6 +74,14 @@ class View extends Templater
 	}
 
 	/**
+	 * Синоним fetch
+	 */
+	public function render($tmpl=false, $vars=array())
+	{
+		return $this->fetch($tmpl, $vars);
+	}
+
+	/**
 	 * Magically converts view object to string.
 	 *
 	 * @return  string
