@@ -43,24 +43,12 @@ class QFW
 	private function __construct() {}
 
 	/**
-	 * Инициализация конфига
-	 *
-	 * <br>возвращает конфигурацию, специфичную для текущего хоста
-	 *
-	 * @return array конфигурация на этом хосте
-	 */
-	static public function config()
-	{
-		return QuickFW_Config::main();
-	}
-
-	/**
 	 * Инициализация основных объектов QFW
 	 *
 	 */
 	static public function Init()
 	{
-		self::$config = self::config();
+		self::$config = QuickFW_Config::main();
 
 		//выставляем заголовок с нужной кодировкой
 		if (!empty(self::$config['host']['encoding']))
@@ -70,9 +58,7 @@ class QFW
 		self::$db = new DbSimple_Connect(self::$config['database']);
 
 		//Подключаем шаблонизатор
-		$templ = ucfirst(self::$config['templater']['name']);
-		$class = 'Templater_'.$templ;
-		require_once QFWPATH.'/Templater/'.$templ.'.php';
+		$class = 'Templater_'.ucfirst(self::$config['templater']['name']);
 		self::$view = new $class(APPPATH,
 			isset(self::$config['templater']['def_tpl']) ? self::$config['templater']['def_tpl'] : '');
 
@@ -197,5 +183,3 @@ class QFW
 }
 
 QFW::Init();
-
-?>

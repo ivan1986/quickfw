@@ -69,11 +69,12 @@ class Autoload
 	 */
 	static public function Main($class)
 	{
-		if (mb_strpos($class, 'QuickFW') === false)
-			return false;
-		$class = strtr($class,'_','/');
-		require QFWPATH.'/'.$class.'.php';
-		return true;
+		if (mb_strpos($class, 'QuickFW_') === 0 || mb_strpos($class, 'Templater_') === 0 || mb_strpos($class, 'Cacher_') === 0)
+		{
+			require QFWPATH.'/'.strtr($class,'_','/').'.php';
+			return true;
+		}
+		return false;
 	}
 
 	/**
