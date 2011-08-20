@@ -116,10 +116,12 @@ class QuickFW_Config implements ArrayAccess
 	 */
 	static private function loadFromFiles($info)
 	{
-		$C=Cache::get('File');
-		$key = 'config_'.$info['prefix'];
-		if ($data = $C->load($key))
-			return $data;
+		if (QuickFW_Cacher_SysSlot::is_use())
+		{
+			$C = new QuickFW_Cacher_SysSlot('config_'.$info['prefix']);
+			if ($data = $C->load())
+				return $data;
+		}
 		$data = array();
 		foreach($info['files'] as $file)
 		{
@@ -132,7 +134,8 @@ class QuickFW_Config implements ArrayAccess
 				$data = (is_array($data) && is_array($new)) ?
 					array_replace_recursive($data, $new) : $new;
 		}
-		$C->save($data, $key);
+		if (QuickFW_Cacher_SysSlot::is_use())
+			$C->save($data);
 		return $data;
 	}
 
