@@ -23,8 +23,10 @@ class QuickFW_Config implements ArrayAccess
 			if (isset($_SERVER['HTTP_HOST']))
 				$files[] = APPPATH.'/host.'.$_SERVER['HTTP_HOST'].'.php';
 			return array(
-				'prefix' => $prefix,
 				'files' => $files,
+				'key' => $prefix.
+					(isset($_SERVER['SERVER_NAME']) ? $_SERVER['SERVER_NAME'] : '').
+					(isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : ''),
 			);
 		}
 		$files = array();
@@ -34,8 +36,10 @@ class QuickFW_Config implements ArrayAccess
 		if (isset($_SERVER['HTTP_HOST']))
 			$files[] = $prefix.'.host.'.$_SERVER['HTTP_HOST'].'.php';
 		return array(
-			'prefix' => $prefix,
 			'files' => $files,
+			'key' => $prefix
+				(isset($_SERVER['SERVER_NAME']) ? $_SERVER['SERVER_NAME'] : '').
+				(isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : ''),
 		);
 	}
 
@@ -116,9 +120,9 @@ class QuickFW_Config implements ArrayAccess
 	 */
 	static private function loadFromFiles($info)
 	{
-		if (QuickFW_Cacher_SysSlot::is_use())
+		if (QuickFW_Cacher_SysSlot::is_use('config'))
 		{
-			$C = new QuickFW_Cacher_SysSlot('config_'.$info['prefix']);
+			$C = new QuickFW_Cacher_SysSlot('config_'.$info['key']);
 			if ($data = $C->load())
 				return $data;
 		}
@@ -134,7 +138,7 @@ class QuickFW_Config implements ArrayAccess
 				$data = (is_array($data) && is_array($new)) ?
 					array_replace_recursive($data, $new) : $new;
 		}
-		if (QuickFW_Cacher_SysSlot::is_use())
+		if (QuickFW_Cacher_SysSlot::is_use('config'))
 			$C->save($data);
 		return $data;
 	}

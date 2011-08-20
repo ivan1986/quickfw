@@ -15,11 +15,14 @@ class QuickFW_Cacher_SysSlot extends Dklab_Cache_Frontend_Slot
 
 	public static function is_use($where=false)
 	{
+		// используются 'MCA', 'autoload', 'config'
 		return false;
-		if ($where == 'MCA')
+		/*if ($where == 'MCA')
 			return false;
 		if ($where == 'autoload')
 			return false;
-		return false;
+		if ($where == 'config')
+			return false;
+		return false;*/
 	}
 }
