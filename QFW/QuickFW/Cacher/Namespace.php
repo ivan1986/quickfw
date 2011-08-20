@@ -19,19 +19,28 @@ class Dklab_Cache_Backend_NamespaceWrapper implements Zend_Cache_Backend_Interfa
 		return $this->_backend->setDirectives($directives);
 	}
 	
-	public function load($id, $doNotTest = false)
+	public function load($id, $doNotTestCacheValidity = false)
 	{
-		$id = is_array($id) ? array_map(array($this, '_mangleId'), $id) : $this->_mangleId($id);
-		$data = $this->_backend->load($id, $doNotTest);
-		
-		if (!is_array($id) || !is_array($data))
-			return $data;
-		$d = array();
-		$l = strlen($this->_namespace) + 1;
-		foreach($data as $k=>$v)
-			$d[substr($k, $l)] = $v;
-		return $d;
+		return $this->_backend->load($this->_mangleId($id), $doNotTestCacheValidity);
 	}
+	
+	public function multiLoad($ids, $doNotTestCacheValidity = false)
+	{
+		if (!is_array($ids)) {
+			Zend_Cache::throwException('multiLoad() expects parameter 1 to be array, ' . gettype($ids) . ' given');
+		}
+		if (method_exists($this->_backend, 'multiLoad')) {
+			return $this->_backend->multiLoad($this->_mangleIds($ids), $doNotTestCacheValidity);
+		}
+		// No multiLoad() method avalilable, so we have to emulate it to keep
+		// the interface consistent.
+		$result = array();
+		foreach ($ids as $i => $id) {
+			$result[$id] = $this->load($id, $doNotTestCacheValidity);
+		}
+		return $result;
+	}
+	
 	public function test($id)
 	{
 		return $this->_backend->test($this->_mangleId($id));

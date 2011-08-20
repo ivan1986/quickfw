@@ -110,6 +110,9 @@ abstract class Dklab_Cache_Frontend_Slot
      */
     public function addTag(Dklab_Cache_Frontend_Tag $tag)
     {
+        if ($tag->getBackend() !== $this->_getBackend()) {
+            Zend_Cache::throwException("Backends for tag " . get_class($tag) . " and slot " . get_class($this) . " must be same");
+        }
         $this->_tags[] = $tag;
     }
 
