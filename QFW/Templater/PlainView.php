@@ -41,7 +41,7 @@ class PlainView_Delegate
 	 *
 	 * @return bool можно вызывать
 	 */
-	public function callable()
+	public function calling()
 	{
 		return $this->m !== false;
 	}
@@ -102,7 +102,7 @@ class Templater_PlainView extends Templater
 		$data = ob_get_clean();
 		$caller = array_pop($this->callers);
 		$caller instanceof PlainView_Delegate;
-		echo $caller->callable() ? $caller->run($data) : $data;
+		echo $caller->calling() ? $caller->run($data) : $data;
 	}
 
 	public function extend($tpl)
