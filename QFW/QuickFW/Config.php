@@ -22,7 +22,10 @@ class QuickFW_Config implements ArrayAccess
 				$files[] = APPPATH.'/serv.'.$_SERVER['SERVER_NAME'].'.php';
 			if (isset($_SERVER['HTTP_HOST']))
 				$files[] = APPPATH.'/host.'.$_SERVER['HTTP_HOST'].'.php';
-			return $files;
+			return array(
+				'prefix' => $prefix,
+				'files' => $files,
+			);
 		}
 		$files = array();
 		$files[] = $prefix.'.php';
@@ -30,7 +33,10 @@ class QuickFW_Config implements ArrayAccess
 			$files[] = $prefix.'.serv.'.$_SERVER['SERVER_NAME'].'.php';
 		if (isset($_SERVER['HTTP_HOST']))
 			$files[] = $prefix.'.host.'.$_SERVER['HTTP_HOST'].'.php';
-		return $files;
+		return array(
+			'prefix' => $prefix,
+			'files' => $files,
+		);
 	}
 
 	/**
@@ -108,10 +114,14 @@ class QuickFW_Config implements ArrayAccess
 	 * @param array $files файлы
 	 * @return array|mixed|QuickFW_Config вложенный массив
 	 */
-	static private function loadFromFiles($files)
+	static private function loadFromFiles($info)
 	{
+		$C=Cache::get('File');
+		$key = 'config_'.$info['prefix'];
+		if ($data = $C->load($key))
+			return $data;
 		$data = array();
-		foreach($files as $file)
+		foreach($info['files'] as $file)
 		{
 			$new = array();
 			if (is_file($file))
@@ -122,6 +132,7 @@ class QuickFW_Config implements ArrayAccess
 				$data = (is_array($data) && is_array($new)) ?
 					array_replace_recursive($data, $new) : $new;
 		}
+		$C->save($data, $key);
 		return $data;
 	}
 
