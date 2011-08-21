@@ -131,7 +131,7 @@ class Cache
 				$backend = ucfirst($data['module']);
 			}
 			else
-				$backend = $name;
+				$backend = ucfirst($name);
 			$cl='Cacher_'.$backend;
 			require_once QFWPATH.'/Cacher/'.$backend.'.php';
 			$c=new $cl;

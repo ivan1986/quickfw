@@ -58,7 +58,9 @@ class QFW
 		self::$db = new DbSimple_Connect(self::$config['database']);
 
 		//Подключаем шаблонизатор
-		$class = 'Templater_'.ucfirst(self::$config['templater']['name']);
+		$tpl = ucfirst(self::$config['templater']['name']);
+		$class = 'Templater_'.$tpl;
+		require_once QFWPATH.'/Templater/'.$tpl.'.php';
 		self::$view = new $class(APPPATH,
 			isset(self::$config['templater']['def_tpl']) ? self::$config['templater']['def_tpl'] : '');
 
