@@ -10,7 +10,7 @@ class QuickFW_Cacher_SysSlot extends Dklab_Cache_Frontend_Slot
 	protected function _getBackend()
 	{
 		//return Cache::get('Null');
-		return Cache::get('File');
+		return Cache::get('Apc');
 	}
 
 	public static function is_use($where=false)
