@@ -131,7 +131,7 @@ class Cache
 				$backend = ucfirst($data['module']);
 			}
 			else
-				$backend = $name;
+				$backend = ucfirst($name);
 			$cl='Cacher_'.$backend;
 			require_once QFWPATH.'/Cacher/'.$backend.'.php';
 			$c=new $cl;
@@ -169,11 +169,13 @@ class Cache
 	/**
 	 * Фабрика слотов
 	 *
+	 * @deprecated Используйте autoload
 	 * @param string $name имя слота
 	 * @return Dklab_Cache_Frontend_Slot новый слот
 	 */
 	public static function slot($name)
 	{
+		trigger_error('Используйте autoload', E_USER_NOTICE);
 		require_once QFWPATH.'/QuickFW/Cacher/Slot.php';
 		require_once COMPATH.'/slots/'.$name.'.php';
 		$args = func_get_args();
@@ -185,11 +187,13 @@ class Cache
 	/**
 	 * Фабрика тегов
 	 *
+	 * @deprecated Используйте autoload
 	 * @param string $name имя тега
 	 * @return Dklab_Cache_Frontend_Tag новый тег
 	 */
 	public static function tag($name)
 	{
+		trigger_error('Используйте autoload', E_USER_NOTICE);
 		require_once QFWPATH.'/QuickFW/Cacher/Tag.php';
 		require_once COMPATH.'/tags/'.$name.'.php';
 		$args = func_get_args();
@@ -227,5 +231,3 @@ function thru($Cacher, $obj, $id, $tags=array(), $lifeTime=null)
 {
 	return new Cache_Thru($Cacher, $obj, $id, $tags, $lifeTime);
 }
-
-?>

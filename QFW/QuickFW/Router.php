@@ -453,13 +453,12 @@ class QuickFW_Router
 	{
 		while (isset($data[0]) AND $data[0] === '') array_shift($data);
 
-		if (!empty(QFW::$config['cache']['MCA']))
+		if (QuickFW_Cacher_SysSlot::is_use('MCA'))
 		{
-			$Cache = Cache::get('MCA');
 			$key = 'MCA_'.$this->sub.crc32(serialize($data)).$type.
 				($type=='Block' ? $this->curModule : $this->defM);
-			$cached = $Cache->load($key);
-			if ($cached)
+			$C = new QuickFW_Cacher_SysSlot($key);
+			if ($cached = $C->load())
 			{
 				$MCA = $cached['MCA'];
 				//устанавливаем переменные роутера
@@ -595,12 +594,16 @@ class QuickFW_Router
 		}
 		$MCA['Path']=$MCA['Module'].'/'.$MCA['Controller'].'/'.$aname;
 
-		if (!empty(QFW::$config['cache']['MCA']))
-			$Cache->save(array(
-				'MCA' => $MCA,
+		if (QuickFW_Cacher_SysSlot::is_use('MCA'))
+		{
+			$MCA_Cache = $MCA;
+			unset($MCA_Cache['Class']);
+			$C->save(array(
+				'MCA' => $MCA_Cache,
 				'defA' => $this->classes[$class_key]['defA'],
 				'a' => $this->classes[$class_key]['a'],
-			), $key, array());
+			));
+		}
 
 		return $MCA;
 	}

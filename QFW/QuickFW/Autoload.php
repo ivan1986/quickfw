@@ -15,9 +15,11 @@ class Autoload
 	{
 		spl_autoload_register(array(__CLASS__, 'Bind'));
 		spl_autoload_register(array(__CLASS__, 'Main'));
-		spl_autoload_register(array(__CLASS__, 'Dirs'));
+		spl_autoload_register(array(__CLASS__, 'Cached'));
+		//кешированный автолоад
 		spl_autoload_register(array(__CLASS__, 'Controller'));
 		spl_autoload_register(array(__CLASS__, 'SlotsAndTags'));
+		spl_autoload_register(array(__CLASS__, 'Dirs'));
 	}
 
 	/**
@@ -33,6 +35,24 @@ class Autoload
 		elseif (is_callable($function))
 			spl_autoload_register($function);
 	}
+	
+	/**
+	 * Загрузка результатов разбора из кеша
+	 *
+	 * @param string $class искомый класс
+	 */
+	static public function Cached($class)
+	{
+		if (!QuickFW_Cacher_SysSlot::is_use('autoload'))
+			return false;
+		$C = new QuickFW_Cacher_SysSlot(self::k($class));
+		if ($data = $C->load())
+		{
+			require $data;
+			return true;
+		}
+		return false;
+	}
 
 	/**
 	 * Автолоад контроллеров (при наследовании)
@@ -43,21 +63,19 @@ class Autoload
 	{
 		if (mb_strpos($class, 'Controller') === false)
 			return false;
-		$class = strtr($class,'_','/');
+		$c = strtr($class,'_','/');
 		//пространство имен
-		if ($pos = mb_strpos($class, '\\'))
+		if ($pos = mb_strpos($c, '\\'))
 		{
-			$ns = strtolower(mb_substr($class, 0, $pos));
-			$class = ucfirst(mb_substr($class, $pos+1));
+			$ns = strtolower(mb_substr($c, 0, $pos));
+			$c = ucfirst(mb_substr($c, $pos+1));
 			$Q = $ns.'\QFW';
 			//Проверка на саброутинг
 			$dir = !class_exists($Q) ? $ns : QFW::$router->cModule.'/'.$ns.'/'.$Q::$router->cModule;
 		}
 		else
 			$dir = QFW::$router->cModule;
-		$file = $dir.'/'.QuickFW_Router::CONTROLLERS_DIR.'/'.$class;
-		require APPPATH.'/'.$file.'.php';
-		return true;
+		return self::incl($class, APPPATH.'/'.$dir.'/'.QuickFW_Router::CONTROLLERS_DIR.'/'.$c.'.php');
 	}
 
 	/**
@@ -69,11 +87,12 @@ class Autoload
 	 */
 	static public function Main($class)
 	{
-		if (mb_strpos($class, 'QuickFW') === false)
-			return false;
-		$class = strtr($class,'_','/');
-		require QFWPATH.'/'.$class.'.php';
-		return true;
+		if (mb_strpos($class, 'QuickFW_') === 0 || mb_strpos($class, 'Templater_') === 0 || mb_strpos($class, 'Cacher_') === 0)
+		{
+			require QFWPATH.'/'.strtr($class,'_','/').'.php';
+			return true;
+		}
+		return false;
 	}
 
 	/**
@@ -93,6 +112,7 @@ class Autoload
 				'Hlp' => QFWPATH.'/QuickFW/Helpers.php',
 				'Dklab_Cache_Frontend_Slot' => QFWPATH.'/QuickFW/Cacher/Slot.php',
 				'Dklab_Cache_Frontend_Tag' => QFWPATH.'/QuickFW/Cacher/Tag.php',
+				'QuickFW_Cacher_SysSlot' => QFWPATH.'/QuickFW/Cacher/SysSlot.php',
 			);
 		if (empty(self::$classes[$class]))
 			return false;
@@ -134,14 +154,27 @@ class Autoload
 			LIBPATH,
 			MODPATH,
 		);
-		$class = str_replace('_', '/', $class);
+		$c = str_replace('_', '/', $class);
 		foreach ($list as $dir)
-			if (is_file($dir.'/'.$class.'.php'))
-			{
-				require $dir.'/'.$class.'.php';
-				return true;
-			}
+			if (is_file($dir.'/'.$c.'.php'))
+				return self::incl($class, $dir.'/'.$c.'.php');
 		return false;
+	}
+	
+	static private function incl($class, $file)
+	{
+		if (QuickFW_Cacher_SysSlot::is_use('autoload'))
+		{
+			$C = new QuickFW_Cacher_SysSlot(self::k($class));
+			$C->save($file);
+		}
+		require $file;
+		return true;
+	}
+	
+	static private function k($class)
+	{
+		return 'autoload_'.$class.(QFW::$router ? QFW::$router->cModule : '');
 	}
 
 }

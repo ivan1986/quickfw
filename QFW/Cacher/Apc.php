@@ -1,15 +1,10 @@
 <?php
 
 /**
- * Xcache variable cache interface
- *
- * @package RELAX
- * @author Petrenko Andrey
- * @version 0.1
- * @copyright RosBusinessConsulting
+ * Apc variable cache interface
  */
 
-class Cacher_Xcache implements Zend_Cache_Backend_Interface
+class Cacher_Apc implements Zend_Cache_Backend_Interface
 {
 	public function setDirectives($directives)
 	{
@@ -25,7 +20,7 @@ class Cacher_Xcache implements Zend_Cache_Backend_Interface
 	 */
 	public function save($data, $id, $tags = array(), $specificLifetime = 3600)
 	{
-		return xcache_set($id, $data, $specificLifetime);
+		return apc_store($id, $data);
 	}
 
 	/**
@@ -36,7 +31,7 @@ class Cacher_Xcache implements Zend_Cache_Backend_Interface
 	 */
 	public function load($id, $doNotTest = false)
 	{
-		return xcache_get($id);
+		return apc_fetch($id);
 	}
 
 	/**
@@ -47,7 +42,7 @@ class Cacher_Xcache implements Zend_Cache_Backend_Interface
 	 */
 	public function test($id)
 	{
-		return xcache_isset($id);
+		return apc_exists($id);
 	}
 
 	/**
@@ -58,12 +53,12 @@ class Cacher_Xcache implements Zend_Cache_Backend_Interface
 	 */
 	public function remove($id)
 	{
-		return xcache_unset($id);
+		return apc_delete($id);
 	}
 
 	public function clean($mode = CACHE_CLR_ALL, $tags = array())
 	{
-
+		apc_clear_cache('user');
 	}
 
 }
