@@ -1,6 +1,11 @@
 <?php
 
 /**
+ * Класс исключения - не найден файлы для этого модуля
+ */
+class QuickFWConfigNotFileException extends Exception {}
+
+/**
  * Класс для работы с конфигом
  */
 class QuickFW_Config implements ArrayAccess
@@ -53,12 +58,8 @@ class QuickFW_Config implements ArrayAccess
 		try {
 			$data = self::loadFromFiles(self::files(false));
 		}
-		catch(Exception $e)
-		{
-			if ($e->getMessage() == 'Not Exist Config File')
-				$data = array();
-			else
-				throw $e;
+		catch(QuickFWConfigNotFileException $e)	{
+			$data = array();
 		}
 		return new self($data, APPPATH.'/config');
 	}
@@ -108,11 +109,8 @@ class QuickFW_Config implements ArrayAccess
 			try {
 				$this->data[$offset] = $this->load($offset);
 			}
-			catch(Exception $e)
-			{
-				if ($e->getMessage() == 'Not Exist Config File')
-					return false;
-				throw $e;
+			catch(QuickFWConfigNotFileException $e)	{
+				return false;
 			}
 		}
 		return $this->data[$offset];
@@ -162,7 +160,7 @@ class QuickFW_Config implements ArrayAccess
 					array_replace_recursive($data, $new) : $new;
 		}
 		if ($empty)
-			throw new Exception('Not Exist Config File', 42);
+			throw new QuickFWConfigNotFileException();
 		if (QuickFW_Cacher_SysSlot::is_use('config'))
 			$C->save($data);
 		return $data;
