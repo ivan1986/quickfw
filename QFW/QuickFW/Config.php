@@ -37,7 +37,7 @@ class QuickFW_Config implements ArrayAccess
 			$files[] = $prefix.'.host.'.$_SERVER['HTTP_HOST'].'.php';
 		return array(
 			'files' => $files,
-			'key' => $prefix
+			'key' => $prefix.
 				(isset($_SERVER['SERVER_NAME']) ? $_SERVER['SERVER_NAME'] : '').
 				(isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : ''),
 		);
@@ -50,7 +50,17 @@ class QuickFW_Config implements ArrayAccess
 	 */
 	static public function main()
 	{
-		return new self(self::loadFromFiles(self::files(false)), APPPATH.'/config');
+		try {
+			$data = self::loadFromFiles(self::files(false));
+		}
+		catch(Exception $e)
+		{
+			if ($e->getMessage() == 'Not Exist Config File')
+				$data = array();
+			else
+				throw $e;
+		}
+		return new self($data, APPPATH.'/config');
 	}
 
 	private $data = array();
@@ -94,7 +104,17 @@ class QuickFW_Config implements ArrayAccess
 
 	public function offsetGet($offset) {
 		if ($this->dir && !isset($this->data[$offset]))
-			$this->data[$offset] = $this->load($offset);
+		{
+			try {
+				$this->data[$offset] = $this->load($offset);
+			}
+			catch(Exception $e)
+			{
+				if ($e->getMessage() == 'Not Exist Config File')
+					return false;
+				throw $e;
+			}
+		}
 		return $this->data[$offset];
 	}
 	public function offsetExists($offset) { return isset($this->data[$offset]); }
@@ -125,19 +145,24 @@ class QuickFW_Config implements ArrayAccess
 			$C = new QuickFW_Cacher_SysSlot('config_'.$info['key']);
 			if ($data = $C->load())
 				return $data;
-		}
+		};
 		$data = array();
+		$empty = true;
 		foreach($info['files'] as $file)
 		{
-			$new = array();
+			$new = false;
 			if (is_file($file))
 				$new = include($file);
+			if ($new !== false)
+				$empty = false;
 			if ($new === 1 && isset($config))
 				$new = $config;
 			if (!empty($new))
 				$data = (is_array($data) && is_array($new)) ?
 					array_replace_recursive($data, $new) : $new;
 		}
+		if ($empty)
+			throw new Exception('Not Exist Config File', 42);
 		if (QuickFW_Cacher_SysSlot::is_use('config'))
 			$C->save($data);
 		return $data;
