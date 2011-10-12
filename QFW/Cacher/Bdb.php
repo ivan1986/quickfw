@@ -54,19 +54,11 @@ class Cacher_Bdb implements Zend_Cache_Backend_Interface
 	public function clean($mode = CACHE_CLR_ALL, $tags = array())
 	{
 		if (!$this->file) $this->conn();
-		$key=dba_firstkey($this->file);
-		if (!$key)
+		if (!$key=dba_firstkey($this->file))
 			return;
 		do {
 			if ($mode == CACHE_CLR_ALL)
 				dba_delete($key,$this->file);
-			elseif($mode == CACHE_CLR_OLD)
-			{
-				$data=dba_fetch($key,$this->file);
-				$data=unserialize($data);
-				if ($data[0]<time())
-					dba_delete($key,$this->file);
-			}
 		} while($key=dba_nextkey($this->file));
 		dba_optimize($this->file);
 		dba_sync($this->file);
