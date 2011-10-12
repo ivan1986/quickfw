@@ -4,7 +4,7 @@
 	define ('APPPATH', ROOTPATH . '/application');
 	define ('VARPATH', ROOTPATH . '/var');
 	define ('QFWPATH', ROOTPATH . '/QFW');
-	define ('LIBPATH', ROOTPATH . '/lib');
+	define ('LIBPATH', QFWPATH . '/lib');
 
 //Настройки по умолчанию, если нужно - измените
 //	define ('TMPPATH', VARPATH . '/tmp');
