@@ -1,6 +1,6 @@
 <?php
 
-require_once 'Templater.php';
+require_once __DIR__.'/Templater.php';
 
 /**
  * Делегат отложенного вызова функции или метода

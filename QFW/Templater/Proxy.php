@@ -1,6 +1,6 @@
 <?php
 
-require_once 'Templater.php';
+require_once __DIR__.'/Templater.php';
 
 class Templater_Proxy extends Templater
 {

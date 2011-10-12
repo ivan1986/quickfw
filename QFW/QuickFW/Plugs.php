@@ -1,6 +1,6 @@
 <?php
 
-require_once 'Helpers.php';
+require_once __DIR__.'/Helpers.php';
 
 class QuickFW_Plugs
 {
