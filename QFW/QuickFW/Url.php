@@ -171,6 +171,30 @@ class Url
 			$this->get = array_merge_recursive($this->get, $k);
 		else
 			$this->get[$k] = $v;
+		if ($v===false)
+			unset($this->get[$k]);
+		return $this;
+	}
+
+	/**
+	 * Добавляет _GET параметры в урл из текущего запроса
+	 * и возможно изменяет некоторые ключи
+	 *
+	 * @param string|array|false $k ключ
+	 * @param string|false $v значение
+	 * @return Url
+	 */
+	public function pget($k=false, $v=false)
+	{
+		$this->get += $_GET;
+		if (!$k)
+			return $this;
+		if (is_array($k))
+			$this->get = array_merge_recursive($this->get, $k);
+		else
+			$this->get[$k] = $v;
+		if ($v===false)
+			unset($this->get[$k]);
 		return $this;
 	}
 
@@ -207,7 +231,7 @@ class Url
 	{
 		return static::$config['router']->backrewriteUrl(
 			static::$config['base'].static::$config['router']->backrewrite($this->u).
-          QuickFW_Router::PATH_SEPARATOR
+				QuickFW_Router::PATH_SEPARATOR
 			);
 	}
 
