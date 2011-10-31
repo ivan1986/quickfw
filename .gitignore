@@ -1,2 +1,5 @@
 /var/tmp/doc
+/doc/asciidoc/*.pdf
+/doc/asciidoc/*.html
+/doc/asciidoc/*.css
 .idea
