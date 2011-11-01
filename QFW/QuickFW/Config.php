@@ -13,7 +13,9 @@ class QuickFW_Config implements ArrayAccess, IteratorAggregate
 	/**
 	 * Генерирует список файлов конфигураций
 	 *
-	 * @param string|false $prefix префикс
+	 * Включите необходимые файлы
+	 *
+	 * @param string|false $prefix префикс (относительно корня)
 	 * @return array массив файлов
 	 */
 	static private function files($prefix)
@@ -22,28 +24,35 @@ class QuickFW_Config implements ArrayAccess, IteratorAggregate
 		{
 			$files = array();
 			$files[] = APPPATH.'/default.php';
-			if (isset($_SERVER['SERVER_NAME']))
-				$files = array_merge($files, self::tails(APPPATH.'/serv.', $_SERVER['SERVER_NAME']));
+			//if (isset($_SERVER['SERVER_NAME']))
+			//	$files = array_merge($files, self::tails(APPPATH.'/serv.', $_SERVER['SERVER_NAME']));
 			if (isset($_SERVER['HTTP_HOST']))
 				$files = array_merge($files, self::tails(APPPATH.'/host.', $_SERVER['HTTP_HOST']));
 			return array(
 				'files' => $files,
-				'key' => $prefix.
-					(isset($_SERVER['SERVER_NAME']) ? $_SERVER['SERVER_NAME'] : '').
-					(isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : ''),
+				'key' => $prefix
+					//.(isset($_SERVER['SERVER_NAME']) ? $_SERVER['SERVER_NAME'] : '')
+					.(isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : '')
+				,
 			);
 		}
 		$files = array();
-		$files[] = $prefix.'.php';
-		if (isset($_SERVER['SERVER_NAME']))
-			$files = array_merge($files, self::tails($prefix.'.serv.', $_SERVER['SERVER_NAME']));
+		$files[] = QFWPATH.$prefix.'.php';
+		$files[] = APPPATH.$prefix.'.php';
+		//$files[] = APPPATH.'/'.QFW::$router->module.'/config/'.$prefix.'.php';
+
+		//if (isset($_SERVER['SERVER_NAME']))
+		//	$files = array_merge($files, self::tails($prefix.'.serv.', $_SERVER['SERVER_NAME']));
+
 		if (isset($_SERVER['HTTP_HOST']))
 			$files = array_merge($files, self::tails($prefix.'.host.', $_SERVER['HTTP_HOST']));
 		return array(
 			'files' => $files,
-			'key' => $prefix.
-				(isset($_SERVER['SERVER_NAME']) ? $_SERVER['SERVER_NAME'] : '').
-				(isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : ''),
+			'key' => $prefix
+				//.(isset($_SERVER['SERVER_NAME']) ? $_SERVER['SERVER_NAME'] : '').
+				.(isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : '')
+				//.(isset(QFW::$router->module)?QFW::$router->module:'')
+			,
 		);
 	}
 
@@ -81,7 +90,7 @@ class QuickFW_Config implements ArrayAccess, IteratorAggregate
 		catch(QuickFWConfigNotFileException $e) {
 			$data = array();
 		}
-		return new self($data, APPPATH.'/config');
+		return new self($data, '/config');
 	}
 
 	/**
