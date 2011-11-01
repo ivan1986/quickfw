@@ -24,9 +24,9 @@ class QuickFW_Config implements ArrayAccess
 			$files[] = QFWPATH.'/config.php';
 			$files[] = APPPATH.'/default.php';
 			if (isset($_SERVER['SERVER_NAME']))
-				$files[] = APPPATH.'/serv.'.$_SERVER['SERVER_NAME'].'.php';
+				$files = array_merge($files, self::tails(APPPATH.'/serv.', $_SERVER['SERVER_NAME']));
 			if (isset($_SERVER['HTTP_HOST']))
-				$files[] = APPPATH.'/host.'.$_SERVER['HTTP_HOST'].'.php';
+				$files = array_merge($files, self::tails(APPPATH.'/host.', $_SERVER['HTTP_HOST']));
 			return array(
 				'files' => $files,
 				'key' => $prefix.
@@ -37,15 +37,36 @@ class QuickFW_Config implements ArrayAccess
 		$files = array();
 		$files[] = $prefix.'.php';
 		if (isset($_SERVER['SERVER_NAME']))
-			$files[] = $prefix.'.serv.'.$_SERVER['SERVER_NAME'].'.php';
+			$files = array_merge($files, self::tails($prefix.'.serv.', $_SERVER['SERVER_NAME']));
 		if (isset($_SERVER['HTTP_HOST']))
-			$files[] = $prefix.'.host.'.$_SERVER['HTTP_HOST'].'.php';
+			$files = array_merge($files, self::tails($prefix.'.host.', $_SERVER['HTTP_HOST']));
 		return array(
 			'files' => $files,
 			'key' => $prefix.
 				(isset($_SERVER['SERVER_NAME']) ? $_SERVER['SERVER_NAME'] : '').
 				(isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : ''),
 		);
+	}
+
+	/**
+	 * Генерирует из имени хоста все суффиксы
+	 *
+	 * @static
+	 * @param string $prefix Префикс имени
+	 * @param string $host хост
+	 * @return array список файлов
+	 */
+	static private function tails($prefix, $host)
+	{
+		$host = array_reverse(explode('.', $host));
+		$files = array();
+		$tail = 'php';
+		foreach($host as $k=>$part)
+		{
+			$tail = $part . '.' . $tail;
+			$files[] = $prefix . $tail;
+		}
+		return $files;
 	}
 
 	/**
@@ -58,7 +79,7 @@ class QuickFW_Config implements ArrayAccess
 		try {
 			$data = self::loadFromFiles(self::files(false));
 		}
-		catch(QuickFWConfigNotFileException $e)	{
+		catch(QuickFWConfigNotFileException $e) {
 			$data = array();
 		}
 		return new self($data, APPPATH.'/config');
@@ -109,7 +130,7 @@ class QuickFW_Config implements ArrayAccess
 			try {
 				$this->data[$offset] = $this->load($offset);
 			}
-			catch(QuickFWConfigNotFileException $e)	{
+			catch(QuickFWConfigNotFileException $e) {
 				return false;
 			}
 		}
