@@ -8,7 +8,7 @@ class QuickFWConfigNotFileException extends Exception {}
 /**
  * Класс для работы с конфигом
  */
-class QuickFW_Config implements ArrayAccess
+class QuickFW_Config implements ArrayAccess, IteratorAggregate
 {
 	/**
 	 * Генерирует список файлов конфигураций
@@ -21,7 +21,6 @@ class QuickFW_Config implements ArrayAccess
 		if ($prefix === false)
 		{
 			$files = array();
-			$files[] = QFWPATH.'/config.php';
 			$files[] = APPPATH.'/default.php';
 			if (isset($_SERVER['SERVER_NAME']))
 				$files = array_merge($files, self::tails(APPPATH.'/serv.', $_SERVER['SERVER_NAME']));
@@ -85,6 +84,16 @@ class QuickFW_Config implements ArrayAccess
 		return new self($data, APPPATH.'/config');
 	}
 
+	/**
+	 * для интерфейса IteratorAggregate
+	 *
+	 * @return ArrayIterator
+	 */
+	public function getIterator()
+	{
+		return new ArrayIterator($this->data);
+	}
+
 	private $data = array();
 	/**
 	 * @var string Директория конфигурации
@@ -136,7 +145,12 @@ class QuickFW_Config implements ArrayAccess
 		}
 		return $this->data[$offset];
 	}
-	public function offsetExists($offset) { return isset($this->data[$offset]); }
+	public function offsetExists($offset) {
+		if (isset($this->data[$offset]))
+			return true;
+		$this->offsetGet($offset);
+		return isset($this->data[$offset]);
+	}
 	public function offsetUnset($offset) { unset($this->data[$offset]); }
 
 	/**
