@@ -135,10 +135,8 @@ class Cache
 			$cl='Cacher_'.$backend;
 			require_once QFWPATH.'/Cacher/'.$backend.'.php';
 			$c=new $cl;
-			$c->setDirectives(
-				(isset($data['options']) && is_array($data['options']))
-				? $data['options'] : array()
-			);
+			if ($data['options'])
+				$c->setDirectives($data['options']->toArray());
 			self::$cachers['__'.$name] = $c;
 		}
 
