@@ -4,7 +4,7 @@
 	define ('APPPATH', dirname(dirname(__FILE__)).'/testapp');
 	define ('VARPATH', ROOTPATH . '/var');
 	define ('QFWPATH', ROOTPATH . '/QFW');
-	define ('LIBPATH', ROOTPATH . '/lib');
+	define ('LIBPATH', QFWPATH . '/lib');
 
 	$_SERVER['HTTP_HOST'] = 'test';
 

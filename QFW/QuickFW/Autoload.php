@@ -95,6 +95,9 @@ class Autoload
 		return false;
 	}
 
+	/** @var array соответствие классов и файлов */
+	static private $classes;
+
 	/**
 	 * Автолоад некоторых стандартных классов
 	 *
@@ -140,9 +143,6 @@ class Autoload
 		return false;
 	}
 
-	/** @var array соответствие классов и файлов */
-	static private $classes;
-
 	/**
 	 * Автолоад в директориях
 	 *
@@ -153,7 +153,13 @@ class Autoload
 		$list = array(
 			LIBPATH,
 			MODPATH,
+			COMPATH.'/lib',
 		);
+		if (QFW::$router && QFW::$router->module)
+		{
+			$list[] = APPPATH.QFW::$router->module.'/lib';
+			$list[] = APPPATH.QFW::$router->module.'/models';
+		}
 		$c = str_replace('_', '/', $class);
 		foreach ($list as $dir)
 			if (is_file($dir.'/'.$c.'.php'))

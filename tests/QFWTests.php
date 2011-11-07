@@ -4,9 +4,7 @@
 	define ('APPPATH',  ROOTPATH . '/tests/testapp');
 	define ('VARPATH',  ROOTPATH . '/vap');
 	define ('QFWPATH',  ROOTPATH . '/QFW');
-	define ('LIBPATH',  ROOTPATH . '/lib');
-	define ('COMPATH',  APPPATH  . '/_common');
-	define ('MODPATH',  COMPATH  . '/models');
+	define ('LIBPATH', QFWPATH . '/lib');
 
 	$_SERVER['HTTP_HOST'] = 'test';
 
