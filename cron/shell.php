@@ -32,7 +32,6 @@ define ('LIBPATH', QFWPATH . '/lib');
 //	define ('TMPPATH', VARPATH . '/tmp');
 //	define ('LOGPATH', VARPATH . '/log');
 //	define ('COMPATH', APPPATH . '/_common');
-//	define ('MODPATH', COMPATH . '/models');
 
 $_SERVER['HTTP_HOST'] = 'shell';
 

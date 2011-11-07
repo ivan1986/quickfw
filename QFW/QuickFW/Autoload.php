@@ -152,7 +152,7 @@ class Autoload
 	{
 		$list = array(
 			LIBPATH,
-			MODPATH,
+			COMPATH.'/models',
 			COMPATH.'/lib',
 		);
 		if (QFW::$router && QFW::$router->module)

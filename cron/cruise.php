@@ -10,7 +10,6 @@
 //	define ('TMPPATH', VARPATH . '/tmp');
 //	define ('LOGPATH', VARPATH . '/log');
 //	define ('COMPATH', APPPATH . '/_common');
-//	define ('MODPATH', COMPATH . '/models');
 
 	if (empty($_SERVER['HTTP_HOST']))
 		$_SERVER['HTTP_HOST'] = gethostname();

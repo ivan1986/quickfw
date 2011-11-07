@@ -7,8 +7,6 @@ if (!defined('LOGPATH'))
 	define('LOGPATH', VARPATH.'/log');
 if (!defined('COMPATH'))
 	define ('COMPATH', APPPATH.'/_common');
-if (!defined('MODPATH'))
-	define ('MODPATH', COMPATH.'/models');
 
 //регаем автолоад
 require_once QFWPATH.'/QuickFW/Autoload.php';
