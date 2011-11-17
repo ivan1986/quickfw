@@ -24,12 +24,13 @@ $config['database']='mypdo://root@localhost/smspr?enc=utf8';
 
 /* Настройки перенаправления */
 $config['redirection']=array(
-	'baseUrl'          => '/',
-	'useIndex'         => false,
-	'defExt'           => '',	//или пусто или .html например
-	'useRewrite'       => true,
-	'useBlockRewrite'  => false,
-	'delDef'           => true,
+	'baseUrl'         => '/',
+	'useIndex'        => false,
+	'defExt'          => '',	//или пусто или .html например
+	'useRewrite'      => true,
+	'useBlockRewrite' => false,
+	'delDef'          => true,
+	'delFull'         => true, //удаляет полностью
 );
 
 /**

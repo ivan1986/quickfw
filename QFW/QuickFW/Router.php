@@ -296,11 +296,17 @@ class QuickFW_Router
 	public function delDef($url)
 	{
 		$url = explode(self::PATH_SEPARATOR, $url);
+		$url = QFW::$config['redirection']['delFull'] ? $this->delDefFull($url) : $this->delDefSelf($url);
+		return join(self::PATH_SEPARATOR, $url);
+	}
+	
+	private function delDefSelf($url)
+	{
 		$n = min(3, count($url));
 		if (isset($url[0]) && $url[0]==$this->defM && $n--)
 			array_shift($url);
 		if (count($url)>$n)
-			return join(self::PATH_SEPARATOR, $url);
+			return $url;
 		$i = $n - 1;
 		if (count($url)<=$n && isset($url[$i]) && $url[$i]==$this->defA)
 		{
@@ -310,7 +316,23 @@ class QuickFW_Router
 		}
 		if (count($url)==1 && $url[0]==$this->defC)
 			array_shift($url);
-		return join(self::PATH_SEPARATOR, $url);
+		return $url;
+	}
+
+	private function delDefFull($url)
+	{
+		$n = min(2, count($url));
+		$i = 0;
+		//если первый параметр - дефолтовый модуль - убираем его
+		if (isset($url[0]) && $url[0]==$this->defM && $n--)
+			array_shift($url);
+		else
+			$i++;
+		if (isset($url[$i]) && $url[$i]==$this->defC)
+			unset($url[$i]);
+		if (isset($url[$n]) && $url[$n]==$this->defA)
+			unset($url[$n]);
+		return $url;
 	}
 
 	/**
