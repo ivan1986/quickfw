@@ -503,9 +503,10 @@ class QuickFW_Router
 				$class_key=$MCA['Module'].'|'.$MCA['Controller'];
 				if (!isset($this->classes[$class_key]))
 					$this->classes[$class_key] = array(
-						'i'    => $MCA['Class'] = new $class,
-						'defA' => $cached['defA'],
-						'a'    => $cached['a'],
+						'i'       => $MCA['Class'] = new $class,
+						'defA'    => $cached['defA'],
+						'auto404' => $cached['auto404'],
+						'a'       => $cached['a'],
 					);
 				return $MCA;
 			}
@@ -563,10 +564,11 @@ class QuickFW_Router
 					return $MCA;
 				}
 			}
-			$class = $this->sub.$class;
-			$vars = get_class_vars($class);
-			$acts = get_class_methods($class);
-			$defA = isset($vars['defA']) ? $vars['defA'] : $this->defA;
+			$class   = $this->sub.$class;
+			$vars    = get_class_vars($class);
+			$acts    = get_class_methods($class);
+			$defA    = isset($vars['defA']) ? $vars['defA'] : $this->defA;
+			$auto404 = isset($vars['auto404']) ? $vars['auto404'] : QFW::$config['QFW']['auto404'];
 
 			//Выполняется при первом вызове и сохраняет значение вызванного MCA
 			//Проверяем последний так как остальные уже записаны
@@ -580,9 +582,10 @@ class QuickFW_Router
 			}
 
 			$this->classes[$class_key] = array(
-				'i'    => new $class,
-				'defA' => $defA,
-				'a'    => $acts,
+				'i'       => new $class,
+				'defA'    => $defA,
+				'auto404' => $auto404,
+				'a'       => $acts,
 			);
 		}
 		$MCA['Class'] = $this->classes[$class_key]['i'];
@@ -608,7 +611,7 @@ class QuickFW_Router
 		}
 		$this->cAction = $MCA['Action'];
 
-		if (QFW::$config['QFW']['auto404'] && count($data)==$c && $c>0)
+		if ($this->classes[$class_key]['auto404'] && count($data)==$c && $c>0)
 		{	 // если из URI после модуля ничего не забрали и что-то осталось
 			$MCA['Error']="Указаны параметры у дефолтового CA \n".
 				"или несуществующий Контроллер или Экшен дефолтового контроллера\n".
@@ -621,9 +624,10 @@ class QuickFW_Router
 			$MCA_Cache = $MCA;
 			unset($MCA_Cache['Class']);
 			$C->save(array(
-				'MCA' => $MCA_Cache,
-				'defA' => $this->classes[$class_key]['defA'],
-				'a' => $this->classes[$class_key]['a'],
+				'MCA'     => $MCA_Cache,
+				'defA'    => $this->classes[$class_key]['defA'],
+				'auto404' => $this->classes[$class_key]['auto404'],
+				'a'       => $this->classes[$class_key]['a'],
 			));
 		}
 
