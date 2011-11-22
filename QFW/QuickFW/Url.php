@@ -79,6 +79,16 @@ class Url
 	}
 
 	/**
+	 * Текущий урл
+	 *
+	 * @return Url адрес на сайте
+	 */
+	public static function cur()
+	{
+		return new static(static::$config['router']->RequestUri);
+	}
+
+	/**
 	 * Инициализация класса из конфига
 	 */
 	public static function Init($base='')
@@ -156,6 +166,34 @@ class Url
 			($this->u!=='' ? static::$config['ext'] : '').
 			($this->get ? ('?' . http_build_query($this->get)) : '').
 			($this->anchor ? '#' . $this->anchor : ''));
+	}
+
+	/**
+	 * Поднимается на уровень выше
+	 *
+	 * @return Url
+	 */
+	public function up()
+	{
+		$this->u = dirname($this->u);
+		$this->u = $this->u == '.' ? '' : $this->u;
+		return $this;
+	}
+
+	/**
+	 * Добавляет путь к урлу
+	 *
+	 * @param string|self $action url
+	 * @return Url
+	 */
+	public function add($path='')
+	{
+		$add = join(QuickFW_Router::PATH_SEPARATOR, func_get_args());
+		//Заменяем / на QuickFW_Router::PATH_SEPARATOR
+		if (QuickFW_Router::PATH_SEPARATOR != '/')
+			$add = strtr($add, '/', QuickFW_Router::PATH_SEPARATOR);
+		$this->u = trim($this->u.QuickFW_Router::PATH_SEPARATOR.$add, QuickFW_Router::PATH_SEPARATOR);
+		return $this;
 	}
 
 	/**
